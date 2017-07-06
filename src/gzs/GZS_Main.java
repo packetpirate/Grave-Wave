@@ -12,6 +12,7 @@ public class GZS_Main extends Application{
 	
 	@Override
 	public void start(Stage stage) {
+		stage.setTitle("Generic Zombie Shooter Redux v" + Globals.VERSION);
 		stage.setResizable(false);
 		stage.requestFocus();
 		stage.centerOnScreen();
