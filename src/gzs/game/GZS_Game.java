@@ -30,7 +30,6 @@ public class GZS_Game {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	
-	private GameStateManager gsm;
 	private Screen [] allScreens;
 	private Screen cScreen;
 	
@@ -40,8 +39,6 @@ public class GZS_Game {
 	public GZS_Game(Stage stage_) {
 		try {
 			mStage = stage_;
-			
-			gsm = new GameStateManager();
 			
 			/* IMPORTANT!!!!!!!!!
 			 * If the order of the screens is changed or more are added, you must also
@@ -54,7 +51,8 @@ public class GZS_Game {
 				new GameScreen(),
 				new ShopScreen(),
 				new TrainScreen(),
-				new GameOverScreen()
+				new GameOverScreen(),
+				new BlackScreen()
 			};
 			
 			inputs = new HashSet<String>();
@@ -84,21 +82,37 @@ public class GZS_Game {
 				private long lastUpdate = 0L;
 				
 				{ // Begin Pseudo-Constructor
-					gsm.transition("initialized");
-					changeScreen(gsm.getState());
+					Globals.getGSM().transition("initialized");
+					changeScreen(Globals.getGSM().getState());
 				} // End Pseudo-Constructor
 				
 				@Override
 				public void handle(long nT) {
-					// Convert current nano time to milliseconds.
-					long now = nT / Globals.NANO_TO_MS;
-					
-					// Check if elapsed time since last update is greater than sleep time.
-					double elapsed = ((double)nT - (double)lastUpdate) / 1_000_000_000.0;
-					if(elapsed >= Globals.UPDATE_TIME) {
-						update(now);
-						render(now);
-						lastUpdate = now;
+					if(Globals.getGSM().getState() != GameState.QUIT) {
+						// Convert current nano time to milliseconds.
+						long now = nT / Globals.NANO_TO_MS;
+						
+						// Check if elapsed time since last update is greater than sleep time.
+						double elapsed = ((double)nT - (double)lastUpdate) / 1_000_000_000.0;
+						if(elapsed >= Globals.UPDATE_TIME) {
+							update(now);
+							try {
+								changeScreen(Globals.getGSM().getState());
+							} catch (ScreenIndexException sie) {
+								// Should never happen, but just in case...
+								sie.printStackTrace();
+								try {
+									Globals.getGSM().transition("exception");
+									new ExceptionHandler(sie);
+									this.stop();
+								} catch (GameStateException e) {} // ignore... base case prevents this
+							}
+							render(now);
+							lastUpdate = now;
+						}
+					} else {
+						stop();
+						System.exit(0);
 					}
 				}
 			}.start();
@@ -107,27 +121,50 @@ public class GZS_Game {
 		} catch(Exception e) {
 			// Pass to custom exception handler class which will display the exception visually.
 			try {
-				gsm.transition("exception");
+				Globals.getGSM().transition("exception");
 				new ExceptionHandler(e);
+				System.exit(1);
 			} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 			e.printStackTrace();
 		}
 	}
 	
 	private void update(long cT) {
-		if(gsm.getState() != GameState.ERROR) {
+		if(Globals.getGSM().getState() != GameState.ERROR) {
 			// Update the current screen.
-			if(cScreen != null) cScreen.update(cT, mouse);
+			if(cScreen != null) {
+				try {
+					cScreen.update(cT, mouse);
+				} catch (Exception e) {
+					try {
+						Globals.getGSM().transition("exception");
+						new ExceptionHandler(e);
+						System.exit(1);
+					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
 	private void render(long cT) {
-		if(gsm.getState() != GameState.ERROR) {
+		if(Globals.getGSM().getState() != GameState.ERROR) {
 			gc.setFill(Color.WHITE);
 			gc.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
 			
-			gc.setFill(Color.BLACK);
-			gc.fillText(("Screen: " + cScreen), 10, 20);
+			// Render the current screen.
+			if(cScreen != null) {
+				try {
+					cScreen.render(gc, cT);
+				} catch (Exception e) {
+					try {
+						Globals.getGSM().transition("exception");
+						new ExceptionHandler(e);
+						System.exit(1);
+					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
+					e.printStackTrace();
+				} 
+			}
 		} else {
 			gc.setFill(Color.BLACK);
 			gc.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
@@ -150,7 +187,16 @@ public class GZS_Game {
 			} else if(mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
 				mouse.setMouseDown(false);
 			} else if(mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
-				cScreen.dispatchClick(mouse);
+				try {
+					cScreen.dispatchClick(mouse);
+				} catch(Exception e) {
+					try {
+						Globals.getGSM().transition("exception");
+						new ExceptionHandler(e);
+						System.exit(1);
+					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
+					e.printStackTrace();
+				}
 			}
 		}
 	};

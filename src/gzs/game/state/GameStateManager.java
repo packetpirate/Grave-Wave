@@ -22,22 +22,18 @@ public class GameStateManager {
 			return;
 		}
 		
-		Iterator it = TRANSITIONS.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<GameState, List<Transition>> pair = (Map.Entry<GameState, List<Transition>>)it.next();
-			GameState current = pair.getKey();
-			if(current == state) {
-				List<Transition> transitions = pair.getValue();
-				for(Transition t : transitions) {
-					GameState end = t.checkTransition(condition);
-					if(end != state) {
-						state = end; // A valid transition was found.
-						return;
-					}
+		if(TRANSITIONS.containsKey(state)) {
+			List<Transition> transitions = TRANSITIONS.get(state);
+			for(Transition t : transitions) {
+				GameState end = t.checkTransition(condition);
+				if(end != state) {
+					state = end;
+					System.out.println("New State: " + state);
+					return;
 				}
-				
-				throw new GameStateException("No valid transition found!");
 			}
+			
+			throw new GameStateException("No valid transition found!");
 		}
 		
 		throw new GameStateException("Current state not in transitions table!");
@@ -57,6 +53,7 @@ public class GameStateManager {
 		List<Transition> menu = new ArrayList<Transition>() {{
 			add(new Transition(GameState.MENU, "credits", GameState.CREDITS));
 			add(new Transition(GameState.MENU, "start game", GameState.GAME));
+			add(new Transition(GameState.MENU, "quit", GameState.QUIT));
 		}};
 		TRANSITIONS.put(GameState.MENU, menu);
 		
