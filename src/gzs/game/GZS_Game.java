@@ -4,12 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gzs.game.gfx.Screen;
-import gzs.game.gfx.screens.*;
+import gzs.game.gfx.screens.BlackScreen;
+import gzs.game.gfx.screens.CreditsScreen;
+import gzs.game.gfx.screens.GameOverScreen;
+import gzs.game.gfx.screens.GameScreen;
+import gzs.game.gfx.screens.MenuScreen;
+import gzs.game.gfx.screens.ScreenIndexException;
+import gzs.game.gfx.screens.ShopScreen;
+import gzs.game.gfx.screens.TrainScreen;
 import gzs.game.info.Globals;
 import gzs.game.misc.MouseInfo;
 import gzs.game.state.GameState;
 import gzs.game.state.GameStateException;
-import gzs.game.state.GameStateManager;
 import gzs.game.utils.ExceptionHandler;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -103,7 +109,7 @@ public class GZS_Game {
 								sie.printStackTrace();
 								try {
 									Globals.getGSM().transition("exception");
-									new ExceptionHandler(sie);
+									ExceptionHandler.Handle(sie);
 									this.stop();
 								} catch (GameStateException e) {} // ignore... base case prevents this
 							}
@@ -122,7 +128,7 @@ public class GZS_Game {
 			// Pass to custom exception handler class which will display the exception visually.
 			try {
 				Globals.getGSM().transition("exception");
-				new ExceptionHandler(e);
+				ExceptionHandler.Handle(e);
 				System.exit(1);
 			} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 			e.printStackTrace();
@@ -138,7 +144,7 @@ public class GZS_Game {
 				} catch (Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
-						new ExceptionHandler(e);
+						ExceptionHandler.Handle(e);
 						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 					e.printStackTrace();
@@ -159,7 +165,7 @@ public class GZS_Game {
 				} catch (Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
-						new ExceptionHandler(e);
+						ExceptionHandler.Handle(e);
 						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 					e.printStackTrace();
@@ -192,7 +198,7 @@ public class GZS_Game {
 				} catch(Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
-						new ExceptionHandler(e);
+						ExceptionHandler.Handle(e);
 						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 					e.printStackTrace();

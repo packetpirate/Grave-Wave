@@ -10,6 +10,7 @@ import javafx.scene.text.TextAlignment;
 public class MenuButton {
 	private static final Color DEFAULT_BUTTON_STROKE = new Color(0.0, 0.133, 0.398, 1.0);
 	private static final Color DEFAULT_BUTTON_FILL = new Color(0.234, 0.391, 0.684, 1.0);
+	private static final Color HOVER_BUTTON_FILL = new Color(0.140, 0.235, 0.410, 1.0);
 	private static final Color DEFAULT_TEXT_STROKE = new Color(0.781, 0.645, 0.059, 1.0);
 	private static final Color DEFAULT_TEXT_FILL = new Color(0.938, 0.781, 0.371, 1.0);
 	
@@ -19,6 +20,10 @@ public class MenuButton {
 	private String text;
 	private Image img;
 	
+	private boolean mouseIn;
+	public void mouseEnter() { this.mouseIn = true; }
+	public void mouseExit() { this.mouseIn = false; }
+	
 	public MenuButton(double x_, double y_, double w_, double h_, String text_) {
 		this.img = null;
 		this.x = x_;
@@ -26,6 +31,7 @@ public class MenuButton {
 		this.w = w_;
 		this.h = h_;
 		this.text = text_;
+		this.mouseIn = false;
 	}
 	
 	public MenuButton(double x_, double y_, Image img_) {
@@ -35,13 +41,15 @@ public class MenuButton {
 		this.y = y_;
 		this.w = img.getWidth();
 		this.h = img.getHeight();
+		this.mouseIn = false;
 	}
 	
 	public void render(GraphicsContext gc, long cT) {
 		if(img == null) {
 			// Draw a basic shape to represent the button.
 			gc.setStroke(DEFAULT_BUTTON_STROKE);
-			gc.setFill(DEFAULT_BUTTON_FILL);
+			if(mouseIn) gc.setFill(HOVER_BUTTON_FILL);
+			else 		gc.setFill(DEFAULT_BUTTON_FILL);
 			gc.strokeRect(x, y, w, h);
 			gc.fillRect(x, y, w, h);
 			

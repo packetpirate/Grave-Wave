@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 public class ExceptionHandler {
-	public ExceptionHandler(Exception ex) {
+	public static void Handle(Exception ex) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("An Error Occurred");
 		alert.setHeaderText(ex.getMessage());

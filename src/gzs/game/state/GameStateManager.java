@@ -2,7 +2,6 @@ package gzs.game.state;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,6 @@ public class GameStateManager {
 				GameState end = t.checkTransition(condition);
 				if(end != state) {
 					state = end;
-					System.out.println("New State: " + state);
 					return;
 				}
 			}

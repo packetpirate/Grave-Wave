@@ -22,17 +22,24 @@ public class MenuScreen implements Screen {
 			e.printStackTrace();
 			background = null;
 		}
-		gameStart = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 150), 
+		gameStart = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 250), 
 									100, 40, "Start Game");
-		credits = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 100),
+		credits = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 200),
 								 100, 40, "Credits");
-		exit = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 50),
+		exit = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 150),
 							  100, 40, "Exit Game");
 	}
 	
 	@Override
 	public void update(long cT, MouseInfo mouse) {
+		if(gameStart.contains(mouse)) gameStart.mouseEnter();
+		else gameStart.mouseExit();
 		
+		if(credits.contains(mouse)) credits.mouseEnter();
+		else credits.mouseExit();
+		
+		if(exit.contains(mouse)) exit.mouseEnter();
+		else exit.mouseExit();
 	}
 
 	@Override
