@@ -6,12 +6,27 @@ import java.util.Map;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
 import gzs.game.utils.FileUtilities;
+import gzs.math.Calculate;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 
 public class Player implements Entity {
 	private Pair<Double> position;
+	public Pair<Double> getPosition() { return position; }
+	public void move(double xOff, double yOff) {
+		double tx = position.x + xOff;
+		double ty = position.y + yOff;
+		if((tx >= 0) && (tx < Globals.WIDTH) && 
+		   (ty >= 0) && (ty < Globals.HEIGHT)) {
+			position.x += xOff;
+			position.y += yOff;
+		}
+	}
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
@@ -39,14 +54,27 @@ public class Player implements Entity {
 	
 	@Override
 	public void update(long cTime) {
+		double speed = getDoubleAttribute("speed") * getDoubleAttribute("spdMult");
+		if(Globals.inputs.contains("W")) move(0, -speed);
+		if(Globals.inputs.contains("A")) move(-speed, 0);
+		if(Globals.inputs.contains("S")) move(0, speed);
+		if(Globals.inputs.contains("D")) move(speed, 0);
 		
+		// Calculate the player's rotation based on mouse position.
+		setDoubleAttribute("theta", Calculate.Hypotenuse(position, Globals.mouse.getPosition()));
 	}
 
 	@Override
 	public void render(GraphicsContext gc, long cTime) {
 		if(img != null) {
-			gc.drawImage(img, (position.x - (img.getWidth() / 2)), 
-							  (position.y - (img.getHeight() / 2)));
+			ImageView iv = new ImageView(img);
+			SnapshotParameters params = new SnapshotParameters();
+			params.setFill(Color.TRANSPARENT);
+		    params.setTransform(new Rotate(Math.toDegrees(getDoubleAttribute("theta") + (Math.PI / 2)), 
+		    							  (img.getWidth() / 2), img.getHeight() / 2));
+		    params.setViewport(new Rectangle2D(0, 0, img.getWidth(), img.getHeight()));
+			gc.drawImage(iv.snapshot(params, null), (position.x - (img.getWidth() / 2)), 
+							  						(position.y - (img.getHeight() / 2)));
 		} else {
 			gc.setStroke(Color.BLACK);
 			gc.setFill(Color.RED);
@@ -66,7 +94,7 @@ public class Player implements Entity {
 		iAttributes.put("level", 1);
 		iAttributes.put("skillPoints", 0);
 		
-		dAttributes.put("speed", 5.0);
+		dAttributes.put("speed", 3.0);
 		
 		// Multipliers
 		dAttributes.put("expMult", 1.0);

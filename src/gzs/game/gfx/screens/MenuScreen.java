@@ -31,14 +31,14 @@ public class MenuScreen implements Screen {
 	}
 	
 	@Override
-	public void update(long cT, MouseInfo mouse) {
-		if(gameStart.contains(mouse)) gameStart.mouseEnter();
+	public void update(long cT) {
+		if(gameStart.contains(Globals.mouse)) gameStart.mouseEnter();
 		else gameStart.mouseExit();
 		
-		if(credits.contains(mouse)) credits.mouseEnter();
+		if(credits.contains(Globals.mouse)) credits.mouseEnter();
 		else credits.mouseExit();
 		
-		if(exit.contains(mouse)) exit.mouseEnter();
+		if(exit.contains(Globals.mouse)) exit.mouseEnter();
 		else exit.mouseExit();
 	}
 
@@ -56,5 +56,10 @@ public class MenuScreen implements Screen {
 		if(gameStart.contains(mouse)) Globals.getGSM().transition("start game");
 		else if(credits.contains(mouse)) Globals.getGSM().transition("credits");
 		else if(exit.contains(mouse)) Globals.getGSM().transition("quit");
+	}
+
+	@Override
+	public boolean hidesCursor() {
+		return false;
 	}
 }

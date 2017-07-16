@@ -6,7 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class BlackScreen implements Screen {
 	@Override
-	public void update(long cT, MouseInfo mouse) {
+	public void update(long cT) {
 		
 	}
 
@@ -18,5 +18,10 @@ public class BlackScreen implements Screen {
 	@Override
 	public void dispatchClick(MouseInfo mouse) {
 		
+	}
+
+	@Override
+	public boolean hidesCursor() {
+		return false;
 	}
 }

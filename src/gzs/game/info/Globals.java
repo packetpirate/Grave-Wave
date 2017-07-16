@@ -1,5 +1,9 @@
 package gzs.game.info;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import gzs.game.misc.MouseInfo;
 import gzs.game.state.GameStateManager;
 
 public class Globals {
@@ -15,4 +19,7 @@ public class Globals {
 	
 	private static GameStateManager GSM = new GameStateManager();
 	public static GameStateManager getGSM() { return Globals.GSM; };
+	
+	public static Set<String> inputs = new HashSet<String>();
+	public static MouseInfo mouse = new MouseInfo();
 }

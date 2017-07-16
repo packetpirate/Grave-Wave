@@ -1,8 +1,5 @@
 package gzs.game;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import gzs.game.gfx.Screen;
 import gzs.game.gfx.screens.BlackScreen;
 import gzs.game.gfx.screens.CreditsScreen;
@@ -13,12 +10,12 @@ import gzs.game.gfx.screens.ScreenIndexException;
 import gzs.game.gfx.screens.ShopScreen;
 import gzs.game.gfx.screens.TrainScreen;
 import gzs.game.info.Globals;
-import gzs.game.misc.MouseInfo;
 import gzs.game.state.GameState;
 import gzs.game.state.GameStateException;
 import gzs.game.utils.ExceptionHandler;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -39,8 +36,7 @@ public class GZS_Game {
 	private Screen [] allScreens;
 	private Screen cScreen;
 	
-	private Set<String> inputs;
-	private MouseInfo mouse;
+	private Exception lastException;
 	
 	public GZS_Game(Stage stage_) {
 		try {
@@ -61,8 +57,7 @@ public class GZS_Game {
 				new BlackScreen()
 			};
 			
-			inputs = new HashSet<String>();
-			mouse = new MouseInfo();
+			lastException = null;
 			
 			Group root = new Group();
 			mScene = new Scene(root);
@@ -78,6 +73,7 @@ public class GZS_Game {
 			mScene.addEventHandler(KeyEvent.KEY_RELEASED, keyHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_MOVED, mouseHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_PRESSED, mouseHandler);
+			mScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler);
 			
@@ -104,17 +100,23 @@ public class GZS_Game {
 							update(now);
 							try {
 								changeScreen(Globals.getGSM().getState());
-							} catch (ScreenIndexException sie) {
+							} catch (Exception e) {
 								// Should never happen, but just in case...
-								sie.printStackTrace();
+								e.printStackTrace();
+								lastException = e;
 								try {
 									Globals.getGSM().transition("exception");
-									ExceptionHandler.Handle(sie);
-									this.stop();
-								} catch (GameStateException e) {} // ignore... base case prevents this
+									ExceptionHandler.Handle(e);
+									System.exit(1);
+								} catch (GameStateException gse) {} // ignore... base case prevents this
 							}
 							render(now);
 							lastUpdate = now;
+							
+							if(Globals.getGSM().getState() == GameState.ERROR) {
+								ExceptionHandler.Handle(lastException);
+								System.exit(1);
+							}
 						}
 					} else {
 						stop();
@@ -129,9 +131,9 @@ public class GZS_Game {
 			try {
 				Globals.getGSM().transition("exception");
 				ExceptionHandler.Handle(e);
+				e.printStackTrace();
 				System.exit(1);
 			} catch (GameStateException gse) {} // ignore this... base case in method prevents this
-			e.printStackTrace();
 		}
 	}
 	
@@ -140,14 +142,14 @@ public class GZS_Game {
 			// Update the current screen.
 			if(cScreen != null) {
 				try {
-					cScreen.update(cT, mouse);
+					cScreen.update(cT);
 				} catch (Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
 						ExceptionHandler.Handle(e);
+						e.printStackTrace();
 						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
-					e.printStackTrace();
 				}
 			}
 		}
@@ -165,10 +167,10 @@ public class GZS_Game {
 				} catch (Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
-						ExceptionHandler.Handle(e);
-						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 					e.printStackTrace();
+					lastException = e;
+					return;
 				} 
 			}
 		} else {
@@ -177,31 +179,33 @@ public class GZS_Game {
 		}
 	}
 	
-	private void changeScreen(GameState state) throws ScreenIndexException {
+	private void changeScreen(GameState state) throws Exception {
 		int index = GameState.getScreenIndex(state);
 		if(index != -1) cScreen = allScreens[index];
 		else throw new ScreenIndexException("Invalid screen index!");
+		if(cScreen.hidesCursor()) mScene.setCursor(Cursor.NONE);
+		else mScene.setCursor(Cursor.DEFAULT);
 	}
 	
 	EventHandler<MouseEvent> mouseHandler = (mouseEvent) -> {
 		// Update the mouse position.
-		mouse.setPosition(mouseEvent.getX(), mouseEvent.getY());
+		Globals.mouse.setPosition(mouseEvent.getX(), mouseEvent.getY());
 		
 		if(mouseEvent.getButton() == MouseButton.PRIMARY) {
 			if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-				mouse.setMouseDown(true);
+				Globals.mouse.setMouseDown(true);
 			} else if(mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
-				mouse.setMouseDown(false);
+				Globals.mouse.setMouseDown(false);
 			} else if(mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
 				try {
-					cScreen.dispatchClick(mouse);
+					cScreen.dispatchClick(Globals.mouse);
 				} catch(Exception e) {
 					try {
 						Globals.getGSM().transition("exception");
-						ExceptionHandler.Handle(e);
-						System.exit(1);
 					} catch (GameStateException gse) {} // ignore this... base case in method prevents this
 					e.printStackTrace();
+					lastException = e;
+					return;
 				}
 			}
 		}
@@ -210,9 +214,9 @@ public class GZS_Game {
 	EventHandler<KeyEvent> keyHandler = (key) -> {
 		String code = key.getCode().toString();
 		if(key.getEventType() == KeyEvent.KEY_PRESSED) {
-			inputs.add(code);
+			Globals.inputs.add(code);
 		} else if(key.getEventType() == KeyEvent.KEY_RELEASED) {
-			inputs.remove(code);
+			Globals.inputs.remove(code);
 		}
 	};
 }

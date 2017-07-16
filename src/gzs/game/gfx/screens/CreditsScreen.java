@@ -10,7 +10,7 @@ public class CreditsScreen implements Screen {
 	}
 	
 	@Override
-	public void update(long cT, MouseInfo mouse) {
+	public void update(long cT) {
 		
 	}
 
@@ -22,5 +22,10 @@ public class CreditsScreen implements Screen {
 	@Override
 	public void dispatchClick(MouseInfo mouse) {
 		
+	}
+
+	@Override
+	public boolean hidesCursor() {
+		return false;
 	}
 }
