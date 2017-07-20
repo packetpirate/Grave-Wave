@@ -5,6 +5,8 @@ import java.util.Map;
 
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
+import gzs.game.objects.weapons.Pistol;
+import gzs.game.objects.weapons.Weapon;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
 import javafx.geometry.Rectangle2D;
@@ -35,6 +37,9 @@ public class Player implements Entity {
 	public double getDoubleAttribute(String key) { return dAttributes.get(key); }
 	public void setDoubleAttribute(String key, double val) { dAttributes.put(key, val); }
 	
+	private Weapon currentWeapon;
+	public Weapon getCurrentWeapon() { return currentWeapon; }
+	
 	private Image img;
 	
 	public Player() {
@@ -43,6 +48,8 @@ public class Player implements Entity {
 		iAttributes = new HashMap<String, Integer>();
 		dAttributes = new HashMap<String, Double>();
 		resetAttributes();
+		
+		currentWeapon = new Pistol();
 		
 		try {
 			img = FileUtilities.LoadImage("GZS_Player.png");
@@ -60,12 +67,20 @@ public class Player implements Entity {
 		if(Globals.inputs.contains("S")) move(0, speed);
 		if(Globals.inputs.contains("D")) move(speed, 0);
 		
+		if(Globals.mouse.isMouseDown() && currentWeapon.canFire(cTime)) {
+			currentWeapon.fire(new Pair<Double>(position.x, position.y), 
+							   getDoubleAttribute("theta"), cTime);
+		}
+		
+		currentWeapon.update(cTime);
+		
 		// Calculate the player's rotation based on mouse position.
 		setDoubleAttribute("theta", Calculate.Hypotenuse(position, Globals.mouse.getPosition()));
 	}
 
 	@Override
 	public void render(GraphicsContext gc, long cTime) {
+		currentWeapon.render(gc, cTime);
 		if(img != null) {
 			ImageView iv = new ImageView(img);
 			SnapshotParameters params = new SnapshotParameters();

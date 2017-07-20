@@ -14,6 +14,7 @@ import gzs.game.misc.MouseInfo;
 import gzs.game.misc.Pair;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class GameScreen implements Screen {
 	private Map<String, Entity> entities;
@@ -53,6 +54,12 @@ public class GameScreen implements Screen {
 				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
 				pair.getValue().render(gc, cT);
 			}
+			
+			Player player = (Player) entities.get("player");
+			int clip = player.getCurrentWeapon().getClipAmmo();
+			int inventory = player.getCurrentWeapon().getInventoryAmmo();
+			gc.setFill(Color.BLACK);
+			gc.fillText(String.format("Ammo: %d / %d", clip, inventory), 50, 20);
 		}
 	}
 

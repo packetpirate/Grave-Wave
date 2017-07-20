@@ -95,7 +95,8 @@ public class GZS_Game {
 						long now = nT / Globals.NANO_TO_MS;
 						
 						// Check if elapsed time since last update is greater than sleep time.
-						double elapsed = ((double)nT - (double)lastUpdate) / 1_000_000_000.0;
+						//double elapsed = ((double)nT - (double)lastUpdate) / 10_000_000_000_000.0;
+						long elapsed = now - lastUpdate;
 						if(elapsed >= Globals.UPDATE_TIME) {
 							update(now);
 							try {
@@ -157,7 +158,7 @@ public class GZS_Game {
 
 	private void render(long cT) {
 		if(Globals.getGSM().getState() != GameState.ERROR) {
-			gc.setFill(Color.WHITE);
+			gc.setFill(Color.GREEN);
 			gc.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
 			
 			// Render the current screen.
