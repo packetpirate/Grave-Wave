@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 public interface Weapon {
 	public abstract void update(long cTime);
 	public abstract void render(GraphicsContext gc, long cTime);
+	public abstract int getClipSize();
 	public abstract int getClipAmmo();
 	public abstract int getInventoryAmmo();
 	public abstract boolean canFire(long cTime);

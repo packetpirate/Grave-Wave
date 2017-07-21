@@ -6,7 +6,9 @@ import java.util.List;
 
 import gzs.game.gfx.particles.Particle;
 import gzs.game.misc.Pair;
+import gzs.game.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 
 public class Pistol implements Weapon {
@@ -14,6 +16,8 @@ public class Pistol implements Weapon {
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 2000;
+	private static final Media FIRE_SOUND = SoundManager.LoadSound("shoot4.wav");
+	private static final Media RELOAD_SOUND = SoundManager.LoadSound("buy_ammo2.wav");
 	
 	private List<Particle> projectiles;
 	private int ammoInClip;
@@ -24,6 +28,9 @@ public class Pistol implements Weapon {
 	
 	@Override
 	public List<Particle> getProjectiles() { return projectiles; }
+	
+	@Override
+	public int getClipSize() { return Pistol.CLIP_SIZE; }
 	
 	@Override
 	public int getClipAmmo() { return ammoInClip; }
@@ -88,13 +95,16 @@ public class Pistol implements Weapon {
 	public void fire(Pair<Double> position, double theta, long cTime) {
 		Color color = getProjectile().getColor();
 		double velocity = getProjectile().getVelocity();
-		double size = getProjectile().getSize();
+		double width = getProjectile().getWidth();
+		double height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle projectile = new Particle(color, position, velocity, theta,
-										   0.0, size, lifespan, cTime);
+										   0.0, new Pair<Double>(width, height), 
+										   lifespan, cTime);
 		projectiles.add(projectile);
 		ammoInClip--;
 		lastFired = cTime;
+		SoundManager.PlaySound(Pistol.FIRE_SOUND);
 	}
 
 	@Override
@@ -104,8 +114,10 @@ public class Pistol implements Weapon {
 			reloadStart = cTime;
 			
 			int newClip = (ammoInInventory < Pistol.CLIP_SIZE) ? ammoInInventory : Pistol.CLIP_SIZE;
-			ammoInInventory -= newClip;
+			ammoInInventory -= (newClip - ammoInClip);
 			ammoInClip = newClip;
+			
+			SoundManager.PlaySound(Pistol.RELOAD_SOUND);
 		}
 	}
 	

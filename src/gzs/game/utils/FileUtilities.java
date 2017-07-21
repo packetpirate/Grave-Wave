@@ -9,19 +9,27 @@ public class FileUtilities {
 	 * @param filename The name of the file, located in the res/images folder.
 	 * @return An image object representing the image at the location given.
 	 */
-	public static Image LoadImage(String filename) throws Exception {
+	public static Image LoadImage(String filename) {
 		if((filename == null) || filename.isEmpty()) return null;
 		
-		Image image =  new Image("file:res/images/" + filename);
-		
-		return image;
+		try {
+			Image image =  new Image("file:res/images/" + filename);
+			return image;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
-	public static Font LoadFont(String filename, double size) throws Exception {
+	public static Font LoadFont(String filename, double size) {
 		if((filename == null) || filename.isEmpty()) return null;
 		
-		Font font = Font.loadFont(("file:res/fonts/" + filename), size);
-		
-		return font;
+		try {
+			Font font = Font.loadFont(("file:res/fonts/" + filename), size);
+			return font;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 }

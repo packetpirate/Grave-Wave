@@ -51,12 +51,7 @@ public class Player implements Entity {
 		
 		currentWeapon = new Pistol();
 		
-		try {
-			img = FileUtilities.LoadImage("GZS_Player.png");
-		} catch(Exception e) {
-			img = null;
-			e.printStackTrace();
-		}
+		img = FileUtilities.LoadImage("GZS_Player.png");
 	}
 	
 	@Override
@@ -66,6 +61,11 @@ public class Player implements Entity {
 		if(Globals.inputs.contains("A")) move(-speed, 0);
 		if(Globals.inputs.contains("S")) move(0, speed);
 		if(Globals.inputs.contains("D")) move(speed, 0);
+		if(Globals.inputs.contains("R") && 
+		   !currentWeapon.isReloading(cTime) &&
+		   (currentWeapon.getClipAmmo() != currentWeapon.getClipSize())) {
+			currentWeapon.reload(cTime);
+		}
 		
 		if(Globals.mouse.isMouseDown() && currentWeapon.canFire(cTime)) {
 			currentWeapon.fire(new Pair<Double>(position.x, position.y), 

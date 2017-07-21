@@ -15,13 +15,8 @@ public class MenuScreen implements Screen {
 	private MenuButton exit;
 	
 	public MenuScreen() {
-		try {
-			background = FileUtilities.LoadImage("GZS_Splash.png");
-		} catch (Exception e) {
-			System.err.println("ERROR: Could not load background.");
-			e.printStackTrace();
-			background = null;
-		}
+		background = FileUtilities.LoadImage("GZS_Splash.png");
+		
 		gameStart = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 250), 
 									100, 40, "Start Game");
 		credits = new MenuButton(((Globals.WIDTH / 2) - 60), (Globals.HEIGHT - 200),

@@ -14,26 +14,26 @@ import gzs.game.misc.MouseInfo;
 import gzs.game.misc.Pair;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class GameScreen implements Screen {
+	private static final Image BACKGROUND = FileUtilities.LoadImage("GZS_Background6.png");
+	
 	private Map<String, Entity> entities;
 	
 	public GameScreen() {
 		entities = new HashMap<String, Entity>();
-		try {
-			entities.put("player", new Player());
-			entities.put("crosshairs", new Drawable(FileUtilities.LoadImage("GZS_Crosshair.png"),
-													new Pair<Double>(0.0, 0.0)) {
-				@Override
-				public void update(long cTime) {
-					Pair<Double> m = Globals.mouse.getPosition();
-					setPosition(m.x, m.y);
-				}
-			});
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		entities.put("player", new Player());
+		entities.put("crosshairs", new Drawable(FileUtilities.LoadImage("GZS_Crosshair.png"),
+												new Pair<Double>(0.0, 0.0)) {
+			@Override
+			public void update(long cTime) {
+				Pair<Double> m = Globals.mouse.getPosition();
+				setPosition(m.x, m.y);
+			}
+		});
+		
 	}
 
 	@Override
@@ -48,6 +48,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(GraphicsContext gc, long cT) {
+		gc.drawImage(BACKGROUND, 0, 0);
+		
 		{ // Render all entities.
 			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 			while(it.hasNext()) {
@@ -70,6 +72,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public boolean hidesCursor() {
-		return entities.containsKey("crosshairs");
+		return (entities.containsKey("crosshairs") && 
+			   (entities.get("crosshairs") != null));
 	}
 }

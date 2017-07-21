@@ -18,7 +18,7 @@ public class Particle implements Entity {
 	private Pair<Double> velocity;
 	private double theta;
 	private double angularVelocity;
-	private double size;
+	private Pair<Double> size;
 	private long lifespan;
 	public boolean isAlive(long cTime) {
 		long elapsed = cTime - created;
@@ -27,13 +27,13 @@ public class Particle implements Entity {
 	private long created;
 	
 	public Particle(Color color_, Pair<Double> position_, double velocity_, double theta_, 
-					double angularVelocity_, double size_, long lifespan_, long created_) {
+					double angularVelocity_, Pair<Double> size_, long lifespan_, long created_) {
 		this(null, color_, position_, velocity_, theta_, 
 			 angularVelocity_, size_, lifespan_, created_);
 	}
 	
 	public Particle(Image image_, Color color_, Pair<Double> position_, double velocity_,
-					double theta_, double angularVelocity_, double size_, long lifespan_,
+					double theta_, double angularVelocity_, Pair<Double> size_, long lifespan_,
 					long created_) {
 		this.image = image_;
 		this.color = color_;
@@ -68,10 +68,10 @@ public class Particle implements Entity {
 			gc.drawImage(iv.snapshot(params, null), (position.x - (image.getWidth() / 2)), 
 							  						(position.y - (image.getHeight() / 2)));
 		} else {
-			double x = position.x - (size / 2);
-			double y = position.y - (size / 2);
+			double x = position.x - (size.x / 2);
+			double y = position.y - (size.y / 2);
 			gc.setFill(color);
-			gc.fillOval(x, y, size, size);
+			gc.fillOval(x, y, size.x, size.y);
 		}
 	}
 }
