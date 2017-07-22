@@ -5,7 +5,7 @@ import java.util.Map;
 
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
-import gzs.game.objects.weapons.Pistol;
+import gzs.game.objects.weapons.AssaultRifle;
 import gzs.game.objects.weapons.Weapon;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
@@ -49,7 +49,7 @@ public class Player implements Entity {
 		dAttributes = new HashMap<String, Double>();
 		resetAttributes();
 		
-		currentWeapon = new Pistol();
+		currentWeapon = new AssaultRifle();
 		
 		img = FileUtilities.LoadImage("GZS_Player.png");
 	}

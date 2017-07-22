@@ -8,31 +8,33 @@ public class Animation {
 	private Image image;
 	private double sx, sy, sw, sh;
 	private int frames, current;
-	private long delay, lastUpdate, lifespan;
+	private long delay, lastUpdate;
+	private long lifespan, created;
 	
 	public Animation(Image image_, double fw_, double fh_, int frames_, long delay_) {
-		this(image_, fw_, fh_, frames_, delay_, -1);
+		this(image_, fw_, fh_, frames_, delay_, -1, -1);
 	}
 	
 	public Animation(Image image_, double fw_, double fh_, int frames_,
-					 long delay_, long lifespan_) {
+					 long delay_, long lifespan_, long created_) {
 		this.image = image_;
 		
 		this.sx = 0;
 		this.sy = 0;
 		this.sw = fw_;
-		this.sy = fh_;
+		this.sh = fh_;
 		
 		this.frames = frames_;
 		this.current = 0;
 		this.delay = delay_;
-		this.lifespan = lifespan_;
 		this.lastUpdate = 0;
+		this.lifespan = lifespan_;
+		this.created = created_;
 	}
 	
-	// TODO: Figure out if there's a way to handle this with just the variables we already have.
-	public boolean isActive() {
-		return true;
+	public boolean isActive(long cTime) {
+		long elapsed = cTime - created;
+		return ((lifespan == -1) || (elapsed < lifespan));
 	}
 
 	public void update(long cTime) {

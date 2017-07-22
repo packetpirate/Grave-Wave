@@ -68,10 +68,15 @@ public class Particle implements Entity {
 			gc.drawImage(iv.snapshot(params, null), (position.x - (image.getWidth() / 2)), 
 							  						(position.y - (image.getHeight() / 2)));
 		} else {
+			gc.save();
 			double x = position.x - (size.x / 2);
 			double y = position.y - (size.y / 2);
 			gc.setFill(color);
-			gc.fillOval(x, y, size.x, size.y);
+			gc.translate(position.x, position.y);
+			gc.rotate(Math.toDegrees(theta + (Math.PI / 2)));
+			gc.translate(-position.x, -position.y);
+			gc.fillRect(x, y, size.x, size.y);
+			gc.restore();
 		}
 	}
 }

@@ -33,7 +33,6 @@ public class GameScreen implements Screen {
 				setPosition(m.x, m.y);
 			}
 		});
-		
 	}
 
 	@Override

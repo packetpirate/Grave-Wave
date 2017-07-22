@@ -11,12 +11,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 
-public class Pistol implements Weapon {
-	private static final long COOLDOWN = 500;
-	private static final int CLIP_SIZE = 12;
+public class AssaultRifle implements Weapon {
+	private static final long COOLDOWN = 200;
+	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 2000;
-	private static final Media FIRE_SOUND = SoundManager.LoadSound("shoot4.wav");
+	private static final Media FIRE_SOUND = SoundManager.LoadSound("shoot3.wav");
 	private static final Media RELOAD_SOUND = SoundManager.LoadSound("buy_ammo2.wav");
 	
 	private List<Particle> projectiles;
@@ -27,18 +27,26 @@ public class Pistol implements Weapon {
 	private long reloadStart;
 	
 	@Override
-	public List<Particle> getProjectiles() { return projectiles; }
-	
-	@Override
-	public int getClipSize() { return Pistol.CLIP_SIZE; }
-	
-	@Override
-	public int getClipAmmo() { return ammoInClip; }
+	public List<Particle> getProjectiles() {
+		return projectiles;
+	}
 
 	@Override
-	public int getInventoryAmmo() { return ammoInInventory; }
+	public int getClipSize() {
+		return AssaultRifle.CLIP_SIZE;
+	}
+
+	@Override
+	public int getClipAmmo() {
+		return ammoInClip;
+	}
+
+	@Override
+	public int getInventoryAmmo() {
+		return ammoInInventory;
+	}
 	
-	public Pistol() {
+	public AssaultRifle() {
 		this.projectiles = new ArrayList<Particle>();
 		this.ammoInClip = CLIP_SIZE;
 		this.ammoInInventory = (START_CLIPS - 1) * CLIP_SIZE;
@@ -76,12 +84,13 @@ public class Pistol implements Weapon {
 		}
 	}
 
+
 	@Override
 	public boolean canFire(long cTime) {
 		if(reloading) return false;
 		boolean clipNotEmpty = ammoInClip > 0;
 		boolean ammoLeft = ammoInInventory > 0;
-		boolean cool = (cTime - lastFired) >= Pistol.COOLDOWN;
+		boolean cool = (cTime - lastFired) >= AssaultRifle.COOLDOWN;
 		
 		if(!clipNotEmpty) {
 			reload(cTime);
@@ -104,7 +113,7 @@ public class Pistol implements Weapon {
 		projectiles.add(projectile);
 		ammoInClip--;
 		lastFired = cTime;
-		SoundManager.PlaySound(Pistol.FIRE_SOUND);
+		SoundManager.PlaySound(AssaultRifle.FIRE_SOUND);
 	}
 
 	@Override
@@ -113,22 +122,24 @@ public class Pistol implements Weapon {
 			reloading = true;
 			reloadStart = cTime;
 			
-			int newClip = (ammoInInventory < Pistol.CLIP_SIZE) ? ammoInInventory : Pistol.CLIP_SIZE;
+			int newClip = (ammoInInventory < AssaultRifle.CLIP_SIZE) ? ammoInInventory : AssaultRifle.CLIP_SIZE;
 			ammoInInventory -= (newClip - ammoInClip);
 			ammoInClip = newClip;
 			
-			SoundManager.PlaySound(Pistol.RELOAD_SOUND);
+			SoundManager.PlaySound(AssaultRifle.RELOAD_SOUND);
 		}
 	}
-	
+
 	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
-		return ((elapsed < Pistol.RELOAD_TIME) && reloading);
+		return ((elapsed < AssaultRifle.RELOAD_TIME) && reloading);
 	}
-	
+
+
 	@Override
 	public ProjectileType getProjectile() {
-		return ProjectileType.HANDGUN;
+		return ProjectileType.ASSAULT;
 	}
+
 }
