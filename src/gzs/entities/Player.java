@@ -1,21 +1,20 @@
 package gzs.entities;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import gzs.entities.enemies.Enemy;
+import gzs.game.gfx.particles.Projectile;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
 import gzs.game.objects.weapons.AssaultRifle;
 import gzs.game.objects.weapons.Weapon;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 
 public class Player implements Entity {
 	private Pair<Double> position;
@@ -82,14 +81,13 @@ public class Player implements Entity {
 	public void render(GraphicsContext gc, long cTime) {
 		currentWeapon.render(gc, cTime);
 		if(img != null) {
-			ImageView iv = new ImageView(img);
-			SnapshotParameters params = new SnapshotParameters();
-			params.setFill(Color.TRANSPARENT);
-		    params.setTransform(new Rotate(Math.toDegrees(getDoubleAttribute("theta") + (Math.PI / 2)), 
-		    							  (img.getWidth() / 2), img.getHeight() / 2));
-		    params.setViewport(new Rectangle2D(0, 0, img.getWidth(), img.getHeight()));
-			gc.drawImage(iv.snapshot(params, null), (position.x - (img.getWidth() / 2)), 
-							  						(position.y - (img.getHeight() / 2)));
+			gc.save();
+			gc.translate(position.x, position.y);
+			gc.rotate(Math.toDegrees(getDoubleAttribute("theta") + (Math.PI / 2)));
+			gc.translate(-position.x, -position.y);
+			gc.drawImage(img, (position.x - (img.getWidth() / 2)), 
+							  (position.y - (img.getHeight() / 2)));
+			gc.restore();
 		} else {
 			gc.setStroke(Color.BLACK);
 			gc.setFill(Color.RED);
@@ -118,5 +116,40 @@ public class Player implements Entity {
 		
 		// Game Parameters
 		dAttributes.put("theta", 0.0);
+	}
+	
+	public void takeDamage(double amnt) {
+		double currentHealth = getDoubleAttribute("health");
+		double adjusted = currentHealth - amnt;
+		double newHealth = (adjusted < 0) ? 0 : adjusted;
+		setDoubleAttribute("health", newHealth);
+	}
+	
+	public boolean isAlive() {
+		// TODO: May need to revise this in the future.
+		return (getDoubleAttribute("health") > 0);
+	}
+	
+	public boolean touchingEnemy(Enemy enemy) {
+		return (isAlive() && enemy.checkCollision(position));
+	}
+	
+	/**
+	 * Checks for a collision between the enemy and the player's projectiles.
+	 * @param enemy The enemy to test against the projectiles.
+	 * @return If there is a collision, return true. Otherwise, false.
+	 */
+	public boolean checkCollisions(Enemy enemy, long cTime) {
+		Iterator<Projectile> it = currentWeapon.getProjectiles().iterator();
+		while(it.hasNext()) {
+			Projectile p = it.next();
+			if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {
+				p.collide();
+				enemy.takeDamage(p.getDamage());
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

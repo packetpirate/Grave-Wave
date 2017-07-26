@@ -7,11 +7,14 @@ import java.util.Map.Entry;
 
 import gzs.entities.Entity;
 import gzs.entities.Player;
+import gzs.entities.enemies.Enemy;
+import gzs.entities.enemies.Zumby;
 import gzs.game.gfx.Drawable;
 import gzs.game.gfx.Screen;
 import gzs.game.info.Globals;
 import gzs.game.misc.MouseInfo;
 import gzs.game.misc.Pair;
+import gzs.game.state.GameState;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -21,6 +24,8 @@ public class GameScreen implements Screen {
 	private static final Image BACKGROUND = FileUtilities.LoadImage("GZS_Background6.png");
 	
 	private Map<String, Entity> entities;
+	private long lastZumby;
+	private int zumbyCount;
 	
 	public GameScreen() {
 		entities = new HashMap<String, Entity>();
@@ -33,20 +38,54 @@ public class GameScreen implements Screen {
 				setPosition(m.x, m.y);
 			}
 		});
+		
+		entities.put("zumby1", new Zumby(new Pair<Double>(0.0, 0.0)));
+		zumbyCount = 1;
+		lastZumby = 0L;
 	}
 
 	@Override
-	public void update(long cT) {
+	public void update(long cT) throws Exception {
 		// Update all entities.
-		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-			pair.getValue().update(cT);
+		Player player = (Player) entities.get("player");
+		
+		if(Globals.getGSM().getState() != GameState.DEATH) {
+			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
+				pair.getValue().update(cT);
+				if(pair.getValue() instanceof Enemy) {
+					Enemy enemy = (Enemy) pair.getValue();
+					enemy.move(player);
+					
+					// Check if this enemy is touching any of the player's projectiles.
+					if(player.checkCollisions(enemy, cT) &&
+					   !enemy.isAlive(cT)) it.remove();
+					
+					// Check if the player is touching the enemy.
+					if(enemy.isAlive(cT) && 
+					   player.touchingEnemy(enemy)) player.takeDamage(enemy.getDamage());
+					
+					// If the player has died, transition state.
+					if(!player.isAlive()) {
+						Globals.getGSM().transition("die");
+						break;
+					}
+				}
+			}
+			
+			long elapsed = cT - lastZumby;
+			if(elapsed >= 1000) {
+				// Spawn a new zumby.
+				zumbyCount++;
+				lastZumby = cT;
+				entities.put(String.format("zumby%3d", zumbyCount), new Zumby(new Pair<Double>(0.0, 0.0)));
+			}
 		}
 	}
 
 	@Override
-	public void render(GraphicsContext gc, long cT) {
+	public void render(GraphicsContext gc, long cT) throws Exception {
 		gc.drawImage(BACKGROUND, 0, 0);
 		
 		{ // Render all entities.
@@ -59,8 +98,15 @@ public class GameScreen implements Screen {
 			Player player = (Player) entities.get("player");
 			int clip = player.getCurrentWeapon().getClipAmmo();
 			int inventory = player.getCurrentWeapon().getInventoryAmmo();
-			gc.setFill(Color.BLACK);
+			gc.setFill(Color.WHITE);
 			gc.fillText(String.format("Ammo: %d / %d", clip, inventory), 50, 20);
+		}
+		
+		if(Globals.getGSM().getState() == GameState.DEATH) {
+			gc.setStroke(Color.WHITE);
+			gc.setFill(Color.DARKRED);
+			gc.fillText("YOU DIED", ((Globals.WIDTH / 2) - 20), ((Globals.HEIGHT / 2) - 10));
+			gc.strokeText("YOU DIED", ((Globals.WIDTH / 2) - 20), ((Globals.HEIGHT / 2) - 10));
 		}
 	}
 

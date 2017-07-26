@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import gzs.game.gfx.particles.Particle;
+import gzs.game.gfx.particles.Projectile;
 import gzs.game.misc.Pair;
 import gzs.game.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,14 +13,15 @@ import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 
 public class AssaultRifle implements Weapon {
-	private static final long COOLDOWN = 200;
+	private static final long COOLDOWN = 100;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 2000;
+	private static final double DAMAGE = 75.0;
 	private static final Media FIRE_SOUND = SoundManager.LoadSound("shoot3.wav");
 	private static final Media RELOAD_SOUND = SoundManager.LoadSound("buy_ammo2.wav");
 	
-	private List<Particle> projectiles;
+	private List<Projectile> projectiles;
 	private int ammoInClip;
 	private int ammoInInventory;
 	private long lastFired;
@@ -27,7 +29,7 @@ public class AssaultRifle implements Weapon {
 	private long reloadStart;
 	
 	@Override
-	public List<Particle> getProjectiles() {
+	public List<Projectile> getProjectiles() {
 		return projectiles;
 	}
 
@@ -47,7 +49,7 @@ public class AssaultRifle implements Weapon {
 	}
 	
 	public AssaultRifle() {
-		this.projectiles = new ArrayList<Particle>();
+		this.projectiles = new ArrayList<Projectile>();
 		this.ammoInClip = CLIP_SIZE;
 		this.ammoInInventory = (START_CLIPS - 1) * CLIP_SIZE;
 		this.lastFired = 0L;
@@ -62,7 +64,7 @@ public class AssaultRifle implements Weapon {
 		
 		// Update all projectiles.
 		if(!projectiles.isEmpty()) {
-			Iterator<Particle> it = projectiles.iterator();
+			Iterator<Projectile> it = projectiles.iterator();
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {
@@ -76,7 +78,7 @@ public class AssaultRifle implements Weapon {
 	public void render(GraphicsContext gc, long cTime) {
 		// Render all projectiles.
 		if(!projectiles.isEmpty()) {
-			Iterator<Particle> it = projectiles.iterator();
+			Iterator<Projectile> it = projectiles.iterator();
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) p.render(gc, cTime);
@@ -107,9 +109,10 @@ public class AssaultRifle implements Weapon {
 		double width = getProjectile().getWidth();
 		double height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle projectile = new Particle(color, position, velocity, theta,
-										   0.0, new Pair<Double>(width, height), 
-										   lifespan, cTime);
+		Particle particle = new Particle(color, position, velocity, theta,
+										 0.0, new Pair<Double>(width, height), 
+										 lifespan, cTime);
+		Projectile projectile = new Projectile(particle, AssaultRifle.DAMAGE);
 		projectiles.add(projectile);
 		ammoInClip--;
 		lastFired = cTime;
