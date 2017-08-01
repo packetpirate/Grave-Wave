@@ -7,8 +7,10 @@ import java.util.List;
 import gzs.game.gfx.particles.Particle;
 import gzs.game.gfx.particles.Projectile;
 import gzs.game.misc.Pair;
+import gzs.game.utils.FileUtilities;
 import gzs.game.utils.SoundManager;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 
@@ -18,6 +20,7 @@ public class AssaultRifle implements Weapon {
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 2000;
 	private static final double DAMAGE = 75.0;
+	private static final Image INV_ICON = FileUtilities.LoadImage("GZS_RTPS.png");
 	private static final Media FIRE_SOUND = SoundManager.LoadSound("shoot3.wav");
 	private static final Media RELOAD_SOUND = SoundManager.LoadSound("buy_ammo2.wav");
 	
@@ -32,6 +35,9 @@ public class AssaultRifle implements Weapon {
 	public List<Projectile> getProjectiles() {
 		return projectiles;
 	}
+	
+	@Override
+	public Image getInventoryIcon() { return AssaultRifle.INV_ICON; }
 
 	@Override
 	public int getClipSize() {
@@ -139,6 +145,11 @@ public class AssaultRifle implements Weapon {
 		return ((elapsed < AssaultRifle.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public double getReloadTime(long cTime) {
+		long elapsed = cTime - reloadStart;
+		return ((double)elapsed / (double)AssaultRifle.RELOAD_TIME);
+	}
 
 	@Override
 	public ProjectileType getProjectile() {

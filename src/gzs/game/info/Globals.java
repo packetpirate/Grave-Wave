@@ -12,7 +12,6 @@ public class Globals {
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;
-	//public static final double UPDATE_TIME = 0.016667;
 	public static final long UPDATE_TIME = 20;
 	
 	public static double WIDTH = 800;

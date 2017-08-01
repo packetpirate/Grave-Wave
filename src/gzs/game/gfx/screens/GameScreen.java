@@ -10,6 +10,7 @@ import gzs.entities.Player;
 import gzs.entities.enemies.Enemy;
 import gzs.entities.enemies.Zumby;
 import gzs.game.gfx.Drawable;
+import gzs.game.gfx.HUD;
 import gzs.game.gfx.Screen;
 import gzs.game.info.Globals;
 import gzs.game.misc.MouseInfo;
@@ -22,12 +23,16 @@ import javafx.scene.paint.Color;
 
 public class GameScreen implements Screen {
 	private static final Image BACKGROUND = FileUtilities.LoadImage("GZS_Background6.png");
+	private static final Image DEATH_OVERLAY = FileUtilities.LoadImage("GZS_DeathScreen.png");
 	
+	private HUD hud;
 	private Map<String, Entity> entities;
 	private long lastZumby;
 	private int zumbyCount;
 	
 	public GameScreen() {
+		hud = new HUD();
+		
 		entities = new HashMap<String, Entity>();
 		entities.put("player", new Player());
 		entities.put("crosshairs", new Drawable(FileUtilities.LoadImage("GZS_Crosshair.png"),
@@ -64,7 +69,10 @@ public class GameScreen implements Screen {
 					
 					// Check if the player is touching the enemy.
 					if(enemy.isAlive(cT) && 
-					   player.touchingEnemy(enemy)) player.takeDamage(enemy.getDamage());
+					   player.touchingEnemy(enemy)) {
+						double damage = enemy.getDamage() / (1000L / Globals.UPDATE_TIME);
+						player.takeDamage(damage);
+					}
 					
 					// If the player has died, transition state.
 					if(!player.isAlive()) {
@@ -73,6 +81,8 @@ public class GameScreen implements Screen {
 					}
 				}
 			}
+			
+			hud.update(player, cT);
 			
 			long elapsed = cT - lastZumby;
 			if(elapsed >= 1000) {
@@ -102,11 +112,15 @@ public class GameScreen implements Screen {
 			gc.fillText(String.format("Ammo: %d / %d", clip, inventory), 50, 20);
 		}
 		
+		Player player = (Player)entities.get("player");
+		hud.render(gc, player, cT);
+		
 		if(Globals.getGSM().getState() == GameState.DEATH) {
-			gc.setStroke(Color.WHITE);
-			gc.setFill(Color.DARKRED);
-			gc.fillText("YOU DIED", ((Globals.WIDTH / 2) - 20), ((Globals.HEIGHT / 2) - 10));
-			gc.strokeText("YOU DIED", ((Globals.WIDTH / 2) - 20), ((Globals.HEIGHT / 2) - 10));
+			gc.save();
+			//gc.setGlobalBlendMode(BlendMode.SOFT_LIGHT);
+			gc.setGlobalAlpha(0.6);
+			gc.drawImage(DEATH_OVERLAY, 0, 0);
+			gc.restore();
 		}
 	}
 

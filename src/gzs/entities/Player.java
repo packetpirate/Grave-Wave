@@ -40,6 +40,7 @@ public class Player implements Entity {
 	public Weapon getCurrentWeapon() { return currentWeapon; }
 	
 	private Image img;
+	public Image getImage() { return img; }
 	
 	public Player() {
 		position = new Pair<Double>((Globals.WIDTH / 2), (Globals.HEIGHT / 2));
