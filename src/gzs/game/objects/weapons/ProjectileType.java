@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 
 public enum ProjectileType {
 	HANDGUN(new Color(0.95, 0.95, 0.55, 1.0), 75.0, 3.0, 10.0, 1500),
-	ASSAULT(new Color(0.95, 0.95, 0.75, 1.0), 75.0, 3.0, 12.0, 2000);
+	ASSAULT(new Color(0.95, 0.95, 0.75, 1.0), 75.0, 3.0, 12.0, 2000),
+	SHOTGUN(new Color(0.95, 0.95, 0.55, 1.0), 40.0, 4.0, 4.0, 800);
 	
 	private Color color;
 	public Color getColor() { return color; }

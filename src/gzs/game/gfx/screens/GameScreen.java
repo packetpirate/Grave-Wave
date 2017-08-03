@@ -134,4 +134,10 @@ public class GameScreen implements Screen {
 		return (entities.containsKey("crosshairs") && 
 			   (entities.get("crosshairs") != null));
 	}
+
+	@Override
+	public void dispatchScroll(int direction) {
+		Player player = (Player) entities.get("player");
+		player.weaponRotate(direction);
+	}
 }

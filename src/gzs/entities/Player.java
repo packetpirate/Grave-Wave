@@ -1,15 +1,16 @@
 package gzs.entities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import gzs.entities.enemies.Enemy;
 import gzs.game.gfx.particles.Projectile;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
-import gzs.game.objects.weapons.AssaultRifle;
-import gzs.game.objects.weapons.Weapon;
+import gzs.game.objects.weapons.*;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,8 +37,16 @@ public class Player implements Entity {
 	public double getDoubleAttribute(String key) { return dAttributes.get(key); }
 	public void setDoubleAttribute(String key, double val) { dAttributes.put(key, val); }
 	
-	private Weapon currentWeapon;
-	public Weapon getCurrentWeapon() { return currentWeapon; }
+	private List<Weapon> weapons;
+	private int weaponIndex;
+	public Weapon getCurrentWeapon() { return weapons.get(weaponIndex); }
+	public void weaponRotate(int direction) {
+		int wc = weapons.size();
+		// looks stupid, I know... but Java % is remainder, not modulus, so it's necessary
+		// for cases where remainder is negative
+		weaponIndex = ((((weaponIndex + direction) % wc) + wc) % wc);
+	}
+	
 	
 	private Image img;
 	public Image getImage() { return img; }
@@ -49,7 +58,12 @@ public class Player implements Entity {
 		dAttributes = new HashMap<String, Double>();
 		resetAttributes();
 		
-		currentWeapon = new AssaultRifle();
+		weapons = new ArrayList<Weapon>() {{
+			add(new Pistol());
+			add(new AssaultRifle());
+			add(new Shotgun());
+		}};
+		weaponIndex = 0;
 		
 		img = FileUtilities.LoadImage("GZS_Player.png");
 	}
@@ -62,17 +76,20 @@ public class Player implements Entity {
 		if(Globals.inputs.contains("S")) move(0, speed);
 		if(Globals.inputs.contains("D")) move(speed, 0);
 		if(Globals.inputs.contains("R") && 
-		   !currentWeapon.isReloading(cTime) &&
-		   (currentWeapon.getClipAmmo() != currentWeapon.getClipSize())) {
-			currentWeapon.reload(cTime);
+		   !getCurrentWeapon().isReloading(cTime) &&
+		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
+			getCurrentWeapon().reload(cTime);
 		}
 		
-		if(Globals.mouse.isMouseDown() && currentWeapon.canFire(cTime)) {
-			currentWeapon.fire(new Pair<Double>(position.x, position.y), 
+		if(Globals.mouse.isMouseDown() && getCurrentWeapon().canFire(cTime)) {
+			getCurrentWeapon().fire(new Pair<Double>(position.x, position.y), 
 							   getDoubleAttribute("theta"), cTime);
 		}
 		
-		currentWeapon.update(cTime);
+		for(Weapon w : weapons) {
+			w.update(cTime);
+		}
+		//getCurrentWeapon().update(cTime);
 		
 		// Calculate the player's rotation based on mouse position.
 		setDoubleAttribute("theta", Calculate.Hypotenuse(position, Globals.mouse.getPosition()));
@@ -80,7 +97,7 @@ public class Player implements Entity {
 
 	@Override
 	public void render(GraphicsContext gc, long cTime) {
-		currentWeapon.render(gc, cTime);
+		getCurrentWeapon().render(gc, cTime);
 		if(img != null) {
 			gc.save();
 			gc.translate(position.x, position.y);
@@ -141,7 +158,7 @@ public class Player implements Entity {
 	 * @return If there is a collision, return true. Otherwise, false.
 	 */
 	public boolean checkCollisions(Enemy enemy, long cTime) {
-		Iterator<Projectile> it = currentWeapon.getProjectiles().iterator();
+		Iterator<Projectile> it = getCurrentWeapon().getProjectiles().iterator();
 		while(it.hasNext()) {
 			Projectile p = it.next();
 			if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {

@@ -1,6 +1,7 @@
 package gzs.game.info;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import gzs.game.misc.MouseInfo;
@@ -22,4 +23,6 @@ public class Globals {
 	
 	public static Set<String> inputs = new HashSet<String>();
 	public static MouseInfo mouse = new MouseInfo();
+	
+	public static Random rand = new Random();
 }

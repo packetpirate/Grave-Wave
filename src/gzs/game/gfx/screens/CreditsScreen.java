@@ -28,4 +28,9 @@ public class CreditsScreen implements Screen {
 	public boolean hidesCursor() {
 		return false;
 	}
+
+	@Override
+	public void dispatchScroll(int direction) {
+		
+	}
 }

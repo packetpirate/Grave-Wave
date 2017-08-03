@@ -23,6 +23,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -76,6 +77,7 @@ public class GZS_Game {
 			mScene.addEventHandler(MouseEvent.MOUSE_DRAGGED, mouseHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_RELEASED, mouseHandler);
 			mScene.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseHandler);
+			mScene.addEventHandler(ScrollEvent.SCROLL, scrollHandler);
 			
 			mStage.sizeToScene();
 			
@@ -209,6 +211,14 @@ public class GZS_Game {
 					return;
 				}
 			}
+		}
+	};
+	
+	EventHandler<ScrollEvent> scrollHandler = (scrollEvent) -> {
+		if(Globals.getGSM().getState() == GameState.GAME) {
+			double deltaY = scrollEvent.getDeltaY();
+			if(deltaY < 0) cScreen.dispatchScroll(-1);
+			else if(deltaY > 0) cScreen.dispatchScroll(1);
 		}
 	};
 	

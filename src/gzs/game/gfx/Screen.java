@@ -8,4 +8,5 @@ public interface Screen {
 	public void update(long cT) throws Exception;
 	public void render(GraphicsContext gc, long cT) throws Exception;
 	public void dispatchClick(MouseInfo mouse) throws Exception;
+	public void dispatchScroll(int direction);
 }
