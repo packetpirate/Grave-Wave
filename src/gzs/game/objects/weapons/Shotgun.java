@@ -30,6 +30,7 @@ public class Shotgun implements Weapon {
 	private List<Projectile> projectiles;
 	private int ammoInClip;
 	private int ammoInInventory;
+	private boolean active;
 	private long lastFired;
 	private boolean reloading;
 	private long reloadStart;
@@ -38,6 +39,7 @@ public class Shotgun implements Weapon {
 		this.projectiles = new ArrayList<Projectile>();
 		this.ammoInClip = CLIP_SIZE;
 		this.ammoInInventory = (START_CLIPS - 1) * CLIP_SIZE;
+		this.active = false;
 		this.lastFired = 0L;
 		this.reloading = false;
 		this.reloadStart = 0L;
@@ -164,4 +166,13 @@ public class Shotgun implements Weapon {
 		return ProjectileType.SHOTGUN;
 	}
 
+	@Override
+	public boolean hasWeapon() {
+		return active;
+	}
+
+	@Override
+	public void activate() {
+		active = true;
+	}
 }

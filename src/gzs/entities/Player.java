@@ -38,13 +38,20 @@ public class Player implements Entity {
 	public void setDoubleAttribute(String key, double val) { dAttributes.put(key, val); }
 	
 	private List<Weapon> weapons;
+	public List<Weapon> getWeapons() { return weapons; }
+	public int activeWeapons() {
+		return (int)weapons.stream()
+						   .filter((w) -> w.hasWeapon())
+						   .count();
+	}
 	private int weaponIndex;
+	public int getWeaponIndex() { return weaponIndex; }
 	public Weapon getCurrentWeapon() { return weapons.get(weaponIndex); }
 	public void weaponRotate(int direction) {
 		int wc = weapons.size();
-		// looks stupid, I know... but Java % is remainder, not modulus, so it's necessary
-		// for cases where remainder is negative
-		weaponIndex = ((((weaponIndex + direction) % wc) + wc) % wc);
+		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
+		weaponIndex = Math.floorMod((weaponIndex + direction), wc);
+		// TODO: Fix this. Currently cycles to next weapon even if the player doesn't have it.
 	}
 	
 	
@@ -64,6 +71,8 @@ public class Player implements Entity {
 			add(new Shotgun());
 		}};
 		weaponIndex = 0;
+		weapons.get(weaponIndex).activate(); // activate the Pistol by default
+		weapons.get(weaponIndex + 1).activate();
 		
 		img = FileUtilities.LoadImage("GZS_Player.png");
 	}

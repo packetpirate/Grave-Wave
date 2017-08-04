@@ -44,8 +44,8 @@ public class GameScreen implements Screen {
 			}
 		});
 		
-		entities.put("zumby1", new Zumby(new Pair<Double>(0.0, 0.0)));
-		zumbyCount = 1;
+		//entities.put("zumby1", new Zumby(new Pair<Double>(0.0, 0.0)));
+		zumbyCount = 0;
 		lastZumby = 0L;
 	}
 
@@ -84,8 +84,9 @@ public class GameScreen implements Screen {
 			
 			hud.update(player, cT);
 			
+			boolean spawn = false;
 			long elapsed = cT - lastZumby;
-			if(elapsed >= 1000) {
+			if(spawn && (elapsed >= 1000)) {
 				// Spawn a new zumby.
 				zumbyCount++;
 				lastZumby = cT;
@@ -138,6 +139,9 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispatchScroll(int direction) {
 		Player player = (Player) entities.get("player");
-		player.weaponRotate(direction);
+		if(player.activeWeapons() > 1) {
+			player.weaponRotate(direction);
+			hud.queueWeaponCycle();
+		}
 	}
 }
