@@ -50,8 +50,10 @@ public class Player implements Entity {
 	public void weaponRotate(int direction) {
 		int wc = weapons.size();
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
-		weaponIndex = Math.floorMod((weaponIndex + direction), wc);
-		// TODO: Fix this. Currently cycles to next weapon even if the player doesn't have it.
+		//weaponIndex = Math.floorMod((weaponIndex + direction), wc);
+		int i = Math.floorMod((weaponIndex + direction), wc);
+		while(!weapons.get(i).hasWeapon()) i += direction;
+		weaponIndex = i;
 	}
 	
 	
@@ -73,6 +75,7 @@ public class Player implements Entity {
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
 		weapons.get(weaponIndex + 1).activate();
+		weapons.get(weaponIndex + 2).activate();
 		
 		img = FileUtilities.LoadImage("GZS_Player.png");
 	}
@@ -95,10 +98,7 @@ public class Player implements Entity {
 							   getDoubleAttribute("theta"), cTime);
 		}
 		
-		for(Weapon w : weapons) {
-			w.update(cTime);
-		}
-		//getCurrentWeapon().update(cTime);
+		weapons.stream().forEach(w -> w.update(cTime));
 		
 		// Calculate the player's rotation based on mouse position.
 		setDoubleAttribute("theta", Calculate.Hypotenuse(position, Globals.mouse.getPosition()));

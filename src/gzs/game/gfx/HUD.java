@@ -71,16 +71,14 @@ public class HUD {
 		} // End health bar rendering.
 		
 		if(displayWeapons(cTime)) {
-			// Render the three weapons in front of the current weapon.
+			// Render the three weapons (or the player's active weapons - 1) on 
+			// top of the current weapon.
 			List<Weapon> weapons = player.getWeapons();
-			int wi = player.getWeaponIndex();
-			// get the start Y (3 * the size of the box containing the weapon image)
-			double startY = WEAPONS_ORIGIN.y - (3.0 * 54.0);
-			for(int i = 0; i < 3; i++) {
-				// TODO: Fix this. Currently shows weapons out of order and allows current weapon
-				// to display above current weapon in list of three.
-				Weapon w = weapons.get(Math.floorMod((wi + i + 1), weapons.size()));
-				double cy = (startY + (i * 54.0));
+			int wi = player.getWeaponIndex() - 1;
+			double startY = WEAPONS_ORIGIN.y;
+			for(int i = 0; i < Math.min(3, player.activeWeapons()); i++) {
+				Weapon w = weapons.get(Math.floorMod((wi + (i + 1)), weapons.size()));
+				double cy = (startY - (i * 54.0));
 				
 				gc.setFill(Color.LIGHTGRAY);
 				gc.setStroke(Color.LIGHTSLATEGRAY);
@@ -118,7 +116,7 @@ public class HUD {
 				gc.save();
 				gc.setGlobalAlpha(0.5);
 				gc.setFill(Color.WHITE);
-				gc.fillRect(WEAPONS_ORIGIN.x, y, 48.0, height);
+				gc.fillRect((WEAPONS_ORIGIN.x + 3.0), y, 48.0, height);
 				gc.restore();
 			}
 			

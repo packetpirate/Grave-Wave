@@ -44,7 +44,6 @@ public class GameScreen implements Screen {
 			}
 		});
 		
-		//entities.put("zumby1", new Zumby(new Pair<Double>(0.0, 0.0)));
 		zumbyCount = 0;
 		lastZumby = 0L;
 	}
@@ -84,7 +83,7 @@ public class GameScreen implements Screen {
 			
 			hud.update(player, cT);
 			
-			boolean spawn = false;
+			boolean spawn = true;
 			long elapsed = cT - lastZumby;
 			if(spawn && (elapsed >= 1000)) {
 				// Spawn a new zumby.
