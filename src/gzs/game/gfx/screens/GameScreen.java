@@ -15,6 +15,9 @@ import gzs.game.gfx.Screen;
 import gzs.game.info.Globals;
 import gzs.game.misc.MouseInfo;
 import gzs.game.misc.Pair;
+import gzs.game.objects.items.AmmoCrate;
+import gzs.game.objects.items.HealthKit;
+import gzs.game.objects.items.Item;
 import gzs.game.state.GameState;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,8 +30,15 @@ public class GameScreen implements Screen {
 	
 	private HUD hud;
 	private Map<String, Entity> entities;
+	
 	private long lastZumby;
 	private int zumbyCount;
+	
+	private long lastHealth;
+	private int healthCount;
+	
+	private long lastAmmo;
+	private int ammoCount;
 	
 	public GameScreen() {
 		hud = new HUD();
@@ -46,6 +56,12 @@ public class GameScreen implements Screen {
 		
 		zumbyCount = 0;
 		lastZumby = 0L;
+		
+		healthCount = 0;
+		lastHealth = 0L;
+		
+		ammoCount = 0;
+		lastAmmo = 0L;
 	}
 
 	@Override
@@ -69,7 +85,7 @@ public class GameScreen implements Screen {
 					// Check if the player is touching the enemy.
 					if(enemy.isAlive(cT) && 
 					   player.touchingEnemy(enemy)) {
-						double damage = enemy.getDamage() / (1000L / Globals.UPDATE_TIME);
+						double damage = enemy.getDamage() / (1_000L / Globals.UPDATE_TIME);
 						player.takeDamage(damage);
 					}
 					
@@ -78,19 +94,54 @@ public class GameScreen implements Screen {
 						Globals.getGSM().transition("die");
 						break;
 					}
+				} else if(pair.getValue() instanceof Item) {
+					Item item = (Item) pair.getValue();
+					if(item.isActive(cT)) {
+						player.checkItem(item, cT);
+					} else it.remove();
 				}
 			}
 			
 			hud.update(player, cT);
 			
-			boolean spawn = true;
-			long elapsed = cT - lastZumby;
-			if(spawn && (elapsed >= 1000)) {
-				// Spawn a new zumby.
-				zumbyCount++;
-				lastZumby = cT;
-				entities.put(String.format("zumby%3d", zumbyCount), new Zumby(new Pair<Double>(0.0, 0.0)));
-			}
+			{ // Begin Zombie Spawning
+				boolean spawn = true;
+				long elapsed = cT - lastZumby;
+				if(spawn && (elapsed >= 1_000L)) {
+					// Spawn a new zumby.
+					zumbyCount++;
+					lastZumby = cT;
+					entities.put(String.format("zumby%3d", zumbyCount), new Zumby(new Pair<Double>(0.0, 0.0)));
+				}
+			} // End Zombie Spawning
+			
+			{ // Begin Health Spawning
+				boolean spawn = true;
+				long elapsed = cT - lastHealth;
+				if(spawn && (elapsed >= 20_000L)) {
+					// Spawn a new health pack.
+					double spawnX = ((Globals.WIDTH * 2) / 3);
+					double spawnY = (Globals.HEIGHT / 4);
+					healthCount++;
+					lastHealth = cT;
+					entities.put(String.format("health%3d", healthCount),
+								 new HealthKit(new Pair<Double>(spawnX, spawnY), cT));
+				}
+			} // End Health Spawning
+			
+			{ // Begin Ammo Spawning
+				boolean spawn = true;
+				long elapsed = cT - lastAmmo;
+				if(spawn && (elapsed >= 20_000L)) {
+					// Spawn a new health pack.
+					double spawnX = ((Globals.WIDTH * 2) / 3);
+					double spawnY = ((Globals.HEIGHT * 3) / 4);
+					ammoCount++;
+					lastAmmo = cT;
+					entities.put(String.format("ammo%3d", ammoCount),
+								 new AmmoCrate(new Pair<Double>(spawnX, spawnY), cT));
+				}
+			} // End Ammo Spawning
 		}
 	}
 

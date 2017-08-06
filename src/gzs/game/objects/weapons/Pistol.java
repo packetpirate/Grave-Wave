@@ -47,6 +47,11 @@ public class Pistol implements Weapon {
 	@Override
 	public int getInventoryAmmo() { return ammoInInventory; }
 	
+	@Override
+	public void addInventoryAmmo(int amnt) {
+		ammoInInventory += amnt;
+	}
+	
 	public Pistol() {
 		this.projectiles = new ArrayList<Projectile>();
 		this.ammoInClip = CLIP_SIZE;

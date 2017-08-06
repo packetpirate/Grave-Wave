@@ -55,6 +55,11 @@ public class AssaultRifle implements Weapon {
 		return ammoInInventory;
 	}
 	
+	@Override
+	public void addInventoryAmmo(int amnt) {
+		ammoInInventory += amnt;
+	}
+	
 	public AssaultRifle() {
 		this.projectiles = new ArrayList<Projectile>();
 		this.ammoInClip = CLIP_SIZE;

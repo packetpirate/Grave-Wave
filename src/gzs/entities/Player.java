@@ -10,7 +10,11 @@ import gzs.entities.enemies.Enemy;
 import gzs.game.gfx.particles.Projectile;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
-import gzs.game.objects.weapons.*;
+import gzs.game.objects.items.Item;
+import gzs.game.objects.weapons.AssaultRifle;
+import gzs.game.objects.weapons.Pistol;
+import gzs.game.objects.weapons.Shotgun;
+import gzs.game.objects.weapons.Weapon;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
 import javafx.scene.canvas.GraphicsContext;
@@ -41,8 +45,15 @@ public class Player implements Entity {
 	public List<Weapon> getWeapons() { return weapons; }
 	public int activeWeapons() {
 		return (int)weapons.stream()
-						   .filter((w) -> w.hasWeapon())
+						   .filter(w -> w.hasWeapon())
 						   .count();
+	}
+	public List<Weapon> getActiveWeapons() {
+		List<Weapon> activeWeapons = new ArrayList<Weapon>();
+		for(Weapon w : weapons) {
+			if(w.hasWeapon()) activeWeapons.add(w); 
+		}
+		return activeWeapons;
 	}
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
@@ -145,6 +156,14 @@ public class Player implements Entity {
 		dAttributes.put("theta", 0.0);
 	}
 	
+	public void addHealth(double amnt) {
+		double currentHealth = getDoubleAttribute("health");
+		double maxHealth = getDoubleAttribute("maxHealth");
+		double adjusted = currentHealth + amnt;
+		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
+		setDoubleAttribute("health", newHealth);
+	}
+	
 	public void takeDamage(double amnt) {
 		double currentHealth = getDoubleAttribute("health");
 		double adjusted = currentHealth - amnt;
@@ -178,5 +197,10 @@ public class Player implements Entity {
 		}
 		
 		return false;
+	}
+	
+	public void checkItem(Item item, long cTime) {
+		double distance = Calculate.Distance(position, item.getPosition());
+		if(item.isTouching(distance)) item.apply(this, cTime);
 	}
 }

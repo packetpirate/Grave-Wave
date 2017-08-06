@@ -9,7 +9,7 @@ import gzs.game.state.GameStateManager;
 
 public class Globals {
 	// Contains global constants.
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.15";
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;

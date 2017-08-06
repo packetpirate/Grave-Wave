@@ -14,6 +14,7 @@ public interface Weapon {
 	public abstract int getClipSize();
 	public abstract int getClipAmmo();
 	public abstract int getInventoryAmmo();
+	public abstract void addInventoryAmmo(int amnt);
 	public abstract boolean hasWeapon();
 	public abstract void activate();
 	public abstract boolean canFire(long cTime);
