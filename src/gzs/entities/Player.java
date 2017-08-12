@@ -15,6 +15,8 @@ import gzs.game.objects.weapons.AssaultRifle;
 import gzs.game.objects.weapons.Pistol;
 import gzs.game.objects.weapons.Shotgun;
 import gzs.game.objects.weapons.Weapon;
+import gzs.game.status.Status;
+import gzs.game.status.StatusEffect;
 import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
 import javafx.scene.canvas.GraphicsContext;
@@ -67,6 +69,29 @@ public class Player implements Entity {
 		weaponIndex = i;
 	}
 	
+	private List<StatusEffect> statusEffects;
+	public List<StatusEffect> getStatuses() { return statusEffects; }
+	public void addStatus(StatusEffect effect, long cTime) {
+		// First check to see if the player already has this status.
+		for(StatusEffect se : statusEffects) {
+			Status s = se.getStatus();
+			if(s.equals(effect.getStatus())) {
+				// Refresh the effect rather than adding it to the list.
+				se.refresh(cTime);
+			}
+		}
+		
+		// The player does not have this effect. Add it.
+		statusEffects.add(effect);
+	}
+	public boolean hasStatus(Status status) {
+		for(StatusEffect se : statusEffects) {
+			Status ses = se.getStatus();
+			if(ses.equals(status)) return true;
+		}
+		
+		return false;
+	}
 	
 	private Image img;
 	public Image getImage() { return img; }
@@ -88,11 +113,25 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 1).activate();
 		weapons.get(weaponIndex + 2).activate();
 		
+		statusEffects = new ArrayList<StatusEffect>();
+		
 		img = FileUtilities.LoadImage("GZS_Player.png");
 	}
 	
 	@Override
 	public void update(long cTime) {
+		// Need to make sure to update the status effects first.
+		Iterator<StatusEffect> it = statusEffects.iterator();
+		while(it.hasNext()) {
+			StatusEffect status = (StatusEffect) it.next();
+			if(status.isActive(cTime)) {
+				status.update(this, cTime);
+			} else {
+				status.onDestroy(this, cTime);
+				it.remove();
+			}
+		}
+		
 		double speed = getDoubleAttribute("speed") * getDoubleAttribute("spdMult");
 		if(Globals.inputs.contains("W")) move(0, -speed);
 		if(Globals.inputs.contains("A")) move(-speed, 0);
@@ -142,6 +181,7 @@ public class Player implements Entity {
 		iAttributes.put("money", 0);
 		
 		iAttributes.put("experience", 0);
+		iAttributes.put("expToLevel", 100);
 		iAttributes.put("level", 1);
 		iAttributes.put("skillPoints", 0);
 		

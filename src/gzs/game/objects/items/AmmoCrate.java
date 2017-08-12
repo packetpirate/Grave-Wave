@@ -14,7 +14,7 @@ import javafx.scene.media.Media;
 public class AmmoCrate extends Item {
 	private static final Image IMAGE = FileUtilities.LoadImage("GZS_Ammo.png");
 	private static final Media SOUND = SoundManager.LoadSound("powerup2.wav");
-	private static final long DURATION = 10000L;
+	private static final long DURATION = 10_000L;
 	
 	public AmmoCrate(Pair<Double> pos, long cTime) {
 		super(pos, cTime);

@@ -6,10 +6,12 @@ import gzs.entities.Player;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
 import gzs.game.objects.weapons.Weapon;
+import gzs.game.status.StatusEffect;
 import gzs.game.utils.FileUtilities;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -20,6 +22,8 @@ public class HUD {
 	
 	private static final Pair<Double> HEALTH_ORIGIN = new Pair<Double>(10.0, 10.0);
 	private static final Pair<Double> WEAPONS_ORIGIN = new Pair<Double>(10.0, (Globals.HEIGHT - 64.0));
+	private static final Pair<Double> EXP_ORIGIN = new Pair<Double>(10.0, 41.0);
+	private static final Pair<Double> STATUS_ORIGIN = new Pair<Double>(10.0, 62.0);
 	
 	private long lastWeaponSwitch;
 	private boolean cycleWeapons;
@@ -69,6 +73,26 @@ public class HUD {
 			gc.fillText(healthText, (HEALTH_ORIGIN.x + 78.0), (HEALTH_ORIGIN.y + 5.0));
 			gc.restore();
 		} // End health bar rendering.
+		
+		{ // Begin experience bar rendering.
+			double currentExp = (double) player.getIntAttribute("experience");
+			double expToLevel = (double) player.getIntAttribute("expToLevel");
+			double percentage = currentExp / expToLevel;
+			
+			gc.setFill(Color.BLACK);
+			gc.setStroke(Color.LIGHTGRAY);
+			gc.fillRect(EXP_ORIGIN.x, EXP_ORIGIN.y, 156.0, 16.0);
+			gc.strokeRect(EXP_ORIGIN.x, EXP_ORIGIN.y, 156.0, 16.0);
+			
+			if(percentage != 0.0) {
+				gc.setFill(Color.GREEN);
+				gc.setStroke(Color.LIGHTSLATEGRAY);
+				gc.fillRect((EXP_ORIGIN.x + 3.0), (EXP_ORIGIN.y + 3.0), 
+							(percentage * 150.0), 10.0);
+				gc.strokeRect((EXP_ORIGIN.x + 3.0), (EXP_ORIGIN.y + 3.0), 
+							  (percentage * 150.0), 10.0);
+			}
+		} // End experience bar rendering.
 		
 		if(displayWeapons(cTime)) {
 			// Render the three weapons (or the player's active weapons - 1) on 
@@ -131,5 +155,22 @@ public class HUD {
 			gc.fillText(ammoText, (WEAPONS_ORIGIN.x + 99.0), (WEAPONS_ORIGIN.y + 18.0));
 			gc.restore();
 		} // End weapons loadout rendering.
+		
+		{ // Begin Status Effects rendering.
+			double xPlus = 0.0;
+			List<StatusEffect> statusEffects = player.getStatuses();
+			for(StatusEffect status : statusEffects) {
+				// Render each individual status underneath the health and experience bars.
+				Image img = status.getIcon();
+				double percentageTimeLeft = status.getPercentageTimeLeft(cTime);
+				
+				gc.save();
+				gc.setGlobalAlpha(percentageTimeLeft);
+				gc.drawImage(img, (STATUS_ORIGIN.x + xPlus), STATUS_ORIGIN.y);
+				gc.restore();
+				
+				xPlus += img.getWidth() + 5.0;
+			}
+		} // End Status Effects rendering.
 	}
 }

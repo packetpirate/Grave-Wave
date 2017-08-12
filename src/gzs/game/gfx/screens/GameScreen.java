@@ -18,6 +18,7 @@ import gzs.game.misc.Pair;
 import gzs.game.objects.items.AmmoCrate;
 import gzs.game.objects.items.HealthKit;
 import gzs.game.objects.items.Item;
+import gzs.game.objects.items.SpeedItem;
 import gzs.game.state.GameState;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,6 +40,9 @@ public class GameScreen implements Screen {
 	
 	private long lastAmmo;
 	private int ammoCount;
+	
+	private long lastSpeed;
+	private int speedCount;
 	
 	public GameScreen() {
 		hud = new HUD();
@@ -62,6 +66,9 @@ public class GameScreen implements Screen {
 		
 		ammoCount = 0;
 		lastAmmo = 0L;
+		
+		speedCount = 0;
+		lastSpeed = 0L;
 	}
 
 	@Override
@@ -142,6 +149,20 @@ public class GameScreen implements Screen {
 								 new AmmoCrate(new Pair<Double>(spawnX, spawnY), cT));
 				}
 			} // End Ammo Spawning
+			
+			{ // Begin Speed Spawning
+				boolean spawn = true;
+				long elapsed = cT - lastSpeed;
+				if(spawn && (elapsed >= 20_000L)) {
+					// Spawn a new speed power up.
+					double spawnX = (Globals.WIDTH / 4);
+					double spawnY = ((Globals.HEIGHT * 3) / 4);
+					speedCount++;
+					lastSpeed = cT;
+					entities.put(String.format("speed%3d", speedCount),
+								 new SpeedItem(new Pair<Double>(spawnX, spawnY), cT));
+				}
+			} // End Speed Spawning
 		}
 	}
 
