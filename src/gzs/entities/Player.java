@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import gzs.entities.enemies.Enemy;
+import gzs.game.gfx.Flashlight;
 import gzs.game.gfx.particles.Projectile;
 import gzs.game.info.Globals;
 import gzs.game.misc.Pair;
@@ -96,6 +97,9 @@ public class Player implements Entity {
 	private Image img;
 	public Image getImage() { return img; }
 	
+	private Flashlight flashlight;
+	public Flashlight getFlashlight() { return flashlight; }
+	
 	public Player() {
 		position = new Pair<Double>((Globals.WIDTH / 2), (Globals.HEIGHT / 2));
 		
@@ -116,6 +120,7 @@ public class Player implements Entity {
 		statusEffects = new ArrayList<StatusEffect>();
 		
 		img = FileUtilities.LoadImage("GZS_Player.png");
+		flashlight = new Flashlight();
 	}
 	
 	@Override
@@ -152,6 +157,7 @@ public class Player implements Entity {
 		
 		// Calculate the player's rotation based on mouse position.
 		setDoubleAttribute("theta", Calculate.Hypotenuse(position, Globals.mouse.getPosition()));
+		flashlight.update(this, cTime);
 	}
 
 	@Override

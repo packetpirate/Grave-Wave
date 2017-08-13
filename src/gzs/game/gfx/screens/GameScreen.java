@@ -22,6 +22,7 @@ import gzs.game.objects.items.SpeedItem;
 import gzs.game.state.GameState;
 import gzs.game.utils.FileUtilities;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -168,6 +169,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(GraphicsContext gc, long cT) throws Exception {
+		Player player = (Player)entities.get("player");
+		
 		gc.drawImage(BACKGROUND, 0, 0);
 		
 		{ // Render all entities.
@@ -177,19 +180,25 @@ public class GameScreen implements Screen {
 				pair.getValue().render(gc, cT);
 			}
 			
-			Player player = (Player) entities.get("player");
 			int clip = player.getCurrentWeapon().getClipAmmo();
 			int inventory = player.getCurrentWeapon().getInventoryAmmo();
 			gc.setFill(Color.WHITE);
 			gc.fillText(String.format("Ammo: %d / %d", clip, inventory), 50, 20);
 		}
 		
-		Player player = (Player)entities.get("player");
+		gc.save();
+		gc.setGlobalAlpha(0.75);
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
+		gc.setGlobalAlpha(0.15);
+		gc.setGlobalBlendMode(BlendMode.SRC_OVER);
+		player.getFlashlight().render(gc, player, cT);
+		gc.restore();
+		
 		hud.render(gc, player, cT);
 		
 		if(Globals.getGSM().getState() == GameState.DEATH) {
 			gc.save();
-			//gc.setGlobalBlendMode(BlendMode.SOFT_LIGHT);
 			gc.setGlobalAlpha(0.6);
 			gc.drawImage(DEATH_OVERLAY, 0, 0);
 			gc.restore();
