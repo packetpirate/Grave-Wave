@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import gzs.game.misc.MouseInfo;
+
 public class Globals {
 	// Contains global constants.
 	public static final String VERSION = "0.15";
@@ -19,7 +21,7 @@ public class Globals {
 	//public static GameStateManager getGSM() { return Globals.GSM; };
 	
 	public static Set<String> inputs = new HashSet<String>();
-	//public static MouseInfo mouse = new MouseInfo();
+	public static MouseInfo mouse = new MouseInfo();
 	
 	public static Random rand = new Random();
 }

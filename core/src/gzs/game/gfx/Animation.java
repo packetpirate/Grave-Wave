@@ -82,16 +82,12 @@ public class Animation {
 
 	/**
 	 * Render the current frame of the animation.
-	 * @param gc The graphics context of the scene.
+	 * @param batch The sprite batch used for drawing.
 	 * @param position The position to render the animation at.
 	 * @param cTime The current time (in milliseconds).
 	 */
 	public void render(SpriteBatch batch, Pair<Double> position, long cTime) {
 		if(image != null) {
-			/*gc.drawImage(image, sx, sy, sw, sh, 
-						 (position.x - (sw / 2)), 
-						 (position.y - (sh / 2)), 
-						 sw, sh);*/
 			batch.begin();
 			batch.draw(image, 
 					   position.x.floatValue(), 
@@ -104,28 +100,20 @@ public class Animation {
 	
 	/**
 	 * Render the current frame of the animation.
-	 * @param gc The graphics context of the scene.
+	 * @param batch The sprite batch used for drawing.
 	 * @param position The position to render the animation at.
 	 * @param theta The angle to rotate the animation by. Measured in radians.
 	 * @param cTime The current time (in milliseconds).
 	 */
 	public void render(SpriteBatch batch, Pair<Double> position, double theta, long cTime) {
 		if(image != null) {
-			/*gc.save();
-			gc.translate(position.x, position.y);
-			gc.rotate(Math.toDegrees(theta + (Math.PI / 2)));
-			gc.translate(-position.x, -position.y);
-			gc.drawImage(image, sx, sy, sw, sh, 
-						 (position.x - (sw / 2)), 
-						 (position.y - (sh / 2)), 
-						 sw, sh);
-			gc.restore();*/
 			batch.begin();
 			batch.draw(image, 
 					   position.x.floatValue(), 
 					   position.y.floatValue(), 
 					   0.0f, 0.0f, sw, sh, 1, 1, 
-					   (float)theta, sx, sy, sw, sh, false, true);
+					   (float)(Math.toDegrees(theta + (Math.PI / 2))), 
+					   sx, sy, sw, sh, false, true);
 			batch.end();
 		}
 	}
