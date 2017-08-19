@@ -1,6 +1,7 @@
 package gzs.entities.enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import gzs.entities.Entity;
 import gzs.entities.Player;
@@ -38,7 +39,7 @@ public abstract class Enemy implements Entity {
 	public abstract void move(Player player);
 
 	@Override
-	public void render(SpriteBatch batch, long cTime) {
+	public void render(SpriteBatch batch, ShapeRenderer sr, long cTime) {
 		// All enemies should render their animation.
 		if(isAlive(cTime)) animation.render(batch, position, theta, cTime);
 	}

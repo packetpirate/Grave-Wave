@@ -2,6 +2,7 @@ package gzs.game.objects.items;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import gzs.entities.Entity;
 import gzs.entities.Player;
@@ -30,7 +31,7 @@ public abstract class Item implements Entity {
 	}
 
 	@Override
-	public void render(SpriteBatch batch, long cTime) {
+	public void render(SpriteBatch batch, ShapeRenderer sr, long cTime) {
 		if(isActive(cTime) && (icon != null)) {
 			double x = position.x - (icon.getWidth() / 2);
 			double y = position.y - (icon.getHeight() / 2);

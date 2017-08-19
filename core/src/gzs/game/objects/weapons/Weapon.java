@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import gzs.game.gfx.particles.Projectile;
 import gzs.game.misc.Pair;
 
 public interface Weapon {
 	public abstract void update(long cTime);
-	public abstract void render(SpriteBatch batch, long cTime);
+	public abstract void render(SpriteBatch batch, ShapeRenderer sr, long cTime);
 	public abstract Texture getInventoryIcon();
 	public abstract int getClipSize();
 	public abstract int getClipAmmo();

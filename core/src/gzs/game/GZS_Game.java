@@ -2,12 +2,16 @@ package gzs.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import gzs.entities.Player;
@@ -16,6 +20,7 @@ import gzs.game.info.Globals;
 public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private ShapeRenderer sr;
 	
 	private Player player;
 	
@@ -24,7 +29,10 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 		camera = new OrthographicCamera(Globals.WIDTH, Globals.HEIGHT);
 		camera.setToOrtho(true, Globals.WIDTH, Globals.HEIGHT);
 		
-		batch = new SpriteBatch();
+		ShaderProgram shader = ImmediateModeRenderer20.createDefaultShader(false, true, 0);
+		
+		batch = new SpriteBatch(5000, shader);
+		sr = new ShapeRenderer();
 		
 		player = new Player();
 		
@@ -47,12 +55,13 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 		
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+		sr.setProjectionMatrix(camera.combined);
 		
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Begin drawing here.
-		player.render(batch, cTime);
+		player.render(batch, sr, cTime);
 	}
 	
 	@Override
@@ -92,11 +101,19 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			Globals.mouse.setMouseDown(true);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			Globals.mouse.setMouseDown(false);
+			return true;
+		}
 		return false;
 	}
 

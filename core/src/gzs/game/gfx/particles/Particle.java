@@ -81,7 +81,7 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public void render(SpriteBatch batch, long cTime) {
+	public void render(SpriteBatch batch, ShapeRenderer sr, long cTime) {
 		if(image != null) {
 			batch.begin();
 			batch.draw(image, 
@@ -96,7 +96,7 @@ public class Particle implements Entity {
 		} else {
 			double x = position.x - (size.x / 2);
 			double y = position.y - (size.y / 2);
-			ShapeRenderer sr = new ShapeRenderer();
+			
 			sr.begin(ShapeType.Filled);
 			sr.setColor(color);
 			sr.rotate(0.0f, 0.0f, 1.0f, (float)(Math.toDegrees(theta + (Math.PI / 2))));

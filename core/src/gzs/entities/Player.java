@@ -166,8 +166,8 @@ public class Player implements Entity {
 	}
 
 	@Override
-	public void render(SpriteBatch batch, long cTime) {
-		getCurrentWeapon().render(batch, cTime);
+	public void render(SpriteBatch batch, ShapeRenderer sr, long cTime) {
+		getCurrentWeapon().render(batch, sr, cTime);
 		if(img != null) {
 			batch.begin();
 			batch.draw(img, 
@@ -180,7 +180,6 @@ public class Player implements Entity {
 					   false, true);
 			batch.end();
 		} else {
-			ShapeRenderer sr = new ShapeRenderer();
 			sr.begin(ShapeType.Filled);
 			sr.setColor(Color.RED);
 			sr.circle(position.x.floatValue(), position.y.floatValue(), 40.0f);

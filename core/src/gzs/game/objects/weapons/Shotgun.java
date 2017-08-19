@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import gzs.game.gfx.particles.Particle;
 import gzs.game.gfx.particles.Projectile;
@@ -63,13 +64,13 @@ public class Shotgun implements Weapon {
 	}
 
 	@Override
-	public void render(SpriteBatch batch, long cTime) {
+	public void render(SpriteBatch batch, ShapeRenderer sr, long cTime) {
 		// Render all projectiles.
 		if(!projectiles.isEmpty()) {
 			Iterator<Projectile> it = projectiles.iterator();
 			while(it.hasNext()) {
 				Particle p = it.next();
-				if(p.isAlive(cTime)) p.render(batch, cTime);
+				if(p.isAlive(cTime)) p.render(batch, sr, cTime);
 			}
 		}
 	}
