@@ -28,17 +28,23 @@ import gzs.game.utils.FileUtilities;
 import gzs.math.Calculate;
 
 public class Player implements Entity {
-	private Pair<Double> position;
-	public Pair<Double> getPosition() { return position; }
-	public void move(double xOff, double yOff) {
-		double tx = position.x + xOff;
-		double ty = position.y + yOff;
+	private Pair<Float> position;
+	public Pair<Float> getPosition() { return position; }
+	public void move(float xOff, float yOff) {
+		float tx = position.x + xOff;
+		float ty = position.y + yOff;
 		if((tx >= 0) && (tx < Globals.WIDTH) && 
 		   (ty >= 0) && (ty < Globals.HEIGHT)) {
 			position.x += xOff;
 			position.y += yOff;
 		}
 	}
+	
+	private float speed;
+	public float getSpeed() { return speed; }
+	
+	private float theta;
+	public float getRotation() { return theta; }
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
@@ -104,7 +110,7 @@ public class Player implements Entity {
 	public Flashlight getFlashlight() { return flashlight; }
 	
 	public Player() {
-		position = new Pair<Double>((double)(Globals.WIDTH / 2), (double)(Globals.HEIGHT / 2));
+		position = new Pair<Float>((Globals.WIDTH / 2), (Globals.HEIGHT / 2));
 		
 		iAttributes = new HashMap<String, Integer>();
 		dAttributes = new HashMap<String, Double>();
@@ -141,27 +147,26 @@ public class Player implements Entity {
 		}
 		
 		// TODO: rewrite to use LibGDX input handling
-		double speed = getDoubleAttribute("speed") * getDoubleAttribute("spdMult");
-		if(Globals.inputs.contains("W")) move(0, -speed);
-		if(Globals.inputs.contains("A")) move(-speed, 0);
-		if(Globals.inputs.contains("S")) move(0, speed);
-		if(Globals.inputs.contains("D")) move(speed, 0);
+		float adjSpeed = getSpeed() * (float)getDoubleAttribute("spdMult");
+		if(Globals.inputs.contains("W")) move(0.0f, -adjSpeed);
+		if(Globals.inputs.contains("A")) move(-adjSpeed, 0.0f);
+		if(Globals.inputs.contains("S")) move(0.0f, adjSpeed);
+		if(Globals.inputs.contains("D")) move(adjSpeed, 0.0f);
 		if(Globals.inputs.contains("R") && 
 		   !getCurrentWeapon().isReloading(cTime) &&
 		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
 			getCurrentWeapon().reload(cTime);
 		}
 		
-		// TODO: Convert to new input handling method.
 		if(Globals.mouse.isMouseDown() && getCurrentWeapon().canFire(cTime)) {
-			getCurrentWeapon().fire(new Pair<Double>(position.x, position.y), 
-							   getDoubleAttribute("theta"), cTime);
+			getCurrentWeapon().fire(new Pair<Float>(position.x, position.y), 
+							   theta, cTime);
 		}
 		
 		weapons.stream().forEach(w -> w.update(cTime));
 		
 		// Calculate the player's rotation based on mouse position.
-		setDoubleAttribute("theta", (Math.toDegrees(Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (Math.PI / 2))));
+		theta = Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (float)(Math.PI / 2);
 		flashlight.update(this, cTime);
 	}
 
@@ -171,18 +176,18 @@ public class Player implements Entity {
 		if(img != null) {
 			batch.begin();
 			batch.draw(img, 
-					   (float)(position.x - (img.getWidth() / 2)), 
-					   (float)(position.y - (img.getHeight() / 2)), 
+					   (position.x - (img.getWidth() / 2)), 
+					   (position.y - (img.getHeight() / 2)), 
 					   (img.getWidth() / 2), (img.getHeight() / 2), 
 					   img.getWidth(), img.getHeight(), 
-					   1.0f, 1.0f, (float)getDoubleAttribute("theta"), 
+					   1.0f, 1.0f, (float)(Math.toDegrees(theta)), 
 					   0, 0, img.getWidth(), img.getHeight(), 
 					   false, true);
 			batch.end();
 		} else {
 			sr.begin(ShapeType.Filled);
 			sr.setColor(Color.RED);
-			sr.circle(position.x.floatValue(), position.y.floatValue(), 40.0f);
+			sr.circle(position.x, position.y, 40.0f);
 			sr.end();
 		}
 	}
@@ -200,15 +205,10 @@ public class Player implements Entity {
 		iAttributes.put("level", 1);
 		iAttributes.put("skillPoints", 0);
 		
-		dAttributes.put("speed", 3.0);
-		
 		// Multipliers
 		dAttributes.put("expMult", 1.0);
 		dAttributes.put("spdMult", 1.0);
 		dAttributes.put("damMult", 1.0);
-		
-		// Game Parameters
-		dAttributes.put("theta", 0.0);
 	}
 	
 	public void addHealth(double amnt) {
@@ -255,7 +255,7 @@ public class Player implements Entity {
 	}
 	
 	public void checkItem(Item item, long cTime) {
-		double distance = Calculate.Distance(position, item.getPosition());
+		float distance = Calculate.Distance(position, item.getPosition());
 		if(item.isTouching(distance)) item.apply(this, cTime);
 	}
 }

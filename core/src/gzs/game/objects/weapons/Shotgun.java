@@ -21,7 +21,7 @@ public class Shotgun implements Weapon {
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 5;
 	private static final int SHOT_COUNT = 5;
-	private static final double MAX_SPREAD = Math.PI / 12;
+	private static final float MAX_SPREAD = (float)(Math.PI / 12);
 	private static final long RELOAD_TIME = 2500;
 	private static final double DAMAGE = 60.0;
 	private static final Texture INV_ICON = FileUtilities.LoadTexture("GZS_Boomstick.png");
@@ -116,16 +116,16 @@ public class Shotgun implements Weapon {
 	}
 
 	@Override
-	public void fire(Pair<Double> position, double theta, long cTime) {
+	public void fire(Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Shotgun.SHOT_COUNT; i++) {
 			Color color = getProjectile().getColor();
-			double velocity = getProjectile().getVelocity();
-			double width = getProjectile().getWidth();
-			double height = getProjectile().getHeight();
-			double devTheta = (theta + (Globals.rand.nextDouble() * Shotgun.MAX_SPREAD * (Globals.rand.nextBoolean()?1:-1)));
+			float velocity = getProjectile().getVelocity();
+			float width = getProjectile().getWidth();
+			float height = getProjectile().getHeight();
+			float devTheta = (theta + (Globals.rand.nextFloat() * Shotgun.MAX_SPREAD * (Globals.rand.nextBoolean()?1:-1)));
 			long lifespan = getProjectile().getLifespan();
 			Particle particle = new Particle(color, position, velocity, devTheta,
-											 0.0, new Pair<Double>(width, height), 
+											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			Projectile projectile = new Projectile(particle, Shotgun.DAMAGE);
 			projectiles.add(projectile);

@@ -29,10 +29,8 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 		camera = new OrthographicCamera(Globals.WIDTH, Globals.HEIGHT);
 		camera.setToOrtho(true, Globals.WIDTH, Globals.HEIGHT);
 		
-		ShaderProgram shader = ImmediateModeRenderer20.createDefaultShader(false, true, 0);
-		
-		batch = new SpriteBatch(5000, shader);
-		sr = new ShapeRenderer();
+		batch = new SpriteBatch(1000, SpriteBatch.createDefaultShader());
+		sr = new ShapeRenderer(5000, ImmediateModeRenderer20.createDefaultShader(false, true, 0));
 		
 		player = new Player();
 		
@@ -71,19 +69,16 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -95,7 +90,6 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

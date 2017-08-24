@@ -86,14 +86,14 @@ public class Animation {
 	 * @param position The position to render the animation at.
 	 * @param cTime The current time (in milliseconds).
 	 */
-	public void render(SpriteBatch batch, Pair<Double> position, long cTime) {
+	public void render(SpriteBatch batch, Pair<Float> position, long cTime) {
 		if(image != null) {
 			batch.begin();
 			batch.draw(image, 
-					   position.x.floatValue(), 
-					   position.y.floatValue(),
+					   position.x, position.y,
 					   sw, sh,
-					   sx, sy, sw, sh, false, true);
+					   sx, sy, sw, sh, 
+					   false, true);
 			batch.end();
 		}
 	}
@@ -105,15 +105,15 @@ public class Animation {
 	 * @param theta The angle to rotate the animation by. Measured in radians.
 	 * @param cTime The current time (in milliseconds).
 	 */
-	public void render(SpriteBatch batch, Pair<Double> position, double theta, long cTime) {
+	public void render(SpriteBatch batch, Pair<Float> position, float theta, long cTime) {
 		if(image != null) {
 			batch.begin();
 			batch.draw(image, 
-					   position.x.floatValue(), 
-					   position.y.floatValue(), 
+					   position.x, position.y, 
 					   0.0f, 0.0f, sw, sh, 1, 1, 
 					   (float)(Math.toDegrees(theta + (Math.PI / 2))), 
-					   sx, sy, sw, sh, false, true);
+					   sx, sy, sw, sh, 
+					   false, true);
 			batch.end();
 		}
 	}

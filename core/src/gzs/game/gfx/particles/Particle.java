@@ -14,16 +14,16 @@ public class Particle implements Entity {
 	public Texture getImage() { return image; }
 	private Color color;
 	public Color getColor() { return color; }
-	private Pair<Double> position;
-	public Pair<Double> getPosition() { return position; }
-	private Pair<Double> velocity;
-	public Pair<Double> getVelocity() { return velocity; }
-	private double theta;
-	public double getTheta() { return theta; }
-	private double angularVelocity;
-	public double getAngularVelocity() { return angularVelocity; }
-	private Pair<Double> size;
-	public Pair<Double> getSize() { return size; }
+	private Pair<Float> position;
+	public Pair<Float> getPosition() { return position; }
+	private float velocity;
+	public float getVelocity() { return velocity; }
+	private float theta;
+	public float getTheta() { return theta; }
+	private float angularVelocity;
+	public float getAngularVelocity() { return angularVelocity; }
+	private Pair<Float> size;
+	public Pair<Float> getSize() { return size; }
 	private long lifespan;
 	public long getLifespan() { return lifespan; }
 	public boolean isAlive(long cTime) {
@@ -35,20 +35,19 @@ public class Particle implements Entity {
 	private boolean collision;
 	public void collide() { collision = true; }
 	
-	public Particle(Color color_, Pair<Double> position_, double velocity_, double theta_, 
-					double angularVelocity_, Pair<Double> size_, long lifespan_, long created_) {
+	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_, 
+					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
 		this(null, color_, position_, velocity_, theta_, 
 			 angularVelocity_, size_, lifespan_, created_);
 	}
 	
-	public Particle(Texture image_, Color color_, Pair<Double> position_, double velocity_,
-					double theta_, double angularVelocity_, Pair<Double> size_, long lifespan_,
+	public Particle(Texture image_, Color color_, Pair<Float> position_, float velocity_,
+					float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
 					long created_) {
 		this.image = image_;
 		this.color = color_;
 		this.position = position_;
-		this.velocity = new Pair<Double>((Math.cos(theta_) * velocity_), 
-										 (Math.sin(theta_) * velocity_));
+		this.velocity = velocity_;
 		this.theta = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
@@ -61,11 +60,11 @@ public class Particle implements Entity {
 		// Copy constructor.
 		this.image = p.getImage();
 		this.color = p.getColor();
-		this.position = new Pair<Double>(p.getPosition().x, p.getPosition().y);
-		this.velocity = new Pair<Double>(p.getVelocity().x, p.getVelocity().y);
+		this.position = new Pair<Float>(p.getPosition().x, p.getPosition().y);
+		this.velocity = p.getVelocity();
 		this.theta = p.getTheta();
 		this.angularVelocity = p.getAngularVelocity();
-		this.size = new Pair<Double>(p.getSize().x, p.getSize().y);
+		this.size = new Pair<Float>(p.getSize().x, p.getSize().y);
 		this.lifespan = p.getLifespan();
 		this.created = p.getCreated();
 		this.collision = false;
@@ -74,9 +73,9 @@ public class Particle implements Entity {
 	@Override
 	public void update(long cTime) {
 		if(isAlive(cTime)) {
-			this.position.x += this.velocity.x;
-			this.position.y += this.velocity.y;
-			this.theta += this.angularVelocity;
+			position.x += velocity * (float)Math.cos(theta - (Math.PI / 2));
+			position.y += velocity * (float)Math.sin(theta - (Math.PI / 2));
+			theta += angularVelocity;
 		}
 	}
 
@@ -85,23 +84,25 @@ public class Particle implements Entity {
 		if(image != null) {
 			batch.begin();
 			batch.draw(image, 
-					   (float)(position.x - (image.getWidth() / 2)), 
-					   (float)(position.y - (image.getHeight() / 2)), 
+					   (position.x - (image.getWidth() / 2)), 
+					   (position.y - (image.getHeight() / 2)), 
 					   0.0f, 0.0f, 
-					   (float)image.getWidth(), (float)image.getHeight(), 
-					   1.0f, 1.0f, (float)(Math.toDegrees(theta + (Math.PI / 2))), 
+					   image.getWidth(), image.getHeight(), 
+					   1.0f, 1.0f, (float)Math.toDegrees(theta), 
 					   0, 0, image.getWidth(), image.getHeight(), 
 					   false, true);
 			batch.end();
 		} else {
-			double x = position.x - (size.x / 2);
-			double y = position.y - (size.y / 2);
+			float x = position.x - (size.x / 2);
+			float y = position.y - (size.y / 2);
 			
 			sr.begin(ShapeType.Filled);
 			sr.setColor(color);
-			sr.rotate(0.0f, 0.0f, 1.0f, (float)(Math.toDegrees(theta + (Math.PI / 2))));
-			sr.rect((float)x, (float)y, 
-					size.x.floatValue(), size.y.floatValue());
+			sr.identity();
+			sr.translate(position.x, position.y, 0.0f);
+			sr.rotate(0.0f, 0.0f, 1.0f, (float)Math.toDegrees(theta));
+			sr.translate(-position.x, -position.y, 0.0f);
+			sr.rect(x, y, size.x, size.y);
 			sr.end();
 		}
 	}

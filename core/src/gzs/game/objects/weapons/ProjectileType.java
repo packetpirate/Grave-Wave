@@ -3,26 +3,26 @@ package gzs.game.objects.weapons;
 import com.badlogic.gdx.graphics.Color;
 
 public enum ProjectileType {
-	HANDGUN(new Color(0.95f, 0.95f, 0.55f, 1.0f), 75.0, 3.0, 10.0, 1500),
-	ASSAULT(new Color(0.95f, 0.95f, 0.75f, 1.0f), 75.0, 3.0, 12.0, 2000),
-	SHOTGUN(new Color(0.95f, 0.95f, 0.55f, 1.0f), 40.0, 4.0, 4.0, 800);
+	HANDGUN(new Color(0.95f, 0.95f, 0.55f, 1.0f), 75.0f, 3.0f, 10.0f, 1500),
+	ASSAULT(new Color(0.95f, 0.95f, 0.75f, 1.0f), 75.0f, 3.0f, 12.0f, 2000),
+	SHOTGUN(new Color(0.95f, 0.95f, 0.55f, 1.0f), 40.0f, 4.0f, 4.0f, 800);
 	
 	private Color color;
 	public Color getColor() { return color; }
 	
-	private double velocity;
-	public double getVelocity() { return velocity; }
+	private float velocity;
+	public float getVelocity() { return velocity; }
 	
-	private double width;
-	public double getWidth() { return width; }
+	private float width;
+	public float getWidth() { return width; }
 	
-	private double height;
-	public double getHeight() { return height; }
+	private float height;
+	public float getHeight() { return height; }
 	
 	private long lifespan;
 	public long getLifespan() { return lifespan; }
 	
-	ProjectileType(Color color_, double velocity_, double width_, double height_, long lifespan_) {
+	ProjectileType(Color color_, float velocity_, float width_, float height_, long lifespan_) {
 		this.color = color_;
 		this.velocity = velocity_;
 		this.width = width_;

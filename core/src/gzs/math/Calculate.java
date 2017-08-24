@@ -9,8 +9,8 @@ public class Calculate {
 	 * @param target The target position.
 	 * @return The theta value representing the hypotenuse between the two points.
 	 */
-	public static double Hypotenuse(Pair<Double> src, Pair<Double> target) {
-		return Math.atan2((target.y - src.y), (target.x - src.x));
+	public static float Hypotenuse(Pair<Float> src, Pair<Float> target) {
+		return (float)Math.atan2((target.y - src.y), (target.x - src.x));
 	}
 	
 	/**
@@ -19,9 +19,9 @@ public class Calculate {
 	 * @param target The target position.
 	 * @return The distance between the two points.
 	 */
-	public static double Distance(Pair<Double> src, Pair<Double> target) {
-		double xD = target.x - src.x;
-		double yD = target.y - src.y;
-		return Math.sqrt((xD * xD) + (yD * yD));
+	public static float Distance(Pair<Float> src, Pair<Float> target) {
+		float xD = target.x - src.x;
+		float yD = target.y - src.y;
+		return (float)Math.sqrt((xD * xD) + (yD * yD));
 	}
 }

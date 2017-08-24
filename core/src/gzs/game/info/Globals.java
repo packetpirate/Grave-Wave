@@ -14,8 +14,8 @@ public class Globals {
 	public static final long NANO_TO_MS = 1_000_000L;
 	public static final long UPDATE_TIME = 20;
 	
-	public static int WIDTH = 800;
-	public static int HEIGHT = 640;
+	public static float WIDTH = 800.0f;
+	public static float HEIGHT = 640.0f;
 	
 	//private static GameStateManager GSM = new GameStateManager();
 	//public static GameStateManager getGSM() { return Globals.GSM; };

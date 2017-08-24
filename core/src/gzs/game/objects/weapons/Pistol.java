@@ -108,14 +108,14 @@ public class Pistol implements Weapon {
 	}
 
 	@Override
-	public void fire(Pair<Double> position, double theta, long cTime) {
+	public void fire(Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
-		double velocity = getProjectile().getVelocity();
-		double width = getProjectile().getWidth();
-		double height = getProjectile().getHeight();
+		float velocity = getProjectile().getVelocity();
+		float width = getProjectile().getWidth();
+		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(color, position, velocity, theta,
-										 0.0, new Pair<Double>(width, height), 
+										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		Projectile projectile = new Projectile(particle, Pistol.DAMAGE);
 		projectiles.add(projectile);

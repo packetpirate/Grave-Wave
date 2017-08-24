@@ -11,18 +11,18 @@ import gzs.game.misc.Pair;
 public abstract class Enemy implements Entity {
 	protected EnemyType type;
 	protected Animation animation;
-	protected Pair<Double> position;
-	protected double theta;
+	protected Pair<Float> position;
+	protected float theta;
 	
 	protected double health;
 	protected int cash;
 	protected int experience;
 	
-	public Enemy(EnemyType type_, Pair<Double> position_) {
+	public Enemy(EnemyType type_, Pair<Float> position_) {
 		this.type = type_;
 		this.animation = type.getAnimation();
 		this.position = position_;
-		this.theta = 0.0;
+		this.theta = 0.0f;
 		this.health = 0.0;
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
@@ -44,7 +44,7 @@ public abstract class Enemy implements Entity {
 		if(isAlive(cTime)) animation.render(batch, position, theta, cTime);
 	}
 	
-	public abstract boolean checkCollision(Pair<Double> p);
+	public abstract boolean checkCollision(Pair<Float> p);
 	public abstract void takeDamage(double amnt);
 	public abstract double getDamage();
 }
