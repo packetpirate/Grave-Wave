@@ -113,6 +113,7 @@ public class GZS_Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
+		Globals.mouse.setPosition(screenX, screenY);
+		return true;
 	}
 }
