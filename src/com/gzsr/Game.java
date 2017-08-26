@@ -1,15 +1,13 @@
 package com.gzsr;
 
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
-public class Game extends BasicGame {
-	private Image player;
-	
+import com.gzsr.states.*;
+
+public class Game extends StateBasedGame {
 	public Game() {
 		super("Generic Zombie Shooter: Remastered");
 	}
@@ -18,24 +16,24 @@ public class Game extends BasicGame {
 		try {
 			AppGameContainer app = new AppGameContainer(new Game());
 			app.setDisplayMode(Globals.WIDTH, Globals.HEIGHT, false);
+			app.setShowFPS(false);
 			app.start();
 		} catch(SlickException se) {
 			se.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void init(GameContainer gc) throws SlickException {
-		player = new Image("images/GZS_Player.png");
-	}
-	
-	@Override
-	public void update(GameContainer gc, int delta) throws SlickException {
-		
-	}
 
 	@Override
-	public void render(GameContainer gc, Graphics g) throws SlickException {
-		g.drawImage(player, 200, 200);
+	public void initStatesList(GameContainer gc) throws SlickException {
+		addState(new MenuState());
+		addState(new GameState());
+		addState(new ShopState());
+		addState(new TrainState());
+		addState(new GameOverState());
+		addState(new CreditsState());
+		addState(new BlankState());
+		
+		// TODO: Temporary so we can skip to game screen. Remove once menu screen implemented.
+		enterState(GameState.ID);
 	}
 }
