@@ -2,6 +2,7 @@ package com.gzsr;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -35,5 +36,23 @@ public class Game extends StateBasedGame {
 		
 		// TODO: Temporary so we can skip to game screen. Remove once menu screen implemented.
 		enterState(GameState.ID);
+	}
+	
+	public static void handleInput(GameContainer gc) {
+		Input input = gc.getInput();
+		
+		// Handle mouse input.
+		Globals.mouse.setMouseDown(input.isMouseButtonDown(0));
+		Globals.mouse.setPosition(input.getMouseX(), input.getMouseY());
+		
+		// Handle keyboard input.
+		int [] codes = new int[] { input.KEY_W, input.KEY_A, input.KEY_S, input.KEY_D, input.KEY_R };
+		String [] inputs = new String[] { "W", "A", "S", "D", "R" };
+		
+		for(int i = 0; i < codes.length; i++) {
+			String in = inputs[i];
+			if(input.isKeyDown(codes[i])) Globals.inputs.add(in);
+			else Globals.inputs.remove(in);
+		}
 	}
 }

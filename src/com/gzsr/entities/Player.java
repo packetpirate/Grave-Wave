@@ -9,13 +9,25 @@ import java.util.Map;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.tests.xml.Item;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.gfx.Flashlight;
+import com.gzsr.gfx.particles.Projectile;
+import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Item;
+import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.Pistol;
+import com.gzsr.objects.weapons.Shotgun;
+import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.status.Status;
+import com.gzsr.status.StatusEffect;
 
 public class Player implements Entity {
+	private static final float DEFAULT_SPEED = 0.15f;
+	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void move(float xOff, float yOff) {
@@ -61,7 +73,6 @@ public class Player implements Entity {
 	public void weaponRotate(int direction) {
 		int wc = weapons.size();
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
-		//weaponIndex = Math.floorMod((weaponIndex + direction), wc);
 		int i = Math.floorMod((weaponIndex + direction), wc);
 		while(!weapons.get(i).hasWeapon()) i += direction;
 		weaponIndex = i;
@@ -99,6 +110,8 @@ public class Player implements Entity {
 	public Player() {
 		position = new Pair<Float>((float)(Globals.WIDTH / 2), 
 								   (float)(Globals.HEIGHT / 2));
+		speed = Player.DEFAULT_SPEED;
+		theta = 0.0f;
 		
 		iAttributes = new HashMap<String, Integer>();
 		dAttributes = new HashMap<String, Double>();
@@ -133,7 +146,6 @@ public class Player implements Entity {
 			}
 		}
 		
-		// TODO: rewrite to use LibGDX input handling
 		float adjSpeed = getSpeed() * (float)getDoubleAttribute("spdMult");
 		if(Globals.inputs.contains("W")) move(0.0f, -adjSpeed);
 		if(Globals.inputs.contains("A")) move(-adjSpeed, 0.0f);
@@ -160,10 +172,17 @@ public class Player implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		getCurrentWeapon().render(g, cTime);
-		if(getImage() != null) {
-			// Draw the player image.
+		
+		Image image = getImage();
+		if(image != null) {
+			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
+			g.drawImage(image, (position.x - (image.getWidth() / 2)), 
+							   (position.y - (image.getHeight() / 2)));
+			g.resetTransform();
 		} else {
 			// Draw a shape to represent the missing player image.
+			g.setColor(Color.red);
+			g.fillOval((position.x - 20), (position.y - 20), 40, 40);
 		}
 	}
 	
