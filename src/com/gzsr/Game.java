@@ -34,8 +34,7 @@ public class Game extends StateBasedGame {
 		addState(new CreditsState());
 		addState(new BlankState());
 		
-		// TODO: Temporary so we can skip to game screen. Remove once menu screen implemented.
-		enterState(GameState.ID);
+		enterState(MenuState.ID);
 	}
 	
 	public static void handleInput(GameContainer gc) {

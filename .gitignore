@@ -1,6 +1,8 @@
 .metadata
 bin/
 tmp/
+*.class
+*.xcf
 *.tmp
 *.bak
 *.swp
@@ -9,6 +11,9 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+# Thumbnails
+Thumbs.db
 
 # External tool builders
 .externalToolBuilders/

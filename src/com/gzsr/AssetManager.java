@@ -3,6 +3,7 @@ package com.gzsr;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
@@ -11,10 +12,12 @@ public class AssetManager {
 	
 	private Map<String, Image> images = null;
 	private Map<String, Sound> sounds = null;
+	private Map<String, Font> fonts = null;
 	
 	private AssetManager() {
 		images = new HashMap<String, Image>();
 		sounds = new HashMap<String, Sound>();
+		fonts = new HashMap<String, Font>();
 	}
 	
 	public static AssetManager getManager() {
@@ -51,6 +54,22 @@ public class AssetManager {
 		}
 		
 		//System.out.println(String.format("Sound Not Found: %s", key));
+		return null;
+	}
+	
+	public void addFont(String key, Font fnt) {
+		if(fonts != null) {
+			fonts.put(key, fnt);
+			System.out.println(String.format("Font Loaded: %s", key));
+		}
+	}
+	
+	public Font getFont(String key) {
+		if((fonts != null) && (key != null) && (!key.equals(""))) {
+			return fonts.get(key);
+		}
+		
+		//System.out.println(String.format("Font Not Found: %s", key));
 		return null;
 	}
 }

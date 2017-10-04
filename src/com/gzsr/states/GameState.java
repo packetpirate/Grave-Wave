@@ -11,6 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import com.gzsr.AssetManager;
 import com.gzsr.Game;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.HUD;
 
 public class GameState extends BasicGameState {
 	public static final int ID = 1;
@@ -18,6 +19,7 @@ public class GameState extends BasicGameState {
 	private AssetManager assets;
 	private long time;
 	
+	private HUD hud;
 	private Player player;
 	
 	@Override
@@ -29,6 +31,8 @@ public class GameState extends BasicGameState {
 		
 		time = 0L;
 		
+		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
+		hud = new HUD();
 		player = new Player();
 	}
 
@@ -37,6 +41,7 @@ public class GameState extends BasicGameState {
 		time += (long)delta;
 		Game.handleInput(gc);
 		
+		hud.update(player, time);
 		player.update(time);
 	}
 	
@@ -45,12 +50,20 @@ public class GameState extends BasicGameState {
 		g.resetTransform();
 		g.clear();
 		
+		g.drawImage(assets.getImage("GZS_Background6"), 0.0f, 0.0f);
 		player.render(g, time);
+		
+		hud.render(g, player, time);
 	}
 	
 	private void loadImages() throws SlickException {
 		String [] assetList = new String [] {
-			"images/GZS_Player.png"
+			"images/GZS_Background6.png",
+			"images/GZS_Player.png",
+			"images/GZS_Crosshair.png",
+			"images/GZS_Popgun.png",
+			"images/GZS_RTPS.png",
+			"images/GZS_Boomstick.png"
 		};
 		
 		for(String asset : assetList) {
