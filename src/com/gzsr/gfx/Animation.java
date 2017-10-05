@@ -103,7 +103,10 @@ public class Animation {
 		Image image = getImage();
 		if(image != null) {
 			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-			g.drawImage(image, position.x, position.y, sx, sy, (sx + sw), (sy + sh));
+			g.drawImage(image, position.x, position.y, 
+						sw, sh, sx, sy, 
+						(sx + sw), (sy + sh));
+			g.resetTransform();
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.Font;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.FontUtils;
 
@@ -50,7 +51,6 @@ public class HUD {
 	
 	public void render(Graphics g, Player player, long cTime) {
 		AssetManager assets = AssetManager.getManager();
-		org.newdawn.slick.Font sFont = g.getFont();
 		{ // Render the health bar.
 			float currentHealth = (float)player.getDoubleAttribute("health");
 			float maxHealth = (float)player.getDoubleAttribute("maxHealth");
@@ -148,25 +148,18 @@ public class HUD {
 								 (int)(WEAPONS_ORIGIN.x + 54.0f), 
 								 (int)(WEAPONS_ORIGIN.y + 13.0f), 93, Color.black);
 		} // End weapons loadout rendering.
-			/*
 		
 		{ // Begin Status Effects rendering.
-			double xPlus = 0.0;
+			float xPlus = 0.0f;
 			List<StatusEffect> statusEffects = player.getStatuses();
 			for(StatusEffect status : statusEffects) {
 				// Render each individual status underneath the health and experience bars.
 				Image img = status.getIcon();
-				double percentageTimeLeft = status.getPercentageTimeLeft(cTime);
-				
-				gc.save();
-				gc.setGlobalAlpha(percentageTimeLeft);
-				gc.drawImage(img, (STATUS_ORIGIN.x + xPlus), STATUS_ORIGIN.y);
-				gc.restore();
-				
-				xPlus += img.getWidth() + 5.0;
+				float percentageTimeLeft = status.getPercentageTimeLeft(cTime);
+				g.drawImage(img, (STATUS_ORIGIN.x + xPlus), STATUS_ORIGIN.y, 
+							new Color(1.0f, 1.0f, 1.0f, percentageTimeLeft));
+				xPlus += img.getWidth() + 5.0f;
 			}
-		} // End Status Effects rendering.*/
-		
-		g.setFont(sFont);
+		} // End Status Effects rendering.
 	}
 }

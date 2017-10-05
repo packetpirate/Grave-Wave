@@ -11,7 +11,7 @@ import com.gzsr.misc.Pair;
 public abstract class Item implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
-	private String iconName;
+	protected String iconName;
 	private Image getIcon() {
 		return AssetManager.getManager().getImage(iconName);
 	}

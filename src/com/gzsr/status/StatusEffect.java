@@ -22,9 +22,9 @@ public abstract class StatusEffect {
 	public void refresh(long cTime) {
 		this.created = cTime;
 	}
-	public double getPercentageTimeLeft(long cTime) {
+	public float getPercentageTimeLeft(long cTime) {
 		long elapsed = cTime - created;
-		return (1.0 - ((double)elapsed / (double)duration));
+		return (1.0f - ((float)elapsed / (float)duration));
 	}
 	
 	public StatusEffect(Status status_, long duration_, long created_) {
