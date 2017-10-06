@@ -1,5 +1,6 @@
 package com.gzsr.gfx;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -102,10 +103,15 @@ public class Animation {
 	public void render(Graphics g, Pair<Float> position, float theta) {
 		Image image = getImage();
 		if(image != null) {
-			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-			g.drawImage(image, position.x, position.y, 
-						sw, sh, sx, sy, 
-						(sx + sw), (sy + sh));
+			float tlx = position.x - (sw / 2);
+			float tly = position.y - (sh / 2);
+			g.rotate(position.x, position.y, (float)Math.toDegrees(theta + (float)(Math.PI / 2)));
+			g.drawImage(image, 
+						tlx, tly, (tlx + sw), (tly + sh), 
+						sx, sy, (sx + sw), (sy + sh));
+			//g.setColor(Color.red);
+			//g.drawRect((position.x - (sw / 2)), (position.y - (sh / 2)), sw, sh);
+			//g.fillOval((position.x - 5.0f), (position.y - 5.0f), 10.0f, 10.0f);
 			g.resetTransform();
 		}
 	}
