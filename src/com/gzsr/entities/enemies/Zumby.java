@@ -9,7 +9,7 @@ import com.gzsr.misc.Pair;
 public class Zumby extends Enemy {
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.15f;
-	private static final float DPS = 5.0f;
+	private static final float DPS = 2.0f;
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);

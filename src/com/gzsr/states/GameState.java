@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
@@ -22,12 +23,11 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.Zumby;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.HUD;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 
-public class GameState extends BasicGameState {
+public class GameState extends BasicGameState implements MouseListener {
 	public static final int ID = 1;
 	
 	private AssetManager assets;
@@ -155,6 +155,15 @@ public class GameState extends BasicGameState {
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
 			assets.addSound(key, sound);
+		}
+	}
+	
+	@Override
+	public void mouseWheelMoved(int change) {
+		Player player = (Player)entities.get("player");
+		if(player.activeWeapons() > 1) {
+			player.weaponRotate((change > 0)?1:-1);
+			hud.queueWeaponCycle();
 		}
 	}
 

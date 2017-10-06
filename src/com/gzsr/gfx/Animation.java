@@ -109,9 +109,6 @@ public class Animation {
 			g.drawImage(image, 
 						tlx, tly, (tlx + sw), (tly + sh), 
 						sx, sy, (sx + sw), (sy + sh));
-			//g.setColor(Color.red);
-			//g.drawRect((position.x - (sw / 2)), (position.y - (sh / 2)), sw, sh);
-			//g.fillOval((position.x - 5.0f), (position.y - 5.0f), 10.0f, 10.0f);
 			g.resetTransform();
 		}
 	}
