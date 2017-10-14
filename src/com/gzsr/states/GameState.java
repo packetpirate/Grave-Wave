@@ -21,7 +21,7 @@ import com.gzsr.Game;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Zumby;
 import com.gzsr.gfx.HUD;
 import com.gzsr.misc.Pair;
@@ -50,7 +50,7 @@ public class GameState extends BasicGameState implements MouseListener {
 		
 		entities = new HashMap<String, Entity>();
 		entities.put("player", new Player());
-		entities.put("zumby1", new Zumby(new Pair<Float>(100.0f, 100.0f)));
+		entities.put("enemyController", new EnemyController());
 	}
 
 	@Override
@@ -64,34 +64,22 @@ public class GameState extends BasicGameState implements MouseListener {
 		while(it.hasNext()) {
 			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
 			pair.getValue().update(time);
-			if(pair.getValue() instanceof Enemy) {
-				Enemy enemy = (Enemy) pair.getValue();
-				enemy.move(player);
-				
-				// Check if this enemy is touching any of the player's projectiles.
-				if(player.checkCollisions(enemy, time) &&
-				   !enemy.isAlive(time)) it.remove();
-				
-				// Check if the player is touching the enemy.
-				if(enemy.isAlive(time) && 
-				   player.touchingEnemy(enemy)) {
-					double damage = enemy.getDamage() / (1_000L / Globals.UPDATE_TIME);
-					player.takeDamage(damage);
-				}
-				
-				// If the player has died, transition state.
-				if(!player.isAlive()) {
-					game.enterState(GameOverState.ID, 
-									new FadeOutTransition(), 
-									new FadeInTransition());
-					break;
-				}
+			if(pair.getValue() instanceof EnemyController) {
+				EnemyController ec = (EnemyController)pair.getValue();
+				ec.updateEnemies(player, time);
 			} else if(pair.getValue() instanceof Item) {
 				Item item = (Item) pair.getValue();
 				if(item.isActive(time)) {
 					player.checkItem(item, time);
 				} else it.remove();
 			}
+		}
+		
+		// If the player has died, transition state.
+		if(!player.isAlive()) {
+			game.enterState(GameOverState.ID, 
+							new FadeOutTransition(), 
+							new FadeInTransition());
 		}
 		
 		hud.update(player, time);
