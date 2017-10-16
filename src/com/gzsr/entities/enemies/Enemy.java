@@ -15,7 +15,9 @@ public abstract class Enemy implements Entity {
 	
 	protected double health;
 	protected int cash;
+	public int getCashValue() { return cash; }
 	protected int experience;
+	public int getExpValue() { return experience; }
 	
 	public Enemy(EnemyType type_, Pair<Float> position_) {
 		this.type = type_;

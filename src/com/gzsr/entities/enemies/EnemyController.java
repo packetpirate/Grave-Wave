@@ -100,9 +100,14 @@ public class EnemyController implements Entity {
 			enemy.update(cTime);
 			enemy.move(player);
 			
-			// Check if this enemy is touching any of the player's projectiles.
-			if(player.checkProjectiles(enemy, cTime) &&
-			   !enemy.isAlive(cTime)) it.remove();
+			// Check collisions with player projectiles, then see if the enemy is still alive.
+			boolean damageTaken = player.checkProjectiles(enemy, cTime);
+			if(!enemy.isAlive(cTime)) {
+				// If the enemy died, give the player experience and cash, and remove the enemy.
+				player.addExperience(enemy.getExpValue());
+				player.addIntAttribute("money", enemy.getCashValue());
+				it.remove();
+			}
 			
 			// Check if the player is touching the enemy.
 			if(enemy.isAlive(cTime) && 

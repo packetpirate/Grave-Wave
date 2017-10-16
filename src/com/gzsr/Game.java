@@ -16,7 +16,7 @@ import com.gzsr.states.TrainState;
 
 public class Game extends StateBasedGame {
 	public Game() {
-		super("Generic Zombie Shooter: Remastered");
+		super("Generic Zombie Shooter: Redux");
 	}
 
 	public static void main(String[] args) {

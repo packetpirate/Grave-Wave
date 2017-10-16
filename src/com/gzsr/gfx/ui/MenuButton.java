@@ -11,7 +11,6 @@ public class MenuButton {
 	private static final Color DEFAULT_BUTTON_STROKE = new Color(0.0f, 0.133f, 0.398f, 1.0f);
 	private static final Color DEFAULT_BUTTON_FILL = new Color(0.234f, 0.391f, 0.684f, 1.0f);
 	private static final Color HOVER_BUTTON_FILL = new Color(0.140f, 0.235f, 0.410f, 1.0f);
-	private static final Color DEFAULT_TEXT_STROKE = new Color(0.781f, 0.645f, 0.059f, 1.0f);
 	private static final Color DEFAULT_TEXT_FILL = new Color(0.938f, 0.781f, 0.371f, 1.0f);
 	
 	private float x, y, w, h;

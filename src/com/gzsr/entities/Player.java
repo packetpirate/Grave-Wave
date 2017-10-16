@@ -49,9 +49,11 @@ public class Player implements Entity {
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
 	public void setIntAttribute(String key, int val) { iAttributes.put(key, val); }
+	public void addIntAttribute(String key, int amnt) { iAttributes.put(key, (getIntAttribute(key) + amnt)); }
 	private Map<String, Double> dAttributes;
 	public double getDoubleAttribute(String key) { return dAttributes.get(key); }
 	public void setDoubleAttribute(String key, double val) { dAttributes.put(key, val); }
+	public void addDoubleAttribute(String key, double amnt) { dAttributes.put(key, (getDoubleAttribute(key) + amnt)); }
 	
 	private List<Weapon> weapons;
 	public List<Weapon> getWeapons() { return weapons; }
@@ -219,7 +221,7 @@ public class Player implements Entity {
 		iAttributes.put("experience", 0);
 		iAttributes.put("expToLevel", 100);
 		iAttributes.put("level", 1);
-		iAttributes.put("skillPoints", 0);
+		iAttributes.put("skillPoints", 10);
 		
 		// Upgrade level attributes.
 		iAttributes.put("healthUp", 0);
@@ -254,6 +256,25 @@ public class Player implements Entity {
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			setDoubleAttribute("health", newHealth);
+		}
+	}
+	
+	public void addExperience(int amnt) {
+		int currentExp = getIntAttribute("experience");
+		int adjusted = currentExp + amnt;
+		int expToLevel = getIntAttribute("expToLevel");
+		int newLevel = getIntAttribute("level") + 1;
+		
+		setIntAttribute("experience", adjusted);
+		
+		if(adjusted >= expToLevel) {
+			// Level up!
+			int carryOver = adjusted % expToLevel;
+			setIntAttribute("experience", carryOver);
+			setIntAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
+			setIntAttribute("level", newLevel);
+			addIntAttribute("skillPoints", 1);
+			// TODO: Add level up sound.
 		}
 	}
 	

@@ -23,8 +23,9 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.HUD;
+import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.InvulnerableItem;
 import com.gzsr.objects.items.Item;
-import com.gzsr.objects.items.UnlimitedAmmoItem;
 
 public class GameState extends BasicGameState implements MouseListener {
 	public static final int ID = 1;
