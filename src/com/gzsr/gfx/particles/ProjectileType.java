@@ -3,7 +3,7 @@ package com.gzsr.gfx.particles;
 import org.newdawn.slick.Color;
 
 public enum ProjectileType {
-	HANDGUN(new Color(0xF2F28C), 10.0f, 3.0f, 10.0f, 1500),
+	HANDGUN(new Color(0xF2F28C), 8.0f, 3.0f, 10.0f, 1500),
 	ASSAULT(new Color(0xF2F2BF), 10.0f, 3.0f, 12.0f, 2000),
 	SHOTGUN(new Color(0xF2F28C), 4.5f, 4.0f, 4.0f, 800);
 	

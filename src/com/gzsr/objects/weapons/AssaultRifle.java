@@ -22,7 +22,7 @@ public class AssaultRifle implements Weapon {
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 2000;
-	private static final double DAMAGE = 75.0;
+	private static final double DAMAGE = 50.0;
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "shoot3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -185,5 +185,10 @@ public class AssaultRifle implements Weapon {
 	@Override
 	public void activate() {
 		active = true;
+	}
+	
+	@Override
+	public void deactivate() {
+		active = false;
 	}
 }

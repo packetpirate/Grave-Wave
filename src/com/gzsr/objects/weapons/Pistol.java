@@ -11,6 +11,7 @@ import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Player;
+import com.gzsr.Globals;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -18,11 +19,11 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class Pistol implements Weapon {
-	private static final long COOLDOWN = 500;
+	private static final long COOLDOWN = 300;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
-	private static final long RELOAD_TIME = 2000;
-	private static final double DAMAGE = 40.0;
+	private static final long RELOAD_TIME = 1500;
+	private static final double DAMAGE = 75.0;
 	private static final String ICON_NAME = "GZS_Popgun";
 	private static final String FIRE_SOUND = "shoot4";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -37,6 +38,7 @@ public class Pistol implements Weapon {
 	private long lastFired;
 	private boolean reloading;
 	private long reloadStart;
+	private boolean release;
 	
 	@Override
 	public List<Projectile> getProjectiles() { return projectiles; }
@@ -73,6 +75,7 @@ public class Pistol implements Weapon {
 		this.lastFired = 0L;
 		this.reloading = false;
 		this.reloadStart = 0L;
+		this.release = true;
 	}
 	
 	@Override
@@ -90,6 +93,9 @@ public class Pistol implements Weapon {
 				} else it.remove();
 			}
 		}
+		
+		// If mouse released, release fire lock.
+		if(!release && !Globals.mouse.isMouseDown()) release = true;
 	}
 
 	@Override
@@ -116,7 +122,7 @@ public class Pistol implements Weapon {
 			return false;
 		}
 		
-		return ((clipNotEmpty || ammoLeft) && cool);
+		return (release && (clipNotEmpty || ammoLeft) && cool);
 	}
 
 	@Override
@@ -133,6 +139,7 @@ public class Pistol implements Weapon {
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
+		release = false;
 		
 		fireSound.play();
 	}
@@ -176,5 +183,10 @@ public class Pistol implements Weapon {
 	@Override
 	public void activate() {
 		active = true;
+	}
+	
+	@Override
+	public void deactivate() {
+		active = false;
 	}
 }

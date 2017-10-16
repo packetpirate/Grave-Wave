@@ -6,14 +6,14 @@ import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
-public class Zumby extends Enemy {
-	private static final float HEALTH = 100.0f;
-	private static final float SPEED = 0.10f;
+public class Rotdog extends Enemy {
+	private static final float HEALTH = 50.0f;
+	private static final float SPEED = 0.30f;
 	private static final float DPS = 2.0f;
 	
-	public Zumby(Pair<Float> position_) {
-		super(EnemyType.ZUMBY, position_);
-		this.health = Zumby.HEALTH;
+	public Rotdog(Pair<Float> position_) {
+		super(EnemyType.ROTDOG, position_);
+		this.health = Rotdog.HEALTH;
 	}
 
 	@Override
@@ -24,8 +24,8 @@ public class Zumby extends Enemy {
 	@Override
 	public void move(Player player) {
 		theta = Calculate.Hypotenuse(position, player.getPosition());
-		position.x += (float)Math.cos(theta) * Zumby.SPEED;
-		position.y += (float)Math.sin(theta) * Zumby.SPEED;
+		position.x += (float)Math.cos(theta) * Rotdog.SPEED;
+		position.y += (float)Math.sin(theta) * Rotdog.SPEED;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class Zumby extends Enemy {
 	
 	@Override
 	public double getDamage() {
-		return Zumby.DPS;
+		return Rotdog.DPS;
 	}
 
 	@Override

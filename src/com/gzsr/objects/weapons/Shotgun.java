@@ -25,7 +25,7 @@ public class Shotgun implements Weapon {
 	private static final int SHOT_COUNT = 5;
 	private static final float MAX_SPREAD = (float)(Math.PI / 12);
 	private static final long RELOAD_TIME = 2500;
-	private static final double DAMAGE = 60.0;
+	private static final double DAMAGE = 20.0;
 	private static final String ICON_NAME = "GZS_Boomstick";
 	private static final String FIRE_SOUND = "shotgun1";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -191,5 +191,10 @@ public class Shotgun implements Weapon {
 	@Override
 	public void activate() {
 		active = true;
+	}
+	
+	@Override
+	public void deactivate() {
+		active = false;
 	}
 }

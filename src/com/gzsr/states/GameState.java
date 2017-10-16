@@ -21,10 +21,8 @@ import com.gzsr.Game;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.Zumby;
+import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.HUD;
-import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.UnlimitedAmmoItem;
 
@@ -49,9 +47,10 @@ public class GameState extends BasicGameState implements MouseListener {
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		hud = new HUD();
 		
+		Globals.player = new Player();
+		
 		entities = new HashMap<String, Entity>();
-		entities.put("player", new Player());
-		entities.put("zumby1", new Zumby(new Pair<Float>(100.0f, 100.0f)));
+		entities.put("enemyController", new EnemyController());
 	}
 
 	@Override
@@ -59,34 +58,16 @@ public class GameState extends BasicGameState implements MouseListener {
 		time += (long)delta;
 		Game.handleInput(gc);
 		
-		Player player = (Player)entities.get("player");
+		Player player = Globals.player;
+		player.update(time);
 		
 		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 		while(it.hasNext()) {
 			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
 			pair.getValue().update(time);
-			if(pair.getValue() instanceof Enemy) {
-				Enemy enemy = (Enemy) pair.getValue();
-				enemy.move(player);
-				
-				// Check if this enemy is touching any of the player's projectiles.
-				if(player.checkCollisions(enemy, time) &&
-				   !enemy.isAlive(time)) it.remove();
-				
-				// Check if the player is touching the enemy.
-				if(enemy.isAlive(time) && 
-				   player.touchingEnemy(enemy)) {
-					double damage = enemy.getDamage() / (1_000L / Globals.UPDATE_TIME);
-					player.takeDamage(damage);
-				}
-				
-				// If the player has died, transition state.
-				if(!player.isAlive()) {
-					game.enterState(GameOverState.ID, 
-									new FadeOutTransition(), 
-									new FadeInTransition());
-					break;
-				}
+			if(pair.getValue() instanceof EnemyController) {
+				EnemyController ec = (EnemyController)pair.getValue();
+				ec.updateEnemies(player, time);
 			} else if(pair.getValue() instanceof Item) {
 				Item item = (Item) pair.getValue();
 				if(item.isActive(time)) {
@@ -95,17 +76,39 @@ public class GameState extends BasicGameState implements MouseListener {
 			}
 		}
 		
+		// If the player has died, transition state.
+		if(!player.isAlive()) {
+			game.enterState(GameOverState.ID, 
+							new FadeOutTransition(), 
+							new FadeInTransition());
+		}
+		
+		if(Globals.inputs.contains("T")) {
+			// Open the training screen.
+			game.enterState(TrainState.ID,
+							new FadeOutTransition(),
+							new FadeInTransition());
+		} else if(Globals.inputs.contains("B")) {
+			game.enterState(ShopState.ID,
+							new FadeOutTransition(),
+							new FadeInTransition());
+		}
+		
 		hud.update(player, time);
 	}
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-		Player player = (Player)entities.get("player");
+		Player player = Globals.player;
 		
 		g.resetTransform();
 		g.clear();
 		
-		g.drawImage(assets.getImage("GZS_Background6"), 0.0f, 0.0f);
+		Image background = assets.getImage("GZS_Background6");
+		g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
+		
+		// Render the player.
+		player.render(g, time);
 
 		// Render all entities.
 		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
@@ -132,6 +135,7 @@ public class GameState extends BasicGameState implements MouseListener {
 			"images/GZS_SpeedUp.png",
 			//Enemy Images
 			"images/GZS_Zumby2.png",
+			"images/GZS_Rotdog2.png",
 			// Weapon Images
 			"images/GZS_Popgun.png",
 			"images/GZS_RTPS.png",
@@ -165,7 +169,7 @@ public class GameState extends BasicGameState implements MouseListener {
 	
 	@Override
 	public void mouseWheelMoved(int change) {
-		Player player = (Player)entities.get("player");
+		Player player = Globals.player;
 		if(player.activeWeapons() > 1) {
 			player.weaponRotate((change > 0)?1:-1);
 			hud.queueWeaponCycle();
