@@ -158,7 +158,7 @@ public class Player implements Entity {
 		}
 		
 		if(Globals.mouse.isMouseDown() && getCurrentWeapon().canFire(cTime)) {
-			getCurrentWeapon().fire(new Pair<Float>(position.x, position.y), 
+			getCurrentWeapon().fire(this, new Pair<Float>(position.x, position.y), 
 							   theta, cTime);
 		}
 		
@@ -214,10 +214,12 @@ public class Player implements Entity {
 	}
 	
 	public void takeDamage(double amnt) {
-		double currentHealth = getDoubleAttribute("health");
-		double adjusted = currentHealth - amnt;
-		double newHealth = (adjusted < 0) ? 0 : adjusted;
-		setDoubleAttribute("health", newHealth);
+		if(!hasStatus(Status.INVULNERABLE)) {
+			double currentHealth = getDoubleAttribute("health");
+			double adjusted = currentHealth - amnt;
+			double newHealth = (adjusted < 0) ? 0 : adjusted;
+			setDoubleAttribute("health", newHealth);
+		}
 	}
 	
 	public boolean isAlive() {

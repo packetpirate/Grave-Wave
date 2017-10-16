@@ -10,10 +10,12 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.status.Status;
 
 public class Pistol implements Weapon {
 	private static final long COOLDOWN = 500;
@@ -118,7 +120,7 @@ public class Pistol implements Weapon {
 	}
 
 	@Override
-	public void fire(Pair<Float> position, float theta, long cTime) {
+	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -129,7 +131,7 @@ public class Pistol implements Weapon {
 										 lifespan, cTime);
 		Projectile projectile = new Projectile(particle, Pistol.DAMAGE);
 		projectiles.add(projectile);
-		ammoInClip--;
+		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
 		
 		fireSound.play();

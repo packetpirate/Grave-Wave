@@ -11,10 +11,12 @@ import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.status.Status;
 
 public class Shotgun implements Weapon {
 	private static final long COOLDOWN = 1200;
@@ -124,7 +126,7 @@ public class Shotgun implements Weapon {
 	}
 
 	@Override
-	public void fire(Pair<Float> position, float theta, long cTime) {
+	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Shotgun.SHOT_COUNT; i++) {
 			Color color = getProjectile().getColor();
 			float velocity = getProjectile().getVelocity();
@@ -139,7 +141,7 @@ public class Shotgun implements Weapon {
 			projectiles.add(projectile);
 		}
 		
-		ammoInClip--;
+		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
 		
 		fireSound.play();

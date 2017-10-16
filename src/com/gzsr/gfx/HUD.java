@@ -1,8 +1,7 @@
 package com.gzsr.gfx;
 
-import java.util.List;
-
 import java.awt.Font;
+import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -15,6 +14,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 
 public class HUD {
@@ -141,12 +141,19 @@ public class HUD {
 				g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
 			}
 			
-			String ammoText = String.format("%d / %d", 
-								player.getCurrentWeapon().getClipAmmo(),
-								player.getCurrentWeapon().getInventoryAmmo());
-			FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
-								 (int)(WEAPONS_ORIGIN.x + 54.0f), 
-								 (int)(WEAPONS_ORIGIN.y + 13.0f), 93, Color.black);
+			if(player.hasStatus(Status.UNLIMITED_AMMO)) {
+				Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
+				float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
+				float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
+				g.drawImage(unlimitedAmmo, x, y);
+			} else {
+				String ammoText = String.format("%d / %d", 
+									player.getCurrentWeapon().getClipAmmo(),
+									player.getCurrentWeapon().getInventoryAmmo());
+				FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
+									 (int)(WEAPONS_ORIGIN.x + 54.0f), 
+									 (int)(WEAPONS_ORIGIN.y + 13.0f), 93, Color.black);
+			}
 		} // End weapons loadout rendering.
 		
 		{ // Begin Status Effects rendering.

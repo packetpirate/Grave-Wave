@@ -26,6 +26,7 @@ import com.gzsr.entities.enemies.Zumby;
 import com.gzsr.gfx.HUD;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
+import com.gzsr.objects.items.UnlimitedAmmoItem;
 
 public class GameState extends BasicGameState implements MouseListener {
 	public static final int ID = 1;
@@ -122,8 +123,12 @@ public class GameState extends BasicGameState implements MouseListener {
 			"images/GZS_Background6.png",
 			"images/GZS_Player.png",
 			"images/GZS_Crosshair.png",
+			// Item Images
+			"images/GZS_Health.png",
+			"images/GZS_Ammo.png",
 			// Powerup Images
 			"images/GZS_Invulnerability.png",
+			"images/GZS_UnlimitedAmmo.png",
 			"images/GZS_SpeedUp.png",
 			//Enemy Images
 			"images/GZS_Zumby2.png",
