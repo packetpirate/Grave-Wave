@@ -70,6 +70,12 @@ public class Player implements Entity {
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
 	public Weapon getCurrentWeapon() { return weapons.get(weaponIndex); }
+	public void setCurrentWeapon(int wi) {
+		if((wi < weapons.size()) && weapons.get(wi).hasWeapon()) {
+			// If the player actually has the weapon bound to the key that was pressed...
+			weaponIndex = wi;
+		}
+	}
 	public void weaponRotate(int direction) {
 		int wc = weapons.size();
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
@@ -157,11 +163,21 @@ public class Player implements Entity {
 			getCurrentWeapon().reload(cTime);
 		}
 		
+		// Check to see if the player is trying to change weapon by number.
+		for(int i = 0; i < 10; i++) {
+			if(Globals.inputs.contains(Integer.toString(i))) {
+				if(i == 0) setCurrentWeapon(9);
+				else setCurrentWeapon(i - 1);
+				break; // To avoid conflicts when holding multiple numerical keys.
+			}
+		}
+		
 		if(Globals.mouse.isMouseDown() && getCurrentWeapon().canFire(cTime)) {
 			getCurrentWeapon().fire(new Pair<Float>(position.x, position.y), 
 							   theta, cTime);
 		}
 		
+		// Call update for all weapon objects.
 		weapons.stream().forEach(w -> w.update(cTime));
 		
 		// Calculate the player's rotation based on mouse position.
@@ -186,18 +202,29 @@ public class Player implements Entity {
 		}
 	}
 	
-	private void resetAttributes() {
+	/**
+	 * Reset all dAttributes and iAttributes members.
+	 */
+	public void resetAttributes() {
 		dAttributes.clear();
+		iAttributes.clear();
 		
+		// Basic attributes.
 		dAttributes.put("health", 100.0);
 		dAttributes.put("maxHealth", 100.0);
 		iAttributes.put("lives", 3);
 		iAttributes.put("money", 0);
 		
+		// Experience related attributes.
 		iAttributes.put("experience", 0);
 		iAttributes.put("expToLevel", 100);
 		iAttributes.put("level", 1);
 		iAttributes.put("skillPoints", 0);
+		
+		// Upgrade level attributes.
+		iAttributes.put("healthUp", 0);
+		iAttributes.put("speedUp", 0);
+		iAttributes.put("damageUp", 0);
 		
 		// Multipliers
 		dAttributes.put("expMult", 1.0);
@@ -205,6 +232,10 @@ public class Player implements Entity {
 		dAttributes.put("damMult", 1.0);
 	}
 	
+	/**
+	 * Add health to the player's current health. Usually only used for applying health kits to the player.
+	 * @param amnt The amount of health to give the player.
+	 */
 	public void addHealth(double amnt) {
 		double currentHealth = getDoubleAttribute("health");
 		double maxHealth = getDoubleAttribute("maxHealth");
@@ -213,6 +244,10 @@ public class Player implements Entity {
 		setDoubleAttribute("health", newHealth);
 	}
 	
+	/**
+	 * Deal damage to the player.
+	 * @param amnt The amount of damage to apply to the player's health.
+	 */
 	public void takeDamage(double amnt) {
 		double currentHealth = getDoubleAttribute("health");
 		double adjusted = currentHealth - amnt;
@@ -232,15 +267,16 @@ public class Player implements Entity {
 	/**
 	 * Checks for a collision between the enemy and the player's projectiles.
 	 * @param enemy The enemy to test against the projectiles.
-	 * @return If there is a collision, return true. Otherwise, false.
+	 * @return Boolean value representing whether or not there was a collision.
 	 */
-	public boolean checkCollisions(Enemy enemy, long cTime) {
+	public boolean checkProjectiles(Enemy enemy, long cTime) {
 		Iterator<Projectile> it = getCurrentWeapon().getProjectiles().iterator();
 		while(it.hasNext()) {
 			Projectile p = it.next();
 			if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {
 				p.collide();
-				enemy.takeDamage(p.getDamage());
+				float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
+				enemy.takeDamage(p.getDamage() * damagePercentage);
 				return true;
 			}
 		}
@@ -248,6 +284,11 @@ public class Player implements Entity {
 		return false;
 	}
 	
+	/**
+	 * Check for a collision between the player and a given Item object.
+	 * @param item The Item object to check for a collision with.
+	 * @param cTime The current game time. Used for setting the start time for any Item effects to be applied.
+	 */
 	public void checkItem(Item item, long cTime) {
 		float distance = Calculate.Distance(position, item.getPosition());
 		if(item.isTouching(distance)) item.apply(this, cTime);

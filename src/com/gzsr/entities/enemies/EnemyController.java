@@ -74,6 +74,7 @@ public class EnemyController implements Entity {
 			
 			// TODO: Have enemy type chosen randomly before spawning.
 			Zumby z = new Zumby(new Pair<Float>(x, y));
+			//Rotdog r = new Rotdog(new Pair<Float>(x, y));
 			unborn.add(z);
 		}
 		
@@ -96,10 +97,11 @@ public class EnemyController implements Entity {
 		Iterator<Enemy> it = alive.iterator();
 		while(it.hasNext()) {
 			Enemy enemy = it.next();
+			enemy.update(cTime);
 			enemy.move(player);
 			
 			// Check if this enemy is touching any of the player's projectiles.
-			if(player.checkCollisions(enemy, cTime) &&
+			if(player.checkProjectiles(enemy, cTime) &&
 			   !enemy.isAlive(cTime)) it.remove();
 			
 			// Check if the player is touching the enemy.

@@ -19,6 +19,7 @@ public interface Weapon {
 	public abstract void addInventoryAmmo(int amnt);
 	public abstract boolean hasWeapon();
 	public abstract void activate();
+	public abstract void deactivate();
 	public abstract boolean canFire(long cTime);
 	public abstract void fire(Pair<Float> position, float theta, long cTime);
 	public abstract void reload(long cTime);

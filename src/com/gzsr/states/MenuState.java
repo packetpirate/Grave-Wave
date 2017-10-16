@@ -66,7 +66,7 @@ public class MenuState extends BasicGameState {
 		g.resetTransform();
 		g.clear();
 		
-		if(background != null) g.drawImage(background, 0.0f, 0.0f);
+		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
 		gameStart.render(g);
 		credits.render(g);
