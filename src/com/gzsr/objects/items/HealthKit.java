@@ -10,7 +10,8 @@ import com.gzsr.misc.Pair;
 public class HealthKit extends Item {
 	private static final String ICONNAME = "GZS_Health";
 	private static final long DURATION = 10_000L;
-	private static final double MAX_RESTORE = 75.0;
+	private static final double RESTORE_MIN = 50.0;
+	private static final double RESTORE_MAX = 75.0;
 	
 	private Sound powerupSound;
 	
@@ -24,7 +25,7 @@ public class HealthKit extends Item {
 	
 	@Override
 	public void apply(Player player, long cTime) {
-		double amnt = Globals.rand.nextDouble() * HealthKit.MAX_RESTORE;
+		double amnt = (Globals.rand.nextDouble() * (HealthKit.RESTORE_MAX - HealthKit.RESTORE_MIN)) + HealthKit.RESTORE_MIN;
 		player.addHealth(amnt);
 		duration = 0L;
 		powerupSound.play();

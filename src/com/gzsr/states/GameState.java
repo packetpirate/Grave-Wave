@@ -18,7 +18,6 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Game;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -32,6 +31,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	private AssetManager assets;
 	private long time;
+	public long getTime() { return time; }
 	
 	private Console console;
 	private HUD hud;
@@ -66,9 +66,9 @@ public class GameState extends BasicGameState implements InputListener {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		time += (long)delta;
-		
 		if(!paused && !consoleOpen) {
+			time += (long)delta; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
+			
 			Player player = Globals.player;
 			player.update(time);
 			
@@ -196,12 +196,20 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(true);
+		if(button == 0) {
+			if(consoleOpen) console.mousePressed(button, x, y);
+			Globals.mouse.setMouseDown(true);
+		}
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		if(button == 0) Globals.mouse.setMouseDown(false);
+	}
+	
+	@Override
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		Globals.mouse.setPosition(newx, newy);
 	}
 	
 	@Override
