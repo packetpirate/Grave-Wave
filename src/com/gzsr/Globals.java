@@ -24,6 +24,12 @@ public class Globals {
 	public static Set<Integer> released = new HashSet<Integer>();
 	public static MouseInfo mouse = new MouseInfo();
 	
+	public static void resetInputs() {
+		inputs.clear();
+		released.clear();
+		mouse.setMouseDown(false);
+	}
+	
 	public static int [] keyCodes = new int[] { Input.KEY_Q, Input.KEY_W, Input.KEY_E, Input.KEY_R, Input.KEY_T, Input.KEY_Y, Input.KEY_U, Input.KEY_I, Input.KEY_O, Input.KEY_P,
 			   								 	Input.KEY_A, Input.KEY_S, Input.KEY_D, Input.KEY_F, Input.KEY_G, Input.KEY_H, Input.KEY_J, Input.KEY_K, Input.KEY_L,
 			   								 	Input.KEY_Z, Input.KEY_X, Input.KEY_C, Input.KEY_V, Input.KEY_B, Input.KEY_N, Input.KEY_M, Input.KEY_SPACE, Input.KEY_ENTER,
@@ -38,4 +44,8 @@ public class Globals {
 	public static Random rand = new Random();
 	
 	public static Player player = null;
+	
+	private static int entityNum = 0;
+	public static int generateEntityID() { return entityNum++; }
+	public static void resetEntityNum() { entityNum = 0; }
 }

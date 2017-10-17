@@ -3,6 +3,7 @@ package com.gzsr.states;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -10,11 +11,10 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Game;
 import com.gzsr.Globals;
 import com.gzsr.gfx.ui.MenuButton;
 
-public class MenuState extends BasicGameState {
+public class MenuState extends BasicGameState implements InputListener {
 	public static final int ID = 0;
 	
 	private AssetManager assets = null;
@@ -45,11 +45,13 @@ public class MenuState extends BasicGameState {
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		Game.handleInput(gc);
-		
 		if(gameStart.contains(Globals.mouse)) {
 			gameStart.mouseEnter();
-			if(Globals.mouse.isMouseDown()) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
+			if(Globals.mouse.isMouseDown()) {
+				Globals.resetEntityNum();
+				Globals.resetInputs();
+				game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
+			}
 		} else gameStart.mouseExit();
 		
 		if(credits.contains(Globals.mouse)) credits.mouseEnter();
@@ -71,6 +73,21 @@ public class MenuState extends BasicGameState {
 		gameStart.render(g);
 		credits.render(g);
 		exit.render(g);
+	}
+	
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		Globals.mouse.setPosition(newx, newy);
+	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(true);
+	}
+	
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(false);
 	}
 	
 	@Override

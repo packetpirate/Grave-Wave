@@ -5,12 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
@@ -28,7 +27,7 @@ import com.gzsr.gfx.HUD;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.objects.items.Item;
 
-public class GameState extends BasicGameState implements MouseListener {
+public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
 	
 	private AssetManager assets;
@@ -40,6 +39,7 @@ public class GameState extends BasicGameState implements MouseListener {
 	public Map<String, Entity> getEntities() { return entities; }
 	
 	private boolean paused, consoleOpen;
+	public boolean isConsoleOpen() { return consoleOpen; }
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -61,13 +61,12 @@ public class GameState extends BasicGameState implements MouseListener {
 		paused = false;
 		consoleOpen = false;
 		
-		console = new Console(this);
+		console = new Console(this, gc);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		time += (long)delta;
-		Game.handleInput(gc);
 		
 		if(!paused && !consoleOpen) {
 			Player player = Globals.player;
@@ -88,8 +87,9 @@ public class GameState extends BasicGameState implements MouseListener {
 				}
 			}
 			
-			// If the player has died, transition state.
 			if(!player.isAlive()) {
+				// If the player has died, transition state.
+				Globals.resetInputs();
 				game.enterState(GameOverState.ID, 
 								new FadeOutTransition(), 
 								new FadeInTransition());
@@ -97,10 +97,13 @@ public class GameState extends BasicGameState implements MouseListener {
 			
 			if(Globals.released.contains(Input.KEY_T)) {
 				// Open the training screen.
+				Globals.resetInputs();
 				game.enterState(TrainState.ID,
 								new FadeOutTransition(),
 								new FadeInTransition());
 			} else if(Globals.released.contains(Input.KEY_B)) {
+				// Open the weapon shopping screen.
+				Globals.resetInputs();
 				game.enterState(ShopState.ID,
 								new FadeOutTransition(),
 								new FadeInTransition());
@@ -111,7 +114,7 @@ public class GameState extends BasicGameState implements MouseListener {
 			console.update(time);
 		}
 		
-		if(Globals.released.contains(Input.KEY_GRAVE)) consoleOpen = !consoleOpen;
+		Globals.released.clear();
 	}
 	
 	@Override
@@ -183,6 +186,43 @@ public class GameState extends BasicGameState implements MouseListener {
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
 			assets.addSound(key, sound);
+		}
+	}
+	
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		Globals.mouse.setPosition(newx, newy);
+	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(true);
+	}
+	
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(false);
+	}
+	
+	@Override
+	public void keyPressed(int key, char c) {
+		if(consoleOpen) {
+			console.keyPressed(key, c);
+		} else {
+			Globals.inputs.add(key);
+		}
+	}
+	
+	@Override
+	public void keyReleased(int key, char c) {
+		if(key == Input.KEY_GRAVE) consoleOpen = !consoleOpen; 
+		else {
+			if(consoleOpen) {
+				console.keyReleased(key, c);
+			} else {
+				Globals.inputs.remove(key);
+				Globals.released.add(key);
+			}
 		}
 	}
 	

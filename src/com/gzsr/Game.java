@@ -42,24 +42,4 @@ public class Game extends StateBasedGame {
 		
 		enterState(MenuState.ID);
 	}
-	
-	public static void handleInput(GameContainer gc) {
-		Input input = gc.getInput();
-		
-		// Handle mouse input.
-		Globals.mouse.setMouseDown(input.isMouseButtonDown(0));
-		Globals.mouse.setPosition(input.getMouseX(), input.getMouseY());
-		
-		// Clear the previously released inputs.
-		Globals.released.clear();
-		
-		// Handle keyboard input.
-		for(int i = 0; i < Globals.keyCodes.length; i++) {
-			if(input.isKeyDown(Globals.keyCodes[i])) Globals.inputs.add(Globals.keyCodes[i]);
-			else {
-				boolean down = Globals.inputs.remove(Globals.keyCodes[i]);
-				if(down) Globals.released.add(Globals.keyCodes[i]);
-			}
-		}
-	}
 }

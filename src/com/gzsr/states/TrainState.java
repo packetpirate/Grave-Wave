@@ -6,24 +6,26 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Game;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.TooltipText;
 import com.gzsr.misc.Pair;
 
-public class TrainState extends BasicGameState {
+public class TrainState extends BasicGameState implements InputListener {
 	public static final int ID = 3;
 	private static final TrueTypeFont FONT_HEADER = new TrueTypeFont(new Font("Lucida Console", Font.BOLD, 32), true);
 	private static final TrueTypeFont FONT_NORMAL = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 16), true);
+	private static final Color EXP_BAR = new Color(0.0f, 0.6f, 0.0f);
 	
 	private AssetManager assets;
 	
@@ -31,6 +33,8 @@ public class TrainState extends BasicGameState {
 	private TooltipText healthUpTooltip;
 	private TooltipText speedUpTooltip;
 	private TooltipText damageUpTooltip;
+	
+	private boolean exit;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -52,19 +56,15 @@ public class TrainState extends BasicGameState {
 										  "Damage:",
 										  "Each point in this increases damage done by 10%.",
 										  Color.white, new Pair<Float>(30.0f, 390.0f));
+		
+		exit = false;
 	}
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		Game.handleInput(gc);
-		
 		Player player = Globals.player;
 		
-		if(Globals.released.contains(Input.KEY_T)) {
-			game.enterState(GameState.ID, 
-							new FadeOutTransition(),
-							new FadeInTransition());
-		}
+		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
 	}
 
 	@Override
@@ -97,11 +97,15 @@ public class TrainState extends BasicGameState {
 			g.setColor(Color.lightGray);
 			g.drawRect(30.0f, 150.0f, 300.0f, 50.0f);
 			if(expWidth > 0) {
-				g.setColor(Color.green);
+				g.setColor(TrainState.EXP_BAR);
 				g.fillRect(35.0f, 155.0f, (expWidth * 290.0f), 40.0f);
 				g.setColor(Color.lightGray);
 				g.drawRect(35.0f, 155.0f, (expWidth * 290.0f), 40.0f);
 			}
+			
+			String expText = String.format("%d / %d", player.getIntAttribute("experience"), player.getIntAttribute("expToLevel"));
+			g.setColor(Color.white);
+			FontUtils.drawCenter(TrainState.FONT_NORMAL, expText, 30, (175 - (TrainState.FONT_NORMAL.getHeight() / 2)), 300);
 		} // End drawing of experience bar.
 		
 		{ // Begin drawing health upgrade components.
@@ -162,6 +166,31 @@ public class TrainState extends BasicGameState {
 			speedUpTooltip.render(g, 0L);
 			damageUpTooltip.render(g, 0L);
 		} // End tooltip drawing.
+	}
+	
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		Globals.mouse.setPosition(newx, newy);
+	}
+	
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(true);
+	}
+	
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if(button == 0) Globals.mouse.setMouseDown(false);
+	}
+	
+	@Override
+	public void keyReleased(int key, char c) {
+		if(key == Input.KEY_T) exit = true;
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame game) {
+		exit = false;
 	}
 
 	@Override

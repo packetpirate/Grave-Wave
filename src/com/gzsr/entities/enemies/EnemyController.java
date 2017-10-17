@@ -15,7 +15,9 @@ public class EnemyController implements Entity {
 	private static final long DEFAULT_SPAWN = 2000L;
 	
 	private List<Enemy> unborn;
+	public void addUnborn(Enemy e) { unborn.add(e); }
 	private List<Enemy> alive;
+	public void addAlive(Enemy e) { alive.add(e); }
 	
 	private long spawnRate;
 	private long nextSpawn;
