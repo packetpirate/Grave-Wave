@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -155,19 +157,21 @@ public class Player implements Entity {
 		}
 		
 		float adjSpeed = getSpeed() * (float)getDoubleAttribute("spdMult");
-		if(Globals.inputs.contains("W")) move(0.0f, -adjSpeed);
-		if(Globals.inputs.contains("A")) move(-adjSpeed, 0.0f);
-		if(Globals.inputs.contains("S")) move(0.0f, adjSpeed);
-		if(Globals.inputs.contains("D")) move(adjSpeed, 0.0f);
-		if(Globals.inputs.contains("R") && 
+		if(Globals.inputs.contains(Input.KEY_W)) move(0.0f, -adjSpeed);
+		if(Globals.inputs.contains(Input.KEY_A)) move(-adjSpeed, 0.0f);
+		if(Globals.inputs.contains(Input.KEY_S)) move(0.0f, adjSpeed);
+		if(Globals.inputs.contains(Input.KEY_D)) move(adjSpeed, 0.0f);
+		if(Globals.inputs.contains(Input.KEY_R) && 
 		   !getCurrentWeapon().isReloading(cTime) &&
 		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
 			getCurrentWeapon().reload(cTime);
 		}
 		
 		// Check to see if the player is trying to change weapon by number.
+		int [] codes = new int[] { Input.KEY_0, Input.KEY_1, Input.KEY_2, Input.KEY_3, Input.KEY_4,
+								   Input.KEY_5, Input.KEY_6, Input.KEY_7, Input.KEY_8, Input.KEY_9 };
 		for(int i = 0; i < 10; i++) {
-			if(Globals.inputs.contains(Integer.toString(i))) {
+			if(Globals.inputs.contains(codes[i])) {
 				if(i == 0) setCurrentWeapon(9);
 				else setCurrentWeapon(i - 1);
 				break; // To avoid conflicts when holding multiple numerical keys.

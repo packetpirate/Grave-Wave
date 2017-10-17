@@ -50,18 +50,16 @@ public class Game extends StateBasedGame {
 		Globals.mouse.setMouseDown(input.isMouseButtonDown(0));
 		Globals.mouse.setPosition(input.getMouseX(), input.getMouseY());
 		
-		// Handle keyboard input.
-		int [] codes = new int[] { input.KEY_W, input.KEY_A, input.KEY_S, input.KEY_D, input.KEY_R, input.KEY_T, input.KEY_B,
-								   input.KEY_1, input.KEY_2, input.KEY_3, input.KEY_4, input.KEY_5,
-								   input.KEY_6, input.KEY_7, input.KEY_8, input.KEY_9, input.KEY_0 };
-		String [] inputs = new String[] { "W", "A", "S", "D", "R", "T", "B",
-										  "1", "2", "3", "4", "5", 
-										  "6", "7", "8", "9", "0" };
+		// Clear the previously released inputs.
+		Globals.released.clear();
 		
-		for(int i = 0; i < codes.length; i++) {
-			String in = inputs[i];
-			if(input.isKeyDown(codes[i])) Globals.inputs.add(in);
-			else Globals.inputs.remove(in);
+		// Handle keyboard input.
+		for(int i = 0; i < Globals.keyCodes.length; i++) {
+			if(input.isKeyDown(Globals.keyCodes[i])) Globals.inputs.add(Globals.keyCodes[i]);
+			else {
+				boolean down = Globals.inputs.remove(Globals.keyCodes[i]);
+				if(down) Globals.released.add(Globals.keyCodes[i]);
+			}
 		}
 	}
 }

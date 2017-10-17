@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -23,8 +25,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.HUD;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.items.InvulnerableItem;
+import com.gzsr.gfx.ui.Console;
 import com.gzsr.objects.items.Item;
 
 public class GameState extends BasicGameState implements MouseListener {
@@ -33,8 +34,12 @@ public class GameState extends BasicGameState implements MouseListener {
 	private AssetManager assets;
 	private long time;
 	
+	private Console console;
 	private HUD hud;
 	private Map<String, Entity> entities;
+	public Map<String, Entity> getEntities() { return entities; }
+	
+	private boolean paused, consoleOpen;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -52,6 +57,11 @@ public class GameState extends BasicGameState implements MouseListener {
 		
 		entities = new HashMap<String, Entity>();
 		entities.put("enemyController", new EnemyController());
+		
+		paused = false;
+		consoleOpen = false;
+		
+		console = new Console(this);
 	}
 
 	@Override
@@ -59,43 +69,49 @@ public class GameState extends BasicGameState implements MouseListener {
 		time += (long)delta;
 		Game.handleInput(gc);
 		
-		Player player = Globals.player;
-		player.update(time);
-		
-		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-			pair.getValue().update(time);
-			if(pair.getValue() instanceof EnemyController) {
-				EnemyController ec = (EnemyController)pair.getValue();
-				ec.updateEnemies(player, time);
-			} else if(pair.getValue() instanceof Item) {
-				Item item = (Item) pair.getValue();
-				if(item.isActive(time)) {
-					player.checkItem(item, time);
-				} else it.remove();
+		if(!paused && !consoleOpen) {
+			Player player = Globals.player;
+			player.update(time);
+			
+			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
+				pair.getValue().update(time);
+				if(pair.getValue() instanceof EnemyController) {
+					EnemyController ec = (EnemyController)pair.getValue();
+					ec.updateEnemies(player, time);
+				} else if(pair.getValue() instanceof Item) {
+					Item item = (Item) pair.getValue();
+					if(item.isActive(time)) {
+						player.checkItem(item, time);
+					} else it.remove();
+				}
 			}
+			
+			// If the player has died, transition state.
+			if(!player.isAlive()) {
+				game.enterState(GameOverState.ID, 
+								new FadeOutTransition(), 
+								new FadeInTransition());
+			}
+			
+			if(Globals.released.contains(Input.KEY_T)) {
+				// Open the training screen.
+				game.enterState(TrainState.ID,
+								new FadeOutTransition(),
+								new FadeInTransition());
+			} else if(Globals.released.contains(Input.KEY_B)) {
+				game.enterState(ShopState.ID,
+								new FadeOutTransition(),
+								new FadeInTransition());
+			}
+			
+			hud.update(player, time);
+		} else if(consoleOpen) {
+			console.update(time);
 		}
 		
-		// If the player has died, transition state.
-		if(!player.isAlive()) {
-			game.enterState(GameOverState.ID, 
-							new FadeOutTransition(), 
-							new FadeInTransition());
-		}
-		
-		if(Globals.inputs.contains("T")) {
-			// Open the training screen.
-			game.enterState(TrainState.ID,
-							new FadeOutTransition(),
-							new FadeInTransition());
-		} else if(Globals.inputs.contains("B")) {
-			game.enterState(ShopState.ID,
-							new FadeOutTransition(),
-							new FadeInTransition());
-		}
-		
-		hud.update(player, time);
+		if(Globals.released.contains(Input.KEY_GRAVE)) consoleOpen = !consoleOpen;
 	}
 	
 	@Override
@@ -119,6 +135,8 @@ public class GameState extends BasicGameState implements MouseListener {
 		}
 		
 		hud.render(g, player, time);
+		
+		if(consoleOpen) console.render(g, time);
 	}
 	
 	private void loadImages() throws SlickException {

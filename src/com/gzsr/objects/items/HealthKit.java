@@ -21,11 +21,6 @@ public class HealthKit extends Item {
 		duration = HealthKit.DURATION;
 		powerupSound = AssetManager.getManager().getSound("powerup2");
 	}
-
-	@Override
-	public void update(long cTime) {
-		
-	}
 	
 	@Override
 	public void apply(Player player, long cTime) {

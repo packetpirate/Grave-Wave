@@ -10,8 +10,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
-import com.gzsr.entities.Player;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
