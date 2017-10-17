@@ -16,6 +16,9 @@ local.properties
 # Thumbnails
 Thumbs.db
 
+# Custom
+linesofcode.py
+
 # External tool builders
 .externalToolBuilders/
 

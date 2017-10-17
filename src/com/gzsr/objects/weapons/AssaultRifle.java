@@ -138,7 +138,8 @@ public class AssaultRifle implements Weapon {
 		Particle particle = new Particle(color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		Projectile projectile = new Projectile(particle, AssaultRifle.DAMAGE);
+		double damage = AssaultRifle.DAMAGE + (player.getIntAttribute("damageUp") * 0.10);
+		Projectile projectile = new Projectile(particle, damage);
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;

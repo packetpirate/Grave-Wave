@@ -137,7 +137,8 @@ public class Shotgun implements Weapon {
 			Particle particle = new Particle(color, position, velocity, devTheta,
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
-			Projectile projectile = new Projectile(particle, Shotgun.DAMAGE);
+			double damage = Shotgun.DAMAGE + (player.getIntAttribute("damageUp") * 0.10);
+			Projectile projectile = new Projectile(particle, damage);
 			projectiles.add(projectile);
 		}
 		

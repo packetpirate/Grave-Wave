@@ -28,7 +28,9 @@ import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 
 public class Player implements Entity {
+	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
+	private static final double HEALTH_PER_SP = 20;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -144,6 +146,14 @@ public class Player implements Entity {
 	
 	@Override
 	public void update(long cTime) {
+		// Make sure player's health is up to date.
+		double currentMax = getDoubleAttribute("maxHealth");
+		double healthBonus = getIntAttribute("healthUp") * HEALTH_PER_SP;
+		if(currentMax != (DEFAULT_MAX_HEALTH + healthBonus)) {
+			// Update player's max health.
+			setDoubleAttribute("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
+		}
+		
 		// Need to make sure to update the status effects first.
 		Iterator<StatusEffect> it = statusEffects.iterator();
 		while(it.hasNext()) {

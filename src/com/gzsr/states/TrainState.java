@@ -1,13 +1,18 @@
 package com.gzsr.states;
 
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -18,6 +23,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.SkillButton;
 import com.gzsr.gfx.ui.TooltipText;
 import com.gzsr.misc.Pair;
 
@@ -34,11 +40,16 @@ public class TrainState extends BasicGameState implements InputListener {
 	private TooltipText speedUpTooltip;
 	private TooltipText damageUpTooltip;
 	
+	private List<SkillButton> skillButtons;
+	
 	private boolean exit;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
+		
+		loadImages();
+		loadSounds();
 		
 		expToLevelTooltip = new TooltipText(TrainState.FONT_NORMAL, 
 											"Exp To Next Level:", 
@@ -56,6 +67,15 @@ public class TrainState extends BasicGameState implements InputListener {
 										  "Damage:",
 										  "Each point in this increases damage done by 10%.",
 										  Color.white, new Pair<Float>(30.0f, 390.0f));
+		
+		skillButtons = new ArrayList<SkillButton>() {{
+			add(new SkillButton("healthUp", true, new Pair<Float>(340.0f, 240.0f)));
+			add(new SkillButton("healthUp", false, new Pair<Float>(400.0f, 240.0f)));
+			add(new SkillButton("speedUp", true, new Pair<Float>(340.0f, 330.0f)));
+			add(new SkillButton("speedUp", false, new Pair<Float>(400.0f, 330.0f)));
+			add(new SkillButton("damageUp", true, new Pair<Float>(340.0f, 420.0f)));
+			add(new SkillButton("damageUp", false, new Pair<Float>(400.0f, 420.0f)));
+		}};
 		
 		exit = false;
 	}
@@ -156,6 +176,14 @@ public class TrainState extends BasicGameState implements InputListener {
 			}
 		} // End drawing damage upgrade components.
 		
+		{ // Begin rendering skill buttons.
+			Iterator<SkillButton> it = skillButtons.iterator();
+			while(it.hasNext()) {
+				SkillButton sk = it.next();
+				sk.render(g, 0L);
+			}
+		} // End rendering skill buttons.
+		
 		// Show how many skill points the player has.
 		g.setColor(Color.white);
 		g.drawString(String.format("Skill Points: %d", player.getIntAttribute("skillPoints")), 30.0f, (Globals.HEIGHT - 66.0f));
@@ -176,6 +204,16 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if(button == 0) Globals.mouse.setMouseDown(true);
+		
+		// Check all skill buttons to see if they've been clicked.
+		Iterator<SkillButton> it = skillButtons.iterator();
+		while(it.hasNext()) {
+			SkillButton sk = it.next();
+			if(sk.inBounds(x, y)) {
+				sk.click(Globals.player);
+				break;
+			}
+		}
 	}
 	
 	@Override
@@ -191,6 +229,34 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) {
 		exit = false;
+	}
+	
+	private void loadImages() throws SlickException {
+		String [] assetList = new String [] {
+			// Primary Images
+			"images/GZS_SkillUpButton.png",
+			"images/GZS_SkillDownButton.png"
+		};
+		
+		for(String asset : assetList) {
+			Image image = new Image(asset);
+			String key = asset.substring((asset.indexOf('/') + 1), 
+										  asset.lastIndexOf('.'));
+			assets.addImage(key, image);
+		}
+	}
+	
+	private void loadSounds() throws SlickException {
+		String [] assetList = new String [] {
+			"sounds/point_buy.wav"
+		};
+		
+		for(String asset : assetList) {
+			Sound sound = new Sound(asset);
+			String key = asset.substring((asset.indexOf('/') + 1), 
+										  asset.lastIndexOf('.'));
+			assets.addSound(key, sound);
+		}
 	}
 
 	@Override
