@@ -14,6 +14,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Rotdog;
+import com.gzsr.entities.enemies.Upchuck;
 import com.gzsr.entities.enemies.Zumby;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
@@ -33,14 +34,12 @@ public class Console implements Entity {
 	private static final TrueTypeFont CONSOLE_FONT = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 12), true);
 	
 	private GameState gs;
-	private GameContainer gc;
 	
 	private String currentCommand;
 	private List<String> pastCommands;
 	
 	public Console(GameState gs_, GameContainer gc_) {
 		this.gs = gs_;
-		this.gc = gc_;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
 		
@@ -106,7 +105,7 @@ public class Console implements Entity {
 						pastCommands.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
 					} else if(command.equals("spawn") && (args == 3)) {
 						// requires entity name and x,y coordinates
-						EnemyController ec = (EnemyController)gs.getEntities().get("enemyController");
+						EnemyController ec = (EnemyController)gs.getEntity("enemyController");
 						
 						String entityName = tokens[1];
 						float x = Float.parseFloat(tokens[2]);
@@ -118,6 +117,9 @@ public class Console implements Entity {
 						} else if(entityName.equals("rotdog")) {
 							Rotdog r = new Rotdog(new Pair<Float>(x, y));
 							ec.addAlive(r);
+						} else if(entityName.equals("upchuck")) {
+							Upchuck u = new Upchuck(new Pair<Float>(x, y));
+							ec.addAlive(u);
 						} else {
 							pastCommands.add("  ERROR: Invalid entity name specified.");
 						}
@@ -130,19 +132,19 @@ public class Console implements Entity {
 						
 						if(itemName.equals("ammo")) {
 							AmmoCrate ac = new AmmoCrate(new Pair<Float>(x, y), cTime);
-							gs.getEntities().put(String.format("ammo%d", id), ac);
+							gs.addEntity(String.format("ammo%d", id), ac);
 						} else if(itemName.equals("health")) {
 							HealthKit hk = new HealthKit(new Pair<Float>(x, y), cTime);
-							gs.getEntities().put(String.format("health%d", id), hk);
+							gs.addEntity(String.format("health%d", id), hk);
 						} else if(itemName.equals("invulnerability")) {
 							InvulnerableItem inv = new InvulnerableItem(new Pair<Float>(x, y), cTime);
-							gs.getEntities().put(String.format("invuln%d", id), inv);
+							gs.addEntity(String.format("invuln%d", id), inv);
 						} else if(itemName.equals("speed")) {
 							SpeedItem spd = new SpeedItem(new Pair<Float>(x, y), cTime);
-							gs.getEntities().put(String.format("speed%d", id), spd);
+							gs.addEntity(String.format("speed%d", id), spd);
 						} else if(itemName.equals("unlimitedammo")) {
 							UnlimitedAmmoItem una = new UnlimitedAmmoItem(new Pair<Float>(x, y), cTime);
-							gs.getEntities().put(String.format("unlimAmmo%d", args), una);
+							gs.addEntity(String.format("unlimAmmo%d", args), una);
 						} else {
 							pastCommands.add("  ERROR: Invalid item name specified.");
 						}
@@ -151,7 +153,7 @@ public class Console implements Entity {
 						
 						if(attributeName.equals("health")) {
 							double health = Double.parseDouble(tokens[2]);
-							Globals.player.setDoubleAttribute("health", health);
+							Globals.player.setAttribute("health", health);
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
 						}

@@ -11,9 +11,7 @@ import com.gzsr.misc.Pair;
 public class Particle implements Entity {
 	private String image;
 	public String getImageName() { return image; }
-	public Image getImage() {
-		return AssetManager.getManager().getImage(image);
-	}
+	public Image getImage() { return AssetManager.getManager().getImage(image); }
 	private Color color;
 	public Color getColor() { return color; }
 	private Pair<Float> position;

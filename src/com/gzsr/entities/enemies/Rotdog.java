@@ -1,8 +1,6 @@
 package com.gzsr.entities.enemies;
 
-import org.newdawn.slick.Graphics;
-
-import com.gzsr.entities.Player;
+import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
@@ -22,8 +20,8 @@ public class Rotdog extends Enemy {
 	}
 
 	@Override
-	public void move(Player player) {
-		theta = Calculate.Hypotenuse(position, player.getPosition());
+	public void move() {
+		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 		position.x += (float)Math.cos(theta) * Rotdog.SPEED;
 		position.y += (float)Math.sin(theta) * Rotdog.SPEED;
 	}
@@ -41,15 +39,5 @@ public class Rotdog extends Enemy {
 	@Override
 	public boolean checkCollision(Pair<Float> p) {
 		return (Calculate.Distance(p, position) <= animation.getSize());
-	}
-	
-	@Override
-	public void update(long cTime) {
-		super.update(cTime);
-	}
-	
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
 	}
 }

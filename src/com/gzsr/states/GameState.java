@@ -22,6 +22,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.HUD;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.objects.items.Item;
@@ -36,7 +37,8 @@ public class GameState extends BasicGameState implements InputListener {
 	private Console console;
 	private HUD hud;
 	private Map<String, Entity> entities;
-	public Map<String, Entity> getEntities() { return entities; }
+	public Entity getEntity(String key) { return entities.get(key); }
+	public void addEntity(String key, Entity e) { entities.put(key, e); }
 	
 	private boolean paused, consoleOpen;
 	public boolean isConsoleOpen() { return consoleOpen; }
@@ -46,6 +48,7 @@ public class GameState extends BasicGameState implements InputListener {
 		assets = AssetManager.getManager();
 		
 		loadImages();
+		loadAnimations(); // has to come after loadImages
 		loadSounds();
 		
 		time = 0L;
@@ -158,7 +161,11 @@ public class GameState extends BasicGameState implements InputListener {
 			//Enemy Images
 			"images/GZS_Zumby2.png",
 			"images/GZS_Rotdog2.png",
+			"images/GZS_Upchuck2.png",
+			// Enemy Projectile Images
+			"images/GZS_AcidParticle2.png",
 			// Weapon Images
+			"images/GZS_MuzzleFlash.png",
 			"images/GZS_Popgun.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png"
@@ -170,6 +177,11 @@ public class GameState extends BasicGameState implements InputListener {
 										  asset.lastIndexOf('.'));
 			assets.addImage(key, image);
 		}
+	}
+	
+	private void loadAnimations() throws SlickException {
+		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
+		assets.addAnimation("GZS_MuzzleFlash", mf);
 	}
 	
 	private void loadSounds() throws SlickException {

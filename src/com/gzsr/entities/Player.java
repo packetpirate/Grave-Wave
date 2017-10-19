@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -31,6 +31,7 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
+	private static final float COLLISION_DIST = 16.0f;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -52,11 +53,11 @@ public class Player implements Entity {
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
-	public void setIntAttribute(String key, int val) { iAttributes.put(key, val); }
+	public void setAttribute(String key, int val) { iAttributes.put(key, val); }
 	public void addIntAttribute(String key, int amnt) { iAttributes.put(key, (getIntAttribute(key) + amnt)); }
 	private Map<String, Double> dAttributes;
 	public double getDoubleAttribute(String key) { return dAttributes.get(key); }
-	public void setDoubleAttribute(String key, double val) { dAttributes.put(key, val); }
+	public void setAttribute(String key, double val) { dAttributes.put(key, val); }
 	public void addDoubleAttribute(String key, double amnt) { dAttributes.put(key, (getDoubleAttribute(key) + amnt)); }
 	
 	private List<Weapon> weapons;
@@ -67,11 +68,9 @@ public class Player implements Entity {
 						   .count();
 	}
 	public List<Weapon> getActiveWeapons() {
-		List<Weapon> activeWeapons = new ArrayList<Weapon>();
-		for(Weapon w : weapons) {
-			if(w.hasWeapon()) activeWeapons.add(w); 
-		}
-		return activeWeapons;
+		return weapons.stream()
+					  .filter(w -> w.hasWeapon())
+					  .collect(Collectors.toList());
 	}
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
@@ -151,7 +150,7 @@ public class Player implements Entity {
 		double healthBonus = getIntAttribute("healthUp") * HEALTH_PER_SP;
 		if(currentMax != (DEFAULT_MAX_HEALTH + healthBonus)) {
 			// Update player's max health.
-			setDoubleAttribute("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
+			setAttribute("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
 		}
 		
 		// Need to make sure to update the status effects first.
@@ -166,7 +165,7 @@ public class Player implements Entity {
 			}
 		}
 		
-		float adjSpeed = getSpeed() * (float)getDoubleAttribute("spdMult");
+		float adjSpeed = (getSpeed() + (getIntAttribute("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)getDoubleAttribute("spdMult");
 		if(Globals.inputs.contains(Input.KEY_W)) move(0.0f, -adjSpeed);
 		if(Globals.inputs.contains(Input.KEY_A)) move(-adjSpeed, 0.0f);
 		if(Globals.inputs.contains(Input.KEY_S)) move(0.0f, adjSpeed);
@@ -226,26 +225,26 @@ public class Player implements Entity {
 		iAttributes.clear();
 		
 		// Basic attributes.
-		dAttributes.put("health", 100.0);
-		dAttributes.put("maxHealth", 100.0);
-		iAttributes.put("lives", 3);
-		iAttributes.put("money", 0);
+		setAttribute("health", 100.0);
+		setAttribute("maxHealth", 100.0);
+		setAttribute("lives", 3);
+		setAttribute("money", 0);
 		
 		// Experience related attributes.
-		iAttributes.put("experience", 0);
-		iAttributes.put("expToLevel", 100);
-		iAttributes.put("level", 1);
-		iAttributes.put("skillPoints", 10);
+		setAttribute("experience", 0);
+		setAttribute("expToLevel", 100);
+		setAttribute("level", 1);
+		setAttribute("skillPoints", 10);
 		
 		// Upgrade level attributes.
-		iAttributes.put("healthUp", 0);
-		iAttributes.put("speedUp", 0);
-		iAttributes.put("damageUp", 0);
+		setAttribute("healthUp", 0);
+		setAttribute("speedUp", 0);
+		setAttribute("damageUp", 0);
 		
 		// Multipliers
-		dAttributes.put("expMult", 1.0);
-		dAttributes.put("spdMult", 1.0);
-		dAttributes.put("damMult", 1.0);
+		setAttribute("expMult", 1.0);
+		setAttribute("spdMult", 1.0);
+		setAttribute("damMult", 1.0);
 	}
 	
 	/**
@@ -257,7 +256,7 @@ public class Player implements Entity {
 		double maxHealth = getDoubleAttribute("maxHealth");
 		double adjusted = currentHealth + amnt;
 		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
-		setDoubleAttribute("health", newHealth);
+		setAttribute("health", newHealth);
 	}
 	
 	/**
@@ -269,7 +268,7 @@ public class Player implements Entity {
 			double currentHealth = getDoubleAttribute("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
-			setDoubleAttribute("health", newHealth);
+			setAttribute("health", newHealth);
 		}
 	}
 	
@@ -279,14 +278,14 @@ public class Player implements Entity {
 		int expToLevel = getIntAttribute("expToLevel");
 		int newLevel = getIntAttribute("level") + 1;
 		
-		setIntAttribute("experience", adjusted);
+		setAttribute("experience", adjusted);
 		
 		if(adjusted >= expToLevel) {
 			// Level up!
 			int carryOver = adjusted % expToLevel;
-			setIntAttribute("experience", carryOver);
-			setIntAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
-			setIntAttribute("level", newLevel);
+			setAttribute("experience", carryOver);
+			setAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
+			setAttribute("level", newLevel);
 			addIntAttribute("skillPoints", 1);
 			// TODO: Add level up sound.
 		}
@@ -319,6 +318,11 @@ public class Player implements Entity {
 		}
 		
 		return false;
+	}
+	
+	public boolean checkCollision(Projectile p) {
+		float dist = Calculate.Distance(position, p.getPosition());
+		return (dist <= Player.COLLISION_DIST); 
 	}
 	
 	/**

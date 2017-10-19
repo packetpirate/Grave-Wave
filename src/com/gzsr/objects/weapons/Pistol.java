@@ -12,6 +12,7 @@ import org.newdawn.slick.Sound;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -28,6 +29,7 @@ public class Pistol implements Weapon {
 	private static final String FIRE_SOUND = "shoot4";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private Animation muzzleFlash;
 	private Sound fireSound;
 	private Sound reloadSound;
 	
@@ -40,31 +42,10 @@ public class Pistol implements Weapon {
 	private long reloadStart;
 	private boolean release;
 	
-	@Override
-	public List<Projectile> getProjectiles() { return projectiles; }
-	
-	@Override
-	public Image getInventoryIcon() { 
-		return AssetManager.getManager().getImage(Pistol.ICON_NAME); 
-	}
-	
-	@Override
-	public int getClipSize() { return Pistol.CLIP_SIZE; }
-	
-	@Override
-	public int getClipAmmo() { return ammoInClip; }
-
-	@Override
-	public int getInventoryAmmo() { return ammoInInventory; }
-	
-	@Override
-	public void addInventoryAmmo(int amnt) {
-		ammoInInventory += amnt;
-	}
-	
 	public Pistol() {
 		AssetManager assets = AssetManager.getManager();
 		
+		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.fireSound = assets.getSound(Pistol.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Pistol.RELOAD_SOUND);
 		
@@ -96,6 +77,9 @@ public class Pistol implements Weapon {
 		
 		// If mouse released, release fire lock.
 		if(!release && !Globals.mouse.isMouseDown()) release = true;
+		
+		// Update muzzle flash animation.
+		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
 	}
 
 	@Override
@@ -108,6 +92,10 @@ public class Pistol implements Weapon {
 				if(p.isAlive(cTime)) p.render(g, cTime);
 			}
 		}
+		
+		// Render muzzle flash.
+		Pair<Float> mp = new Pair<Float>((Globals.player.getPosition().x + 5.0f), (Globals.player.getPosition().y - 28.0f));
+		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Globals.player.getPosition(), (Globals.player.getRotation() - (float)(Math.PI / 2)));
 	}
 
 	@Override
@@ -142,6 +130,7 @@ public class Pistol implements Weapon {
 		lastFired = cTime;
 		release = false;
 		
+		muzzleFlash.restart(cTime);
 		fireSound.play();
 	}
 
@@ -169,6 +158,28 @@ public class Pistol implements Weapon {
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)Pistol.RELOAD_TIME);
+	}
+	
+	@Override
+	public List<Projectile> getProjectiles() { return projectiles; }
+	
+	@Override
+	public Image getInventoryIcon() { 
+		return AssetManager.getManager().getImage(Pistol.ICON_NAME); 
+	}
+	
+	@Override
+	public int getClipSize() { return Pistol.CLIP_SIZE; }
+	
+	@Override
+	public int getClipAmmo() { return ammoInClip; }
+
+	@Override
+	public int getInventoryAmmo() { return ammoInInventory; }
+	
+	@Override
+	public void addInventoryAmmo(int amnt) {
+		ammoInInventory += amnt;
 	}
 	
 	@Override

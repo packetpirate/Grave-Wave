@@ -7,15 +7,19 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
+import com.gzsr.gfx.Animation;
+
 public class AssetManager {
 	private static AssetManager instance = null;
 	
 	private Map<String, Image> images = null;
+	private Map<String, Animation> animations = null;
 	private Map<String, Sound> sounds = null;
 	private Map<String, Font> fonts = null;
 	
 	private AssetManager() {
 		images = new HashMap<String, Image>();
+		animations = new HashMap<String, Animation>();
 		sounds = new HashMap<String, Sound>();
 		fonts = new HashMap<String, Font>();
 	}
@@ -37,7 +41,21 @@ public class AssetManager {
 			return images.get(key);
 		}
 		
-		//System.out.println(String.format("Image Not Found: %s", key));
+		return null;
+	}
+	
+	public void addAnimation(String key, Animation anim) {
+		if(animations != null) {
+			animations.put(key, anim);
+			System.out.println(String.format("Animation Loaded: %s", key));
+		}
+	}
+	
+	public Animation getAnimation(String key) {
+		if((animations != null) && (key != null) && (!key.equals(""))) {
+			return new Animation(animations.get(key));
+		}
+		
 		return null;
 	}
 	
@@ -53,7 +71,6 @@ public class AssetManager {
 			return sounds.get(key);
 		}
 		
-		//System.out.println(String.format("Sound Not Found: %s", key));
 		return null;
 	}
 	
@@ -69,7 +86,6 @@ public class AssetManager {
 			return fonts.get(key);
 		}
 		
-		//System.out.println(String.format("Font Not Found: %s", key));
 		return null;
 	}
 }

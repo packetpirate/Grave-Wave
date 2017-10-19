@@ -26,7 +26,7 @@ public class SpeedItem extends Item {
 	public void apply(Player player, long cTime) {
 		SpeedEffect effect = new SpeedEffect(Status.SPEED_UP, SpeedItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
-		player.setDoubleAttribute("spdMult", SpeedEffect.EFFECT);
+		player.setAttribute("spdMult", SpeedEffect.EFFECT);
 		duration = 0L;
 		powerupSound.play();
 	}

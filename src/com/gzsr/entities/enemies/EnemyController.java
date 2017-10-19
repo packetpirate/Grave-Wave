@@ -76,7 +76,6 @@ public class EnemyController implements Entity {
 			
 			// TODO: Have enemy type chosen randomly before spawning.
 			Zumby z = new Zumby(new Pair<Float>(x, y));
-			//Rotdog r = new Rotdog(new Pair<Float>(x, y));
 			unborn.add(z);
 		}
 		
@@ -100,10 +99,9 @@ public class EnemyController implements Entity {
 		while(it.hasNext()) {
 			Enemy enemy = it.next();
 			enemy.update(cTime);
-			enemy.move(player);
 			
 			// Check collisions with player projectiles, then see if the enemy is still alive.
-			boolean damageTaken = player.checkProjectiles(enemy, cTime);
+			player.checkProjectiles(enemy, cTime);
 			if(!enemy.isAlive(cTime)) {
 				// If the enemy died, give the player experience and cash, and remove the enemy.
 				player.addExperience(enemy.getExpValue());

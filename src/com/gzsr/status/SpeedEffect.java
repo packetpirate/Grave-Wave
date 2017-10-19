@@ -16,6 +16,6 @@ public class SpeedEffect extends StatusEffect {
 
 	@Override
 	public void onDestroy(Player player, long cTime) {
-		player.setDoubleAttribute("spdMult", 1.0);
+		player.setAttribute("spdMult", 1.0);
 	}
 }

@@ -3,7 +3,6 @@ package com.gzsr.entities.enemies;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.misc.Pair;
 
@@ -34,10 +33,13 @@ public abstract class Enemy implements Entity {
 	@Override
 	public void update(long cTime) {
 		// All enemies should update.
-		if(isAlive(cTime)) animation.update(cTime);
+		if(isAlive(cTime)) {
+			animation.update(cTime);
+			move();
+		}
 	}
 	
-	public abstract void move(Player player);
+	public abstract void move();
 
 	@Override
 	public void render(Graphics g, long cTime) {

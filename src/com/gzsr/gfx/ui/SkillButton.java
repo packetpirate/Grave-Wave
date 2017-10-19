@@ -29,14 +29,14 @@ public class SkillButton implements Entity {
 		if(increase) {
 			if((skillPoints > 0) && (currentSkillLevel < 10)) {
 				// Add a skill point to the associated skill.
-				player.setIntAttribute(skillName, (currentSkillLevel + 1));
-				player.setIntAttribute("skillPoints", (skillPoints - 1));
+				player.setAttribute(skillName, (currentSkillLevel + 1));
+				player.setAttribute("skillPoints", (skillPoints - 1));
 			}
 		} else {
 			if(currentSkillLevel > 0) {
 				// Remove a skill point from the associated skill.
-				player.setIntAttribute(skillName, (currentSkillLevel - 1));
-				player.setIntAttribute("skillPoints", (skillPoints + 1));
+				player.setAttribute(skillName, (currentSkillLevel - 1));
+				player.setAttribute("skillPoints", (skillPoints + 1));
 			}
 		}
 		
