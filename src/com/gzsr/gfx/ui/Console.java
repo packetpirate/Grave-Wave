@@ -32,23 +32,32 @@ public class Console implements Entity {
 	private static final Color CONSOLE_TEXTBOX = Color.darkGray;
 	private static final Color CONSOLE_TEXTBORDER = Color.black;
 	private static final TrueTypeFont CONSOLE_FONT = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 12), true);
+	private static final long DELETE_FREQ = 100L;
 	
 	private GameState gs;
 	
 	private String currentCommand;
 	private List<String> pastCommands;
 	
+	private boolean deleting;
+	private long lastDelete;
+	
 	public Console(GameState gs_, GameContainer gc_) {
 		this.gs = gs_;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
+		this.deleting = false;
+		this.lastDelete = 0L;
 		
 		System.out.printf("Font Size: %d\n", CONSOLE_FONT.getHeight());
 	}
 
 	@Override
 	public void update(long cTime) {
-		
+		if(deleting && (cTime > (lastDelete + Console.DELETE_FREQ)) && (currentCommand.length() > 0)) {
+			deleteLastCommandChar();
+			lastDelete = cTime;
+		}
 	}
 
 	@Override
@@ -70,6 +79,9 @@ public class Console implements Entity {
 		g.setFont(CONSOLE_FONT);
 		g.drawString(currentCommand, 20.0f, (Globals.HEIGHT - 30.0f));
 		
+		// Draw the cursor next to the last character of the current command.
+		g.fillRect((20.0f + CONSOLE_FONT.getWidth(currentCommand)), (Globals.HEIGHT - 30.0f), 2.0f, CONSOLE_FONT.getHeight());
+		
 		// Display the previous commands.
 		if(!pastCommands.isEmpty()) {
 			int command = (pastCommands.size() > 10) ? (pastCommands.size() - 10) : 0;
@@ -82,6 +94,10 @@ public class Console implements Entity {
 				command++;
 			}
 		}
+	}
+	
+	private void deleteLastCommandChar() {
+		currentCommand = currentCommand.substring(0, (currentCommand.length() - 1));
 	}
 	
 	private void submitCommand() {
@@ -183,11 +199,12 @@ public class Console implements Entity {
 	public void keyPressed(int key, char c) {
 		// Handle submitting commands or erasing characters.
 		if(key == Input.KEY_ENTER) submitCommand();
-		if(key == Input.KEY_BACK) currentCommand = currentCommand.substring(0, (currentCommand.length() - 1));
+		if(key == Input.KEY_BACK) deleting = true;
 	}
 
 	public void keyReleased(int key, char c) {
 		// Handle key typing.
+		if(key == Input.KEY_BACK) deleting = false;
 		if(((c == '/') || (c == ' ') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
 	}
 }

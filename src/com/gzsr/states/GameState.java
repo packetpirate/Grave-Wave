@@ -31,7 +31,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
 	
 	private AssetManager assets;
-	private long time;
+	private long time, consoleTimer;
 	public long getTime() { return time; }
 	
 	private Console console;
@@ -52,6 +52,7 @@ public class GameState extends BasicGameState implements InputListener {
 		loadSounds();
 		
 		time = 0L;
+		consoleTimer = 0L;
 		
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		hud = new HUD();
@@ -114,7 +115,8 @@ public class GameState extends BasicGameState implements InputListener {
 			
 			hud.update(player, time);
 		} else if(consoleOpen) {
-			console.update(time);
+			consoleTimer += (long)delta;
+			console.update(consoleTimer);
 		}
 		
 		Globals.released.clear();
