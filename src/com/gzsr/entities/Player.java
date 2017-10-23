@@ -21,6 +21,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.Flamethrower;
 import com.gzsr.objects.weapons.Pistol;
 import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
@@ -132,11 +133,13 @@ public class Player implements Entity {
 			add(new Pistol());
 			add(new AssaultRifle());
 			add(new Shotgun());
+			add(new Flamethrower());
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
 		weapons.get(weaponIndex + 1).activate();
 		weapons.get(weaponIndex + 2).activate();
+		weapons.get(weaponIndex + 3).activate();
 		
 		statusEffects = new ArrayList<StatusEffect>();
 		
