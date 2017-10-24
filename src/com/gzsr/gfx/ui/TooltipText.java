@@ -7,6 +7,7 @@ import org.newdawn.slick.TrueTypeFont;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class TooltipText implements Entity {
 	private TrueTypeFont ttf;
@@ -24,7 +25,7 @@ public class TooltipText implements Entity {
 	}
 
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		// No need for update.
 	}
 

@@ -74,15 +74,15 @@ public class GameState extends BasicGameState implements InputListener {
 			time += (long)delta; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
 			
 			Player player = Globals.player;
-			player.update(time);
+			player.update(this, time);
 			
 			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 			while(it.hasNext()) {
 				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-				pair.getValue().update(time);
+				pair.getValue().update(this, time);
 				if(pair.getValue() instanceof EnemyController) {
 					EnemyController ec = (EnemyController)pair.getValue();
-					ec.updateEnemies(player, time);
+					ec.updateEnemies(this, player, time);
 				} else if(pair.getValue() instanceof Item) {
 					Item item = (Item) pair.getValue();
 					if(item.isActive(time)) {
@@ -116,7 +116,7 @@ public class GameState extends BasicGameState implements InputListener {
 			hud.update(player, time);
 		} else if(consoleOpen) {
 			consoleTimer += (long)delta;
-			console.update(consoleTimer);
+			console.update(this, consoleTimer);
 		}
 		
 		Globals.released.clear();
@@ -172,7 +172,9 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Popgun.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png",
-			"images/GZS_Flammenwerfer.png"
+			"images/GZS_Flammenwerfer.png",
+			// Effect Images
+			"images/GZS_Explosion.png"
 		};
 		
 		for(String asset : assetList) {
@@ -186,6 +188,9 @@ public class GameState extends BasicGameState implements InputListener {
 	private void loadAnimations() throws SlickException {
 		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
 		assets.addAnimation("GZS_MuzzleFlash", mf);
+		
+		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
+		assets.addAnimation("GZS_Explosion", exp);
 	}
 	
 	private void loadSounds() throws SlickException {

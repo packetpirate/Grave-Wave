@@ -69,12 +69,12 @@ public class TrainState extends BasicGameState implements InputListener {
 										  Color.white, new Pair<Float>(30.0f, 390.0f));
 		
 		skillButtons = new ArrayList<SkillButton>() {{
-			add(new SkillButton("healthUp", true, new Pair<Float>(340.0f, 240.0f)));
-			add(new SkillButton("healthUp", false, new Pair<Float>(400.0f, 240.0f)));
-			add(new SkillButton("speedUp", true, new Pair<Float>(340.0f, 330.0f)));
-			add(new SkillButton("speedUp", false, new Pair<Float>(400.0f, 330.0f)));
-			add(new SkillButton("damageUp", true, new Pair<Float>(340.0f, 420.0f)));
-			add(new SkillButton("damageUp", false, new Pair<Float>(400.0f, 420.0f)));
+			add(new SkillButton("healthUp", true, new Pair<Float>(400.0f, 240.0f)));
+			add(new SkillButton("healthUp", false, new Pair<Float>(340.0f, 240.0f)));
+			add(new SkillButton("speedUp", true, new Pair<Float>(400.0f, 330.0f)));
+			add(new SkillButton("speedUp", false, new Pair<Float>(340.0f, 330.0f)));
+			add(new SkillButton("damageUp", true, new Pair<Float>(400.0f, 420.0f)));
+			add(new SkillButton("damageUp", false, new Pair<Float>(340.0f, 420.0f)));
 		}};
 		
 		exit = false;

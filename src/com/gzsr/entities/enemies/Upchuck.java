@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class Upchuck extends Enemy {
 	private static final float HEALTH = 150.0f;
@@ -35,7 +36,7 @@ public class Upchuck extends Enemy {
 	}
 	
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		if(!dead()) {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
@@ -49,7 +50,7 @@ public class Upchuck extends Enemy {
 		while(it.hasNext()) {
 			Projectile p = it.next();
 			if(p.isAlive(cTime)) {
-				p.update(cTime);
+				p.update(gs, cTime);
 				if(Globals.player.checkCollision(p)) {
 					Globals.player.takeDamage(p.getDamage());
 					it.remove();

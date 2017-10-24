@@ -7,6 +7,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public abstract class Item implements Entity {
 	protected Pair<Float> position;
@@ -29,7 +30,7 @@ public abstract class Item implements Entity {
 	}
 	
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		// Must be overridden.
 	}
 

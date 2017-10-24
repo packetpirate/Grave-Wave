@@ -22,6 +22,7 @@ import com.gzsr.objects.items.HealthKit;
 import com.gzsr.objects.items.InvulnerableItem;
 import com.gzsr.objects.items.SpeedItem;
 import com.gzsr.objects.items.UnlimitedAmmoItem;
+import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 
 public class Console implements Entity {
@@ -53,7 +54,7 @@ public class Console implements Entity {
 	}
 
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		if(deleting && (cTime > (lastDelete + Console.DELETE_FREQ)) && (currentCommand.length() > 0)) {
 			deleteLastCommandChar();
 			lastDelete = cTime;
@@ -119,6 +120,7 @@ public class Console implements Entity {
 						pastCommands.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
 						pastCommands.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
 						pastCommands.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
+						pastCommands.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
 					} else if(command.equals("spawn") && (args == 3)) {
 						// requires entity name and x,y coordinates
 						EnemyController ec = (EnemyController)gs.getEntity("enemyController");
@@ -173,8 +175,19 @@ public class Console implements Entity {
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
 						}
-					} else if(command.equals("explode") && (args == 2)) {
-						// TODO: Generate explosion at (x, y) position.
+					} else if(command.equals("explode") && (args == 4)) {
+						try {
+							float x = Float.parseFloat(tokens[1]);
+							float y = Float.parseFloat(tokens[2]);
+							double damage = Double.parseDouble(tokens[3]);
+							float radius = Float.parseFloat(tokens[4]);
+							int id = Globals.generateEntityID();
+							
+							Explosion exp = new Explosion("GZS_Explosion", new Pair<Float>(x, y), damage, radius);
+							gs.addEntity(String.format("explosion%d", id), exp);
+						} catch(NumberFormatException nfe) {
+							pastCommands.add("  ERROR: Invalid parameters specified for /explode command.");
+						}
 					} else {
 						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}
@@ -205,6 +218,6 @@ public class Console implements Entity {
 	public void keyReleased(int key, char c) {
 		// Handle key typing.
 		if(key == Input.KEY_BACK) deleting = false;
-		if(((c == '/') || (c == ' ') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
+		if(((c == '/') || (c == ' ') || (c == '.') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
 	}
 }

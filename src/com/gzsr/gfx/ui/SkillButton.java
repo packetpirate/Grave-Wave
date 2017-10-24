@@ -7,6 +7,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class SkillButton implements Entity {
 	private static final float SIZE = 50.0f;
@@ -44,7 +45,7 @@ public class SkillButton implements Entity {
 	}
 
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		// Shouldn't need to do anything here...............
 	}
 

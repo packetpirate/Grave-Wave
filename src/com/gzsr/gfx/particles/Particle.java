@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class Particle implements Entity {
 	private String image;
@@ -71,7 +72,7 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		if(isAlive(cTime)) {
 			position.x += velocity * (float)Math.cos(theta - (Math.PI / 2));
 			position.y += velocity * (float)Math.sin(theta - (Math.PI / 2));

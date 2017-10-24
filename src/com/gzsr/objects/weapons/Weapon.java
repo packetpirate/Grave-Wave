@@ -8,13 +8,15 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
+import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
-public abstract class Weapon {
+public abstract class Weapon implements Entity {
 	protected Sound fireSound;
 	protected Sound reloadSound;
 	
@@ -40,7 +42,8 @@ public abstract class Weapon {
 		this.reloadStart = 0L;
 	}
 	
-	public void update(long cTime) {
+	@Override
+	public void update(GameState gs, long cTime) {
 		// Basically just checking to see if the reload time has elapsed.
 		if(!isReloading(cTime)) reloading = false;
 		
@@ -50,12 +53,13 @@ public abstract class Weapon {
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {
-					p.update(cTime);
+					p.update(gs, cTime);
 				} else it.remove();
 			}
 		}
 	}
 	
+	@Override
 	public void render(Graphics g, long cTime) {
 		// Render all projectiles.
 		if(!projectiles.isEmpty()) {

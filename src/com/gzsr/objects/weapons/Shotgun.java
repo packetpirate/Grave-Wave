@@ -12,6 +12,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Shotgun extends Weapon {
@@ -39,8 +40,8 @@ public class Shotgun extends Weapon {
 	}
 	
 	@Override
-	public void update(long cTime) {
-		super.update(cTime);
+	public void update(GameState gs, long cTime) {
+		super.update(gs, cTime);
 		
 		// Update muzzle flash animation.
 		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);

@@ -10,6 +10,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class EnemyController implements Entity {
 	private static final long DEFAULT_SPAWN = 2000L;
@@ -17,6 +18,7 @@ public class EnemyController implements Entity {
 	private List<Enemy> unborn;
 	public void addUnborn(Enemy e) { unborn.add(e); }
 	private List<Enemy> alive;
+	public List<Enemy> getAliveEnemies() { return alive; }
 	public void addAlive(Enemy e) { alive.add(e); }
 	
 	private long spawnRate;
@@ -83,7 +85,7 @@ public class EnemyController implements Entity {
 	}
 
 	@Override
-	public void update(long cTime) {
+	public void update(GameState gs, long cTime) {
 		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.
 		if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
 			lastEnemy = cTime;
@@ -94,11 +96,11 @@ public class EnemyController implements Entity {
 		}
 	}
 	
-	public void updateEnemies(Player player, long cTime) {
+	public void updateEnemies(GameState gs, Player player, long cTime) {
 		Iterator<Enemy> it = alive.iterator();
 		while(it.hasNext()) {
 			Enemy enemy = it.next();
-			enemy.update(cTime);
+			enemy.update(gs, cTime);
 			
 			// Check collisions with player projectiles, then see if the enemy is still alive.
 			player.checkProjectiles(enemy, cTime);

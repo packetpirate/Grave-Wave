@@ -158,4 +158,22 @@ public class Animation {
 			g.resetTransform();
 		}
 	}
+	
+	/**
+	 * Render the current frame of the animation.
+	 * @param g The graphics context used for drawing.
+	 * @param position The position to render the animation at.
+	 * @param size The size to override the size of the image with.
+	 */
+	public void render(Graphics g, Pair<Float> position, Pair<Float> size) {
+		Image image = getImage();
+		if(image != null) {
+			float tlx = position.x - (size.x / 2);
+			float tly = position.y - (size.y / 2);
+			g.drawImage(image, 
+						tlx, tly, (tlx + size.x), (tly + size.y), 
+						srcPos.x, srcPos.y, (srcPos.x + srcSize.x), (srcPos.y + srcSize.y));
+			g.resetTransform();
+		}
+	}
 }
