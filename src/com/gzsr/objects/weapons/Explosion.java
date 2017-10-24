@@ -20,6 +20,11 @@ import com.gzsr.status.StatusEffect;
 public class Explosion implements Entity {
 	private Animation anim;
 	private Pair<Float> position;
+	public Pair<Float> getPosition() { return position; }
+	public void setPosition(Pair<Float> newPos) {
+		position.x = newPos.x;
+		position.y = newPos.y;
+	}
 	private StatusEffect status;
 	private long statusDuration;
 	private double damage;

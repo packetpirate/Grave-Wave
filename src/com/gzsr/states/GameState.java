@@ -167,12 +167,14 @@ public class GameState extends BasicGameState implements InputListener {
 			// Projectile Images
 			"images/GZS_FireParticle2.png",
 			"images/GZS_AcidParticle2.png",
+			"images/GZS_HandEggParticle.png",
 			// Weapon Images
 			"images/GZS_MuzzleFlash.png",
 			"images/GZS_Popgun.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png",
 			"images/GZS_Flammenwerfer.png",
+			"images/GZS_HandEgg.png",
 			// Effect Images
 			"images/GZS_Explosion.png"
 		};
@@ -197,6 +199,7 @@ public class GameState extends BasicGameState implements InputListener {
 		String [] assetList = new String [] {
 			"sounds/shoot4.wav",
 			"sounds/shoot3.wav",
+			"sounds/throw2.wav",
 			"sounds/shotgun1.wav",
 			"sounds/flamethrower2.wav",
 			"sounds/buy_ammo2.wav",

@@ -54,7 +54,10 @@ public abstract class Weapon implements Entity {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {
 					p.update(gs, cTime);
-				} else it.remove();
+				} else {
+					p.onDestroy(gs, cTime);
+					it.remove();
+				}
 			}
 		}
 	}

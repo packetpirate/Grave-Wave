@@ -10,30 +10,30 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Particle implements Entity {
-	private String image;
+	protected String image;
 	public String getImageName() { return image; }
 	public Image getImage() { return AssetManager.getManager().getImage(image); }
-	private Color color;
+	protected Color color;
 	public Color getColor() { return color; }
-	private Pair<Float> position;
+	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
-	private float velocity;
+	protected float velocity;
 	public float getVelocity() { return velocity; }
-	private float theta;
+	protected float theta;
 	public float getTheta() { return theta; }
-	private float angularVelocity;
+	protected float angularVelocity;
 	public float getAngularVelocity() { return angularVelocity; }
-	private Pair<Float> size;
+	protected Pair<Float> size;
 	public Pair<Float> getSize() { return size; }
-	private long lifespan;
+	protected long lifespan;
 	public long getLifespan() { return lifespan; }
 	public boolean isAlive(long cTime) {
 		long elapsed = cTime - created;
 		return (!collision && (elapsed < lifespan));
 	}
-	private long created;
+	protected long created;
 	public long getCreated() { return created; }
-	private boolean collision;
+	protected boolean collision;
 	public void collide() { collision = true; }
 	
 	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_, 
@@ -69,6 +69,10 @@ public class Particle implements Entity {
 		this.lifespan = p.getLifespan();
 		this.created = p.getCreated();
 		this.collision = false;
+	}
+	
+	public void onDestroy(GameState gs, long cTime) {
+		// To be overridden.
 	}
 
 	@Override
