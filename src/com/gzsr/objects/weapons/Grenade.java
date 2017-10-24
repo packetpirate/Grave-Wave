@@ -2,6 +2,9 @@ package com.gzsr.objects.weapons;
 
 import java.util.Iterator;
 
+import org.newdawn.slick.Sound;
+
+import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -13,11 +16,13 @@ public class Grenade extends Projectile {
 	public static final float SPEED = 0.25f;
 	public static final long LIFESPAN = 1000L;
 	
+	private Sound explode;
 	private Explosion exp;
 	private boolean exploded;
 	
 	public Grenade(Particle p_, Explosion exp_) {
 		super(p_, 0.0);
+		this.explode = AssetManager.getManager().getSound("explosion2");
 		this.exp = exp_;
 		this.exploded = false;
 	}
@@ -43,6 +48,7 @@ public class Grenade extends Projectile {
 		int id = Globals.generateEntityID();
 		exp.setPosition(position);
 		gs.addEntity(String.format("explosion%d", id), exp);
+		explode.play();
 		exploded = true;
 	}
 	

@@ -202,6 +202,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"sounds/throw2.wav",
 			"sounds/shotgun1.wav",
 			"sounds/flamethrower2.wav",
+			"sounds/explosion2.wav",
 			"sounds/buy_ammo2.wav",
 			"sounds/powerup2.wav"
 		};
