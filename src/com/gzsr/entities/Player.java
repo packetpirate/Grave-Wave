@@ -122,33 +122,13 @@ public class Player implements Entity {
 	public Flashlight getFlashlight() { return flashlight; }
 	
 	public Player() {
-		position = new Pair<Float>((float)(Globals.WIDTH / 2), 
-								   (float)(Globals.HEIGHT / 2));
-		speed = Player.DEFAULT_SPEED;
-		theta = 0.0f;
+		position = new Pair<Float>(0.0f, 0.0f);
 		
 		iAttributes = new HashMap<String, Integer>();
 		dAttributes = new HashMap<String, Double>();
-		resetAttributes();
-		
-		// TODO: When in testing phase, deactivate all but Pistol (index 0).
-		weapons = new ArrayList<Weapon>() {{
-			add(new Pistol());
-			add(new AssaultRifle());
-			add(new Shotgun());
-			add(new Flamethrower());
-			add(new GrenadeLauncher());
-		}};
-		weaponIndex = 0;
-		weapons.get(weaponIndex).activate(); // activate the Pistol by default
-		weapons.get(weaponIndex + 1).activate();
-		weapons.get(weaponIndex + 2).activate();
-		weapons.get(weaponIndex + 3).activate();
-		weapons.get(weaponIndex + 4).activate();
-		
 		statusEffects = new ArrayList<StatusEffect>();
 		
-		flashlight = new Flashlight();
+		reset();
 	}
 	
 	@Override
@@ -228,9 +208,32 @@ public class Player implements Entity {
 	/**
 	 * Reset all dAttributes and iAttributes members.
 	 */
-	public void resetAttributes() {
+	@SuppressWarnings("serial")
+	public void reset() {
+		position.x = (float)(Globals.WIDTH / 2);
+		position.y = (float)(Globals.HEIGHT / 2);
+		
+		speed = Player.DEFAULT_SPEED;
+		theta = 0.0f;
+		
+		// TODO: When in testing phase, deactivate all but Pistol (index 0).
+		weapons = new ArrayList<Weapon>() {{
+			add(new Pistol());
+			add(new AssaultRifle());
+			add(new Shotgun());
+			add(new Flamethrower());
+			add(new GrenadeLauncher());
+		}};
+		weaponIndex = 0;
+		weapons.get(weaponIndex).activate(); // activate the Pistol by default
+		weapons.get(weaponIndex + 1).activate();
+		weapons.get(weaponIndex + 2).activate();
+		weapons.get(weaponIndex + 3).activate();
+		weapons.get(weaponIndex + 4).activate();
+		
 		dAttributes.clear();
 		iAttributes.clear();
+		statusEffects.clear();
 		
 		// Basic attributes.
 		setAttribute("health", 100.0);
@@ -253,6 +256,8 @@ public class Player implements Entity {
 		setAttribute("expMult", 1.0);
 		setAttribute("spdMult", 1.0);
 		setAttribute("damMult", 1.0);
+		
+		flashlight = new Flashlight();
 	}
 	
 	/**

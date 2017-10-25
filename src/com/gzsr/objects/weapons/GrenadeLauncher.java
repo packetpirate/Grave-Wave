@@ -65,7 +65,7 @@ public class GrenadeLauncher extends Weapon {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-		Explosion exp = new Explosion("GZS_Explosion", new Pair<Float>(0.0f, 0.0f), GrenadeLauncher.DAMAGE, GrenadeLauncher.EXP_RADIUS);
+		Explosion exp = new Explosion("GZS_Explosion", new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;

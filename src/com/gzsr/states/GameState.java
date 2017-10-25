@@ -51,21 +51,12 @@ public class GameState extends BasicGameState implements InputListener {
 		loadAnimations(); // has to come after loadImages
 		loadSounds();
 		
-		time = 0L;
-		consoleTimer = 0L;
-		
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
-		hud = new HUD();
 		
 		Globals.player = new Player();
-		
 		entities = new HashMap<String, Entity>();
-		entities.put("enemyController", new EnemyController());
-		
-		paused = false;
-		consoleOpen = false;
-		
-		console = new Console(this, gc);
+
+		reset(gc);
 	}
 
 	@Override
@@ -94,6 +85,7 @@ public class GameState extends BasicGameState implements InputListener {
 			if(!player.isAlive()) {
 				// If the player has died, transition state.
 				Globals.resetInputs();
+				Globals.gameOver = true;
 				game.enterState(GameOverState.ID, 
 								new FadeOutTransition(), 
 								new FadeInTransition());
@@ -145,6 +137,21 @@ public class GameState extends BasicGameState implements InputListener {
 		hud.render(g, player, time);
 		
 		if(consoleOpen) console.render(g, time);
+	}
+	
+	public void reset(GameContainer gc) throws SlickException{
+		time = 0L;
+		consoleTimer = 0L;
+		
+		Globals.player.reset();
+		entities.clear();
+		entities.put("enemyController", new EnemyController());
+		
+		paused = false;
+		consoleOpen = false;
+		console = new Console(this, gc);
+		
+		hud = new HUD();
 	}
 	
 	private void loadImages() throws SlickException {
@@ -266,6 +273,14 @@ public class GameState extends BasicGameState implements InputListener {
 		if(player.activeWeapons() > 1) {
 			player.weaponRotate((change > 0)?1:-1);
 			hud.queueWeaponCycle();
+		}
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		if(Globals.gameOver) {
+			reset(gc);
+			Globals.gameOver = false;
 		}
 	}
 

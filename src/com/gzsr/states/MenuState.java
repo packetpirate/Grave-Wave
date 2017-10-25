@@ -1,10 +1,15 @@
 package com.gzsr.states;
 
+import java.awt.Color;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.Effect;
+import org.newdawn.slick.font.effects.OutlineEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -26,21 +31,12 @@ public class MenuState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
+		assets.addImage("GZS_Background02", new Image("images/GZS_Background02.png"));
+		assets.addFont("manaspc", "fonts/manaspc.ttf", 32, true, false, new Effect[] { new ColorEffect(Color.WHITE), new OutlineEffect(1, Color.BLACK) });
 		
-		String [] assetList = new String [] {
-			"images/GZS_Background02.png"
-		};
-			
-		for(String asset : assetList) {
-			Image image = new Image(asset);
-			String key = asset.substring((asset.indexOf('/') + 1), 
-										  asset.lastIndexOf('.'));
-			assets.addImage(key, image);
-		}
-		
-		gameStart = new MenuButton(50, (Globals.HEIGHT - 200), 100, 50, "Start Game");
-		credits = new MenuButton(50, (Globals.HEIGHT - 140), 100, 50, "Credits");
-		exit = new MenuButton(50, (Globals.HEIGHT - 80), 100, 50, "Exit");
+		gameStart = new MenuButton(50.0f, (Globals.HEIGHT - 200.0f), "Start Game");
+		credits = new MenuButton(50.0f, (Globals.HEIGHT - 140.0f), "Credits");
+		exit = new MenuButton(50.0f, (Globals.HEIGHT - 80.0f), "Exit");
 	}
 	
 	@Override
@@ -57,7 +53,10 @@ public class MenuState extends BasicGameState implements InputListener {
 		if(credits.contains(Globals.mouse)) credits.mouseEnter();
 		else credits.mouseExit();
 		
-		if(exit.contains(Globals.mouse)) exit.mouseEnter();
+		if(exit.contains(Globals.mouse)) {
+			exit.mouseEnter();
+			if(Globals.mouse.isMouseDown()) gc.exit();
+		}
 		else exit.mouseExit();
 	}
 	

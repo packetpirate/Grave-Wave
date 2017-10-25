@@ -44,6 +44,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	private boolean exit;
 	
+	@SuppressWarnings("serial")
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
@@ -82,8 +83,6 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		Player player = Globals.player;
-		
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
 	}
 

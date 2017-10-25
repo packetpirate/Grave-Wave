@@ -1,12 +1,11 @@
 package com.gzsr.gfx;
 
-import java.awt.Font;
 import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
@@ -29,12 +28,12 @@ public class HUD {
 	private boolean cycleWeapons;
 	public void queueWeaponCycle() { cycleWeapons = true; }
 	
-	public HUD() {
+	public HUD() throws SlickException {
 		lastWeaponSwitch = 0L;
 		cycleWeapons = false;
 		
 		AssetManager assets = AssetManager.getManager();
-		assets.addFont("eurostile.oblique", new TrueTypeFont(new Font("fonts/eurostile.oblique.ttf", Font.PLAIN, 20), true));
+		assets.addFont("eurostile.oblique", "fonts/eurostile.oblique.ttf", 16, false, false);
 	}
 	
 	private boolean displayWeapons(long cTime) {
@@ -152,7 +151,7 @@ public class HUD {
 									player.getCurrentWeapon().getInventoryAmmo());
 				FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
 									 (int)(WEAPONS_ORIGIN.x + 54.0f), 
-									 (int)(WEAPONS_ORIGIN.y + 13.0f), 93, Color.black);
+									 (int)(WEAPONS_ORIGIN.y + 18.0f), 93, Color.black);
 			}
 		} // End weapons loadout rendering.
 		
