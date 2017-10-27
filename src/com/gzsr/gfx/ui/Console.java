@@ -13,6 +13,7 @@ import org.newdawn.slick.TrueTypeFont;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
 import com.gzsr.entities.enemies.Upchuck;
 import com.gzsr.entities.enemies.Zumby;
@@ -128,16 +129,20 @@ public class Console implements Entity {
 						String entityName = tokens[1];
 						float x = Float.parseFloat(tokens[2]);
 						float y = Float.parseFloat(tokens[3]);
+						Pair<Float> position = new Pair<Float>(x, y);
 						
 						if(entityName.equals("zumby")) {
-							Zumby z = new Zumby(new Pair<Float>(x, y));
+							Zumby z = new Zumby(position);
 							ec.addAlive(z);
 						} else if(entityName.equals("rotdog")) {
-							Rotdog r = new Rotdog(new Pair<Float>(x, y));
+							Rotdog r = new Rotdog(position);
 							ec.addAlive(r);
 						} else if(entityName.equals("upchuck")) {
-							Upchuck u = new Upchuck(new Pair<Float>(x, y));
+							Upchuck u = new Upchuck(position);
 							ec.addAlive(u);
+						} else if(entityName.equals("gasbag")) {
+							Gasbag g = new Gasbag(position);
+							ec.addAlive(g);
 						} else {
 							pastCommands.add("  ERROR: Invalid entity name specified.");
 						}

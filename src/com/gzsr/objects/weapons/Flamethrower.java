@@ -21,7 +21,7 @@ public class Flamethrower extends Weapon {
 	private static final long RELOAD_TIME = 3000L;
 	private static final int EMBER_COUNT = 10;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
-	private static final double EMBER_DAMAGE = 3.0;
+	private static final double EMBER_DAMAGE = 1.0;
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
 	private static final String FIRE_SOUND = "flamethrower2";
 	private static final String RELOAD_SOUND = "buy_ammo2";

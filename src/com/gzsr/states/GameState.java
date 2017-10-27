@@ -23,8 +23,8 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.HUD;
 import com.gzsr.gfx.ui.Console;
+import com.gzsr.gfx.ui.HUD;
 import com.gzsr.objects.items.Item;
 
 public class GameState extends BasicGameState implements InputListener {
@@ -163,14 +163,16 @@ public class GameState extends BasicGameState implements InputListener {
 			// Item Images
 			"images/GZS_Health.png",
 			"images/GZS_Ammo.png",
-			// Powerup Images
+			// Status Images
 			"images/GZS_Invulnerability.png",
 			"images/GZS_UnlimitedAmmo.png",
 			"images/GZS_SpeedUp.png",
+			"images/GZS_PoisonIcon.png",
 			//Enemy Images
 			"images/GZS_Zumby2.png",
 			"images/GZS_Rotdog2.png",
 			"images/GZS_Upchuck2.png",
+			"images/GZS_Gasbag2.png",
 			// Projectile Images
 			"images/GZS_FireParticle2.png",
 			"images/GZS_AcidParticle2.png",
@@ -183,7 +185,8 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Flammenwerfer.png",
 			"images/GZS_HandEgg.png",
 			// Effect Images
-			"images/GZS_Explosion.png"
+			"images/GZS_Explosion.png",
+			"images/GZS_PoisonExplosion.png"
 		};
 		
 		for(String asset : assetList) {
@@ -200,6 +203,9 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_Explosion", exp);
+		
+		Animation pc = new Animation("GZS_PoisonExplosion", 128, 128, 8, 125L, 1000L, 1000L);
+		assets.addAnimation("GZS_PoisonExplosion", pc);
 	}
 	
 	private void loadSounds() throws SlickException {
@@ -210,6 +216,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"sounds/shotgun1.wav",
 			"sounds/flamethrower2.wav",
 			"sounds/explosion2.wav",
+			"sounds/poison_cloud.wav",
 			"sounds/buy_ammo2.wav",
 			"sounds/powerup2.wav"
 		};

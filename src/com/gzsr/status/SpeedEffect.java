@@ -5,8 +5,8 @@ import com.gzsr.entities.Player;
 public class SpeedEffect extends StatusEffect {
 	public static final double EFFECT = 2.0;
 
-	public SpeedEffect(Status status_, long duration_, long created_) {
-		super(status_, duration_, created_);
+	public SpeedEffect(long duration_, long created_) {
+		super(Status.SPEED_UP, duration_, created_);
 	}
 
 	@Override

@@ -101,6 +101,7 @@ public class Player implements Entity {
 			if(s.equals(effect.getStatus())) {
 				// Refresh the effect rather than adding it to the list.
 				se.refresh(cTime);
+				return;
 			}
 		}
 		
@@ -114,6 +115,14 @@ public class Player implements Entity {
 		}
 		
 		return false;
+	}
+	public void clearHarmful() {
+		// TODO: Update this if more harmful status effects are added in the future.
+		Iterator<StatusEffect> it = statusEffects.iterator();
+		while(it.hasNext()) {
+			Status s = it.next().getStatus();
+			if(s == Status.POISON) it.remove();
+		}
 	}
 	
 	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player"); }

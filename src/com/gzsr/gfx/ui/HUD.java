@@ -1,4 +1,4 @@
-package com.gzsr.gfx;
+package com.gzsr.gfx.ui;
 
 import java.util.List;
 
@@ -18,6 +18,8 @@ import com.gzsr.status.StatusEffect;
 
 public class HUD {
 	private static final long WEAPONS_DISPLAY_TIME = 2000L;
+	
+	private static final Color POISON_HEALTH = new Color(0x009900);
 	
 	private static final Pair<Float> HEALTH_ORIGIN = new Pair<Float>(10.0f, 10.0f);
 	private static final Pair<Float> WEAPONS_ORIGIN = new Pair<Float>(10.0f, (Globals.HEIGHT - 64.0f));
@@ -60,7 +62,7 @@ public class HUD {
 			g.setColor(Color.lightGray);
 			g.drawRect(HEALTH_ORIGIN.x, HEALTH_ORIGIN.y, 156.0f, 26.0f);
 			
-			g.setColor(Color.red);
+			g.setColor(player.hasStatus(Status.POISON) ? HUD.POISON_HEALTH : Color.red);
 			g.fillRect((HEALTH_ORIGIN.x + 3.0f), 
 					   (HEALTH_ORIGIN.y + 3.0f), 
 					   (percentage * 150.0f), 20.0f);

@@ -24,7 +24,7 @@ public class InvulnerableItem extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		InvulnerableEffect effect = new InvulnerableEffect(Status.INVULNERABLE, InvulnerableItem.EFFECT_DURATION, cTime);
+		InvulnerableEffect effect = new InvulnerableEffect(InvulnerableItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
 		duration = 0L;
 		powerupSound.play();

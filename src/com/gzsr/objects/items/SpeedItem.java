@@ -24,7 +24,7 @@ public class SpeedItem extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		SpeedEffect effect = new SpeedEffect(Status.SPEED_UP, SpeedItem.EFFECT_DURATION, cTime);
+		SpeedEffect effect = new SpeedEffect(SpeedItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
 		player.setAttribute("spdMult", SpeedEffect.EFFECT);
 		duration = 0L;

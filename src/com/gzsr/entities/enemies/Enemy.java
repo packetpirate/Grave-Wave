@@ -52,5 +52,6 @@ public abstract class Enemy implements Entity {
 	
 	public abstract boolean checkCollision(Pair<Float> p);
 	public abstract void takeDamage(double amnt);
+	public void onDeath(GameState gs, long cTime) {}
 	public abstract double getDamage();
 }

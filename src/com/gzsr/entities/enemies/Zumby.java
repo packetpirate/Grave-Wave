@@ -5,6 +5,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Zumby extends Enemy {
+	private static final float COLLISION_DIST = 16.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 2.0f;
@@ -38,6 +39,6 @@ public class Zumby extends Enemy {
 
 	@Override
 	public boolean checkCollision(Pair<Float> p) {
-		return (Calculate.Distance(p, position) <= animation.getSize());
+		return (Calculate.Distance(p, position) <= Zumby.COLLISION_DIST);
 	}
 }

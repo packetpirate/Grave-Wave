@@ -3,8 +3,8 @@ package com.gzsr.status;
 import com.gzsr.entities.Player;
 
 public class InvulnerableEffect extends StatusEffect {
-	public InvulnerableEffect(Status status_, long duration_, long created_) {
-		super(status_, duration_, created_);
+	public InvulnerableEffect(long duration_, long created_) {
+		super(Status.INVULNERABLE, duration_, created_);
 	}
 
 	@Override

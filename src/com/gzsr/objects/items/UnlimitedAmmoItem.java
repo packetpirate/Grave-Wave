@@ -24,7 +24,7 @@ public class UnlimitedAmmoItem extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		UnlimitedAmmoEffect effect = new UnlimitedAmmoEffect(Status.UNLIMITED_AMMO, UnlimitedAmmoItem.EFFECT_DURATION, cTime);
+		UnlimitedAmmoEffect effect = new UnlimitedAmmoEffect(UnlimitedAmmoItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
 		duration = 0L;
 		powerupSound.play();

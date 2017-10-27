@@ -26,22 +26,20 @@ public class Explosion implements Entity {
 		position.y = newPos.y;
 	}
 	private StatusEffect status;
-	private long statusDuration;
 	private double damage;
 	private float radius;
 	private boolean started;
 	
-	private List<Entity> entitiesAffected; // TODO: figure out a better way to handle this -_-
+	private List<Entity> entitiesAffected;
 	
 	public Explosion(String animName_, Pair<Float> position_, double damage_, float radius_) {
-		this(animName_, position_, null, 0L, damage_, radius_);
+		this(animName_, position_, null, damage_, radius_);
 	}
 	
-	public Explosion(String animName_, Pair<Float> position_, StatusEffect status_, long statusDuration_, double damage_, float radius_) {
+	public Explosion(String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
 		this.status = status_;
-		this.statusDuration = statusDuration_;
 		this.damage = damage_;
 		this.radius = radius_;
 		this.started = false;
@@ -92,7 +90,7 @@ public class Explosion implements Entity {
 				float dist = Calculate.Distance(position, Globals.player.getPosition());
 				if(dist <= radius) {
 					Globals.player.takeDamage(damage * (1.0f - (dist / radius)));
-					if(status != null) Globals.player.addStatus(status, statusDuration);
+					if(status != null) Globals.player.addStatus(status, status.getDuration());
 					entitiesAffected.add(Globals.player);
 					return true;
 				} else return false;

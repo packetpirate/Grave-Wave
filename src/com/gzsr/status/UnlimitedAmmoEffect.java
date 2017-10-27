@@ -3,8 +3,8 @@ package com.gzsr.status;
 import com.gzsr.entities.Player;
 
 public class UnlimitedAmmoEffect extends StatusEffect {
-	public UnlimitedAmmoEffect(Status status_, long duration_, long created_) {
-		super(status_, duration_, created_);
+	public UnlimitedAmmoEffect(long duration_, long created_) {
+		super(Status.UNLIMITED_AMMO, duration_, created_);
 	}
 
 	@Override
