@@ -76,10 +76,10 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
-			position.x += velocity * (float)Math.cos(theta - (Math.PI / 2));
-			position.y += velocity * (float)Math.sin(theta - (Math.PI / 2));
+			position.x += velocity * delta * (float)Math.cos(theta - (Math.PI / 2));
+			position.y += velocity * delta * (float)Math.sin(theta - (Math.PI / 2));
 			theta += angularVelocity;
 		}
 	}

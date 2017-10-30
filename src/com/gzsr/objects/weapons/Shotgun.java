@@ -40,8 +40,8 @@ public class Shotgun extends Weapon {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
-		super.update(gs, cTime);
+	public void update(GameState gs, long cTime, int delta) {
+		super.update(gs, cTime, delta);
 		
 		// Update muzzle flash animation.
 		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);

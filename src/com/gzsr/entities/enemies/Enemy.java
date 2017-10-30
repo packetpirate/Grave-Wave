@@ -34,15 +34,15 @@ public abstract class Enemy implements Entity {
 	public abstract boolean isAlive(long cTime);
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			animation.update(cTime);
-			move();
+			move(delta);
 		}
 	}
 	
-	public abstract void move();
+	public abstract void move(int delta);
 
 	@Override
 	public void render(Graphics g, long cTime) {

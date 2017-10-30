@@ -85,7 +85,7 @@ public class EnemyController implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.
 		if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
 			lastEnemy = cTime;
@@ -96,11 +96,11 @@ public class EnemyController implements Entity {
 		}
 	}
 	
-	public void updateEnemies(GameState gs, Player player, long cTime) {
+	public void updateEnemies(GameState gs, Player player, long cTime, int delta) {
 		Iterator<Enemy> it = alive.iterator();
 		while(it.hasNext()) {
 			Enemy enemy = it.next();
-			enemy.update(gs, cTime);
+			enemy.update(gs, cTime, delta);
 			
 			// Check collisions with player projectiles, then see if the enemy is still alive.
 			player.checkProjectiles(enemy, cTime);

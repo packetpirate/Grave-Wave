@@ -45,7 +45,7 @@ public class SkillButton implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// Shouldn't need to do anything here...............
 	}
 

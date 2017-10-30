@@ -25,7 +25,7 @@ public class TooltipText implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// No need for update.
 	}
 

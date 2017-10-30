@@ -48,7 +48,7 @@ public class Explosion implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(!started) {
 			anim.restart(cTime);
 			started = true; 

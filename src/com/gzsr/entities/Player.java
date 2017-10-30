@@ -141,7 +141,7 @@ public class Player implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// Make sure player's health is up to date.
 		double currentMax = getDoubleAttribute("maxHealth");
 		double healthBonus = getIntAttribute("healthUp") * HEALTH_PER_SP;
@@ -162,7 +162,7 @@ public class Player implements Entity {
 			}
 		}
 		
-		float adjSpeed = (getSpeed() + (getIntAttribute("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)getDoubleAttribute("spdMult");
+		float adjSpeed = (getSpeed() + (getIntAttribute("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)getDoubleAttribute("spdMult") * delta;
 		if(Globals.inputs.contains(Input.KEY_W)) move(0.0f, -adjSpeed);
 		if(Globals.inputs.contains(Input.KEY_A)) move(-adjSpeed, 0.0f);
 		if(Globals.inputs.contains(Input.KEY_S)) move(0.0f, adjSpeed);
@@ -190,7 +190,7 @@ public class Player implements Entity {
 		}
 		
 		// Call update for all weapon objects.
-		weapons.stream().forEach(w -> w.update(gs, cTime));
+		weapons.stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
 		theta = Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (float)(Math.PI / 2);

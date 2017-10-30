@@ -55,7 +55,7 @@ public class Console implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(deleting && (cTime > (lastDelete + Console.DELETE_FREQ)) && (currentCommand.length() > 0)) {
 			deleteLastCommandChar();
 			lastDelete = cTime;

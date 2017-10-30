@@ -39,8 +39,8 @@ public class Pistol extends Weapon {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
-		super.update(gs, cTime);
+	public void update(GameState gs, long cTime, int delta) {
+		super.update(gs, cTime, delta);
 		
 		// If mouse released, release fire lock.
 		if(!release && !Globals.mouse.isMouseDown()) release = true;

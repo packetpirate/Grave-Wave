@@ -37,12 +37,12 @@ public class Upchuck extends Enemy {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(!dead()) {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				move();
+				move(delta);
 			} else vomit(cTime);
 		}
 		
@@ -51,7 +51,7 @@ public class Upchuck extends Enemy {
 		while(it.hasNext()) {
 			Projectile p = it.next();
 			if(p.isAlive(cTime)) {
-				p.update(gs, cTime);
+				p.update(gs, cTime, delta);
 				if(Globals.player.checkCollision(p)) {
 					Globals.player.takeDamage(p.getDamage());
 					it.remove();
@@ -103,9 +103,9 @@ public class Upchuck extends Enemy {
 	}
 
 	@Override
-	public void move() {
-		position.x += (float)Math.cos(theta) * Upchuck.SPEED;
-		position.y += (float)Math.sin(theta) * Upchuck.SPEED;
+	public void move(int delta) {
+		position.x += (float)Math.cos(theta) * Upchuck.SPEED * delta;
+		position.y += (float)Math.sin(theta) * Upchuck.SPEED * delta;
 	}
 	
 	private boolean nearPlayer() {

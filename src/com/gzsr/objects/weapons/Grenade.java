@@ -28,11 +28,11 @@ public class Grenade extends Projectile {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(!exploded) {
 			// Move the grenade entity along its path.
-			position.x += (float)Math.cos(theta - (Math.PI / 2)) * Grenade.SPEED;
-			position.y += (float)Math.sin(theta - (Math.PI / 2)) * Grenade.SPEED;
+			position.x += (float)Math.cos(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
+			position.y += (float)Math.sin(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
 			
 			// Check to see if the grenade has collided with an enemy. If so, explode.
 			EnemyController ec = (EnemyController)gs.getEntity("enemyController");

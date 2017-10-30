@@ -43,7 +43,7 @@ public abstract class Weapon implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
 		if(!isReloading(cTime)) reloading = false;
 		
@@ -53,7 +53,7 @@ public abstract class Weapon implements Entity {
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {
-					p.update(gs, cTime);
+					p.update(gs, cTime, delta);
 				} else {
 					p.onDestroy(gs, cTime);
 					it.remove();

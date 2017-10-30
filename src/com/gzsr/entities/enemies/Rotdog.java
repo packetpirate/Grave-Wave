@@ -21,10 +21,10 @@ public class Rotdog extends Enemy {
 	}
 
 	@Override
-	public void move() {
+	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-		position.x += (float)Math.cos(theta) * Rotdog.SPEED;
-		position.y += (float)Math.sin(theta) * Rotdog.SPEED;
+		position.x += (float)Math.cos(theta) * Rotdog.SPEED * delta;
+		position.y += (float)Math.sin(theta) * Rotdog.SPEED * delta;
 	}
 
 	@Override

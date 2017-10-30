@@ -65,15 +65,15 @@ public class GameState extends BasicGameState implements InputListener {
 			time += (long)delta; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
 			
 			Player player = Globals.player;
-			player.update(this, time);
+			player.update(this, time, delta);
 			
 			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 			while(it.hasNext()) {
 				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-				pair.getValue().update(this, time);
+				pair.getValue().update(this, time, delta);
 				if(pair.getValue() instanceof EnemyController) {
 					EnemyController ec = (EnemyController)pair.getValue();
-					ec.updateEnemies(this, player, time);
+					ec.updateEnemies(this, player, time, delta);
 				} else if(pair.getValue() instanceof Item) {
 					Item item = (Item) pair.getValue();
 					if(item.isActive(time)) {
@@ -108,7 +108,7 @@ public class GameState extends BasicGameState implements InputListener {
 			hud.update(player, time);
 		} else if(consoleOpen) {
 			consoleTimer += (long)delta;
-			console.update(this, consoleTimer);
+			console.update(this, consoleTimer, delta);
 		}
 		
 		Globals.released.clear();

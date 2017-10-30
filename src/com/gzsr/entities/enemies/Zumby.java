@@ -5,7 +5,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Zumby extends Enemy {
-	private static final float COLLISION_DIST = 16.0f;
+	private static final float COLLISION_DIST = 24.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 2.0f;
@@ -21,10 +21,10 @@ public class Zumby extends Enemy {
 	}
 
 	@Override
-	public void move() {
+	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-		position.x += (float)Math.cos(theta) * Zumby.SPEED;
-		position.y += (float)Math.sin(theta) * Zumby.SPEED;
+		position.x += (float)Math.cos(theta) * Zumby.SPEED * delta;
+		position.y += (float)Math.sin(theta) * Zumby.SPEED * delta;
 	}
 
 	@Override

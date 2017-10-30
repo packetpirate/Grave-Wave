@@ -30,7 +30,7 @@ public abstract class Item implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		// Must be overridden.
 	}
 

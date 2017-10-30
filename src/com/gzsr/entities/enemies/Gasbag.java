@@ -29,12 +29,12 @@ public class Gasbag extends Enemy {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime) {
+	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				move();
+				move(delta);
 			} else explode(gs, cTime);
 		}
 	}
@@ -60,9 +60,9 @@ public class Gasbag extends Enemy {
 	}
 
 	@Override
-	public void move() {
-		position.x += (float)Math.cos(theta) * Gasbag.SPEED;
-		position.y += (float)Math.sin(theta) * Gasbag.SPEED;
+	public void move(int delta) {
+		position.x += (float)Math.cos(theta) * Gasbag.SPEED * delta;
+		position.y += (float)Math.sin(theta) * Gasbag.SPEED * delta;
 	}
 
 	@Override
