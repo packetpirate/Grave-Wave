@@ -31,7 +31,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
 	
 	private AssetManager assets;
-	private long time, consoleTimer;
+	private long time, accu, consoleTimer;
 	public long getTime() { return time; }
 	
 	private Console console;
@@ -61,57 +61,62 @@ public class GameState extends BasicGameState implements InputListener {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(!paused && !consoleOpen) {
-			time += (long)delta; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
-			
-			Player player = Globals.player;
-			player.update(this, time, delta);
-			
-			Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-			while(it.hasNext()) {
-				Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-				pair.getValue().update(this, time, delta);
-				if(pair.getValue() instanceof EnemyController) {
-					EnemyController ec = (EnemyController)pair.getValue();
-					ec.updateEnemies(this, player, time, delta);
-				} else if(pair.getValue() instanceof Item) {
-					Item item = (Item) pair.getValue();
-					if(item.isActive(time)) {
-						player.checkItem(item, time);
-					} else it.remove();
-				}
-			}
-			
-			if(!player.isAlive()) {
-				// If the player has died, transition state.
-				Globals.resetInputs();
-				Globals.gameOver = true;
-				game.enterState(GameOverState.ID, 
-								new FadeOutTransition(), 
-								new FadeInTransition());
-			}
-			
-			if(Globals.released.contains(Input.KEY_T)) {
-				// Open the training screen.
-				Globals.resetInputs();
-				game.enterState(TrainState.ID,
-								new FadeOutTransition(),
-								new FadeInTransition());
-			} else if(Globals.released.contains(Input.KEY_B)) {
-				// Open the weapon shopping screen.
-				Globals.resetInputs();
-				game.enterState(ShopState.ID,
-								new FadeOutTransition(),
-								new FadeInTransition());
-			}
-			
-			hud.update(player, time);
-		} else if(consoleOpen) {
-			consoleTimer += (long)delta;
-			console.update(this, consoleTimer, delta);
-		}
+		accu = Math.min((accu + delta), (Globals.STEP_TIME * Globals.MAX_STEPS));
 		
-		Globals.released.clear();
+		while(accu >= Globals.STEP_TIME) {
+			if(!paused && !consoleOpen) {
+				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
+				
+				Player player = Globals.player;
+				player.update(this, time, Globals.STEP_TIME);
+				
+				Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
+				while(it.hasNext()) {
+					Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
+					pair.getValue().update(this, time, Globals.STEP_TIME);
+					if(pair.getValue() instanceof EnemyController) {
+						EnemyController ec = (EnemyController)pair.getValue();
+						ec.updateEnemies(this, player, time, Globals.STEP_TIME);
+					} else if(pair.getValue() instanceof Item) {
+						Item item = (Item) pair.getValue();
+						if(item.isActive(time)) {
+							player.checkItem(item, time);
+						} else it.remove();
+					}
+				}
+				
+				if(!player.isAlive()) {
+					// If the player has died, transition state.
+					Globals.resetInputs();
+					Globals.gameOver = true;
+					game.enterState(GameOverState.ID, 
+									new FadeOutTransition(), 
+									new FadeInTransition());
+				}
+				
+				if(Globals.released.contains(Input.KEY_T)) {
+					// Open the training screen.
+					Globals.resetInputs();
+					game.enterState(TrainState.ID,
+									new FadeOutTransition(),
+									new FadeInTransition());
+				} else if(Globals.released.contains(Input.KEY_B)) {
+					// Open the weapon shopping screen.
+					Globals.resetInputs();
+					game.enterState(ShopState.ID,
+									new FadeOutTransition(),
+									new FadeInTransition());
+				}
+				
+				hud.update(player, time);
+			} else if(consoleOpen) {
+				consoleTimer += (long)delta;
+				console.update(this, consoleTimer, Globals.STEP_TIME);
+			}
+			
+			Globals.released.clear();
+			accu -= Globals.STEP_TIME;
+		}
 	}
 	
 	@Override
@@ -141,6 +146,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	public void reset(GameContainer gc) throws SlickException{
 		time = 0L;
+		accu = 0L;
 		consoleTimer = 0L;
 		
 		Globals.player.reset();

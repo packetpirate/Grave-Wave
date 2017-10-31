@@ -1,5 +1,8 @@
 package com.gzsr.entities.enemies;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -13,6 +16,13 @@ public class Zumby extends Enemy {
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
 		this.health = Zumby.HEALTH;
+	}
+	
+	@Override
+	public void render(Graphics g, long cTime) {
+		super.render(g, cTime);
+		g.setColor(Color.red);
+		g.drawOval((position.x - (COLLISION_DIST / 2)), (position.y - (COLLISION_DIST / 2)), COLLISION_DIST, COLLISION_DIST);
 	}
 
 	@Override

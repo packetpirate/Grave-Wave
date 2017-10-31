@@ -13,7 +13,10 @@ public class Globals {
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;
-	public static final long UPDATE_TIME = 20;
+	
+	public static final int TARGET_FPS = 60;
+	public static final int STEP_TIME = 1000 / TARGET_FPS;
+	public static final int MAX_STEPS = 4;
 	
 	public static int WIDTH = 1024;
 	public static int HEIGHT = 768;
