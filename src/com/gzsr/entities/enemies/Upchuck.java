@@ -16,7 +16,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Upchuck extends Enemy {
-	private static final float COLLISION_DIST = 16.0f;
+	private static final float COLLISION_DIST = 24.0f;
 	private static final float HEALTH = 150.0f;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
@@ -24,7 +24,7 @@ public class Upchuck extends Enemy {
 	private static final float BILE_DEVIATION = (float)(Math.PI / 18);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
-	private static final float ATTACK_DIST = 200.0f;
+	private static final float ATTACK_DIST = 100.0f;
 	
 	private List<Projectile> bile;
 	private long lastBile;
@@ -66,6 +66,12 @@ public class Upchuck extends Enemy {
 		if(!dead()) animation.render(g, position, theta);
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
+		
+		if(Globals.SHOW_COLLIDERS) {
+			float dist = getCollisionDist();
+			g.setColor(Color.red);
+			g.drawOval((position.x - (dist / 2)), (position.y - (dist / 2)), dist, dist);
+		}
 	}
 	
 	private void vomit(long cTime) {
@@ -110,6 +116,11 @@ public class Upchuck extends Enemy {
 	
 	private boolean nearPlayer() {
 		return (Calculate.Distance(position, Globals.player.getPosition()) <= Upchuck.ATTACK_DIST);
+	}
+	
+	@Override
+	protected float getCollisionDist() {
+		return Upchuck.COLLISION_DIST;
 	}
 
 	@Override

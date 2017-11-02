@@ -1,7 +1,9 @@
 package com.gzsr.entities.enemies;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Animation;
 import com.gzsr.misc.Pair;
@@ -48,8 +50,15 @@ public abstract class Enemy implements Entity {
 	public void render(Graphics g, long cTime) {
 		// All enemies should render their animation.
 		if(isAlive(cTime)) animation.render(g, position, theta);
+		
+		if(Globals.SHOW_COLLIDERS) {
+			float dist = getCollisionDist();
+			g.setColor(Color.red);
+			g.drawOval((position.x - (dist / 2)), (position.y - (dist / 2)), dist, dist);
+		}
 	}
 	
+	protected abstract float getCollisionDist();
 	public abstract boolean checkCollision(Pair<Float> p);
 	public abstract void takeDamage(double amnt);
 	public void onDeath(GameState gs, long cTime) {}

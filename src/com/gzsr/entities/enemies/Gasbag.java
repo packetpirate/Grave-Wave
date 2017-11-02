@@ -11,7 +11,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
 
 public class Gasbag extends Enemy {
-	private static final float COLLISION_DIST = 16.0f;
+	private static final float COLLISION_DIST = 24.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
@@ -65,6 +65,11 @@ public class Gasbag extends Enemy {
 		position.y += (float)Math.sin(theta) * Gasbag.SPEED * delta;
 	}
 
+	@Override
+	protected float getCollisionDist() {
+		return Gasbag.COLLISION_DIST;
+	}
+	
 	@Override
 	public boolean checkCollision(Pair<Float> p) {
 		return (Calculate.Distance(p, position) <= Gasbag.COLLISION_DIST);

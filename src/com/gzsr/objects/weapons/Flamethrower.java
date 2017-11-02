@@ -64,7 +64,7 @@ public class Flamethrower extends Weapon {
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
-		//fireSound.play();
+		//fireSound.play(); TODO: Make a better sound for this.
 	}
 	
 	@Override

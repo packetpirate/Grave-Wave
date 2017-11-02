@@ -18,6 +18,8 @@ public class Globals {
 	public static final int STEP_TIME = 1000 / TARGET_FPS;
 	public static final int MAX_STEPS = 4;
 	
+	public static final boolean SHOW_COLLIDERS = false;
+	
 	public static int WIDTH = 1024;
 	public static int HEIGHT = 768;
 	

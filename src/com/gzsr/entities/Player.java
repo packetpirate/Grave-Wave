@@ -189,8 +189,8 @@ public class Player implements Entity {
 							   theta, cTime);
 		}
 		
-		// Call update for all weapon objects.
-		weapons.stream().forEach(w -> w.update(gs, cTime, delta));
+		// Update all the player's active weapons.
+		getActiveWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
 		theta = Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (float)(Math.PI / 2);
@@ -199,7 +199,8 @@ public class Player implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		getCurrentWeapon().render(g, cTime);
+		// Render all the player's active weapons.
+		getActiveWeapons().stream().forEach(w -> w.render(g, cTime));
 		
 		Image image = getImage();
 		if(image != null) {
@@ -328,14 +329,16 @@ public class Player implements Entity {
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
 	public boolean checkProjectiles(Enemy enemy, long cTime) {
-		Iterator<Projectile> it = getCurrentWeapon().getProjectiles().iterator();
-		while(it.hasNext()) {
-			Projectile p = it.next();
-			if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {
-				p.collide();
-				float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
-				enemy.takeDamage(p.getDamage() * damagePercentage);
-				return true;
+		for(Weapon w : getActiveWeapons()) {
+			Iterator<Projectile> it = w.getProjectiles().iterator();
+			while(it.hasNext()) {
+				Projectile p = it.next();
+				if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {
+					p.collide();
+					float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
+					enemy.takeDamage(p.getDamage() * damagePercentage);
+					return true;
+				}
 			}
 		}
 		

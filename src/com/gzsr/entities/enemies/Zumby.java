@@ -1,28 +1,18 @@
 package com.gzsr.entities.enemies;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Zumby extends Enemy {
-	private static final float COLLISION_DIST = 24.0f;
+	private static final float COLLISION_DIST = 32.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
-	private static final float DPS = 2.0f;
+	private static final float DPS = 5.0f;
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
 		this.health = Zumby.HEALTH;
-	}
-	
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
-		g.setColor(Color.red);
-		g.drawOval((position.x - (COLLISION_DIST / 2)), (position.y - (COLLISION_DIST / 2)), COLLISION_DIST, COLLISION_DIST);
 	}
 
 	@Override
@@ -47,6 +37,11 @@ public class Zumby extends Enemy {
 		return Zumby.DPS;
 	}
 
+	@Override
+	protected float getCollisionDist() {
+		return Zumby.COLLISION_DIST;
+	}
+	
 	@Override
 	public boolean checkCollision(Pair<Float> p) {
 		return (Calculate.Distance(p, position) <= Zumby.COLLISION_DIST);

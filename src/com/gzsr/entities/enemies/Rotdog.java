@@ -5,10 +5,10 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Rotdog extends Enemy {
-	private static final float COLLISION_DIST = 12.0f;
+	private static final float COLLISION_DIST = 16.0f;
 	private static final float HEALTH = 50.0f;
 	private static final float SPEED = 0.30f;
-	private static final float DPS = 2.0f;
+	private static final float DPS = 8.0f;
 	
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);
@@ -37,6 +37,11 @@ public class Rotdog extends Enemy {
 		return Rotdog.DPS;
 	}
 
+	@Override
+	protected float getCollisionDist() {
+		return Rotdog.COLLISION_DIST;
+	}
+	
 	@Override
 	public boolean checkCollision(Pair<Float> p) {
 		return (Calculate.Distance(p, position) <= Rotdog.COLLISION_DIST);
