@@ -129,10 +129,8 @@ public class GameState extends BasicGameState implements InputListener {
 		Image background = assets.getImage("GZS_Background6");
 		g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
-		// Render the player.
 		player.render(g, time);
 
-		// Render all entities.
 		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 		while(it.hasNext()) {
 			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
@@ -180,7 +178,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Upchuck2.png",
 			"images/GZS_Gasbag2.png",
 			// Projectile Images
-			"images/GZS_FireParticle2.png",
+			"images/GZS_FireParticle.png",
 			"images/GZS_AcidParticle2.png",
 			"images/GZS_HandEggParticle.png",
 			// Weapon Images

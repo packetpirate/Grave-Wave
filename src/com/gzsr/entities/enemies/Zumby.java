@@ -1,5 +1,8 @@
 package com.gzsr.entities.enemies;
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -38,12 +41,12 @@ public class Zumby extends Enemy {
 	}
 
 	@Override
-	protected float getCollisionDist() {
+	public float getCollisionDist() {
 		return Zumby.COLLISION_DIST;
 	}
 	
 	@Override
-	public boolean checkCollision(Pair<Float> p) {
-		return (Calculate.Distance(p, position) <= Zumby.COLLISION_DIST);
+	public Shape getCollider() {
+		return new Circle(position.x, position.y, Zumby.COLLISION_DIST);
 	}
 }

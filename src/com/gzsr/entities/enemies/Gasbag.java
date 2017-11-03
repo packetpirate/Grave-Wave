@@ -1,6 +1,8 @@
 package com.gzsr.entities.enemies;
 
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -66,13 +68,13 @@ public class Gasbag extends Enemy {
 	}
 
 	@Override
-	protected float getCollisionDist() {
+	public float getCollisionDist() {
 		return Gasbag.COLLISION_DIST;
 	}
 	
 	@Override
-	public boolean checkCollision(Pair<Float> p) {
-		return (Calculate.Distance(p, position) <= Gasbag.COLLISION_DIST);
+	public Shape getCollider() {
+		return new Circle(position.x, position.y, Gasbag.COLLISION_DIST);
 	}
 	
 	private boolean nearPlayer() {

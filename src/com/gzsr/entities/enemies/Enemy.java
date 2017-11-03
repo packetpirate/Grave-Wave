@@ -2,6 +2,7 @@ package com.gzsr.entities.enemies;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
@@ -58,8 +59,8 @@ public abstract class Enemy implements Entity {
 		}
 	}
 	
-	protected abstract float getCollisionDist();
-	public abstract boolean checkCollision(Pair<Float> p);
+	public abstract float getCollisionDist();
+	public abstract Shape getCollider();
 	public abstract void takeDamage(double amnt);
 	public void onDeath(GameState gs, long cTime) {}
 	public abstract double getDamage();

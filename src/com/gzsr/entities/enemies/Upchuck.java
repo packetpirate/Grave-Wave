@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.Globals;
 import com.gzsr.gfx.particles.Particle;
@@ -119,13 +121,13 @@ public class Upchuck extends Enemy {
 	}
 	
 	@Override
-	protected float getCollisionDist() {
+	public float getCollisionDist() {
 		return Upchuck.COLLISION_DIST;
 	}
 
 	@Override
-	public boolean checkCollision(Pair<Float> p) {
-		return (Calculate.Distance(p, position) <= Upchuck.COLLISION_DIST);
+	public Shape getCollider() {
+		return new Circle(position.x, position.y, Upchuck.COLLISION_DIST);
 	}
 
 	@Override

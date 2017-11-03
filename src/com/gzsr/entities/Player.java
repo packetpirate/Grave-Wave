@@ -34,7 +34,7 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
-	private static final float COLLISION_DIST = 16.0f;
+	private static final float COLLISION_DIST = 24.0f;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -320,7 +320,8 @@ public class Player implements Entity {
 	}
 	
 	public boolean touchingEnemy(Enemy enemy) {
-		return (isAlive() && enemy.checkCollision(position));
+		float dist = Calculate.Distance(position, enemy.getPosition());
+		return (isAlive() && (dist <= enemy.getCollisionDist()));
 	}
 	
 	/**
@@ -333,7 +334,7 @@ public class Player implements Entity {
 			Iterator<Projectile> it = w.getProjectiles().iterator();
 			while(it.hasNext()) {
 				Projectile p = it.next();
-				if(p.isAlive(cTime) && enemy.checkCollision(p.getPosition())) {
+				if(p.isAlive(cTime) && p.checkCollision(enemy)) {
 					p.collide();
 					float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
 					enemy.takeDamage(p.getDamage() * damagePercentage);

@@ -6,8 +6,8 @@ import com.gzsr.objects.weapons.Grenade;
 
 public enum ProjectileType {
 	// Player projectiles.
-	HANDGUN(new Color(0xF2F28C), 2.5f, 3.0f, 10.0f, 1500L),
-	ASSAULT(new Color(0xF2F2BF), 3.0f, 3.0f, 12.0f, 2000L),
+	HANDGUN(new Color(0xF2F28C), 2.0f, 3.0f, 10.0f, 1500L),
+	ASSAULT(new Color(0xF2F2BF), 2.5f, 3.0f, 12.0f, 2000L),
 	SHOTGUN(new Color(0xF2F28C), 1.0f, 4.0f, 4.0f, 800L),
 	FLAMETHROWER(new Color(0xEDA642), 0.25f, 4.0f, 4.0f, 600L),
 	GRENADE(new Color(0x4DAD1A), 0.25f, 4.0f, 4.0f, Grenade.LIFESPAN),

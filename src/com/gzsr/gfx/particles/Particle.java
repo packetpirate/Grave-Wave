@@ -6,6 +6,8 @@ import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -101,5 +103,10 @@ public class Particle implements Entity {
 		}
 		
 		g.resetTransform();
+	}
+	
+	public boolean checkCollision(Enemy enemy) {
+		float dist = Calculate.Distance(position, enemy.getPosition());
+		return (dist <= (enemy.getCollisionDist() + Math.max(size.x, size.y)));
 	}
 }

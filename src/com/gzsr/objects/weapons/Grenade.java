@@ -1,13 +1,9 @@
 package com.gzsr.objects.weapons;
 
-import java.util.Iterator;
-
 import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.states.GameState;
@@ -35,12 +31,13 @@ public class Grenade extends Projectile {
 			position.y += (float)Math.sin(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
 			
 			// Check to see if the grenade has collided with an enemy. If so, explode.
-			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+			// TODO: plz fix
+			/*EnemyController ec = (EnemyController)gs.getEntity("enemyController");
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
 				if(e.checkCollision(position)) explode(gs, cTime);
-			}
+			}*/
 		}
 	}
 	
