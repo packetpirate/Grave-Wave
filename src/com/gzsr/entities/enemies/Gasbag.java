@@ -1,8 +1,6 @@
 package com.gzsr.entities.enemies;
 
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -13,7 +11,6 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
 
 public class Gasbag extends Enemy {
-	private static final float COLLISION_DIST = 24.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
@@ -65,16 +62,9 @@ public class Gasbag extends Enemy {
 	public void move(int delta) {
 		position.x += (float)Math.cos(theta) * Gasbag.SPEED * delta;
 		position.y += (float)Math.sin(theta) * Gasbag.SPEED * delta;
-	}
-
-	@Override
-	public float getCollisionDist() {
-		return Gasbag.COLLISION_DIST;
-	}
-	
-	@Override
-	public Shape getCollider() {
-		return new Circle(position.x, position.y, Gasbag.COLLISION_DIST);
+		
+		bounds.setCenterX(position.x);
+		bounds.setCenterY(position.y);
 	}
 	
 	private boolean nearPlayer() {

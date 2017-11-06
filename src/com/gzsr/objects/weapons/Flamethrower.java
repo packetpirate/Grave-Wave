@@ -15,11 +15,11 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Flamethrower extends Weapon {
-	private static final long COOLDOWN = 50L;
+	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;
 	private static final int START_CLIPS = 3;
 	private static final long RELOAD_TIME = 3000L;
-	private static final int EMBER_COUNT = 10;
+	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final double EMBER_DAMAGE = 2.0;
 	private static final String ICON_NAME = "GZS_Flammenwerfer";

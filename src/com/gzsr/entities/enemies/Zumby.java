@@ -1,14 +1,10 @@
 package com.gzsr.entities.enemies;
 
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
-
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Zumby extends Enemy {
-	private static final float COLLISION_DIST = 32.0f;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 5.0f;
@@ -26,8 +22,12 @@ public class Zumby extends Enemy {
 	@Override
 	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		
 		position.x += (float)Math.cos(theta) * Zumby.SPEED * delta;
 		position.y += (float)Math.sin(theta) * Zumby.SPEED * delta;
+		
+		bounds.setCenterX(position.x);
+		bounds.setCenterY(position.y);
 	}
 
 	@Override
@@ -38,15 +38,5 @@ public class Zumby extends Enemy {
 	@Override
 	public double getDamage() {
 		return Zumby.DPS;
-	}
-
-	@Override
-	public float getCollisionDist() {
-		return Zumby.COLLISION_DIST;
-	}
-	
-	@Override
-	public Shape getCollider() {
-		return new Circle(position.x, position.y, Zumby.COLLISION_DIST);
 	}
 }

@@ -3,11 +3,13 @@ package com.gzsr.gfx.particles;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -19,6 +21,8 @@ public class Particle implements Entity {
 	public Color getColor() { return color; }
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
+	protected Shape bounds;
+	public Shape getCollider() { return bounds; }
 	protected float velocity;
 	public float getVelocity() { return velocity; }
 	protected float theta;
@@ -57,6 +61,8 @@ public class Particle implements Entity {
 		this.lifespan = lifespan_;
 		this.created = created_;
 		this.collision = false;
+		
+		this.bounds = new Rectangle((position.x - (size.x / 2)), (position.y - (size.y / 2)), size.x, size.y);
 	}
 	
 	public Particle(Particle p) {
@@ -71,6 +77,7 @@ public class Particle implements Entity {
 		this.lifespan = p.getLifespan();
 		this.created = p.getCreated();
 		this.collision = false;
+		this.bounds = p.getCollider();
 	}
 	
 	public void onDestroy(GameState gs, long cTime) {
@@ -83,6 +90,7 @@ public class Particle implements Entity {
 			position.x += velocity * delta * (float)Math.cos(theta - (Math.PI / 2));
 			position.y += velocity * delta * (float)Math.sin(theta - (Math.PI / 2));
 			theta += angularVelocity;
+			bounds.setLocation((position.x - (size.x / 2)), (position.y - (size.y / 2)));
 		}
 	}
 
@@ -102,11 +110,15 @@ public class Particle implements Entity {
 			g.fillRect(x, y, size.x, size.y);
 		}
 		
+		if(Globals.SHOW_COLLIDERS) {
+			g.setColor(Color.red);
+			g.draw(bounds);
+		}
+		
 		g.resetTransform();
 	}
 	
 	public boolean checkCollision(Enemy enemy) {
-		float dist = Calculate.Distance(position, enemy.getPosition());
-		return (dist <= (enemy.getCollisionDist() + Math.max(size.x, size.y)));
+		return enemy.getCollider().intersects(bounds);
 	}
 }

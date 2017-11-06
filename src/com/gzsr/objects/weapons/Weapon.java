@@ -48,8 +48,8 @@ public abstract class Weapon implements Entity {
 		if(!isReloading(cTime)) reloading = false;
 		
 		// Update all projectiles.
-		if(!projectiles.isEmpty()) {
-			Iterator<Projectile> it = projectiles.iterator();
+		if(!getProjectiles().isEmpty()) {
+			Iterator<Projectile> it = getProjectiles().iterator();
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {

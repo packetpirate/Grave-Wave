@@ -11,6 +11,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -21,6 +22,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.ClaymoreWeapon;
 import com.gzsr.objects.weapons.Flamethrower;
 import com.gzsr.objects.weapons.GrenadeLauncher;
 import com.gzsr.objects.weapons.Pistol;
@@ -34,7 +36,6 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
-	private static final float COLLISION_DIST = 24.0f;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -47,6 +48,9 @@ public class Player implements Entity {
 			position.y += yOff;
 		}
 	}
+	
+	private Rectangle bounds;
+	public Rectangle getCollider() { return bounds; }
 	
 	private float speed;
 	public float getSpeed() { return speed; }
@@ -172,6 +176,7 @@ public class Player implements Entity {
 		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
 			getCurrentWeapon().reload(cTime);
 		}
+		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
 		// Check to see if the player is trying to change weapon by number.
 		int [] codes = new int[] { Input.KEY_0, Input.KEY_1, Input.KEY_2, Input.KEY_3, Input.KEY_4,
@@ -223,6 +228,8 @@ public class Player implements Entity {
 		position.x = (float)(Globals.WIDTH / 2);
 		position.y = (float)(Globals.HEIGHT / 2);
 		
+		bounds = new Rectangle(position.x, position.y, getImage().getWidth(), getImage().getHeight());
+		
 		speed = Player.DEFAULT_SPEED;
 		theta = 0.0f;
 		
@@ -233,6 +240,7 @@ public class Player implements Entity {
 			add(new Shotgun());
 			add(new Flamethrower());
 			add(new GrenadeLauncher());
+			add(new ClaymoreWeapon());
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
@@ -240,6 +248,7 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 2).activate();
 		weapons.get(weaponIndex + 3).activate();
 		weapons.get(weaponIndex + 4).activate();
+		weapons.get(weaponIndex + 5).activate();
 		
 		dAttributes.clear();
 		iAttributes.clear();
@@ -320,8 +329,7 @@ public class Player implements Entity {
 	}
 	
 	public boolean touchingEnemy(Enemy enemy) {
-		float dist = Calculate.Distance(position, enemy.getPosition());
-		return (isAlive() && (dist <= enemy.getCollisionDist()));
+		return enemy.getCollider().intersects(bounds);
 	}
 	
 	/**
@@ -347,8 +355,7 @@ public class Player implements Entity {
 	}
 	
 	public boolean checkCollision(Projectile p) {
-		float dist = Calculate.Distance(position, p.getPosition());
-		return (dist <= Player.COLLISION_DIST); 
+		return bounds.intersects(p.getCollider());
 	}
 	
 	/**

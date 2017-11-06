@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.Globals;
 import com.gzsr.gfx.particles.Particle;
@@ -18,7 +16,6 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Upchuck extends Enemy {
-	private static final float COLLISION_DIST = 24.0f;
 	private static final float HEALTH = 150.0f;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
@@ -70,9 +67,8 @@ public class Upchuck extends Enemy {
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
-			float dist = getCollisionDist();
 			g.setColor(Color.red);
-			g.drawOval((position.x - (dist / 2)), (position.y - (dist / 2)), dist, dist);
+			g.draw(bounds);
 		}
 	}
 	
@@ -114,20 +110,13 @@ public class Upchuck extends Enemy {
 	public void move(int delta) {
 		position.x += (float)Math.cos(theta) * Upchuck.SPEED * delta;
 		position.y += (float)Math.sin(theta) * Upchuck.SPEED * delta;
+		
+		bounds.setCenterX(position.x);
+		bounds.setCenterY(position.y);
 	}
 	
 	private boolean nearPlayer() {
 		return (Calculate.Distance(position, Globals.player.getPosition()) <= Upchuck.ATTACK_DIST);
-	}
-	
-	@Override
-	public float getCollisionDist() {
-		return Upchuck.COLLISION_DIST;
-	}
-
-	@Override
-	public Shape getCollider() {
-		return new Circle(position.x, position.y, Upchuck.COLLISION_DIST);
 	}
 
 	@Override
