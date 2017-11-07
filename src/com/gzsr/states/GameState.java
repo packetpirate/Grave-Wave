@@ -182,6 +182,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_AcidParticle2.png",
 			"images/GZS_HandEggParticle.png",
 			"images/GZS_Claymore.png",
+			"images/GZS_LaserTerminal.png",
 			// Weapon Images
 			"images/GZS_MuzzleFlash.png",
 			"images/GZS_Popgun.png",
@@ -190,6 +191,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Flammenwerfer.png",
 			"images/GZS_HandEgg.png",
 			"images/GZS_ClaymoreWeapon.png",
+			"images/GZS_LaserWire.png",
 			// Effect Images
 			"images/GZS_Explosion.png",
 			"images/GZS_PoisonExplosion.png"

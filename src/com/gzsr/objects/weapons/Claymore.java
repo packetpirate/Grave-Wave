@@ -24,8 +24,8 @@ import com.gzsr.states.GameState;
 public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);
 	private static final int SHRAPNEL_COUNT = 50;
-	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 4.5);
-	private static final double SHRAPNEL_DAMAGE = 10.0;
+	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
+	private static final double SHRAPNEL_DAMAGE = 20.0;
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
 	

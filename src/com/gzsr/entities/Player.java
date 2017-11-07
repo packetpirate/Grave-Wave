@@ -25,6 +25,8 @@ import com.gzsr.objects.weapons.AssaultRifle;
 import com.gzsr.objects.weapons.ClaymoreWeapon;
 import com.gzsr.objects.weapons.Flamethrower;
 import com.gzsr.objects.weapons.GrenadeLauncher;
+import com.gzsr.objects.weapons.LaserBarrier;
+import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Pistol;
 import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
@@ -241,6 +243,7 @@ public class Player implements Entity {
 			add(new Flamethrower());
 			add(new GrenadeLauncher());
 			add(new ClaymoreWeapon());
+			add(new LaserBarrier());
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
@@ -249,6 +252,7 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 3).activate();
 		weapons.get(weaponIndex + 4).activate();
 		weapons.get(weaponIndex + 5).activate();
+		weapons.get(weaponIndex + 6).activate();
 		
 		dAttributes.clear();
 		iAttributes.clear();
@@ -343,9 +347,16 @@ public class Player implements Entity {
 			while(it.hasNext()) {
 				Projectile p = it.next();
 				if(p.isAlive(cTime) && p.checkCollision(enemy)) {
-					p.collide();
-					float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
-					enemy.takeDamage(p.getDamage() * damagePercentage);
+					if(p instanceof LaserNode) {
+						LaserNode node = (LaserNode) p;
+						node.damage(enemy.getDamage());
+						System.out.println("Laser tripped!");
+					} else {
+						p.collide();
+						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
+						enemy.takeDamage(p.getDamage() * damagePercentage);
+					}
+					
 					return true;
 				}
 			}
