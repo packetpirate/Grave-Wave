@@ -60,8 +60,12 @@ public class Gasbag extends Enemy {
 
 	@Override
 	public void move(int delta) {
-		position.x += (float)Math.cos(theta) * Gasbag.SPEED * delta;
-		position.y += (float)Math.sin(theta) * Gasbag.SPEED * delta;
+		if(!moveBlocked) {
+			position.x += (float)Math.cos(theta) * Gasbag.SPEED * delta;
+			position.y += (float)Math.sin(theta) * Gasbag.SPEED * delta;
+		}
+		
+		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);

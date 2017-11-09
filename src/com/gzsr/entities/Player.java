@@ -350,7 +350,7 @@ public class Player implements Entity {
 					if(p instanceof LaserNode) {
 						LaserNode node = (LaserNode) p;
 						node.damage(enemy.getDamage());
-						System.out.println("Laser tripped!");
+						enemy.blockMovement();
 					} else {
 						p.collide();
 						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));

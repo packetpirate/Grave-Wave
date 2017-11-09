@@ -23,8 +23,12 @@ public class Rotdog extends Enemy {
 	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 		
-		position.x += (float)Math.cos(theta) * Rotdog.SPEED * delta;
-		position.y += (float)Math.sin(theta) * Rotdog.SPEED * delta;
+		if(!moveBlocked) {
+			position.x += (float)Math.cos(theta) * Rotdog.SPEED * delta;
+			position.y += (float)Math.sin(theta) * Rotdog.SPEED * delta;
+		}
+		
+		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);

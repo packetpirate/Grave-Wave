@@ -19,6 +19,8 @@ public abstract class Enemy implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected float theta;
+	protected boolean moveBlocked;
+	public void blockMovement() { moveBlocked = true; }
 	
 	protected double health;
 	protected int cash;
@@ -35,6 +37,7 @@ public abstract class Enemy implements Entity {
 		float h = animation.getSrcSize().y;
 		this.bounds = new Rectangle((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 		
+		this.moveBlocked = false;
 		this.theta = 0.0f;
 		this.health = 0.0;
 		this.cash = type.getCashValue();

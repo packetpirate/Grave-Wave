@@ -108,8 +108,12 @@ public class Upchuck extends Enemy {
 
 	@Override
 	public void move(int delta) {
-		position.x += (float)Math.cos(theta) * Upchuck.SPEED * delta;
-		position.y += (float)Math.sin(theta) * Upchuck.SPEED * delta;
+		if(!moveBlocked) {
+			position.x += (float)Math.cos(theta) * Upchuck.SPEED * delta;
+			position.y += (float)Math.sin(theta) * Upchuck.SPEED * delta;
+		}
+		
+		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
