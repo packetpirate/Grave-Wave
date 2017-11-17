@@ -28,6 +28,7 @@ import com.gzsr.objects.weapons.GrenadeLauncher;
 import com.gzsr.objects.weapons.LaserBarrier;
 import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Pistol;
+import com.gzsr.objects.weapons.SentryWeapon;
 import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
@@ -244,6 +245,7 @@ public class Player implements Entity {
 			add(new GrenadeLauncher());
 			add(new ClaymoreWeapon());
 			add(new LaserBarrier());
+			add(new SentryWeapon());
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
@@ -253,6 +255,7 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 4).activate();
 		weapons.get(weaponIndex + 5).activate();
 		weapons.get(weaponIndex + 6).activate();
+		weapons.get(weaponIndex + 7).activate();
 		
 		dAttributes.clear();
 		iAttributes.clear();
