@@ -19,6 +19,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
+import com.gzsr.misc.Lerp;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -27,13 +28,15 @@ public class Turret extends Projectile {
 	private static final long TURRET_LIFESPAN = 15_000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
-	private static final double PROJECTILE_DAMAGE = 50.0;
-	private static final float FIRING_RANGE = 300.0f;
+	private static final double PROJECTILE_DAMAGE = 25.0;
+	private static final float FIRING_RANGE = 250.0f;
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
 	private static final String FIRE_SOUND = "shoot3";
 	
 	private Sound fireSound;
 	private Shape collider;
+	private Lerp lerp;
+	private Enemy target;
 	private double health;
 	private void takeDamage(double amnt) { health -= amnt; }
 	private List<Projectile> projectiles;
@@ -45,6 +48,9 @@ public class Turret extends Projectile {
 		
 		this.fireSound = AssetManager.getManager().getSound(Turret.FIRE_SOUND);
 		this.collider = new Circle(position.x, position.y, 36.0f);
+		
+		this.lerp = null;
+		this.target = null;
 		
 		this.health = Turret.HEALTH_MAX;
 		
@@ -58,7 +64,6 @@ public class Turret extends Projectile {
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			// Acquire a target.
-			Enemy target = null;
 			float targetDist = Float.MAX_VALUE;
 			EnemyController ec = (EnemyController) gs.getEntity("enemyController");
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
@@ -78,9 +83,18 @@ public class Turret extends Projectile {
 			}
 			
 			// If the turret has a target and can fire, shoot!
-			if(target != null) {
+			if((target != null) && target.isAlive(cTime)) {
 				// Re-orient the sentry to face the target.
-				theta = Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI / 2);
+				if(lerp != null) {
+					if(!lerp.isComplete()) {
+						lerp.update(delta);
+						theta = lerp.getCurrent();
+					} else lerp = null;
+				} else {
+					float end = Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI / 2);
+					lerp = new Lerp(theta, end, 0.01f);
+				}
+				
 				if(canFire(target, cTime)) fire(cTime);
 			}
 		}
@@ -95,6 +109,16 @@ public class Turret extends Projectile {
 		Image base = AssetManager.getManager().getImage(Turret.TURRET_IMAGE).getSubImage(0, 0, 48, 48);
 		if(base != null) g.drawImage(base, (position.x - 24.0f), (position.y - 24.0f));
 		
+		// Render the sentry's laser sight.
+		float facing = theta - (float)(Math.PI / 2);
+		float dist = ((target != null) && target.isAlive(cTime)) ? Math.min(Turret.FIRING_RANGE, Calculate.Distance(position, target.getPosition())) : Turret.FIRING_RANGE;
+		g.setColor(Color.red);
+		g.setLineWidth(2.0f);
+		g.drawLine(position.x, position.y, 
+				   (position.x + ((float)Math.cos(facing) * dist)), 
+				   (position.y + ((float)Math.sin(facing) * dist)));
+		g.setLineWidth(1.0f);
+		
 		// Render the rotated turret head.
 		Image head = AssetManager.getManager().getImage(Turret.TURRET_IMAGE).getSubImage(48, 0, 48, 48);
 		if(head != null) {
@@ -102,10 +126,6 @@ public class Turret extends Projectile {
 			g.drawImage(head, (position.x - 24.0f), (position.y - 24.0f));
 			g.resetTransform();
 		}
-		
-		// Render the range radius visualizer.
-		g.setColor(Color.red);
-		g.drawOval((position.x - Turret.FIRING_RANGE), (position.y - Turret.FIRING_RANGE), (Turret.FIRING_RANGE * 2), (Turret.FIRING_RANGE * 2));
 	}
 	
 	private boolean canFire(Enemy target, long cTime) {
