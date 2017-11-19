@@ -63,22 +63,29 @@ public class Turret extends Projectile {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
-			// Acquire a target.
-			float targetDist = Float.MAX_VALUE;
-			EnemyController ec = (EnemyController) gs.getEntity("enemyController");
-			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
-			while(it.hasNext()) {
-				Enemy e = it.next();
-				float dist = Calculate.Distance(position, e.getPosition());
-				if(collider.intersects(e.getCollider())) {
-					// Enemy is touching the sentry, so it should take damage.
-					takeDamage(e.getDamage());
-				}
-				
-				// If there's a closer target, aim for it.
-				if(dist < targetDist) {
-					target = e;
-					targetDist = dist;
+			if((target != null) && !target.isAlive(cTime)) {
+				lerp = null;
+				target = null; // Don't want to target dead enemies...
+			}
+			
+			// Acquire a target only if we're not currently firing on one..
+			if(target == null) {
+				float targetDist = Float.MAX_VALUE;
+				EnemyController ec = (EnemyController) gs.getEntity("enemyController");
+				Iterator<Enemy> it = ec.getAliveEnemies().iterator();
+				while(it.hasNext()) {
+					Enemy e = it.next();
+					float dist = Calculate.Distance(position, e.getPosition());
+					if(collider.intersects(e.getCollider())) {
+						// Enemy is touching the sentry, so it should take damage.
+						takeDamage(e.getDamage());
+					}
+					
+					// If there's a closer target, aim for it.
+					if(dist < targetDist) {
+						target = e;
+						targetDist = dist;
+					}
 				}
 			}
 			
@@ -118,6 +125,17 @@ public class Turret extends Projectile {
 				   (position.x + ((float)Math.cos(facing) * dist)), 
 				   (position.y + ((float)Math.sin(facing) * dist)));
 		g.setLineWidth(1.0f);
+		
+		// If there is currently a lerp, draw the destination position.
+		if((lerp != null) && !lerp.isComplete()) {
+			float facing2 = lerp.getEnd() - (float)(Math.PI / 2);
+			g.setColor(Color.green);
+			g.setLineWidth(2.0f);
+			g.drawLine(position.x, position.y, 
+					   (position.x + ((float)Math.cos(facing2) * dist)), 
+					   (position.y + ((float)Math.sin(facing2) * dist)));
+			g.setLineWidth(1.0f);
+		}
 		
 		// Render the rotated turret head.
 		Image head = AssetManager.getManager().getImage(Turret.TURRET_IMAGE).getSubImage(48, 0, 48, 48);
