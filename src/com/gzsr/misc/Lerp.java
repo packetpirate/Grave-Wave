@@ -1,39 +1,45 @@
 package com.gzsr.misc;
 
 public class Lerp {
+	private static final float TWO_PI = (float)(Math.PI * 2);
+	
 	private boolean complete;
 	public boolean isComplete() { return complete; }
 	private float current, end, step;
 	public float getCurrent() { return current; }
 	public float getEnd() { return end; }
+	private Vector2f targetDir;
 	
-	public Lerp(float start_, float end_, float step_) {
+	public Lerp(Pair<Float> pos, Pair<Float> target, float start_, float end_, float step_) {
 		this.complete = false;
 		this.current = start_;
 		this.end = end_;
 		this.step = step_;
 		
-		// Determine direction to move in according to arc length from both directions from start to end.
-		float circumference = 2 * (float)Math.PI * 50; // 50 is arbitrary
-		float inverse = (float)(Math.PI * 2) - end_;
-		float arcLength1 = Math.abs(circumference * ((end_ - start_) / (float)(2 * Math.PI)));
-		float arcLength2 = Math.abs(circumference * ((inverse - start_) / (float)(2 * Math.PI)));
-		this.step = (arcLength1 < arcLength2) ? step : -step;
+		// Calculate vector between entity position and target position.
+		this.targetDir = Vector2f.normalize(Vector2f.sub(new Vector2f(target.x, target.y), new Vector2f(pos.x, pos.y)));
 	}
 	
-	public void update(int delta) {
+	public void update(Pair<Float> pos, Pair<Float> target, int delta) {
 		if(!isComplete()) {
-			current += step * delta;
+			// Calculate vector between entity position and target position.
+			this.targetDir = Vector2f.normalize(Vector2f.sub(new Vector2f(target.x, target.y), new Vector2f(pos.x, pos.y)));
 			
-			if(nearEnd(delta)) {
-				current = end;
+			Vector2f aimDir = new Vector2f(Math.cos(current), Math.sin(current));
+			Vector2f perp = new Vector2f(aimDir.y, -aimDir.x); // perpendicular to the current direction
+			
+			// Should the turret be moving left or right?
+			boolean moveRight = Vector2f.dot(targetDir, perp) > 0;
+			
+			// Get the difference between current and end theta.
+			float angleDiff = (float) Math.acos(Vector2f.dot(targetDir, aimDir));
+			
+			// Are we at our destination?
+			if(angleDiff < (step * delta)) {
+				aimDir.set(targetDir);
+				current = ((float) Math.atan2(targetDir.y, targetDir.x) + TWO_PI) % TWO_PI;
 				complete = true;
-			}
+			} else current += moveRight ? (-step * delta) : (step * delta);
 		}
-	}
-	
-	private boolean nearEnd(int delta) {
-		float arcLength = Math.abs((2 * (float)Math.PI * 50) * ((end - current) / (float)(2 * Math.PI)));
-		return (arcLength <= Math.abs(2 * (step * delta)));
 	}
 }

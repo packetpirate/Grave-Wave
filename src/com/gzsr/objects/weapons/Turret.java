@@ -25,7 +25,7 @@ import com.gzsr.states.GameState;
 
 public class Turret extends Projectile {
 	private static final double HEALTH_MAX = 2_00.0;
-	private static final long TURRET_LIFESPAN = 15_000L;
+	private static final long TURRET_LIFESPAN = 15_0000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
 	private static final double PROJECTILE_DAMAGE = 25.0;
@@ -94,15 +94,16 @@ public class Turret extends Projectile {
 				// Re-orient the sentry to face the target.
 				if(lerp != null) {
 					if(!lerp.isComplete()) {
-						lerp.update(delta);
+						lerp.update(position, target.getPosition(), delta);
 						theta = lerp.getCurrent();
 					} else lerp = null;
 				} else {
-					float end = Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI / 2);
-					lerp = new Lerp(theta, end, 0.01f);
+					// Don't want to fire while re-orienting.
+					if(canFire(target, cTime)) fire(cTime);
+					
+					float end = (Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI / 2) + (float)(Math.PI * 2)) % (float)(Math.PI * 2);
+					lerp = new Lerp(position, target.getPosition(), theta, end, 0.005f);
 				}
-				
-				if(canFire(target, cTime)) fire(cTime);
 			}
 		}
 	}
@@ -128,7 +129,7 @@ public class Turret extends Projectile {
 		
 		// If there is currently a lerp, draw the destination position.
 		if((lerp != null) && !lerp.isComplete()) {
-			float facing2 = lerp.getEnd() - (float)(Math.PI / 2);
+			float facing2 = lerp.getEnd();
 			g.setColor(Color.green);
 			g.setLineWidth(2.0f);
 			g.drawLine(position.x, position.y, 
