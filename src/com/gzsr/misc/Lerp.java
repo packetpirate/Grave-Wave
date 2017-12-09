@@ -23,7 +23,7 @@ public class Lerp {
 	public void update(Pair<Float> pos, Pair<Float> target, int delta) {
 		if(!isComplete()) {
 			// Calculate vector between entity position and target position.
-			this.targetDir = Vector2f.normalize(Vector2f.sub(new Vector2f(target.x, target.y), new Vector2f(pos.x, pos.y)));
+			targetDir = Vector2f.normalize(Vector2f.sub(new Vector2f(target.x, target.y), new Vector2f(pos.x, pos.y)));
 			
 			Vector2f aimDir = new Vector2f(Math.cos(current), Math.sin(current));
 			Vector2f perp = new Vector2f(aimDir.y, -aimDir.x); // perpendicular to the current direction

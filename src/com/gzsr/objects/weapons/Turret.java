@@ -30,6 +30,7 @@ public class Turret extends Projectile {
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
 	private static final double PROJECTILE_DAMAGE = 25.0;
 	private static final float FIRING_RANGE = 250.0f;
+	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
 	private static final String FIRE_SOUND = "shoot3";
 	
@@ -101,7 +102,7 @@ public class Turret extends Projectile {
 					// Don't want to fire while re-orienting.
 					if(canFire(target, cTime)) fire(cTime);
 					
-					float end = (Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI / 2) + (float)(Math.PI * 2)) % (float)(Math.PI * 2);
+					float end = (Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI * 2)) % (float)(Math.PI * 2);
 					lerp = new Lerp(position, target.getPosition(), theta, end, 0.005f);
 				}
 			}
@@ -118,9 +119,9 @@ public class Turret extends Projectile {
 		if(base != null) g.drawImage(base, (position.x - 24.0f), (position.y - 24.0f));
 		
 		// Render the sentry's laser sight.
-		float facing = theta - (float)(Math.PI / 2);
+		float facing = theta;
 		float dist = ((target != null) && target.isAlive(cTime)) ? Math.min(Turret.FIRING_RANGE, Calculate.Distance(position, target.getPosition())) : Turret.FIRING_RANGE;
-		g.setColor(Color.red);
+		g.setColor(Turret.TURRET_LASER);
 		g.setLineWidth(2.0f);
 		g.drawLine(position.x, position.y, 
 				   (position.x + ((float)Math.cos(facing) * dist)), 
@@ -128,7 +129,7 @@ public class Turret extends Projectile {
 		g.setLineWidth(1.0f);
 		
 		// If there is currently a lerp, draw the destination position.
-		if((lerp != null) && !lerp.isComplete()) {
+		/*if((lerp != null) && !lerp.isComplete()) {
 			float facing2 = lerp.getEnd();
 			g.setColor(Color.green);
 			g.setLineWidth(2.0f);
@@ -136,12 +137,12 @@ public class Turret extends Projectile {
 					   (position.x + ((float)Math.cos(facing2) * dist)), 
 					   (position.y + ((float)Math.sin(facing2) * dist)));
 			g.setLineWidth(1.0f);
-		}
+		}*/
 		
 		// Render the rotated turret head.
 		Image head = AssetManager.getManager().getImage(Turret.TURRET_IMAGE).getSubImage(48, 0, 48, 48);
 		if(head != null) {
-			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
+			g.rotate(position.x, position.y, (float)Math.toDegrees(theta + (float)(Math.PI / 2)));
 			g.drawImage(head, (position.x - 24.0f), (position.y - 24.0f));
 			g.resetTransform();
 		}
@@ -158,7 +159,7 @@ public class Turret extends Projectile {
 		float width = ProjectileType.ASSAULT.getWidth();
 		float height = ProjectileType.ASSAULT.getHeight();
 		long lifespan = ProjectileType.ASSAULT.getLifespan();
-		float devTheta = (theta + (Globals.rand.nextFloat() * (Turret.PROJECTILE_SPREAD / 2) * (Globals.rand.nextBoolean()?1:-1)));
+		float devTheta = (theta + (float)(Math.PI / 2) + (Globals.rand.nextFloat() * (Turret.PROJECTILE_SPREAD / 2) * (Globals.rand.nextBoolean()?1:-1)));
 		Particle particle = new Particle(color, position, velocity, devTheta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);

@@ -115,6 +115,8 @@ public class Console implements Entity {
 					int args = tokens.length - 1;
 					pastCommands.add(String.format("> %s", currentCommand));
 					
+					EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+					
 					if(command.equals("help") && (args == 0)) {
 						pastCommands.add("  HELP: Here are some commands and example usage.");
 						pastCommands.add("    /help - display this help dialog");
@@ -124,8 +126,6 @@ public class Console implements Entity {
 						pastCommands.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
 					} else if(command.equals("spawn") && (args == 3)) {
 						// requires entity name and x,y coordinates
-						EnemyController ec = (EnemyController)gs.getEntity("enemyController");
-						
 						String entityName = tokens[1];
 						float x = Float.parseFloat(tokens[2]);
 						float y = Float.parseFloat(tokens[3]);
@@ -193,6 +193,9 @@ public class Console implements Entity {
 						} catch(NumberFormatException nfe) {
 							pastCommands.add("  ERROR: Invalid parameters specified for /explode command.");
 						}
+					} else if(command.equals("killall") && (args == 0)) {
+						ec.getAliveEnemies().clear();
+						ec.getUnbornEnemies().clear();
 					} else {
 						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}
