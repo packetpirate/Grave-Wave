@@ -22,6 +22,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.BowAndArrow;
 import com.gzsr.objects.weapons.ClaymoreWeapon;
 import com.gzsr.objects.weapons.Flamethrower;
 import com.gzsr.objects.weapons.GrenadeLauncher;
@@ -88,15 +89,19 @@ public class Player implements Entity {
 	public void setCurrentWeapon(int wi) {
 		if((wi < weapons.size()) && weapons.get(wi).hasWeapon()) {
 			// If the player actually has the weapon bound to the key that was pressed...
+			getCurrentWeapon().weaponChanged();
 			weaponIndex = wi;
+			getCurrentWeapon().equip();
 		}
 	}
 	public void weaponRotate(int direction) {
 		int wc = weapons.size();
+		getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 		int i = Math.floorMod((weaponIndex + direction), wc);
 		while(!weapons.get(i).hasWeapon()) i += direction;
 		weaponIndex = i;
+		getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
 	}
 	
 	private List<StatusEffect> statusEffects;
@@ -192,9 +197,10 @@ public class Player implements Entity {
 			}
 		}
 		
-		if(Globals.mouse.isMouseDown() && getCurrentWeapon().canFire(cTime)) {
-			getCurrentWeapon().fire(this, new Pair<Float>(position.x, position.y), 
-							   theta, cTime);
+		Weapon cWeapon = getCurrentWeapon();
+		if((Globals.mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
+			cWeapon.fire(this, new Pair<Float>(position.x, position.y), 
+						 theta, cTime);
 		}
 		
 		// Update all the player's active weapons.
@@ -241,6 +247,7 @@ public class Player implements Entity {
 			add(new Pistol());
 			add(new AssaultRifle());
 			add(new Shotgun());
+			add(new BowAndArrow());
 			add(new Flamethrower());
 			add(new GrenadeLauncher());
 			add(new ClaymoreWeapon());
@@ -249,6 +256,10 @@ public class Player implements Entity {
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
+		weapons.get(weaponIndex).equip();
+		
+		// Activate the other weapons.
+		// TODO: Remove these activators before full game release.
 		weapons.get(weaponIndex + 1).activate();
 		weapons.get(weaponIndex + 2).activate();
 		weapons.get(weaponIndex + 3).activate();
@@ -256,6 +267,7 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 5).activate();
 		weapons.get(weaponIndex + 6).activate();
 		weapons.get(weaponIndex + 7).activate();
+		weapons.get(weaponIndex + 8).activate();
 		
 		dAttributes.clear();
 		iAttributes.clear();

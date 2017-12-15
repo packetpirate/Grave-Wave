@@ -8,6 +8,11 @@ public T x, y;
 		this.y = y;
 	}
 	
+	public Pair(Pair<T> p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+	
 	public String toString() {
 		return ("(" + x + ", " + y + ")");
 	}

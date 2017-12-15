@@ -23,6 +23,7 @@ public class Flamethrower extends Weapon {
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final double EMBER_DAMAGE = 2.0;
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
+	private static final String PROJECTILE_NAME = "GZS_FireParticle";
 	private static final String FIRE_SOUND = "flamethrower2";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -54,7 +55,7 @@ public class Flamethrower extends Weapon {
 			float height = getProjectile().getHeight();
 			float devTheta = (theta + (Globals.rand.nextFloat() * Flamethrower.EMBER_SPREAD * (Globals.rand.nextBoolean()?1:-1)));
 			long lifespan = getProjectile().getLifespan();
-			Particle particle = new Particle("GZS_FireParticle", color, position, velocity, devTheta,
+			Particle particle = new Particle(Flamethrower.PROJECTILE_NAME, color, position, velocity, devTheta,
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			double damage = Flamethrower.EMBER_DAMAGE + (Flamethrower.EMBER_DAMAGE * (player.getIntAttribute("damageUp") * 0.10));

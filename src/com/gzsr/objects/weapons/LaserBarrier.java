@@ -24,6 +24,7 @@ public class LaserBarrier extends Weapon {
 	private static final Color BARRIER_RANGE_INDICATOR = new Color(0xA0FAFF);
 	private static final float BARRIER_RANGE = 750.0f;
 	private static final String ICON_NAME = "GZS_LaserWire";
+	private static final String PARTICLE_NAME = "GZS_LaserTerminal";
 	private static final String FIRE_SOUND = "throw2";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -66,7 +67,7 @@ public class LaserBarrier extends Weapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle("GZS_LaserTerminal", color, position, velocity, theta,
+		Particle particle = new Particle(LaserBarrier.PARTICLE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		

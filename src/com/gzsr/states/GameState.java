@@ -137,6 +137,25 @@ public class GameState extends BasicGameState implements InputListener {
 			pair.getValue().render(g, time);
 		}
 		
+		/*
+		// Draw the "shadow layer".
+		g.clearAlphaMap();
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		g.setDrawMode(Graphics.MODE_ALPHA_MAP);
+		
+		g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.85f));
+		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+
+		AssetManager.getManager().getImage("GZS_LightAlphaMap").drawCentered(Globals.player.getPosition().x, Globals.player.getPosition().y);
+		
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		g.setDrawMode(Graphics.MODE_ALPHA_BLEND);
+		
+		g.setColor(Color.black);
+		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+		
+		g.setDrawMode(Graphics.MODE_NORMAL);*/
+		
 		hud.render(g, player, time);
 		
 		if(consoleOpen) console.render(g, time);
@@ -178,6 +197,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Upchuck2.png",
 			"images/GZS_Gasbag2.png",
 			// Projectile Images
+			"images/GZS_Arrow.png",
 			"images/GZS_FireParticle.png",
 			"images/GZS_AcidParticle2.png",
 			"images/GZS_HandEggParticle.png",
@@ -189,12 +209,14 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Popgun.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png",
+			"images/GZS_Bow.png",
 			"images/GZS_Flammenwerfer.png",
 			"images/GZS_HandEgg.png",
 			"images/GZS_ClaymoreWeapon.png",
 			"images/GZS_LaserWire.png",
 			"images/GZS_Turret.png",
 			// Effect Images
+			"images/GZS_LightAlphaMap.png",
 			"images/GZS_Explosion.png",
 			"images/GZS_PoisonExplosion.png"
 		};

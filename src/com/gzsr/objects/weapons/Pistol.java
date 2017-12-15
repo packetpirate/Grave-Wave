@@ -31,6 +31,8 @@ public class Pistol extends Weapon {
 	public Pistol() {
 		super();
 		
+		release = false;
+		
 		AssetManager assets = AssetManager.getManager();
 		
 		this.fireSound = assets.getSound(Pistol.FIRE_SOUND);

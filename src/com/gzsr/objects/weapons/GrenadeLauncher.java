@@ -22,6 +22,8 @@ public class GrenadeLauncher extends Weapon {
 	private static final double DAMAGE = 250.0;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
+	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
+	private static final String EXP_NAME = "GZS_Explosion";
 	private static final String FIRE_SOUND = "throw2";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -61,11 +63,11 @@ public class GrenadeLauncher extends Weapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle("GZS_HandEggParticle", color, position, velocity, theta,
+		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-		Explosion exp = new Explosion("GZS_Explosion", new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
+		Explosion exp = new Explosion(GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;

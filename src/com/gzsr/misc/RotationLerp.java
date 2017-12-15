@@ -1,6 +1,6 @@
 package com.gzsr.misc;
 
-public class Lerp {
+public class RotationLerp {
 	private static final float TWO_PI = (float)(Math.PI * 2);
 	
 	private boolean complete;
@@ -10,7 +10,7 @@ public class Lerp {
 	public float getEnd() { return end; }
 	private Vector2f targetDir;
 	
-	public Lerp(Pair<Float> pos, Pair<Float> target, float start_, float end_, float step_) {
+	public RotationLerp(Pair<Float> pos, Pair<Float> target, float start_, float end_, float step_) {
 		this.complete = false;
 		this.current = start_;
 		this.end = end_;

@@ -20,6 +20,7 @@ public class ClaymoreWeapon extends Weapon {
 	private static final int START_CLIPS = 4;
 	private static final long RELOAD_TIME = 1000L;
 	private static final String ICON_NAME = "GZS_ClaymoreWeapon";
+	private static final String PARTICLE_NAME = "GZS_Claymore";
 	private static final String FIRE_SOUND = "landmine_armed";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -38,7 +39,7 @@ public class ClaymoreWeapon extends Weapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle("GZS_Claymore", color, position, velocity, theta,
+		Particle particle = new Particle(ClaymoreWeapon.PARTICLE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		Claymore clay = new Claymore(particle);

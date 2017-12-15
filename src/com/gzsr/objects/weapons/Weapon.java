@@ -25,6 +25,7 @@ public abstract class Weapon implements Entity {
 	protected int ammoInClip;
 	protected int ammoInInventory;
 	protected boolean active;
+	protected boolean equipped;
 	protected long lastFired;
 	protected boolean reloading;
 	protected long reloadStart;
@@ -37,6 +38,7 @@ public abstract class Weapon implements Entity {
 		this.ammoInClip = getClipSize();
 		this.ammoInInventory = (getStartClips() - 1) * getClipSize();
 		this.active = false;
+		this.equipped = false;
 		this.lastFired = 0L;
 		this.reloading = false;
 		this.reloadStart = 0L;
@@ -85,7 +87,7 @@ public abstract class Weapon implements Entity {
 			return false;
 		}
 		
-		return ((clipNotEmpty || ammoLeft) && cool);
+		return (equipped && (clipNotEmpty || ammoLeft) && cool);
 	}
 	
 	public abstract void fire(Player player, Pair<Float> position, float theta, long cTime);
@@ -101,6 +103,19 @@ public abstract class Weapon implements Entity {
 			
 			if(reloadSound != null) reloadSound.play();
 		}
+	}
+	
+	public boolean isChargedWeapon() {
+		return false;
+	}
+
+	public void equip() {
+		equipped = true;
+	}
+	
+	public void weaponChanged() {
+		// To be overridden.
+		equipped = false;
 	}
 	
 	public abstract boolean isReloading(long cTime);

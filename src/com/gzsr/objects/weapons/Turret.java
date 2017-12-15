@@ -19,7 +19,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
-import com.gzsr.misc.Lerp;
+import com.gzsr.misc.RotationLerp;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -36,7 +36,7 @@ public class Turret extends Projectile {
 	
 	private Sound fireSound;
 	private Shape collider;
-	private Lerp lerp;
+	private RotationLerp lerp;
 	private Enemy target;
 	private double health;
 	private void takeDamage(double amnt) { health -= amnt; }
@@ -103,7 +103,7 @@ public class Turret extends Projectile {
 					if(canFire(target, cTime)) fire(cTime);
 					
 					float end = (Calculate.Hypotenuse(position, target.getPosition()) + (float)(Math.PI * 2)) % (float)(Math.PI * 2);
-					lerp = new Lerp(position, target.getPosition(), theta, end, 0.005f);
+					lerp = new RotationLerp(position, target.getPosition(), theta, end, 0.005f);
 				}
 			}
 		}
@@ -127,17 +127,6 @@ public class Turret extends Projectile {
 				   (position.x + ((float)Math.cos(facing) * dist)), 
 				   (position.y + ((float)Math.sin(facing) * dist)));
 		g.setLineWidth(1.0f);
-		
-		// If there is currently a lerp, draw the destination position.
-		/*if((lerp != null) && !lerp.isComplete()) {
-			float facing2 = lerp.getEnd();
-			g.setColor(Color.green);
-			g.setLineWidth(2.0f);
-			g.drawLine(position.x, position.y, 
-					   (position.x + ((float)Math.cos(facing2) * dist)), 
-					   (position.y + ((float)Math.sin(facing2) * dist)));
-			g.setLineWidth(1.0f);
-		}*/
 		
 		// Render the rotated turret head.
 		Image head = AssetManager.getManager().getImage(Turret.TURRET_IMAGE).getSubImage(48, 0, 48, 48);
