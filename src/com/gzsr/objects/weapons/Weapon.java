@@ -39,7 +39,7 @@ public abstract class Weapon implements Entity {
 		this.ammoInInventory = (getStartClips() - 1) * getClipSize();
 		this.active = false;
 		this.equipped = false;
-		this.lastFired = 0L;
+		this.lastFired = -getCooldown();
 		this.reloading = false;
 		this.reloadStart = 0L;
 	}
@@ -67,13 +67,9 @@ public abstract class Weapon implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Render all projectiles.
-		if(!projectiles.isEmpty()) {
-			Iterator<Projectile> it = projectiles.iterator();
-			while(it.hasNext()) {
-				Projectile p = it.next();
-				if(p.isAlive(cTime)) p.render(g, cTime);
-			}
-		}
+		projectiles.stream()
+				   .filter(p -> p.isAlive(cTime))
+				   .forEach(p -> p.render(g, cTime));
 	}
 	
 	public boolean canFire(long cTime) {

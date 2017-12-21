@@ -215,6 +215,7 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_ClaymoreWeapon.png",
 			"images/GZS_LaserWire.png",
 			"images/GZS_Turret.png",
+			"images/GZS_BigRedButton.png",
 			// Effect Images
 			"images/GZS_LightAlphaMap.png",
 			"images/GZS_Explosion.png",

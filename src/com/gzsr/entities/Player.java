@@ -22,6 +22,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.BigRedButton;
 import com.gzsr.objects.weapons.BowAndArrow;
 import com.gzsr.objects.weapons.ClaymoreWeapon;
 import com.gzsr.objects.weapons.Flamethrower;
@@ -253,6 +254,7 @@ public class Player implements Entity {
 			add(new ClaymoreWeapon());
 			add(new LaserBarrier());
 			add(new SentryWeapon());
+			add(new BigRedButton());
 		}};
 		weaponIndex = 0;
 		weapons.get(weaponIndex).activate(); // activate the Pistol by default
@@ -268,6 +270,7 @@ public class Player implements Entity {
 		weapons.get(weaponIndex + 6).activate();
 		weapons.get(weaponIndex + 7).activate();
 		weapons.get(weaponIndex + 8).activate();
+		weapons.get(weaponIndex + 9).activate();
 		
 		dAttributes.clear();
 		iAttributes.clear();
