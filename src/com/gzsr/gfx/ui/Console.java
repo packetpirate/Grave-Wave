@@ -213,7 +213,7 @@ public class Console implements Entity {
 	
 	public void mousePressed(int button, int x, int y) {
 		// Append the current x and y position to the end of the current command.
-		if(currentCommand.charAt(currentCommand.length() - 1) != ' ') currentCommand += " ";
+		if(!currentCommand.isEmpty() && currentCommand.charAt(currentCommand.length() - 1) != ' ') currentCommand += " ";
 		currentCommand += String.format("%d %d", x, y);
 	}
 

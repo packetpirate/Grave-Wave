@@ -1,6 +1,7 @@
 package com.gzsr.objects.weapons;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import org.newdawn.slick.Graphics;
@@ -9,6 +10,8 @@ import org.newdawn.slick.Image;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -54,6 +57,7 @@ public class BigRedButton extends Weapon {
 		if(!explosions.isEmpty() && (elapsed >= BigRedButton.EXP_DELAY)) {
 			int id = Globals.generateEntityID();
 			Explosion exp = explosions.remove();
+			exp.setPosition(getExplosionLocation(gs, Globals.player, Globals.player.getPosition()));
 			gs.addEntity(String.format("explosion%d", id), exp);
 			AssetManager.getManager().getSound(BigRedButton.EXP_SOUND).play();
 			lastExplosion = cTime;
@@ -72,9 +76,8 @@ public class BigRedButton extends Weapon {
 	@Override
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
-			Pair<Float> location = getExplosionLocation(player, position);
 			double damage = BigRedButton.DAMAGE + (BigRedButton.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-			Explosion exp = new Explosion(BigRedButton.EXP_NAME, location, damage, BigRedButton.EXP_RADIUS);
+			Explosion exp = new Explosion(BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
 		
@@ -83,7 +86,32 @@ public class BigRedButton extends Weapon {
 		fireSound.play();
 	}
 	
-	private Pair<Float> getExplosionLocation(Player player, Pair<Float> position) {
+	private Pair<Float> getExplosionLocation(GameState gs, Player player, Pair<Float> position) {
+		int highCount = 0;
+		List<Enemy> enemies = ((EnemyController)gs.getEntity("enemyController")).getAliveEnemies();
+		if(enemies.isEmpty()) return getRandomLocation(player, position);
+		
+		Enemy e = enemies.get(0);
+		for(int i = 0; i < enemies.size(); i++) {
+			int count = 1;
+			Enemy current = enemies.get(i);
+			for(int j = 0; j < enemies.size(); j++) {
+				if(i != j) {
+					float dist = Calculate.Distance(current.getPosition(), enemies.get(j).getPosition());
+					if(dist <= BigRedButton.EXP_RADIUS) count++;
+				}
+			}
+			
+			if(count >= highCount) {
+				highCount = count;
+				e = current;
+			}
+		}
+		
+		return new Pair<Float>(e.getPosition().x, e.getPosition().y);
+	}
+	
+	private Pair<Float> getRandomLocation(Player player, Pair<Float> position) {
 		float x = 0.0f;
 		float y = 0.0f;
 		
