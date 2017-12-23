@@ -44,14 +44,16 @@ public class Console implements Entity {
 	private boolean deleting;
 	private long lastDelete;
 	
+	private boolean continuousSpawn;
+	private String spawnType;
+	
 	public Console(GameState gs_, GameContainer gc_) {
 		this.gs = gs_;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
 		this.deleting = false;
 		this.lastDelete = 0L;
-		
-		System.out.printf("Font Size: %d\n", CONSOLE_FONT.getHeight());
+		this.continuousSpawn = false;
 	}
 
 	@Override
@@ -120,31 +122,24 @@ public class Console implements Entity {
 					if(command.equals("help") && (args == 0)) {
 						pastCommands.add("  HELP: Here are some commands and example usage.");
 						pastCommands.add("    /help - display this help dialog");
+						pastCommands.add("    /spawn entityName - (usage: /spawn zumby) will enable Zumby spawning. Left click to spawn. Right click to stop.");
 						pastCommands.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
 						pastCommands.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
 						pastCommands.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
 						pastCommands.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
-					} else if(command.equals("spawn") && (args == 3)) {
-						// requires entity name and x,y coordinates
-						String entityName = tokens[1];
-						float x = Float.parseFloat(tokens[2]);
-						float y = Float.parseFloat(tokens[3]);
-						Pair<Float> position = new Pair<Float>(x, y);
-						
-						if(entityName.equals("zumby")) {
-							Zumby z = new Zumby(position);
-							ec.addAlive(z);
-						} else if(entityName.equals("rotdog")) {
-							Rotdog r = new Rotdog(position);
-							ec.addAlive(r);
-						} else if(entityName.equals("upchuck")) {
-							Upchuck u = new Upchuck(position);
-							ec.addAlive(u);
-						} else if(entityName.equals("gasbag")) {
-							Gasbag g = new Gasbag(position);
-							ec.addAlive(g);
-						} else {
-							pastCommands.add("  ERROR: Invalid entity name specified.");
+					} else if(command.equals("spawn")) {
+						// Requires entity name and (x, y) coordinates.
+						if(args == 1) {
+							spawnType = tokens[1];
+							continuousSpawn = true;
+							pastCommands.add("  INFO: Continuous spawn started for entity \"" + spawnType + "\".");
+						} else if(args == 3) {
+							String entityName = tokens[1];
+							float x = Float.parseFloat(tokens[2]);
+							float y = Float.parseFloat(tokens[3]);
+							Pair<Float> position = new Pair<Float>(x, y);
+							
+							spawnEnemy(gs, entityName, position);
 						}
 					} else if(command.equals("item") && (args == 3)) {
 						String itemName = tokens[1];
@@ -211,10 +206,40 @@ public class Console implements Entity {
 		currentCommand = "";
 	}
 	
-	public void mousePressed(int button, int x, int y) {
-		// Append the current x and y position to the end of the current command.
-		if(!currentCommand.isEmpty() && currentCommand.charAt(currentCommand.length() - 1) != ' ') currentCommand += " ";
-		currentCommand += String.format("%d %d", x, y);
+	private void spawnEnemy(GameState gs, String entityType, Pair<Float> position) {
+		EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+		
+		if(entityType.equals("zumby")) {
+			Zumby z = new Zumby(position);
+			ec.addAlive(z);
+		} else if(entityType.equals("rotdog")) {
+			Rotdog r = new Rotdog(position);
+			ec.addAlive(r);
+		} else if(entityType.equals("upchuck")) {
+			Upchuck u = new Upchuck(position);
+			ec.addAlive(u);
+		} else if(entityType.equals("gasbag")) {
+			Gasbag g = new Gasbag(position);
+			ec.addAlive(g);
+		} else {
+			pastCommands.add("  ERROR: Invalid entity name specified.");
+		}
+	}
+	
+	public void mousePressed(GameState gs, int button, int x, int y) {
+		if(continuousSpawn && (button == 0)) {
+			// Spawn a new enemy of the given type.
+			Pair<Float> position = new Pair<Float>((float)x, (float)y);
+			spawnEnemy(gs, spawnType, position);
+		} else if(continuousSpawn && (button == 1)) {
+			pastCommands.add("  INFO: Continuous spawn terminated for entity \"" + spawnType + "\".");
+			continuousSpawn = false;
+			spawnType = "";
+		} else {
+			// Append the current x and y position to the end of the current command.
+			if(!currentCommand.isEmpty() && currentCommand.charAt(currentCommand.length() - 1) != ' ') currentCommand += " ";
+			currentCommand += String.format("%d %d", x, y);
+		}
 	}
 
 	public void keyPressed(int key, char c) {

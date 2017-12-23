@@ -1,10 +1,12 @@
 package com.gzsr.states;
 
+import java.awt.Font;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -12,10 +14,12 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -29,6 +33,7 @@ import com.gzsr.objects.items.Item;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
+	private static final TrueTypeFont FONT_PAUSE = new TrueTypeFont(new Font("Lucida Console", Font.BOLD, 32), true);
 	
 	private AssetManager assets;
 	private long time, accu, consoleTimer;
@@ -158,6 +163,14 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		hud.render(g, player, time);
 		
+		if(paused) {
+			g.setColor(Color.white);
+			int w = GameState.FONT_PAUSE.getWidth("Paused");
+			int h = GameState.FONT_PAUSE.getHeight();
+			FontUtils.drawCenter(GameState.FONT_PAUSE, "Paused", 
+								 ((Globals.WIDTH / 2) - (w / 2)), ((Globals.HEIGHT / 2) - (h / 2)), w);
+		}
+		
 		if(consoleOpen) console.render(g, time);
 	}
 	
@@ -270,10 +283,8 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) {
-			if(consoleOpen) console.mousePressed(button, x, y);
-			Globals.mouse.setMouseDown(true);
-		}
+		if(consoleOpen) console.mousePressed(this, button, x, y);
+		Globals.mouse.setMouseDown(true);
 	}
 	
 	@Override
@@ -297,7 +308,8 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		if(key == Input.KEY_GRAVE) consoleOpen = !consoleOpen; 
+		if(key == Input.KEY_GRAVE) consoleOpen = !consoleOpen;
+		else if((key == Input.KEY_P) && !consoleOpen) paused = !paused;
 		else {
 			if(consoleOpen) {
 				console.keyReleased(key, c);
