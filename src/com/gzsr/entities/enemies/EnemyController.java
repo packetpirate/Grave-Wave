@@ -1,10 +1,14 @@
 package com.gzsr.entities.enemies;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
@@ -14,6 +18,8 @@ import com.gzsr.states.GameState;
 
 public class EnemyController implements Entity {
 	private static final long DEFAULT_SPAWN = 2000L;
+	private static final long WAVE_BREAK_TIME = 10_000L;
+	private static final TrueTypeFont FONT_NORMAL = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 32), true);
 	
 	private List<Enemy> unborn;
 	public List<Enemy> getUnbornEnemies() { return unborn; }
@@ -27,6 +33,8 @@ public class EnemyController implements Entity {
 	private long lastEnemy;
 	
 	private int wave;
+	private long lastWave;
+	private boolean breakTime;
 	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
 	
 	public EnemyController() {
@@ -37,7 +45,9 @@ public class EnemyController implements Entity {
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 		lastEnemy = 0L;
 		
-		wave = 10;
+		wave = 0;
+		lastWave = 0L;
+		breakTime = false;
 		
 		restart();
 	}
@@ -88,12 +98,17 @@ public class EnemyController implements Entity {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.
-		if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
-			lastEnemy = cTime;
-			nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
-			
-			Enemy e = unborn.remove(0);
-			alive.add(e);
+		if(!breakTime) {
+			if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
+				lastEnemy = cTime;
+				nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
+				
+				Enemy e = unborn.remove(0);
+				alive.add(e);
+			}
+		} else {
+			long elapsed = cTime - lastWave;
+			if(elapsed >= EnemyController.WAVE_BREAK_TIME) breakTime = false;
 		}
 	}
 	
@@ -120,14 +135,39 @@ public class EnemyController implements Entity {
 				player.takeDamage(damage);
 			}
 		}
+		
+		if(waveClear()) {
+			breakTime = true;
+			lastWave = cTime;
+			restart();
+		}
 	}
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Iterator<Enemy> it = alive.iterator();
-		while(it.hasNext()) {
-			Enemy e = it.next();
-			e.render(g, cTime);
+		if(breakTime) {
+			// Render the countdown to the next wave.
+			long elapsed = cTime - lastWave;
+			int time = (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
+			String text = String.format("Next Wave: %d", time);
+			int w = EnemyController.FONT_NORMAL.getWidth(text);
+			
+			g.setColor(Color.white);
+			FontUtils.drawCenter(EnemyController.FONT_NORMAL, text, (Globals.WIDTH - 10 - w), 10, w);
+		} else {
+			// Render all living enemies.
+			Iterator<Enemy> it = alive.iterator();
+			while(it.hasNext()) {
+				Enemy e = it.next();
+				e.render(g, cTime);
+			}
+			
+			// Render the wave counter.
+			String text = String.format("Wave: %d", wave);
+			int w = EnemyController.FONT_NORMAL.getWidth(text);
+			
+			g.setColor(Color.white);
+			FontUtils.drawCenter(EnemyController.FONT_NORMAL, text, (Globals.WIDTH - 10 - w), 10, w);
 		}
 	}
 }

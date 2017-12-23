@@ -1,10 +1,10 @@
 package com.gzsr.states;
 
 import java.awt.Font;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -41,7 +41,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	private Console console;
 	private HUD hud;
-	private Map<String, Entity> entities;
+	private ConcurrentHashMap<String, Entity> entities;
 	public Entity getEntity(String key) { return entities.get(key); }
 	public void addEntity(String key, Entity e) { entities.put(key, e); }
 	
@@ -59,8 +59,8 @@ public class GameState extends BasicGameState implements InputListener {
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		
 		Globals.player = new Player();
-		entities = new HashMap<String, Entity>();
-
+		entities = new ConcurrentHashMap<String, Entity>();
+		
 		reset(gc);
 	}
 
@@ -70,7 +70,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		while(accu >= Globals.STEP_TIME) {
 			if(!paused && !consoleOpen) {
-				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn/occur while paused.
+				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
 				
 				Player player = Globals.player;
 				player.update(this, time, Globals.STEP_TIME);
