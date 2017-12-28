@@ -12,6 +12,7 @@ import org.newdawn.slick.TrueTypeFont;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
@@ -41,6 +42,9 @@ public class Console implements Entity {
 	private String currentCommand;
 	private List<String> pastCommands;
 	
+	private long pauseTime; // What time was the console opened?
+	public void setPauseTime(long time) { pauseTime = time; }
+	
 	private boolean deleting;
 	private long lastDelete;
 	
@@ -51,6 +55,7 @@ public class Console implements Entity {
 		this.gs = gs_;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
+		this.pauseTime = 0L;
 		this.deleting = false;
 		this.lastDelete = 0L;
 		this.continuousSpawn = false;
@@ -209,20 +214,27 @@ public class Console implements Entity {
 	private void spawnEnemy(GameState gs, String entityType, Pair<Float> position) {
 		EnemyController ec = (EnemyController)gs.getEntity("enemyController");
 		
-		if(entityType.equals("zumby")) {
-			Zumby z = new Zumby(position);
-			ec.addAlive(z);
-		} else if(entityType.equals("rotdog")) {
-			Rotdog r = new Rotdog(position);
-			ec.addAlive(r);
-		} else if(entityType.equals("upchuck")) {
-			Upchuck u = new Upchuck(position);
-			ec.addAlive(u);
-		} else if(entityType.equals("gasbag")) {
-			Gasbag g = new Gasbag(position);
-			ec.addAlive(g);
+		if(!ec.isRestarting()) {
+			if(entityType.equals("zumby")) {
+				Zumby z = new Zumby(position);
+				ec.addAlive(z);
+			} else if(entityType.equals("rotdog")) {
+				Rotdog r = new Rotdog(position);
+				ec.addAlive(r);
+			} else if(entityType.equals("upchuck")) {
+				Upchuck u = new Upchuck(position);
+				ec.addAlive(u);
+			} else if(entityType.equals("gasbag")) {
+				Gasbag g = new Gasbag(position);
+				ec.addAlive(g);
+			} else if(entityType.equals("bigmama")) {
+				BigMama bm = new BigMama(position, pauseTime);
+				ec.addAlive(bm);
+			} else {
+				pastCommands.add("  ERROR: Invalid entity name specified.");
+			}
 		} else {
-			pastCommands.add("  ERROR: Invalid entity name specified.");
+			pastCommands.add("  INFO: Cannot spawn while wave is restarting.");
 		}
 	}
 	

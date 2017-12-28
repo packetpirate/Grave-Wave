@@ -24,6 +24,8 @@ public class EnemyController implements Entity {
 	private List<Enemy> unborn;
 	public List<Enemy> getUnbornEnemies() { return unborn; }
 	public void addUnborn(Enemy e) { unborn.add(e); }
+	private List<Enemy> addImmediately;
+	public void addNextUpdate(Enemy e) { addImmediately.add(e); }
 	private List<Enemy> alive;
 	public List<Enemy> getAliveEnemies() { return alive; }
 	public void addAlive(Enemy e) { alive.add(e); }
@@ -36,9 +38,11 @@ public class EnemyController implements Entity {
 	private long lastWave;
 	private boolean breakTime;
 	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
+	public boolean isRestarting() { return breakTime; }
 	
 	public EnemyController() {
 		unborn = new ArrayList<Enemy>();
+		addImmediately = new ArrayList<Enemy>();
 		alive = new ArrayList<Enemy>();
 		
 		spawnRate = EnemyController.DEFAULT_SPAWN;
@@ -49,15 +53,17 @@ public class EnemyController implements Entity {
 		lastWave = 0L;
 		breakTime = false;
 		
-		restart();
+		restart(0L);
 	}
 	
 	/**
 	 * Starts a new wave, spawning new enemies, and determines difficulty of wave.
+	 * @param startTime The time this wave will start. Used for special-case enemy constructors.
 	 */
-	public void restart() {
+	public void restart(long startTime) {
 		wave++;
 		unborn.clear();
+		addImmediately.clear();
 		alive.clear();
 		
 		// Determine number of zombies based on wave number.
@@ -97,6 +103,10 @@ public class EnemyController implements Entity {
 
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
+		// Add all enemies that need to be immediately added.
+		alive.addAll(addImmediately);
+		addImmediately.clear();
+		
 		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.
 		if(!breakTime) {
 			if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
@@ -139,7 +149,7 @@ public class EnemyController implements Entity {
 		if(waveClear()) {
 			breakTime = true;
 			lastWave = cTime;
-			restart();
+			restart(cTime + EnemyController.WAVE_BREAK_TIME);
 		}
 	}
 
@@ -168,6 +178,7 @@ public class EnemyController implements Entity {
 			
 			g.setColor(Color.white);
 			FontUtils.drawCenter(EnemyController.FONT_NORMAL, text, (Globals.WIDTH - 10 - w), 10, w);
+			
 		}
 	}
 }

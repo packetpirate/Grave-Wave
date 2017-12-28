@@ -209,6 +209,8 @@ public class GameState extends BasicGameState implements InputListener {
 			"images/GZS_Rotdog2.png",
 			"images/GZS_Upchuck2.png",
 			"images/GZS_Gasbag2.png",
+			"images/GZS_BigMama2.png",
+			"images/GZS_TinyZumby.png",
 			// Projectile Images
 			"images/GZS_Arrow.png",
 			"images/GZS_FireParticle.png",
@@ -232,7 +234,8 @@ public class GameState extends BasicGameState implements InputListener {
 			// Effect Images
 			"images/GZS_LightAlphaMap.png",
 			"images/GZS_Explosion.png",
-			"images/GZS_PoisonExplosion.png"
+			"images/GZS_PoisonExplosion.png",
+			"images/GZS_BloodExplosion.png"
 		};
 		
 		for(String asset : assetList) {
@@ -252,6 +255,9 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		Animation pc = new Animation("GZS_PoisonExplosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_PoisonExplosion", pc);
+		
+		Animation be = new Animation("GZS_BloodExplosion", 128, 128, 8, 125L, 1000L, 1000L);
+		assets.addAnimation("GZS_BloodExplosion", be);
 	}
 	
 	private void loadSounds() throws SlickException {
@@ -308,7 +314,10 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		if(key == Input.KEY_GRAVE) consoleOpen = !consoleOpen;
+		if(key == Input.KEY_GRAVE) {
+			console.setPauseTime(time);
+			consoleOpen = !consoleOpen;
+		}
 		else if((key == Input.KEY_P) && !consoleOpen) paused = !paused;
 		else {
 			if(consoleOpen) {
