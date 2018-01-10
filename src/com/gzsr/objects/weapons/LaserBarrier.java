@@ -110,6 +110,11 @@ public class LaserBarrier extends Weapon {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)LaserBarrier.RELOAD_TIME);
 	}
+	
+	@Override
+	public String getName() {
+		return "Laser Barrier";
+	}
 
 	@Override
 	public Image getInventoryIcon() {

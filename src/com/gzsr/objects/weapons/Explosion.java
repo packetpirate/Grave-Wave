@@ -108,4 +108,9 @@ public class Explosion implements Entity {
 		
 		return false;
 	}
+	
+	@Override
+	public String getName() {
+		return "Explosion";
+	}
 }

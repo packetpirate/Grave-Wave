@@ -87,6 +87,11 @@ public class AssaultRifle extends Weapon {
 	}
 	
 	@Override
+	public String getName() {
+		return "Assault Rifle";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(AssaultRifle.ICON_NAME);
 	}

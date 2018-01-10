@@ -139,6 +139,11 @@ public class BigRedButton extends Weapon {
 	}
 
 	@Override
+	public String getName() {
+		return "Big Red Button";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(BigRedButton.ICON_NAME);
 	}

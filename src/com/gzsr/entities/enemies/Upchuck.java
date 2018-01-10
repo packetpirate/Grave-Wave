@@ -132,4 +132,9 @@ public class Upchuck extends Enemy {
 	public double getDamage() {
 		return Upchuck.DPS;
 	}
+
+	@Override
+	public String getName() {
+		return "Upchuck";
+	}
 }

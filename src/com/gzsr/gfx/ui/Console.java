@@ -265,4 +265,9 @@ public class Console implements Entity {
 		if(key == Input.KEY_BACK) deleting = false;
 		if(((c == '/') || (c == ' ') || (c == '.') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
 	}
+
+	@Override
+	public String getName() {
+		return "Console";
+	}
 }

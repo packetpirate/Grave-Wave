@@ -43,4 +43,9 @@ public class Zumby extends Enemy {
 	public double getDamage() {
 		return Zumby.DPS;
 	}
+
+	@Override
+	public String getName() {
+		return "Zumby";
+	}
 }

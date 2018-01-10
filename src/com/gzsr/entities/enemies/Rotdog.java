@@ -43,4 +43,9 @@ public class Rotdog extends Enemy {
 	public double getDamage() {
 		return Rotdog.DPS;
 	}
+
+	@Override
+	public String getName() {
+		return "Rotdog";
+	}
 }

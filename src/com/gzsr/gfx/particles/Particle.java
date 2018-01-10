@@ -121,4 +121,9 @@ public class Particle implements Entity {
 	public boolean checkCollision(Enemy enemy) {
 		return enemy.getCollider().intersects(bounds);
 	}
+	
+	@Override
+	public String getName() {
+		return "Particle";
+	}
 }

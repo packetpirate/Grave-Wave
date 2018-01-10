@@ -31,4 +31,9 @@ public class HealthKit extends Item {
 		duration = 0L;
 		powerupSound.play();
 	}
+
+	@Override
+	public String getName() {
+		return "Health Kit";
+	}
 }

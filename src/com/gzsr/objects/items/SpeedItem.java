@@ -30,4 +30,9 @@ public class SpeedItem extends Item {
 		duration = 0L;
 		powerupSound.play();
 	}
+
+	@Override
+	public String getName() {
+		return "Speed Up";
+	}
 }

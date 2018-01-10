@@ -93,6 +93,11 @@ public class Shotgun extends Weapon {
 	}
 
 	@Override
+	public String getName() {
+		return "Shotgun";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(Shotgun.ICON_NAME);
 	}

@@ -102,4 +102,9 @@ public class BigMama extends Enemy {
 	public double getDamage() {
 		return BigMama.DPS;
 	}
+
+	@Override
+	public String getName() {
+		return "Big Mama";
+	}
 }

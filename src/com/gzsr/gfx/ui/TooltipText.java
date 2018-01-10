@@ -58,4 +58,9 @@ public class TooltipText implements Entity {
 		return ((x >= pos.x) && (y >= pos.y) && 
 				(x <= (pos.x + txtWidth)) && (y <= (pos.y + ttf.getHeight())));
 	}
+
+	@Override
+	public String getName() {
+		return "Tooltip";
+	}
 }

@@ -134,6 +134,11 @@ public class BowAndArrow extends Weapon {
 	public double getReloadTime(long cTime) {
 		return 0.0;
 	}
+	
+	@Override
+	public String getName() {
+		return "Bow & Arrow";
+	}
 
 	@Override
 	public Image getInventoryIcon() {

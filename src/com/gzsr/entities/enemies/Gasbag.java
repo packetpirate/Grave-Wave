@@ -84,4 +84,9 @@ public class Gasbag extends Enemy {
 	public double getDamage() {
 		return Gasbag.DPS;
 	}
+
+	@Override
+	public String getName() {
+		return "Gasbag";
+	}
 }

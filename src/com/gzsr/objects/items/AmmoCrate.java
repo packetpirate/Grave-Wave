@@ -33,4 +33,9 @@ public class AmmoCrate extends Item {
 		duration = 0L;
 		powerupSound.play();
 	}
+
+	@Override
+	public String getName() {
+		return "Ammo Crate";
+	}
 }

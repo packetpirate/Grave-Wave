@@ -29,4 +29,9 @@ public class UnlimitedAmmoItem extends Item {
 		duration = 0L;
 		powerupSound.play();
 	}
+
+	@Override
+	public String getName() {
+		return "Unlimited Ammo";
+	}
 }

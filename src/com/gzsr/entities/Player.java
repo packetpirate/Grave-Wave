@@ -396,4 +396,9 @@ public class Player implements Entity {
 		float distance = Calculate.Distance(position, item.getPosition());
 		if(item.isTouching(distance)) item.apply(this, cTime);
 	}
+	
+	@Override
+	public String getName() {
+		return "Player";
+	}
 }

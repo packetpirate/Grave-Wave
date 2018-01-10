@@ -60,6 +60,11 @@ public class SentryWeapon extends Weapon {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)SentryWeapon.RELOAD_TIME);
 	}
+	
+	@Override
+	public String getName() {
+		return "Sentry Gun";
+	}
 
 	@Override
 	public Image getInventoryIcon() {

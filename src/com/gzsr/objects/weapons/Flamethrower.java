@@ -81,6 +81,11 @@ public class Flamethrower extends Weapon {
 	}
 	
 	@Override
+	public String getName() {
+		return "Flamethrower";
+	}
+	
+	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Flamethrower.ICON_NAME); }
 
 	@Override

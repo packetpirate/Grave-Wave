@@ -29,4 +29,9 @@ public class InvulnerableItem extends Item {
 		duration = 0L;
 		powerupSound.play();
 	}
+
+	@Override
+	public String getName() {
+		return "Invulnerability";
+	}
 }

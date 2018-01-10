@@ -59,4 +59,9 @@ public class SkillButton implements Entity {
 		return ((x > pos.x) && (y > pos.y) && 
 				(x < (pos.x + SIZE)) && (y < (pos.y + SIZE)));
 	}
+
+	@Override
+	public String getName() {
+		return "Skill Button";
+	}
 }

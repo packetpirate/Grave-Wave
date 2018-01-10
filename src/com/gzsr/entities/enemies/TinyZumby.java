@@ -44,4 +44,9 @@ public class TinyZumby extends Enemy {
 		return TinyZumby.DPS;
 	}
 
+	@Override
+	public String getName() {
+		return "Tiny Zumby";
+	}
+
 }

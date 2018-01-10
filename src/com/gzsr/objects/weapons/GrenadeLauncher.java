@@ -88,6 +88,11 @@ public class GrenadeLauncher extends Weapon {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)GrenadeLauncher.RELOAD_TIME);
 	}
+	
+	@Override
+	public String getName() {
+		return "Grenade Launcher";
+	}
 
 	@Override
 	public Image getInventoryIcon() {

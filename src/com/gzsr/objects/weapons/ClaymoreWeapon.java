@@ -62,6 +62,11 @@ public class ClaymoreWeapon extends Weapon {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)ClaymoreWeapon.RELOAD_TIME);
 	}
+	
+	@Override
+	public String getName() {
+		return "Claymore";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
