@@ -20,6 +20,7 @@ import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.AssaultRifle;
 import com.gzsr.objects.weapons.BigRedButton;
@@ -41,6 +42,7 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
+	private static final int INVENTORY_SIZE = 16;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -72,23 +74,25 @@ public class Player implements Entity {
 	public void setAttribute(String key, double val) { dAttributes.put(key, val); }
 	public void addDoubleAttribute(String key, double amnt) { dAttributes.put(key, (getDoubleAttribute(key) + amnt)); }
 	
-	private List<Weapon> weapons;
-	public List<Weapon> getWeapons() { return weapons; }
+	private Inventory inventory;
+	public Inventory getInventory() { return inventory; }
+	public List<Weapon> getWeapons() { return inventory.getWeapons(); }
 	public int activeWeapons() {
-		return (int)weapons.stream()
-						   .filter(w -> w.hasWeapon())
-						   .count();
+		return (int)getWeapons().stream()
+						   		.filter(w -> w.hasWeapon())
+						   		.count();
 	}
 	public List<Weapon> getActiveWeapons() {
-		return weapons.stream()
-					  .filter(w -> w.hasWeapon())
-					  .collect(Collectors.toList());
+		return getWeapons()
+				  .stream()
+				  .filter(w -> w.hasWeapon())
+				  .collect(Collectors.toList());
 	}
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
-	public Weapon getCurrentWeapon() { return weapons.get(weaponIndex); }
+	public Weapon getCurrentWeapon() { return getWeapons().get(weaponIndex); }
 	public void setCurrentWeapon(int wi) {
-		if((wi < weapons.size()) && weapons.get(wi).hasWeapon()) {
+		if((wi < getWeapons().size()) && getWeapons().get(wi).hasWeapon()) {
 			// If the player actually has the weapon bound to the key that was pressed...
 			getCurrentWeapon().weaponChanged();
 			weaponIndex = wi;
@@ -96,11 +100,11 @@ public class Player implements Entity {
 		}
 	}
 	public void weaponRotate(int direction) {
-		int wc = weapons.size();
+		int wc = getWeapons().size();
 		getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 		int i = Math.floorMod((weaponIndex + direction), wc);
-		while(!weapons.get(i).hasWeapon()) i += direction;
+		while(!getWeapons().get(i).hasWeapon()) i += direction;
 		weaponIndex = i;
 		getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
 	}
@@ -244,33 +248,22 @@ public class Player implements Entity {
 		theta = 0.0f;
 		
 		// TODO: When in testing phase, deactivate all but Pistol (index 0).
-		weapons = new ArrayList<Weapon>() {{
-			add(new Pistol());
-			add(new AssaultRifle());
-			add(new Shotgun());
-			add(new BowAndArrow());
-			add(new Flamethrower());
-			add(new GrenadeLauncher());
-			add(new ClaymoreWeapon());
-			add(new LaserBarrier());
-			add(new SentryWeapon());
-			add(new BigRedButton());
-		}};
 		weaponIndex = 0;
-		weapons.get(weaponIndex).activate(); // activate the Pistol by default
-		weapons.get(weaponIndex).equip();
+		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
-		// Activate the other weapons.
-		// TODO: Remove these activators before full game release.
-		weapons.get(weaponIndex + 1).activate();
-		weapons.get(weaponIndex + 2).activate();
-		weapons.get(weaponIndex + 3).activate();
-		weapons.get(weaponIndex + 4).activate();
-		weapons.get(weaponIndex + 5).activate();
-		weapons.get(weaponIndex + 6).activate();
-		weapons.get(weaponIndex + 7).activate();
-		weapons.get(weaponIndex + 8).activate();
-		weapons.get(weaponIndex + 9).activate();
+		inventory.addItem(new Pistol());
+		inventory.addItem(new AssaultRifle());
+		inventory.addItem(new Shotgun());
+		inventory.addItem(new BowAndArrow());
+		inventory.addItem(new Flamethrower());
+		inventory.addItem(new GrenadeLauncher());
+		inventory.addItem(new ClaymoreWeapon());
+		inventory.addItem(new LaserBarrier());
+		inventory.addItem(new SentryWeapon());
+		inventory.addItem(new BigRedButton());
+		
+		inventory.getWeapons().stream().forEach(w -> w.activate());
+		inventory.getWeapons().get(weaponIndex).equip();
 		
 		dAttributes.clear();
 		iAttributes.clear();

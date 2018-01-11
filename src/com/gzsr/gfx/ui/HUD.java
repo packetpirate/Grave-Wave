@@ -129,31 +129,33 @@ public class HUD {
 			g.setColor(Color.black);
 			g.drawRect((WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f), 48.0f, 48.0f);
 			
-			g.drawImage(player.getCurrentWeapon().getInventoryIcon(),
-						(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
+			if(player.getCurrentWeapon().hasWeapon()) {
+				g.drawImage(player.getCurrentWeapon().getInventoryIcon(),
+							(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
 			
-			// Render the reloading bar, if the player is reloading.
-			if(player.getCurrentWeapon().isReloading(cTime)) {
-				float percentage = 1.0f - (float)player.getCurrentWeapon().getReloadTime(cTime);
-				float height = percentage * 48.0f;
-				float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
+				// Render the reloading bar, if the player is reloading.
+				if(player.getCurrentWeapon().isReloading(cTime)) {
+					float percentage = 1.0f - (float)player.getCurrentWeapon().getReloadTime(cTime);
+					float height = percentage * 48.0f;
+					float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
+					
+					g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+					g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
+				}
 				
-				g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-				g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
-			}
-			
-			if(player.hasStatus(Status.UNLIMITED_AMMO)) {
-				Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
-				float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
-				float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
-				g.drawImage(unlimitedAmmo, x, y);
-			} else {
-				String ammoText = String.format("%d / %d", 
-									player.getCurrentWeapon().getClipAmmo(),
-									player.getCurrentWeapon().getInventoryAmmo());
-				FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
-									 (int)(WEAPONS_ORIGIN.x + 54.0f), 
-									 (int)(WEAPONS_ORIGIN.y + 18.0f), 93, Color.black);
+				if(player.hasStatus(Status.UNLIMITED_AMMO)) {
+					Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
+					float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
+					float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
+					g.drawImage(unlimitedAmmo, x, y);
+				} else {
+					String ammoText = String.format("%d / %d", 
+										player.getCurrentWeapon().getClipAmmo(),
+										player.getCurrentWeapon().getInventoryAmmo());
+					FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
+										 (int)(WEAPONS_ORIGIN.x + 54.0f), 
+										 (int)(WEAPONS_ORIGIN.y + 18.0f), 93, Color.black);
+				}
 			}
 		} // End weapons loadout rendering.
 		
