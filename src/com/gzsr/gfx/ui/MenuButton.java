@@ -11,7 +11,7 @@ import com.gzsr.misc.MouseInfo;
 public class MenuButton {
 	private static final Color DEFAULT_TEXT = new Color(0xFFFFFF);
 	private static final Color DEFAULT_HOVER = new Color(0xABCDEF);
-	private static final String FONT_NAME = "manaspc";
+	private static final String FONT_NAME = "PressStart2P-Regular_large";
 	
 	private float x, y;
 	

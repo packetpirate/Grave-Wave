@@ -52,6 +52,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
+		loadFonts();
 		loadImages();
 		loadAnimations(); // has to come after loadImages
 		loadSounds();
@@ -188,6 +189,20 @@ public class GameState extends BasicGameState implements InputListener {
 		console = new Console(this, gc);
 		
 		hud = new HUD();
+	}
+	
+	private void loadFonts() throws SlickException {
+		String [] assetList = new String [] {
+				"fonts/PressStart2P-Regular.ttf"
+			};
+			
+			for(String asset : assetList) {
+				String key = asset.substring((asset.indexOf('/') + 1), 
+											  asset.lastIndexOf('.'));
+				assets.addFont((key + "_small"), asset, 10, false, false);
+				assets.addFont(key, asset, 16, false, false);
+				assets.addFont((key + "_large"), asset, 32, false, false);
+			}
 	}
 	
 	private void loadImages() throws SlickException {

@@ -8,8 +8,10 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.util.FontUtils;
 
+import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -155,15 +157,16 @@ public class EnemyController implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		if(breakTime) {
 			// Render the countdown to the next wave.
 			long elapsed = cTime - lastWave;
 			int time = (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
 			String text = String.format("Next Wave: %d", time);
-			int w = EnemyController.FONT_NORMAL.getWidth(text);
+			int w = f.getWidth(text);
 			
 			g.setColor(Color.white);
-			FontUtils.drawCenter(EnemyController.FONT_NORMAL, text, (Globals.WIDTH - 10 - w), 10, w);
+			FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
 		} else {
 			// Render all living enemies.
 			Iterator<Enemy> it = alive.iterator();
@@ -174,10 +177,10 @@ public class EnemyController implements Entity {
 			
 			// Render the wave counter.
 			String text = String.format("Wave: %d", wave);
-			int w = EnemyController.FONT_NORMAL.getWidth(text);
+			int w = f.getWidth(text);
 			
 			g.setColor(Color.white);
-			FontUtils.drawCenter(EnemyController.FONT_NORMAL, text, (Globals.WIDTH - 10 - w), 10, w);
+			FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
 			
 		}
 	}

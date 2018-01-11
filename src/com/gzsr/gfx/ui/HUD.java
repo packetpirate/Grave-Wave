@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
@@ -71,8 +72,9 @@ public class HUD {
 					   (HEALTH_ORIGIN.y + 3.0f), 
 					   (percentage * 150.0f), 20.0f);
 			
+			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 			String healthText = String.format("HP: %d / %d", (int)currentHealth, (int)maxHealth);
-			FontUtils.drawCenter(g.getFont(), healthText, (int)HEALTH_ORIGIN.x.floatValue(), (int)(HEALTH_ORIGIN.y.floatValue() + 5.0f), 156);
+			FontUtils.drawCenter(f, healthText, (int)HEALTH_ORIGIN.x.floatValue(), (int)(HEALTH_ORIGIN.y.floatValue() + f.getLineHeight()), 156);
 		} // End health bar rendering.
 		
 		{ // Begin experience bar rendering.
@@ -149,12 +151,11 @@ public class HUD {
 					float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
 					g.drawImage(unlimitedAmmo, x, y);
 				} else {
+					UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 					String ammoText = String.format("%d / %d", 
 										player.getCurrentWeapon().getClipAmmo(),
 										player.getCurrentWeapon().getInventoryAmmo());
-					FontUtils.drawCenter(assets.getFont("eurostile.oblique"), ammoText, 
-										 (int)(WEAPONS_ORIGIN.x + 54.0f), 
-										 (int)(WEAPONS_ORIGIN.y + 18.0f), 93, Color.black);
+					FontUtils.drawCenter(f, ammoText, (int)(WEAPONS_ORIGIN.x + 54.0f), (int)(WEAPONS_ORIGIN.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
 				}
 			}
 		} // End weapons loadout rendering.
