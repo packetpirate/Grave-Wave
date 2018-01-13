@@ -22,6 +22,7 @@ import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.SkillButton;
 import com.gzsr.gfx.ui.TooltipText;
@@ -84,6 +85,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
+		MusicPlayer.getInstance().update();
 	}
 
 	@Override

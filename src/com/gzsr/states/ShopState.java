@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
@@ -65,6 +66,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
+		MusicPlayer.getInstance().update();
 	}
 	
 	@Override

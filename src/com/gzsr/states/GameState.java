@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
@@ -23,6 +24,7 @@ import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
@@ -45,7 +47,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public Entity getEntity(String key) { return entities.get(key); }
 	public void addEntity(String key, Entity e) { entities.put(key, e); }
 	
-	private boolean paused, consoleOpen;
+	private boolean gameStarted, paused, consoleOpen;
 	public boolean isConsoleOpen() { return consoleOpen; }
 	
 	@Override
@@ -56,6 +58,7 @@ public class GameState extends BasicGameState implements InputListener {
 		loadImages();
 		loadAnimations(); // has to come after loadImages
 		loadSounds();
+		loadMusic();
 		
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		
@@ -114,6 +117,7 @@ public class GameState extends BasicGameState implements InputListener {
 									new FadeInTransition());
 				}
 				
+				MusicPlayer.getInstance().update();
 				hud.update(player, time);
 			} else if(consoleOpen) {
 				consoleTimer += (long)delta;
@@ -184,6 +188,7 @@ public class GameState extends BasicGameState implements InputListener {
 		entities.clear();
 		entities.put("enemyController", new EnemyController());
 		
+		gameStarted = false;
 		paused = false;
 		consoleOpen = false;
 		console = new Console(this, gc);
@@ -297,6 +302,16 @@ public class GameState extends BasicGameState implements InputListener {
 		}
 	}
 	
+	private void loadMusic() throws SlickException {
+		// FIXME: Do this in a separate thread after loading first song so it doesn't take forever to load?
+		// Load the soundtrack.
+		for(int i = 1; i <= 15; i++) {
+			String songName = String.format("soundtrack_%02d", i);
+			Music m = new Music("music/" + songName + ".ogg");
+			MusicPlayer.getInstance().addSong(songName, m);
+		}
+	}
+	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		Globals.mouse.setPosition(newx, newy);
@@ -333,7 +348,11 @@ public class GameState extends BasicGameState implements InputListener {
 			console.setPauseTime(time);
 			consoleOpen = !consoleOpen;
 		}
-		else if((key == Input.KEY_P) && !consoleOpen) paused = !paused;
+		else if((key == Input.KEY_P) && !consoleOpen) {
+			if(!paused) MusicPlayer.getInstance().pause();
+			else MusicPlayer.getInstance().resume();
+			paused = !paused;
+		}
 		else {
 			if(consoleOpen) {
 				console.keyReleased(key, c);
@@ -355,6 +374,11 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		if(!gameStarted) {
+			MusicPlayer.getInstance().playSong("soundtrack_01");
+			gameStarted = true;
+		}
+		
 		if(Globals.gameOver) {
 			reset(gc);
 			Globals.gameOver = false;
