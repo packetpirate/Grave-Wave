@@ -12,9 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -259,10 +257,9 @@ public class GameState extends BasicGameState implements InputListener {
 		};
 		
 		for(String asset : assetList) {
-			Image image = new Image(asset);
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
-			assets.addImage(key, image);
+			assets.addImage(key, asset);
 		}
 	}
 	
@@ -295,10 +292,9 @@ public class GameState extends BasicGameState implements InputListener {
 		};
 		
 		for(String asset : assetList) {
-			Sound sound = new Sound(asset);
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
-			assets.addSound(key, sound);
+			assets.addSound(key, asset);
 		}
 	}
 	
@@ -307,8 +303,7 @@ public class GameState extends BasicGameState implements InputListener {
 		// Load the soundtrack.
 		for(int i = 1; i <= 15; i++) {
 			String songName = String.format("soundtrack_%02d", i);
-			Music m = new Music("music/" + songName + ".ogg");
-			MusicPlayer.getInstance().addSong(songName, m);
+			MusicPlayer.getInstance().addSong(songName);
 		}
 	}
 	

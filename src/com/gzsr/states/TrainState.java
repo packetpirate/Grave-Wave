@@ -8,11 +8,9 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -240,10 +238,9 @@ public class TrainState extends BasicGameState implements InputListener {
 		};
 		
 		for(String asset : assetList) {
-			Image image = new Image(asset);
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
-			assets.addImage(key, image);
+			assets.addImage(key, asset);
 		}
 	}
 	
@@ -253,10 +250,9 @@ public class TrainState extends BasicGameState implements InputListener {
 		};
 		
 		for(String asset : assetList) {
-			Sound sound = new Sound(asset);
 			String key = asset.substring((asset.indexOf('/') + 1), 
 										  asset.lastIndexOf('.'));
-			assets.addSound(key, sound);
+			assets.addSound(key, asset);
 		}
 	}
 

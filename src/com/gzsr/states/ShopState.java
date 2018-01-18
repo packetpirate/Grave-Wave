@@ -31,8 +31,10 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private static final Pair<Float> SELECTION_CONTAINER = new Pair<Float>(10.0f, 64.0f);
 	private static final Pair<Float> DETAIL_CONTAINER = new Pair<Float>((Globals.WIDTH - 210.0f), 64.0f);
-	private static float SELECTION_WIDTH = Globals.WIDTH - 230.0f;
-	private static float DETAIL_WIDTH = 200.0f;
+	//private static float SELECTION_WIDTH = Globals.WIDTH - 230.0f;
+	private static float SELECTION_WIDTH = 300.0f;
+	//private static float DETAIL_WIDTH = 200.0f;
+	private static float DETAIL_WIDTH = 300.0f;
 	private static float CONTAINER_HEIGHT = Globals.HEIGHT - 110.0f;
 	
 	private static final int ROWS = 6; // The number of rows of item boxes that can fit in the selection container.
@@ -69,6 +71,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		MusicPlayer.getInstance().update();
 	}
 	
+	/*
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		g.resetTransform();
@@ -140,6 +143,32 @@ public class ShopState extends BasicGameState implements InputListener {
 		Calculate.TextWrap(g, itemName, FONT_NORMAL, 
 						   (DETAIL_CONTAINER.x + 10.0f), (DETAIL_CONTAINER.y + 136.0f + FONT_NORMAL.getHeight()), 
 						   180.0f, true, Color.white);
+	}
+	*/
+	
+	/**
+	 * Alternate render method. Testing a different shop layout.
+	 */
+	@Override
+	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+		g.resetTransform();
+		g.clear();
+		
+		g.setColor(Color.darkGray);
+		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+		
+		// Draw the header and footer.
+		g.setColor(Color.white);
+		g.drawLine(10.0f, 36.0f, (Globals.WIDTH - 10.0f), 36.0f);
+		g.drawLine(10.0f, (Globals.HEIGHT - 36.0f), (Globals.WIDTH - 10.0f), (Globals.HEIGHT - 36.0f));
+		g.setFont(ShopState.FONT_HEADER);
+		g.drawString("Item Shop", 30.0f, 20.0f);
+		
+		// Draw the item selection container.
+		g.setColor(new Color(0x2e2e2e));
+		g.fillRect(SELECTION_CONTAINER.x, SELECTION_CONTAINER.y, SELECTION_WIDTH, CONTAINER_HEIGHT);
+		g.setColor(Color.white);
+		g.drawRect(SELECTION_CONTAINER.x, SELECTION_CONTAINER.y, SELECTION_WIDTH, CONTAINER_HEIGHT);
 	}
 	
 	@Override

@@ -1,11 +1,17 @@
 package com.gzsr;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
 
 public class MusicPlayer {
+	private static int SONGS_TO_LOAD = 0;
+	private static int SONGS_LOADED = 0;
+	
 	private static MusicPlayer instance;
 	
 	private boolean autoplay;
@@ -22,17 +28,35 @@ public class MusicPlayer {
 		autoplay = true;
 		currentSong = 1;
 		nowPlaying = null;
-		music = new HashMap<String, Music>();
+		music = Collections.synchronizedMap(new HashMap<String, Music>());
 	}
 	
-	public void addSong(String key, Music m) {
+	public synchronized void addSong(String key) throws SlickException {
 		if((music != null) && (key != null) && (!key.equals(""))) {
-			music.put(key, m);
-			System.out.println(String.format("Music Loaded: %s", key));
+			MusicPlayer.SONGS_TO_LOAD++;
+			final AtomicReference<SlickException> ref = new AtomicReference<>(); // for passing SlickException to the outside of the runnable
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Music m = new Music("music/" + key + ".ogg");
+						music.put(key, m);
+						MusicPlayer.SONGS_LOADED++;
+						System.out.println(String.format("Music Loaded: %s", key));
+					} catch(SlickException se) {
+						ref.set(se); // pass this exception outside
+					}
+				}
+			}).start();
+			
+			// If an exception occurred in the runnable, throw it.
+			if(ref.get() != null) {
+				throw ref.get();
+			}
 		}
 	}
 	
-	public void update() {
+	public synchronized void update() {
 		String songName = String.format("soundtrack_%02d", currentSong);
 		Music song = music.get(songName);
 		if((song != null) && !song.playing() && autoplay) {
@@ -40,19 +64,19 @@ public class MusicPlayer {
 		}
 	}
 	
-	public void pause() {
+	public synchronized void pause() {
 		if((nowPlaying != null) && !nowPlaying.playing()) {
 			nowPlaying.pause();
 		}
 	}
 	
-	public void resume() {
+	public synchronized void resume() {
 		if((nowPlaying != null) && nowPlaying.playing()) {
 			nowPlaying.resume();
 		}
 	}
 	
-	public void nextSong() {
+	public synchronized void nextSong() {
 		String songName = String.format("soundtrack_%02d", currentSong);
 		Music song = music.get(songName);
 		if(song != null) {
@@ -65,7 +89,7 @@ public class MusicPlayer {
 		playSong(nextSong);
 	}
 	
-	public void playSong(String key) {
+	public synchronized void playSong(String key) {
 		Music song = music.get(key);
 		if(song != null) {
 			nowPlaying = song;

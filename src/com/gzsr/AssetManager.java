@@ -2,8 +2,10 @@ package com.gzsr;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -15,6 +17,9 @@ import org.newdawn.slick.font.effects.Effect;
 import com.gzsr.gfx.Animation;
 
 public class AssetManager {
+	private static int ASSETS_TO_LOAD = 0;
+	private static int ASSETS_LOADED = 0;
+	
 	private static AssetManager instance = null;
 	
 	private Map<String, Image> images = null;
@@ -23,9 +28,9 @@ public class AssetManager {
 	private Map<String, UnicodeFont> fonts = null;
 	
 	private AssetManager() {
-		images = new HashMap<String, Image>();
+		images = Collections.synchronizedMap(new HashMap<String, Image>());
 		animations = new HashMap<String, Animation>();
-		sounds = new HashMap<String, Sound>();
+		sounds = Collections.synchronizedMap(new HashMap<String, Sound>());
 		fonts = new HashMap<String, UnicodeFont>();
 	}
 	
@@ -34,14 +39,32 @@ public class AssetManager {
 		return instance;
 	}
 	
-	public void addImage(String key, Image img) throws SlickException {
+	public synchronized void addImage(String key, String img) throws SlickException {
 		if(images != null) {
-			images.put(key, img);
-			System.out.println(String.format("Image Loaded: %s", key));
+			AssetManager.ASSETS_TO_LOAD++;
+			final AtomicReference<SlickException> ref = new AtomicReference<>(); // for passing SlickException to the outside of the runnable
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Image image = new Image(img);
+						images.put(key, image);
+						AssetManager.ASSETS_LOADED++;
+						System.out.println(String.format("Image Loaded: %s", key));
+					} catch(SlickException se) {
+						ref.set(se); // pass this exception outside
+					}
+				}
+			}).start();
+			
+			// If an exception occurred in the runnable, throw it.
+			if(ref.get() != null) {
+				throw ref.get();
+			}
 		}
 	}
 	
-	public Image getImage(String key) {
+	public synchronized Image getImage(String key) {
 		if((images != null) && (key != null) && (!key.equals(""))) {
 			return images.get(key);
 		}
@@ -51,7 +74,9 @@ public class AssetManager {
 	
 	public void addAnimation(String key, Animation anim) throws SlickException {
 		if(animations != null) {
+			AssetManager.ASSETS_TO_LOAD++;
 			animations.put(key, anim);
+			AssetManager.ASSETS_LOADED++;
 			System.out.println(String.format("Animation Loaded: %s", key));
 		}
 	}
@@ -64,14 +89,32 @@ public class AssetManager {
 		return null;
 	}
 	
-	public void addSound(String key, Sound snd) throws SlickException {
+	public synchronized void addSound(String key, String snd) throws SlickException {
 		if(sounds != null) {
-			sounds.put(key, snd);
-			System.out.println(String.format("Sound Loaded: %s", key));
+			AssetManager.ASSETS_TO_LOAD++;
+			final AtomicReference<SlickException> ref = new AtomicReference<>(); // for passing SlickException to the outside of the runnable
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Sound sound = new Sound(snd);
+						sounds.put(key, sound);
+						AssetManager.ASSETS_LOADED++;
+						System.out.println(String.format("Sound Loaded: %s", key));
+					} catch(SlickException se) {
+						ref.set(se); // pass this exception outside
+					}
+				}
+			}).start();
+			
+			// If an exception occurred in the runnable, throw it.
+			if(ref.get() != null) {
+				throw ref.get();
+			}
 		}
 	}
 	
-	public Sound getSound(String key) {
+	public synchronized Sound getSound(String key) {
 		if((sounds != null) && (key != null) && (!key.equals(""))) {
 			return sounds.get(key);
 		}
@@ -86,6 +129,7 @@ public class AssetManager {
 	@SuppressWarnings("unchecked")
 	public void addFont(String key, String file, int size, boolean bold, boolean italic, Effect [] effects) throws SlickException {
 		try {
+			AssetManager.ASSETS_TO_LOAD++;
 			UnicodeFont uni = new UnicodeFont(file, size, bold, italic);
 			uni.addAsciiGlyphs();
 			uni.addGlyphs(400, 600);
@@ -94,6 +138,7 @@ public class AssetManager {
 			uni.loadGlyphs();
 			if((fonts != null) && (uni != null)) {
 				fonts.put(key, uni);
+				AssetManager.ASSETS_LOADED++;
 				System.out.println(String.format("Font Loaded: %s", key));
 			}
 		} catch(Exception ex) {
