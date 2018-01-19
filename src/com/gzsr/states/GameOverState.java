@@ -26,7 +26,6 @@ public class GameOverState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
-		assets.addImage("GZS_DeathScreen", "images/GZS_DeathScreen.png");
 		
 		UnicodeFont uni = assets.getFont("manaspc");
 		menuButton = new MenuButton( ((Globals.WIDTH / 2) - (uni.getWidth("Main Menu") / 2)), (Globals.HEIGHT - 200.0f), "Main Menu");

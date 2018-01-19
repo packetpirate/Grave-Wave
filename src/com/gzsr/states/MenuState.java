@@ -1,15 +1,10 @@
 package com.gzsr.states;
 
-import java.awt.Color;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.font.effects.ColorEffect;
-import org.newdawn.slick.font.effects.Effect;
-import org.newdawn.slick.font.effects.OutlineEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -17,6 +12,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.gfx.ui.MenuButton;
 
 public class MenuState extends BasicGameState implements InputListener {
@@ -31,12 +27,17 @@ public class MenuState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
-		assets.addImage("GZS_Background02", "images/GZS_Background02.png");
-		assets.addFont("manaspc", "fonts/manaspc.ttf", 32, true, false, new Effect[] { new ColorEffect(Color.WHITE), new OutlineEffect(1, Color.BLACK) });
+		//assets.addFont("manaspc", "fonts/manaspc.ttf", 32, true, false, new Effect[] { new ColorEffect(Color.WHITE), new OutlineEffect(1, Color.BLACK) });
 		
 		gameStart = new MenuButton(50.0f, (Globals.HEIGHT - 200.0f), "Start Game");
 		credits = new MenuButton(50.0f, (Globals.HEIGHT - 140.0f), "Credits");
 		exit = new MenuButton(50.0f, (Globals.HEIGHT - 80.0f), "Exit");
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		MusicPlayer.getInstance().reset();
+		MusicPlayer.getInstance().nextSong();
 	}
 	
 	@Override
@@ -58,6 +59,8 @@ public class MenuState extends BasicGameState implements InputListener {
 			if(Globals.mouse.isMouseDown()) gc.exit();
 		}
 		else exit.mouseExit();
+		
+		MusicPlayer.getInstance().update();
 	}
 	
 	@Override

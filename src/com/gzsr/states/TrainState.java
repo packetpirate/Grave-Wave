@@ -48,9 +48,6 @@ public class TrainState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
-		loadImages();
-		loadSounds();
-		
 		expToLevelTooltip = new TooltipText(TrainState.FONT_NORMAL, 
 											"Exp To Next Level:", 
 											"Your progress towards leveling up and gaining a skill point.", 
@@ -228,32 +225,6 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) {
 		exit = false;
-	}
-	
-	private void loadImages() throws SlickException {
-		String [] assetList = new String [] {
-			// Primary Images
-			"images/GZS_SkillUpButton.png",
-			"images/GZS_SkillDownButton.png"
-		};
-		
-		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
-										  asset.lastIndexOf('.'));
-			assets.addImage(key, asset);
-		}
-	}
-	
-	private void loadSounds() throws SlickException {
-		String [] assetList = new String [] {
-			"sounds/point_buy.wav"
-		};
-		
-		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
-										  asset.lastIndexOf('.'));
-			assets.addSound(key, asset);
-		}
 	}
 
 	@Override

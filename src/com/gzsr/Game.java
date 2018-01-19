@@ -9,6 +9,7 @@ import com.gzsr.states.BlankState;
 import com.gzsr.states.CreditsState;
 import com.gzsr.states.GameOverState;
 import com.gzsr.states.GameState;
+import com.gzsr.states.LoadingState;
 import com.gzsr.states.MenuState;
 import com.gzsr.states.ShopState;
 import com.gzsr.states.TrainState;
@@ -31,14 +32,13 @@ public class Game extends StateBasedGame {
 
 	@Override
 	public void initStatesList(GameContainer gc) throws SlickException {
-		addState(new MenuState());
-		addState(new GameState());
-		addState(new ShopState());
-		addState(new TrainState());
-		addState(new GameOverState());
-		addState(new CreditsState());
-		addState(new BlankState());
-		
-		enterState(MenuState.ID);
+		addState(new LoadingState());
+//		addState(new MenuState());
+//		addState(new GameState());
+//		addState(new ShopState());
+//		addState(new TrainState());
+//		addState(new GameOverState());
+//		addState(new CreditsState());
+//		addState(new BlankState());
 	}
 }

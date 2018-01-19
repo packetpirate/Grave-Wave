@@ -26,7 +26,6 @@ import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.gfx.ui.HUD;
 import com.gzsr.objects.items.Item;
@@ -51,12 +50,6 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
-		
-		loadFonts();
-		loadImages();
-		loadAnimations(); // has to come after loadImages
-		loadSounds();
-		loadMusic();
 		
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		
@@ -194,119 +187,6 @@ public class GameState extends BasicGameState implements InputListener {
 		hud = new HUD();
 	}
 	
-	private void loadFonts() throws SlickException {
-		String [] assetList = new String [] {
-				"fonts/PressStart2P-Regular.ttf"
-			};
-			
-			for(String asset : assetList) {
-				String key = asset.substring((asset.indexOf('/') + 1), 
-											  asset.lastIndexOf('.'));
-				assets.addFont((key + "_small"), asset, 10, false, false);
-				assets.addFont(key, asset, 16, false, false);
-				assets.addFont((key + "_large"), asset, 32, false, false);
-			}
-	}
-	
-	private void loadImages() throws SlickException {
-		String [] assetList = new String [] {
-			// Primary Images
-			"images/GZS_Background6.png",
-			"images/GZS_Player.png",
-			"images/GZS_Crosshair.png",
-			// Item Images
-			"images/GZS_Health.png",
-			"images/GZS_Ammo.png",
-			// Status Images
-			"images/GZS_Invulnerability.png",
-			"images/GZS_UnlimitedAmmo.png",
-			"images/GZS_SpeedUp.png",
-			"images/GZS_PoisonIcon.png",
-			//Enemy Images
-			"images/GZS_Zumby2.png",
-			"images/GZS_Rotdog2.png",
-			"images/GZS_Upchuck2.png",
-			"images/GZS_Gasbag2.png",
-			"images/GZS_BigMama2.png",
-			"images/GZS_TinyZumby.png",
-			// Projectile Images
-			"images/GZS_Arrow.png",
-			"images/GZS_FireParticle.png",
-			"images/GZS_AcidParticle2.png",
-			"images/GZS_HandEggParticle.png",
-			"images/GZS_Claymore.png",
-			"images/GZS_LaserTerminal.png",
-			"images/GZS_TurretPieces.png",
-			// Weapon Images
-			"images/GZS_MuzzleFlash.png",
-			"images/GZS_Popgun.png",
-			"images/GZS_RTPS.png",
-			"images/GZS_Boomstick.png",
-			"images/GZS_Bow.png",
-			"images/GZS_Flammenwerfer.png",
-			"images/GZS_HandEgg.png",
-			"images/GZS_ClaymoreWeapon.png",
-			"images/GZS_LaserWire.png",
-			"images/GZS_Turret.png",
-			"images/GZS_BigRedButton.png",
-			// Effect Images
-			"images/GZS_LightAlphaMap.png",
-			"images/GZS_Explosion.png",
-			"images/GZS_PoisonExplosion.png",
-			"images/GZS_BloodExplosion.png"
-		};
-		
-		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
-										  asset.lastIndexOf('.'));
-			assets.addImage(key, asset);
-		}
-	}
-	
-	private void loadAnimations() throws SlickException {
-		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
-		assets.addAnimation("GZS_MuzzleFlash", mf);
-		
-		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
-		assets.addAnimation("GZS_Explosion", exp);
-		
-		Animation pc = new Animation("GZS_PoisonExplosion", 128, 128, 8, 125L, 1000L, 1000L);
-		assets.addAnimation("GZS_PoisonExplosion", pc);
-		
-		Animation be = new Animation("GZS_BloodExplosion", 128, 128, 8, 125L, 1000L, 1000L);
-		assets.addAnimation("GZS_BloodExplosion", be);
-	}
-	
-	private void loadSounds() throws SlickException {
-		String [] assetList = new String [] {
-			"sounds/shoot4.wav",
-			"sounds/shoot3.wav",
-			"sounds/throw2.wav",
-			"sounds/landmine_armed.wav",
-			"sounds/shotgun1.wav",
-			"sounds/flamethrower2.wav",
-			"sounds/explosion2.wav",
-			"sounds/poison_cloud.wav",
-			"sounds/buy_ammo2.wav",
-			"sounds/powerup2.wav"
-		};
-		
-		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
-										  asset.lastIndexOf('.'));
-			assets.addSound(key, asset);
-		}
-	}
-	
-	private void loadMusic() throws SlickException {
-		// FIXME: Do this in a separate thread after loading first song so it doesn't take forever to load?
-		// Load the soundtrack.
-		for(int i = 1; i <= 15; i++) {
-			String songName = String.format("soundtrack_%02d", i);
-			MusicPlayer.getInstance().addSong(songName);
-		}
-	}
-	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		Globals.mouse.setPosition(newx, newy);
@@ -370,7 +250,7 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
 		if(!gameStarted) {
-			MusicPlayer.getInstance().playSong("soundtrack_01");
+			//MusicPlayer.getInstance().nextSong();
 			gameStarted = true;
 		}
 		
