@@ -27,7 +27,6 @@ public class MenuState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
-		//assets.addFont("manaspc", "fonts/manaspc.ttf", 32, true, false, new Effect[] { new ColorEffect(Color.WHITE), new OutlineEffect(1, Color.BLACK) });
 		
 		gameStart = new MenuButton(50.0f, (Globals.HEIGHT - 200.0f), "Start Game");
 		credits = new MenuButton(50.0f, (Globals.HEIGHT - 140.0f), "Credits");

@@ -38,8 +38,17 @@ public class Inventory {
 		return weapons;
 	}
 	
+	public Entity getItem(int i) {
+		if((i >= 0) && (i < items.size())) {
+			return items.get(i);
+		}
+		
+		return null;
+	}
+	
 	private int capacity;
 	public boolean isFull() { return (items.size() >= capacity); }
+	public int getCapacity() { return capacity; }
 	
 	public Inventory(int capacity_) {
 		items = new ArrayList<Entity>();

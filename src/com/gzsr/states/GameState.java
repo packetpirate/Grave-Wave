@@ -250,7 +250,6 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
 		if(!gameStarted) {
-			//MusicPlayer.getInstance().nextSong();
 			gameStarted = true;
 		}
 		
