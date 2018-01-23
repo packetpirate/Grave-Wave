@@ -14,6 +14,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.gfx.ui.MenuButton;
+import com.gzsr.misc.Pair;
 
 public class MenuState extends BasicGameState implements InputListener {
 	public static final int ID = 0;
@@ -28,9 +29,9 @@ public class MenuState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
-		gameStart = new MenuButton(50.0f, (Globals.HEIGHT - 200.0f), "Start Game");
-		credits = new MenuButton(50.0f, (Globals.HEIGHT - 140.0f), "Credits");
-		exit = new MenuButton(50.0f, (Globals.HEIGHT - 80.0f), "Exit");
+		gameStart = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Start Game");
+		credits = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 140.0f)), "Credits");
+		exit = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Exit");
 	}
 	
 	@Override
@@ -41,7 +42,7 @@ public class MenuState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(gameStart.contains(Globals.mouse)) {
+		if(gameStart.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
 			gameStart.mouseEnter();
 			if(Globals.mouse.isMouseDown()) {
 				Globals.resetEntityNum();
@@ -50,10 +51,10 @@ public class MenuState extends BasicGameState implements InputListener {
 			}
 		} else gameStart.mouseExit();
 		
-		if(credits.contains(Globals.mouse)) credits.mouseEnter();
+		if(credits.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) credits.mouseEnter();
 		else credits.mouseExit();
 		
-		if(exit.contains(Globals.mouse)) {
+		if(exit.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
 			exit.mouseEnter();
 			if(Globals.mouse.isMouseDown()) gc.exit();
 		}

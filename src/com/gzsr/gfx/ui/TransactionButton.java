@@ -1,0 +1,59 @@
+package com.gzsr.gfx.ui;
+
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+
+import com.gzsr.AssetManager;
+import com.gzsr.misc.Pair;
+
+public class TransactionButton extends Button {
+	public static enum Type {
+		BUY, SELL
+	}
+	
+	private Type type;
+	public Type getType() { return type; }
+	
+	public TransactionButton(Pair<Float> position_, Type type_) {
+		super();
+		
+		this.type = type_;
+		switch(type_) {
+			case BUY:
+				image = "GZS_BuyButton";
+				break;
+			case SELL:
+				image = "GZS_SellButton";
+				break;
+			default:
+				image = null;
+				break;
+		}
+		
+		this.position = position_;
+		this.size = null;
+	}
+	
+	@Override
+	public void render(Graphics g, long cTime) {
+		// Draw using position as center.
+		Image button = AssetManager.getManager().getImage(image);
+		if(button != null) g.drawImage(button, (position.x - (button.getWidth() / 2)), (position.y - (button.getHeight() / 2)));
+	}
+	
+	@Override
+	public void click() {
+		// Not needed.
+	}
+
+	@Override
+	public boolean inBounds(float x, float y) {
+		return ((x > position.x) && (y > position.y) && 
+				(x < (position.x + size.x)) && (y < (position.y + size.y)));
+	}
+	
+	@Override
+	public String getName() {
+		return "Transaction Button";
+	}
+}

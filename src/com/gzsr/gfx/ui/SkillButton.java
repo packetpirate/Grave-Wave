@@ -4,60 +4,59 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
+import com.gzsr.Globals;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
-public class SkillButton implements Entity {
+public class SkillButton extends Button {
 	private static final float SIZE = 50.0f;
 	
 	private String skillName;
 	private boolean increase;
 	
-	private Pair<Float> pos;
-	
-	public SkillButton(String skillName_, boolean increase_, Pair<Float> pos_) {
+	public SkillButton(String skillName_, boolean increase_, Pair<Float> position_) {
+		super();
+		
 		this.skillName = skillName_;
 		this.increase = increase_;
-		this.pos = pos_;
+		
+		this.image = (increase ? "GZS_SkillUpButton" : "GZS_SkillDownButton");
+		
+		this.position = position_;
+		this.size = new Pair<Float>(SIZE, SIZE);
 	}
 	
-	public void click(Player player) {
-		int skillPoints = player.getIntAttribute("skillPoints");
-		int currentSkillLevel = player.getIntAttribute(skillName);
+	@Override
+	public void render(Graphics g, long cTime) {
+		Image button = AssetManager.getManager().getImage(image);
+		if(button != null) g.drawImage(button, position.x, position.y);
+	}
+	
+	@Override
+	public void click() {
+		int skillPoints = Globals.player.getIntAttribute("skillPoints");
+		int currentSkillLevel = Globals.player.getIntAttribute(skillName);
 		
 		if(increase) {
 			if((skillPoints > 0) && (currentSkillLevel < 10)) {
 				// Add a skill point to the associated skill.
-				player.setAttribute(skillName, (currentSkillLevel + 1));
-				player.setAttribute("skillPoints", (skillPoints - 1));
+				Globals.player.setAttribute(skillName, (currentSkillLevel + 1));
+				Globals.player.setAttribute("skillPoints", (skillPoints - 1));
 			}
 		} else {
 			if(currentSkillLevel > 0) {
 				// Remove a skill point from the associated skill.
-				player.setAttribute(skillName, (currentSkillLevel - 1));
-				player.setAttribute("skillPoints", (skillPoints + 1));
+				Globals.player.setAttribute(skillName, (currentSkillLevel - 1));
+				Globals.player.setAttribute("skillPoints", (skillPoints + 1));
 			}
 		}
 		
 		AssetManager.getManager().getSound("point_buy").play();
 	}
-
-	@Override
-	public void update(GameState gs, long cTime, int delta) {
-		// Shouldn't need to do anything here...............
-	}
-
-	@Override
-	public void render(Graphics g, long cTime) {
-		Image button = AssetManager.getManager().getImage(increase ? "GZS_SkillUpButton" : "GZS_SkillDownButton" );
-		if(button != null) g.drawImage(button, pos.x, pos.y);
-	}
 	
+	@Override
 	public boolean inBounds(float x, float y) {
-		return ((x > pos.x) && (y > pos.y) && 
-				(x < (pos.x + SIZE)) && (y < (pos.y + SIZE)));
+		return ((x > position.x) && (y > position.y) && 
+				(x < (position.x + size.x)) && (y < (position.y + size.y)));
 	}
 
 	@Override

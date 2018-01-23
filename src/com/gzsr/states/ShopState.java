@@ -18,6 +18,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.ui.TransactionButton;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 
@@ -26,9 +27,11 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private static final float CONTAINER_WIDTH = 300.0f;
 	private static final float CONTAINER_HEIGHT = Globals.HEIGHT - 110.0f;
+	
 	private static final Pair<Float> INVENTORY_CONTAINER = new Pair<Float>(10.0f, 64.0f);
 	private static final Pair<Float> SHOP_CONTAINER = new Pair<Float>((Globals.WIDTH - CONTAINER_WIDTH - 10.0f), 64.0f);
 	private static final Pair<Float> ITEM_DESC = new Pair<Float>((CONTAINER_WIDTH + 10.0f), 64.0f);
+	private static final Pair<Float> ITEM_PORTRAIT = new Pair<Float>(((Globals.WIDTH / 2) - 48.0f), 104.0f);
 	
 	private static final int SHOP_ROWS = 6;
 	private static final int SHOP_COLS = 3;
@@ -39,6 +42,9 @@ public class ShopState extends BasicGameState implements InputListener {
 	private Rectangle [][] shopBoxes;
 	private Pair<Integer> selected;
 	private boolean selectedInInventory;
+	
+	private TransactionButton buyButton;
+	private TransactionButton sellButton;
 	
 	private int inventorySize;
 	private boolean exit;
@@ -57,6 +63,9 @@ public class ShopState extends BasicGameState implements InputListener {
 		inventoryBoxes = null;
 		selected = null;
 		selectedInInventory = false;
+		
+		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 58.0f), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.BUY);
+		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 58.0f), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.SELL);
 		
 		inventorySize = 0;
 		exit = false;
@@ -137,14 +146,8 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		// Draw the item description text.
 		String description = "No Item Selected";
-		if(selected != null) {
-			if(selectedInInventory) {
-				Entity item = Globals.player.getInventory().getItem((SHOP_COLS * selected.y) + selected.x);
-				if(item != null) description = item.getName();
-			} else {
-				
-			}
-		}
+		Entity item = getSelectedItem();
+		if((selected != null) && (item != null)) description = item.getName();
 		
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 		float h = g.getFont().getLineHeight();
@@ -152,6 +155,41 @@ public class ShopState extends BasicGameState implements InputListener {
 							 (int)ITEM_DESC.x.floatValue(), 
 							 (int)(ITEM_DESC.y.floatValue() + (h / 2)), 
 							 (int)(Globals.WIDTH - ITEM_DESC.x - CONTAINER_WIDTH - 10.0f));
+		
+		// Draw the item portrait.
+		g.setColor(Color.black);
+		g.fillRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
+		
+		if((selected != null) && (item != null)) {
+			if(item instanceof Weapon) {
+				Weapon w = (Weapon)item;
+				Image img = w.getInventoryIcon();
+				img.draw(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), 2.0f);
+			}
+			// TODO: Add cases for other kinds of items.
+		}
+		
+		g.setColor(Color.white);
+		g.drawRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
+		
+		// Draw the transaction buttons.
+		buyButton.render(g, 0L);
+		sellButton.render(g, 0L);
+	}
+	
+	private Entity getSelectedItem() {
+		Entity item = null;
+		
+		if(selected != null) {
+			if(selectedInInventory) {
+				return Globals.player.getInventory().getItem((selected.y * SHOP_COLS) + selected.x);
+			} else {
+				// FIXME: When shop inventory exists, return item from shop inventory instead.
+				return null;
+			}
+		}
+		
+		return item;
 	}
 	
 	private boolean findSelectedItem(int x, int y) {

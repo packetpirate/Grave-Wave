@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.gfx.ui.MenuButton;
+import com.gzsr.misc.Pair;
 
 public class GameOverState extends BasicGameState implements InputListener {
 	public static final int ID = 4;
@@ -28,8 +29,8 @@ public class GameOverState extends BasicGameState implements InputListener {
 		assets = AssetManager.getManager();
 		
 		UnicodeFont uni = assets.getFont("manaspc");
-		menuButton = new MenuButton( ((Globals.WIDTH / 2) - (uni.getWidth("Main Menu") / 2)), (Globals.HEIGHT - 200.0f), "Main Menu");
-		exitButton = new MenuButton( ((Globals.WIDTH / 2) - (uni.getWidth("Give Up") / 2)), (Globals.HEIGHT - 150.0f), "Give Up");
+		menuButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Main Menu") / 2)), (Globals.HEIGHT - 200.0f)), "Main Menu");
+		exitButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Give Up") / 2)), (Globals.HEIGHT - 150.0f)), "Give Up");
 		
 		time = 0L;
 	}
@@ -38,7 +39,7 @@ public class GameOverState extends BasicGameState implements InputListener {
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		time += (long)delta;
 		
-		if(menuButton.contains(Globals.mouse)) {
+		if(menuButton.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
 			menuButton.mouseEnter();
 			if(Globals.mouse.isMouseDown()) {
 				Globals.resetInputs();
@@ -46,7 +47,7 @@ public class GameOverState extends BasicGameState implements InputListener {
 			}
 		} else menuButton.mouseExit();
 		
-		if(exitButton.contains(Globals.mouse)) {
+		if(exitButton.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
 			exitButton.mouseEnter();
 			if(Globals.mouse.isMouseDown()) gc.exit();
 		} else exitButton.mouseExit();

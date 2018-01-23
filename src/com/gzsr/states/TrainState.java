@@ -206,7 +206,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		while(it.hasNext()) {
 			SkillButton sk = it.next();
 			if(sk.inBounds(x, y)) {
-				sk.click(Globals.player);
+				sk.click();
 				break;
 			}
 		}
