@@ -73,6 +73,11 @@ public class AssaultRifle extends Weapon {
 		muzzleFlash.restart(cTime);
 		fireSound.play();
 	}
+	
+	@Override
+	public double getDamage() {
+		return AssaultRifle.DAMAGE;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -80,6 +85,11 @@ public class AssaultRifle extends Weapon {
 		return ((elapsed < AssaultRifle.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return AssaultRifle.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

@@ -50,11 +50,21 @@ public class SentryWeapon extends Weapon {
 	}
 
 	@Override
+	public double getDamage() {
+		return Turret.getTotalDamage(); 
+	}
+	
+	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((elapsed < SentryWeapon.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return SentryWeapon.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

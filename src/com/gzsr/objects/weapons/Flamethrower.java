@@ -69,11 +69,21 @@ public class Flamethrower extends Weapon {
 	}
 	
 	@Override
+	public double getDamage() {
+		return (Flamethrower.EMBER_DAMAGE * Flamethrower.EMBER_COUNT);
+	}
+	
+	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((elapsed < Flamethrower.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return Flamethrower.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

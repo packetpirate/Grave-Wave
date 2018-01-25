@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -20,6 +21,7 @@ import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.ui.TransactionButton;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
 
 public class ShopState extends BasicGameState implements InputListener {
@@ -64,8 +66,8 @@ public class ShopState extends BasicGameState implements InputListener {
 		selected = null;
 		selectedInInventory = false;
 		
-		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 58.0f), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.BUY);
-		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 58.0f), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.SELL);
+		buyButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (Globals.HEIGHT - 128.0f)), TransactionButton.Type.BUY);
+		sellButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.SELL);
 		
 		inventorySize = 0;
 		exit = false;
@@ -165,6 +167,68 @@ public class ShopState extends BasicGameState implements InputListener {
 				Weapon w = (Weapon)item;
 				Image img = w.getInventoryIcon();
 				img.draw(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), 2.0f);
+				
+				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small"); 
+				g.setFont(f);
+				float barWidth = 157.0f;
+				float barHeight = 50.0f;
+				float barX = ((Globals.WIDTH / 2) - (barWidth / 2));
+				float barY = (Globals.HEIGHT - ((barHeight * 3.0f) + (f.getLineHeight() * 3.0f) + 35.0f) - 198.0f);
+				// Draw damage rating.
+				{
+					FontUtils.drawCenter(f, "Damage", (int)barX, (int)(barY - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
+					
+					g.setColor(Color.black);
+					g.fillRect(barX, barY, barWidth, barHeight);
+					g.setColor(Color.white);
+					g.drawRect(barX, barY, barWidth, barHeight);
+					
+					int pips = ItemConstants.getDamageClass(w.getDamage()).getPipCount();
+					for(int p = 0; p < pips; p++) {
+						g.setColor(Color.red);
+						g.fillRect((barX + (p * 15.0f) + 5.0f), (barY + 5.0f), 10.0f, (barHeight - 10.0f));
+						g.setColor(new Color(0x550000));
+						g.drawRect((barX + (p * 15.0f) + 5.0f), (barY + 5.0f), 10.0f, (barHeight - 10.0f));
+					}
+				}
+				
+				// Draw rate of fire rating.
+				{
+					float y = (barY + f.getLineHeight() + barHeight + 15.0f);
+					FontUtils.drawCenter(f, "Rate of Fire", (int)barX, (int)(y - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
+					
+					g.setColor(Color.black);
+					g.fillRect(barX, y, barWidth, barHeight);
+					g.setColor(Color.white);
+					g.drawRect(barX, y, barWidth, barHeight);
+					
+					int pips = ItemConstants.getRateOfFireClass(w.getCooldown()).getPipCount();
+					for(int p = 0; p < pips; p++) {
+						g.setColor(Color.red);
+						g.fillRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
+						g.setColor(new Color(0x550000));
+						g.drawRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
+					}
+				}
+				
+				// Draw reload time rating.
+				{
+					float y = (barY + ((f.getLineHeight() + barHeight + 15.0f) * 2.0f));
+					FontUtils.drawCenter(f, "Reload Time", (int)barX, (int)(y - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
+					
+					g.setColor(Color.black);
+					g.fillRect(barX, y, barWidth, barHeight);
+					g.setColor(Color.white);
+					g.drawRect(barX, y, barWidth, barHeight);
+					
+					int pips = ItemConstants.getReloadTimeClass(w.getReloadTime()).getPipCount();
+					for(int p = 0; p < pips; p++) {
+						g.setColor(Color.red);
+						g.fillRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
+						g.setColor(new Color(0x550000));
+						g.drawRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
+					}
+				}
 			}
 			// TODO: Add cases for other kinds of items.
 		}

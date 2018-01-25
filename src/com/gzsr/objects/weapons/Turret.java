@@ -161,6 +161,10 @@ public class Turret extends Projectile {
 		fireSound.play();
 	}
 	
+	public static double getTotalDamage() {
+		return Turret.PROJECTILE_DAMAGE;
+	}
+	
 	@Override
 	public boolean isAlive(long cTime) {
 		long elapsed = cTime - created;

@@ -124,10 +124,20 @@ public class BowAndArrow extends Weapon {
 	public boolean isChargedWeapon() {
 		return true;
 	}
+	
+	@Override
+	public double getDamage() {
+		return BowAndArrow.DAMAGE;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
 		return false;
+	}
+	
+	@Override
+	public long getReloadTime() {
+		return 0L;
 	}
 
 	@Override

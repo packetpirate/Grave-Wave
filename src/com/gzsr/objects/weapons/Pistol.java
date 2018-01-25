@@ -87,9 +87,19 @@ public class Pistol extends Weapon {
 	}
 	
 	@Override
+	public double getDamage() {
+		return Pistol.DAMAGE;
+	}
+	
+	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((elapsed < Pistol.RELOAD_TIME) && reloading);
+	}
+	
+	@Override
+	public long getReloadTime() {
+		return Pistol.RELOAD_TIME;
 	}
 	
 	@Override

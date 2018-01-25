@@ -79,6 +79,11 @@ public class Shotgun extends Weapon {
 		muzzleFlash.restart(cTime);
 		fireSound.play();
 	}
+	
+	@Override
+	public double getDamage() {
+		return Shotgun.DAMAGE;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -86,6 +91,11 @@ public class Shotgun extends Weapon {
 		return ((elapsed < Shotgun.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return Shotgun.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

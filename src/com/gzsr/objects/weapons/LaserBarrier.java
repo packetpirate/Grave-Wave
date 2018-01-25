@@ -98,6 +98,11 @@ public class LaserBarrier extends Weapon {
 		boolean inRange = notUnpaired ? true : ((Calculate.Distance(Globals.player.getPosition(), lastNode.getPosition())) <= (LaserBarrier.BARRIER_RANGE / 2));
 		return super.canFire(cTime) && (notUnpaired || inRange);
 	}
+	
+	@Override
+	public double getDamage() {
+		return 0.0;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -105,6 +110,11 @@ public class LaserBarrier extends Weapon {
 		return ((elapsed < LaserBarrier.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return LaserBarrier.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

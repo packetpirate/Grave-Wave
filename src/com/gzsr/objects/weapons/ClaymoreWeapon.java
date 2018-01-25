@@ -50,6 +50,11 @@ public class ClaymoreWeapon extends Weapon {
 		
 		fireSound.play();
 	}
+	
+	@Override
+	public double getDamage() {
+		return Claymore.getTotalDamage();
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -57,6 +62,11 @@ public class ClaymoreWeapon extends Weapon {
 		return ((elapsed < ClaymoreWeapon.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return ClaymoreWeapon.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;

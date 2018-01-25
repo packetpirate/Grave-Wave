@@ -127,9 +127,19 @@ public class BigRedButton extends Weapon {
 	}
 
 	@Override
+	public double getDamage() {
+		return BigRedButton.DAMAGE;
+	}
+	
+	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((elapsed < BigRedButton.RELOAD_TIME) && reloading);
+	}
+	
+	@Override
+	public long getReloadTime() {
+		return BigRedButton.RELOAD_TIME;
 	}
 
 	@Override

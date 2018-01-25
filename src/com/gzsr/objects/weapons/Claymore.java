@@ -121,6 +121,10 @@ public class Claymore extends Projectile {
 		}
 	}
 	
+	public static double getTotalDamage() {
+		return (Claymore.SHRAPNEL_DAMAGE * Claymore.SHRAPNEL_COUNT);
+	}
+	
 	@Override
 	public boolean isAlive(long cTime) {
 		return (!exploded || !shrapnel.isEmpty());

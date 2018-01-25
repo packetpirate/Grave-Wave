@@ -76,6 +76,11 @@ public class GrenadeLauncher extends Weapon {
 		muzzleFlash.restart(cTime);
 		fireSound.play();
 	}
+	
+	@Override
+	public double getDamage() {
+		return GrenadeLauncher.DAMAGE;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -83,6 +88,11 @@ public class GrenadeLauncher extends Weapon {
 		return ((elapsed < GrenadeLauncher.RELOAD_TIME) && reloading);
 	}
 
+	@Override
+	public long getReloadTime() {
+		return GrenadeLauncher.RELOAD_TIME;
+	}
+	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
