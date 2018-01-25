@@ -66,8 +66,8 @@ public class ShopState extends BasicGameState implements InputListener {
 		selected = null;
 		selectedInInventory = false;
 		
-		buyButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (Globals.HEIGHT - 128.0f)), TransactionButton.Type.BUY);
-		sellButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (Globals.HEIGHT - 70.0f)), TransactionButton.Type.SELL);
+		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.BUY);
+		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.SELL);
 		
 		inventorySize = 0;
 		exit = false;
@@ -147,13 +147,13 @@ public class ShopState extends BasicGameState implements InputListener {
 		g.drawRect(SHOP_CONTAINER.x, SHOP_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 		
 		// Draw the item description text.
-		String description = "No Item Selected";
+		String itemName = "No Item Selected";
 		Entity item = getSelectedItem();
-		if((selected != null) && (item != null)) description = item.getName();
+		if((selected != null) && (item != null)) itemName = item.getName();
 		
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 		float h = g.getFont().getLineHeight();
-		FontUtils.drawCenter(g.getFont(), description,
+		FontUtils.drawCenter(g.getFont(), itemName,
 							 (int)ITEM_DESC.x.floatValue(), 
 							 (int)(ITEM_DESC.y.floatValue() + (h / 2)), 
 							 (int)(Globals.WIDTH - ITEM_DESC.x - CONTAINER_WIDTH - 10.0f));
@@ -231,14 +231,14 @@ public class ShopState extends BasicGameState implements InputListener {
 				}
 			}
 			// TODO: Add cases for other kinds of items.
+			
+			// Draw the transaction buttons.
+			buyButton.render(g, 0L);
+			sellButton.render(g, 0L);
 		}
 		
 		g.setColor(Color.white);
 		g.drawRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
-		
-		// Draw the transaction buttons.
-		buyButton.render(g, 0L);
-		sellButton.render(g, 0L);
 	}
 	
 	private Entity getSelectedItem() {

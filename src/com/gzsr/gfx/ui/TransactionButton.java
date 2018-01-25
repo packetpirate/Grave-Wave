@@ -20,10 +20,10 @@ public class TransactionButton extends Button {
 		this.type = type_;
 		switch(type_) {
 			case BUY:
-				image = "GZS_BuyButton";
+				image = "GZS_BuyButton2";
 				break;
 			case SELL:
-				image = "GZS_SellButton";
+				image = "GZS_SellButton2";
 				break;
 			default:
 				image = null;
