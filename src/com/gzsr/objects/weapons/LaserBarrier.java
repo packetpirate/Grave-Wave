@@ -17,6 +17,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class LaserBarrier extends Weapon {
+	private static final int PRICE = 1500;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 2;
 	private static final int START_CLIPS = 4;
@@ -125,6 +126,11 @@ public class LaserBarrier extends Weapon {
 	public String getName() {
 		return "Laser Barrier";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "For those who need a break from fighting zombies to recuperate. Stops the enemies in their tracks.";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
@@ -149,5 +155,10 @@ public class LaserBarrier extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.LASERNODE;
+	}
+
+	@Override
+	public int getPrice() {
+		return LaserBarrier.PRICE;
 	}
 }

@@ -137,4 +137,9 @@ public class Upchuck extends Enemy {
 	public String getName() {
 		return "Upchuck";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Upchuck";
+	}
 }

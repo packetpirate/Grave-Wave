@@ -48,4 +48,9 @@ public class Rotdog extends Enemy {
 	public String getName() {
 		return "Rotdog";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Rotdog";
+	}
 }

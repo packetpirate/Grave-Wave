@@ -63,4 +63,9 @@ public class TooltipText implements Entity {
 	public String getName() {
 		return "Tooltip";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Tooltip Text";
+	}
 }

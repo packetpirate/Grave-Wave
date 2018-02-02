@@ -15,6 +15,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Flamethrower extends Weapon {
+	private static final int PRICE = 3000;
 	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;
 	private static final int START_CLIPS = 3;
@@ -109,4 +110,14 @@ public class Flamethrower extends Weapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.FLAMETHROWER; }
+
+	@Override
+	public int getPrice() {
+		return Flamethrower.PRICE;
+	}
+	
+	@Override
+	public String getDescription() {
+		return "A long-barreled, gas-powered weapon that emits a stream of hellfire to roast your enemies.";
+	}
 }

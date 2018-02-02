@@ -35,4 +35,9 @@ public class SpeedItem extends Item {
 	public String getName() {
 		return "Speed Up";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Speed Up";
+	}
 }

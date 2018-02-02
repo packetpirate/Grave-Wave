@@ -19,6 +19,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class BigRedButton extends Weapon {
+	private static final int PRICE = 10_000;
 	private static final long COOLDOWN = 15000L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
@@ -154,6 +155,11 @@ public class BigRedButton extends Weapon {
 	}
 	
 	@Override
+	public String getDescription() {
+		return "A mysterious featureless box with a large red button on it... I wonder what it does.";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(BigRedButton.ICON_NAME);
 	}
@@ -176,6 +182,11 @@ public class BigRedButton extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return null;
+	}
+
+	@Override
+	public int getPrice() {
+		return BigRedButton.PRICE;
 	}
 
 }

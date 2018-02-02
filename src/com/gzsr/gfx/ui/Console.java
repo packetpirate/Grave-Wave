@@ -270,4 +270,9 @@ public class Console implements Entity {
 	public String getName() {
 		return "Console";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Console";
+	}
 }

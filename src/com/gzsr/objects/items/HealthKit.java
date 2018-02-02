@@ -36,4 +36,9 @@ public class HealthKit extends Item {
 	public String getName() {
 		return "Health Kit";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Health Kit";
+	}
 }

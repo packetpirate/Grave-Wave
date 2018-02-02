@@ -29,6 +29,11 @@ public abstract class Button implements Entity {
 	public String getName() {
 		return "Button";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Button";
+	}
 
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
@@ -40,6 +45,8 @@ public abstract class Button implements Entity {
 		// To be overridden.
 	}
 
+	public Pair<Float> getPosition() { return position; }
+	public Pair<Float> getSize() { return size; }
 	public abstract void click();
 	public abstract boolean inBounds(float x, float y);
 }

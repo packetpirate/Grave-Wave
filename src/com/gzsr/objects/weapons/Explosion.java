@@ -113,4 +113,9 @@ public class Explosion implements Entity {
 	public String getName() {
 		return "Explosion";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Explosion";
+	}
 }

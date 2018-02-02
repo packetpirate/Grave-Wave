@@ -38,4 +38,9 @@ public class AmmoCrate extends Item {
 	public String getName() {
 		return "Ammo Crate";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Ammo Crate";
+	}
 }

@@ -49,4 +49,8 @@ public class TinyZumby extends Enemy {
 		return "Tiny Zumby";
 	}
 
+	@Override
+	public String getDescription() {
+		return "Tiny Zumby";
+	}
 }

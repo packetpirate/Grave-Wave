@@ -48,4 +48,9 @@ public class Zumby extends Enemy {
 	public String getName() {
 		return "Zumby";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Zumby";
+	}
 }

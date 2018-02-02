@@ -34,4 +34,9 @@ public class InvulnerableItem extends Item {
 	public String getName() {
 		return "Invulnerability";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Invulnerability";
+	}
 }

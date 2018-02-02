@@ -16,6 +16,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Shotgun extends Weapon {
+	private static final int PRICE = 1200;
 	private static final long COOLDOWN = 1200L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 5;
@@ -108,6 +109,11 @@ public class Shotgun extends Weapon {
 	}
 	
 	@Override
+	public String getDescription() {
+		return "A redneck's best friend. Rip the zombies a new one!";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(Shotgun.ICON_NAME);
 	}
@@ -128,5 +134,10 @@ public class Shotgun extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.SHOTGUN;
+	}
+
+	@Override
+	public int getPrice() {
+		return Shotgun.PRICE;
 	}
 }

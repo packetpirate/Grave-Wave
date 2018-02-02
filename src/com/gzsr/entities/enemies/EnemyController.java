@@ -189,4 +189,9 @@ public class EnemyController implements Entity {
 	public String getName() {
 		return "Enemy Controller";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Enemy Controller";
+	}
 }

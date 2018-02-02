@@ -58,6 +58,7 @@ public class Calculate {
 	 * @param color The color to use when rendering the text.
 	 */
 	public static void TextWrap(Graphics g, String text, Font font, float x, float y, float maxWidth, boolean center, Color color) {
+		// TODO: Modify algorithm so words do not break, and instead, get pushed to next line.
 		float charWidth = font.getWidth("A"); // How wide are characters in this font?
 		float lines = (charWidth * text.length()) / maxWidth; // How many lines will be needed to draw this string?
 		

@@ -16,6 +16,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class AssaultRifle extends Weapon {
+	private static final int PRICE = 1000;
 	private static final long COOLDOWN = 100L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
@@ -102,6 +103,11 @@ public class AssaultRifle extends Weapon {
 	}
 	
 	@Override
+	public String getDescription() {
+		return "A rapid-fire automatic weapon with the stopping power to mow down an entire wave of zombies in seconds.";
+	}
+	
+	@Override
 	public Image getInventoryIcon() {
 		return AssetManager.getManager().getImage(AssaultRifle.ICON_NAME);
 	}
@@ -122,5 +128,10 @@ public class AssaultRifle extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.ASSAULT;
+	}
+
+	@Override
+	public int getPrice() {
+		return AssaultRifle.PRICE;
 	}
 }

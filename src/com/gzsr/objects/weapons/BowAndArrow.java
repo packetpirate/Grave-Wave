@@ -15,6 +15,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class BowAndArrow extends Weapon {
+	private static final int PRICE = 2000;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
@@ -149,6 +150,11 @@ public class BowAndArrow extends Weapon {
 	public String getName() {
 		return "Bow & Arrow";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "A primitive weapon that takes a little bit of time to fire, but is well worth the wait.";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
@@ -173,6 +179,11 @@ public class BowAndArrow extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.ARROW;
+	}
+
+	@Override
+	public int getPrice() {
+		return BowAndArrow.PRICE;
 	}
 
 }

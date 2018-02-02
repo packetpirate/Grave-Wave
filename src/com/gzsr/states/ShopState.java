@@ -1,5 +1,8 @@
 package com.gzsr.states;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -20,6 +23,7 @@ import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.ui.TransactionButton;
+import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
@@ -39,6 +43,8 @@ public class ShopState extends BasicGameState implements InputListener {
 	private static final int SHOP_COLS = 3;
 	
 	private static final float ITEM_BOX_SIZE = 96.0f;
+	
+	private static final double SELL_BACK_VALUE = 0.6;
 	
 	private Rectangle [][] inventoryBoxes;
 	private Rectangle [][] shopBoxes;
@@ -233,8 +239,31 @@ public class ShopState extends BasicGameState implements InputListener {
 			// TODO: Add cases for other kinds of items.
 			
 			// Draw the transaction buttons.
-			buyButton.render(g, 0L);
-			sellButton.render(g, 0L);
+			if(selectedInInventory) {
+				sellButton.render(g, 0L);
+				
+				String cost = "Error";
+				if(item instanceof Weapon) cost = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getPrice() * SELL_BACK_VALUE));
+				
+				g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+				FontUtils.drawCenter(g.getFont(), cost, (int)(CONTAINER_WIDTH + 10.0f), 
+									 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
+									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
+			} else {
+				buyButton.render(g, 0L);
+				
+				String cost = "Error";
+				if(item instanceof Weapon) cost = "$" + NumberFormat.getInstance(Locale.US).format(((Weapon)item).getPrice());
+				
+				g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+				FontUtils.drawCenter(g.getFont(), cost, (int)((Globals.WIDTH / 2) + 48.0f), 
+									 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
+									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
+			}
+			
+			// Draw the item description text.
+			String description = item.getDescription();
+			Calculate.TextWrap(g, description, AssetManager.getManager().getFont("PressStart2P-Regular_small"), ((Globals.WIDTH / 2) - 150.0f), (ITEM_PORTRAIT.y + 135.0f), 300.0f, true, Color.white);
 		}
 		
 		g.setColor(Color.white);

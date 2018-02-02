@@ -126,4 +126,9 @@ public class Particle implements Entity {
 	public String getName() {
 		return "Particle";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Particle";
+	}
 }

@@ -15,6 +15,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends Weapon {
+	private static final int PRICE = 800;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 4;
@@ -103,6 +104,11 @@ public class GrenadeLauncher extends Weapon {
 	public String getName() {
 		return "Grenade Launcher";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "A tube-barreled weapon with a revolving chamber full of grenades so you can rain concussive blasts of fire upon the undead horde.";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
@@ -127,5 +133,10 @@ public class GrenadeLauncher extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.GRENADE;
+	}
+
+	@Override
+	public int getPrice() {
+		return GrenadeLauncher.PRICE;
 	}
 }

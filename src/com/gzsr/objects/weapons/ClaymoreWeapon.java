@@ -15,6 +15,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class ClaymoreWeapon extends Weapon {
+	private static final int PRICE = 1200;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;
@@ -77,6 +78,11 @@ public class ClaymoreWeapon extends Weapon {
 	public String getName() {
 		return "Claymore";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "A stationary motion-activated explosive that sends shrapnel hurtling through the air to rip your enemies to shreds.";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
@@ -114,5 +120,10 @@ public class ClaymoreWeapon extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.CLAYMORE;
+	}
+
+	@Override
+	public int getPrice() {
+		return ClaymoreWeapon.PRICE;
 	}
 }

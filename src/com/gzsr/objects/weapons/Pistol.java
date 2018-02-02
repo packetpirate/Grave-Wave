@@ -114,6 +114,11 @@ public class Pistol extends Weapon {
 	}
 	
 	@Override
+	public String getDescription() {
+		return "A standard issue pistol. Nothing more, nothing less.";
+	}
+	
+	@Override
 	public Image getInventoryIcon() { 
 		return AssetManager.getManager().getImage(Pistol.ICON_NAME); 
 	}
@@ -132,5 +137,10 @@ public class Pistol extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.HANDGUN;
+	}
+
+	@Override
+	public int getPrice() {
+		return 0;
 	}
 }

@@ -394,4 +394,9 @@ public class Player implements Entity {
 	public String getName() {
 		return "Player";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Player";
+	}
 }

@@ -89,4 +89,9 @@ public class Gasbag extends Enemy {
 	public String getName() {
 		return "Gasbag";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Gasbag";
+	}
 }

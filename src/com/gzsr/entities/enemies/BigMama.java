@@ -107,4 +107,9 @@ public class BigMama extends Enemy {
 	public String getName() {
 		return "Big Mama";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Big Mama";
+	}
 }

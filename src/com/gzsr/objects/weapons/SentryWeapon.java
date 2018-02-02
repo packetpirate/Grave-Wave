@@ -14,6 +14,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
 
 public class SentryWeapon extends Weapon {
+	private static final int PRICE = 4000;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
@@ -75,6 +76,11 @@ public class SentryWeapon extends Weapon {
 	public String getName() {
 		return "Sentry Gun";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Feeling overwhelmed and need some automated assistance? Unleash a second, robotic apocalypse on the undead horde.";
+	}
 
 	@Override
 	public Image getInventoryIcon() {
@@ -112,6 +118,11 @@ public class SentryWeapon extends Weapon {
 	@Override
 	public ProjectileType getProjectile() {
 		return ProjectileType.TURRET;
+	}
+
+	@Override
+	public int getPrice() {
+		return SentryWeapon.PRICE;
 	}
 
 }

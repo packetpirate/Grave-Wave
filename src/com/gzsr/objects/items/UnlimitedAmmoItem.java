@@ -34,4 +34,9 @@ public class UnlimitedAmmoItem extends Item {
 	public String getName() {
 		return "Unlimited Ammo";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "Unlimited Ammo";
+	}
 }

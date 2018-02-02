@@ -114,6 +114,7 @@ public abstract class Weapon implements Entity {
 		equipped = false;
 	}
 	
+	public abstract int getPrice();
 	public abstract double getDamage();
 	public abstract boolean isReloading(long cTime);
 	public abstract double getReloadTime(long cTime);
