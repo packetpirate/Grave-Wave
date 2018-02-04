@@ -96,17 +96,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		g.setColor(Color.darkGray);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		
-		// Draw the header and footer.
-		g.setColor(Color.white);
-		g.drawLine(10.0f, 36.0f, (Globals.WIDTH - 10.0f), 36.0f);
-		g.drawLine(10.0f, (Globals.HEIGHT - 36.0f), (Globals.WIDTH - 10.0f), (Globals.HEIGHT - 36.0f));
-		
-		// Draw the header text.
-		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
-		g.drawString("Inventory", 10.0f, 20.0f);
-		
-		float shopTextWidth = g.getFont().getWidth("Item Shop");
-		g.drawString("Item Shop", (Globals.WIDTH - shopTextWidth -  10.0f), 20.0f);
+		drawHeaderAndFooter(g);
 		
 		// Draw the inventory container.
 		g.setColor(new Color(0x2e2e2e));
@@ -268,6 +258,25 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		g.setColor(Color.white);
 		g.drawRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
+		
+		// Draw the player's current cash.
+		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Globals.player.getIntAttribute("money"));
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
+		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 110.0f), 300, Color.white);
+	}
+	
+	private void drawHeaderAndFooter(Graphics g) {
+		// Draw the header and footer.
+		g.setColor(Color.white);
+		g.drawLine(10.0f, 36.0f, (Globals.WIDTH - 10.0f), 36.0f);
+		g.drawLine(10.0f, (Globals.HEIGHT - 36.0f), (Globals.WIDTH - 10.0f), (Globals.HEIGHT - 36.0f));
+		
+		// Draw the header text.
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
+		g.drawString("Inventory", 10.0f, 20.0f);
+		
+		float shopTextWidth = g.getFont().getWidth("Item Shop");
+		g.drawString("Item Shop", (Globals.WIDTH - shopTextWidth -  10.0f), 20.0f);
 	}
 	
 	private Entity getSelectedItem() {

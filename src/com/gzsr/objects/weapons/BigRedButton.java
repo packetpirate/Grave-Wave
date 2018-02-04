@@ -156,7 +156,7 @@ public class BigRedButton extends Weapon {
 	
 	@Override
 	public String getDescription() {
-		return "A mysterious featureless box with a large red button on it... I wonder what it does.";
+		return "A mysterious featureless box with a large red button on it... I wonder what it does?";
 	}
 	
 	@Override

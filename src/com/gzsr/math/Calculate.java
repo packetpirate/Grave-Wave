@@ -58,9 +58,7 @@ public class Calculate {
 	 * @param color The color to use when rendering the text.
 	 */
 	public static void TextWrap(Graphics g, String text, Font font, float x, float y, float maxWidth, boolean center, Color color) {
-		// TODO: Modify algorithm so words do not break, and instead, get pushed to next line.
 		float charWidth = font.getWidth("A"); // How wide are characters in this font?
-		float lines = (charWidth * text.length()) / maxWidth; // How many lines will be needed to draw this string?
 		
 		g.setColor(color);
 		g.setFont(font);
@@ -68,11 +66,18 @@ public class Calculate {
 		int i = 0; // The current beginning index of the line substring from the text.
 		int line = 0; // The current line - 1.
 		int charsPerLine = (int)(maxWidth / charWidth); // How many characters can fit on each line?
-		while(lines > 0.0f) {
+		while(i < (text.length() - 1)) {
 			// Choose which characters will be drawn on this line.
 			String substr = "";
-			if((i + charsPerLine) <= text.length()) {
-				substr = text.substring(i, (i + charsPerLine));
+			
+			int nextBreak = Calculate.nextSpace(text, i, Math.min((i + charsPerLine), (text.length() - 1)));
+			int charsToGrab = charsPerLine;
+			if((nextBreak != -1) && (nextBreak - i) < charsPerLine) {
+				charsToGrab = (nextBreak - i);
+			}
+			
+			if((i + charsToGrab) <= text.length()) {
+				substr = text.substring(i, (i + charsToGrab));
 			} else {
 				substr = text.substring(i);
 			}
@@ -84,9 +89,25 @@ public class Calculate {
 			if(center) FontUtils.drawCenter(font, substr, (int)x, (int)cy, (int)maxWidth, color);
 			else g.drawString(substr, x, cy);
 			
-			i += charsPerLine;
+			i += charsToGrab;
 			line++;
-			lines -= 1.0f;
 		}
+	}
+	
+	private static int nextSpace(String text, int start, int end) {
+		int next = -1;
+		
+		if(end == (text.length() - 1)) {
+			return text.length();
+		}
+		
+		for(int c = end; c >= start; c--) {
+			if(text.charAt(c) == ' ') {
+				next = c;
+				break;
+			}
+		}
+		
+		return next;
 	}
 }
