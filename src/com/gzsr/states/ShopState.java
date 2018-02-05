@@ -25,6 +25,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.gfx.ui.TransactionButton;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
 
@@ -39,12 +40,19 @@ public class ShopState extends BasicGameState implements InputListener {
 	private static final Pair<Float> ITEM_DESC = new Pair<Float>((CONTAINER_WIDTH + 10.0f), 64.0f);
 	private static final Pair<Float> ITEM_PORTRAIT = new Pair<Float>(((Globals.WIDTH / 2) - 48.0f), 104.0f);
 	
+	private static final float SCROLL_SPEED = 20.0f;
+	
 	private static final int SHOP_ROWS = 6;
 	private static final int SHOP_COLS = 3;
 	
 	private static final float ITEM_BOX_SIZE = 96.0f;
 	
 	private static final double SELL_BACK_VALUE = 0.6;
+	
+	private Inventory shop;
+	
+	private Pair<Float> inventoryOrigin;
+	private Pair<Float> shopOrigin;
 	
 	private Rectangle [][] inventoryBoxes;
 	private Rectangle [][] shopBoxes;
@@ -59,6 +67,11 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
+		shop = new Inventory(30);
+		
+		inventoryOrigin = new Pair<Float>(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y);
+		shopOrigin = new Pair<Float>(SHOP_CONTAINER.x, SHOP_CONTAINER.y);
+		
 		shopBoxes = new Rectangle[SHOP_ROWS][SHOP_COLS];
 		for(int r = 0; r < SHOP_ROWS; r++) {
 			for(int c = 0; c < SHOP_COLS; c++) {
@@ -96,21 +109,53 @@ public class ShopState extends BasicGameState implements InputListener {
 		g.setColor(Color.darkGray);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		
-		drawHeaderAndFooter(g);
+		drawInventory(g);
 		
+		drawShop(g);
+		
+		drawShopCenter(g);
+		
+		drawHeaderAndFooter(g);
+	}
+	
+	private void drawHeaderAndFooter(Graphics g) {
+		// Draw featureless background boxes to hide item boxes in scroll.
+		g.setColor(Color.darkGray);
+		g.fillRect(10.0f, 0.0f, CONTAINER_WIDTH, (INVENTORY_CONTAINER.y - 1));
+		g.fillRect(10.0f, (INVENTORY_CONTAINER.y + CONTAINER_HEIGHT + 1), CONTAINER_WIDTH, (Globals.HEIGHT - INVENTORY_CONTAINER.y));
+		g.fillRect(SHOP_CONTAINER.x, 0.0f, CONTAINER_WIDTH, (SHOP_CONTAINER.y - 1));
+		g.fillRect(SHOP_CONTAINER.x, (SHOP_CONTAINER.y + CONTAINER_HEIGHT + 1), CONTAINER_WIDTH, (Globals.HEIGHT - SHOP_CONTAINER.y));
+		
+		// Draw the header and footer.
+		g.setColor(Color.white);
+		g.drawLine(10.0f, 36.0f, (Globals.WIDTH - 10.0f), 36.0f);
+		g.drawLine(10.0f, (Globals.HEIGHT - 36.0f), (Globals.WIDTH - 10.0f), (Globals.HEIGHT - 36.0f));
+		
+		// Draw the header text.
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
+		g.drawString("Inventory", 10.0f, 20.0f);
+		
+		float shopTextWidth = g.getFont().getWidth("Item Shop");
+		g.drawString("Item Shop", (Globals.WIDTH - shopTextWidth -  10.0f), 20.0f);
+		
+		// Draw the shop and inventory borders. This is so item boxes don't overlap border because of draw order.
+		g.setColor(Color.white);
+		g.drawRect(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+		g.drawRect(SHOP_CONTAINER.x, SHOP_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+	}
+	
+	private void drawInventory(Graphics g) {
 		// Draw the inventory container.
 		g.setColor(new Color(0x2e2e2e));
 		g.fillRect(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-		g.setColor(Color.white);
-		g.drawRect(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 		
 		// Draw the inventory boxes.
 		int cols = SHOP_COLS;
 		int rows = (int)(Math.ceil((float)inventorySize / (float)cols));
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < cols; c++) {
-				float x = (INVENTORY_CONTAINER.x + (c * ITEM_BOX_SIZE) + (c * 2.0f) + 3.0f);
-				float y = (INVENTORY_CONTAINER.y + (r * ITEM_BOX_SIZE) + (r * 2.0f) + 3.0f);
+				float x = (inventoryOrigin.x + (c * ITEM_BOX_SIZE) + (c * 2.0f) + 3.0f);
+				float y = (inventoryOrigin.y + (r * ITEM_BOX_SIZE) + (r * 2.0f) + 3.0f);
 				
 				g.setColor(Color.black);
 				g.fillRect(x, y, ITEM_BOX_SIZE, ITEM_BOX_SIZE);
@@ -123,6 +168,7 @@ public class ShopState extends BasicGameState implements InputListener {
 						Image img = w.getInventoryIcon();
 						img.draw(x, y, 2.0f);
 					}
+					// TODO: Add cases for other item types.
 				}
 				
 				if((selected != null) && selectedInInventory && (r == selected.y) && (c == selected.x)) {
@@ -135,13 +181,48 @@ public class ShopState extends BasicGameState implements InputListener {
 				g.setLineWidth(1.0f);
 			}
 		}
-		
+	}
+	
+	private void drawShop(Graphics g) {
 		// Draw the shop container.
 		g.setColor(new Color(0x2e2e2e));
 		g.fillRect(SHOP_CONTAINER.x, SHOP_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-		g.setColor(Color.white);
-		g.drawRect(SHOP_CONTAINER.x, SHOP_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 		
+		// Draw the inventory boxes.
+		int cols = SHOP_COLS;
+		int rows = (int)(Math.ceil((float)shop.getCapacity() / (float)cols));
+		for(int r = 0; r < rows; r++) {
+			for(int c = 0; c < cols; c++) {
+				float x = (shopOrigin.x + (c * ITEM_BOX_SIZE) + (c * 2.0f) + 3.0f);
+				float y = (shopOrigin.y + (r * ITEM_BOX_SIZE) + (r * 2.0f) + 3.0f);
+				
+				g.setColor(Color.black);
+				g.fillRect(x, y, ITEM_BOX_SIZE, ITEM_BOX_SIZE);
+				
+				// Draw the item image.
+				Entity item = shop.getItem((r * cols) + c);
+				if(item != null) {
+					if(item instanceof Weapon) {
+						Weapon w = (Weapon)item;
+						Image img = w.getInventoryIcon();
+						img.draw(x, y, 2.0f);
+					}
+					// TODO: Add cases for other item types.
+				}
+				
+				if((selected != null) && !selectedInInventory && (r == selected.y) && (c == selected.x)) {
+					g.setColor(Color.white);
+					g.setLineWidth(2.0f);
+				} else {
+					g.setColor(Color.darkGray);
+				}
+				g.drawRect(x, y, ITEM_BOX_SIZE, ITEM_BOX_SIZE);
+				g.setLineWidth(1.0f);
+			}
+		}
+	}
+	
+	private void drawShopCenter(Graphics g) {
 		// Draw the item description text.
 		String itemName = "No Item Selected";
 		Entity item = getSelectedItem();
@@ -265,20 +346,6 @@ public class ShopState extends BasicGameState implements InputListener {
 		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 110.0f), 300, Color.white);
 	}
 	
-	private void drawHeaderAndFooter(Graphics g) {
-		// Draw the header and footer.
-		g.setColor(Color.white);
-		g.drawLine(10.0f, 36.0f, (Globals.WIDTH - 10.0f), 36.0f);
-		g.drawLine(10.0f, (Globals.HEIGHT - 36.0f), (Globals.WIDTH - 10.0f), (Globals.HEIGHT - 36.0f));
-		
-		// Draw the header text.
-		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
-		g.drawString("Inventory", 10.0f, 20.0f);
-		
-		float shopTextWidth = g.getFont().getWidth("Item Shop");
-		g.drawString("Item Shop", (Globals.WIDTH - shopTextWidth -  10.0f), 20.0f);
-	}
-	
 	private Entity getSelectedItem() {
 		Entity item = null;
 		
@@ -338,6 +405,25 @@ public class ShopState extends BasicGameState implements InputListener {
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		if(button == 0) Globals.mouse.setMouseDown(false);
+	}
+	
+	@Override
+	public void mouseWheelMoved(int change) {
+		boolean mouseInInventory = ((Globals.mouse.getPosition().x >= INVENTORY_CONTAINER.x) && (Globals.mouse.getPosition().y >= INVENTORY_CONTAINER.y) && 
+									(Globals.mouse.getPosition().x <= (INVENTORY_CONTAINER.x + CONTAINER_WIDTH)) && (Globals.mouse.getPosition().y <= INVENTORY_CONTAINER.y + CONTAINER_HEIGHT));
+		boolean mouseInShop = ((Globals.mouse.getPosition().x >= SHOP_CONTAINER.x) && (Globals.mouse.getPosition().y >= SHOP_CONTAINER.y) && 
+				(Globals.mouse.getPosition().x <= (SHOP_CONTAINER.x + CONTAINER_WIDTH)) && (Globals.mouse.getPosition().y <= SHOP_CONTAINER.y + CONTAINER_HEIGHT));
+		
+		float scrollAmount = (change > 0) ? SCROLL_SPEED : -SCROLL_SPEED;
+		if(mouseInInventory) {
+			if((inventoryOrigin.y + scrollAmount) <= INVENTORY_CONTAINER.y) {
+				inventoryOrigin.y += scrollAmount;
+			}
+		} else if(mouseInShop) {
+			if((shopOrigin.y + scrollAmount) <= SHOP_CONTAINER.y) {
+				shopOrigin.y += scrollAmount;
+			}
+		}
 	}
 	
 	@Override
