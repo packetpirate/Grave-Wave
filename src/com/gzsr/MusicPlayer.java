@@ -30,13 +30,13 @@ public class MusicPlayer {
 	}
 	
 	public void pause() {
-		if((nowPlaying != null) && !nowPlaying.playing()) {
+		if((nowPlaying != null) && nowPlaying.playing()) {
 			nowPlaying.pause();
 		}
 	}
 	
 	public void resume() {
-		if((nowPlaying != null) && nowPlaying.playing()) {
+		if((nowPlaying != null) && !nowPlaying.playing()) {
 			nowPlaying.resume();
 		}
 	}

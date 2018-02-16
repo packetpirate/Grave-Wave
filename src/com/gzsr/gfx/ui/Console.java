@@ -177,6 +177,9 @@ public class Console implements Entity {
 						if(attributeName.equals("health")) {
 							double health = Double.parseDouble(tokens[2]);
 							Globals.player.setAttribute("health", health);
+						} else if(attributeName.equals("money")) {
+							int money = Integer.parseInt(tokens[2]);
+							Globals.player.setAttribute("money", money);
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
 						}

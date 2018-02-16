@@ -27,6 +27,15 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.ItemConstants;
+import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.BigRedButton;
+import com.gzsr.objects.weapons.BowAndArrow;
+import com.gzsr.objects.weapons.ClaymoreWeapon;
+import com.gzsr.objects.weapons.Flamethrower;
+import com.gzsr.objects.weapons.GrenadeLauncher;
+import com.gzsr.objects.weapons.LaserBarrier;
+import com.gzsr.objects.weapons.SentryWeapon;
+import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
 
 public class ShopState extends BasicGameState implements InputListener {
@@ -34,6 +43,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private static final float CONTAINER_WIDTH = 300.0f;
 	private static final float CONTAINER_HEIGHT = Globals.HEIGHT - 110.0f;
+	private static final int SHOP_SIZE = 30;
 	
 	private static final Pair<Float> INVENTORY_CONTAINER = new Pair<Float>(10.0f, 64.0f);
 	private static final Pair<Float> SHOP_CONTAINER = new Pair<Float>((Globals.WIDTH - CONTAINER_WIDTH - 10.0f), 64.0f);
@@ -42,14 +52,18 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private static final float SCROLL_SPEED = 20.0f;
 	
-	private static final int SHOP_ROWS = 6;
 	private static final int SHOP_COLS = 3;
+	private static final int SHOP_ROWS = SHOP_SIZE / SHOP_COLS;
 	
 	private static final float ITEM_BOX_SIZE = 96.0f;
 	
 	private static final double SELL_BACK_VALUE = 0.6;
 	
-	private Inventory shop;
+	private static Inventory SHOP;
+	public static Inventory getShop() {
+		if(SHOP == null) SHOP = new Inventory(SHOP_SIZE);
+		return SHOP;
+	}
 	
 	private Pair<Float> inventoryOrigin;
 	private Pair<Float> shopOrigin;
@@ -67,8 +81,6 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		shop = new Inventory(30);
-		
 		inventoryOrigin = new Pair<Float>(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y);
 		shopOrigin = new Pair<Float>(SHOP_CONTAINER.x, SHOP_CONTAINER.y);
 		
@@ -190,7 +202,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		// Draw the inventory boxes.
 		int cols = SHOP_COLS;
-		int rows = (int)(Math.ceil((float)shop.getCapacity() / (float)cols));
+		int rows = (int)(Math.ceil((float)getShop().getCapacity() / (float)cols));
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < cols; c++) {
 				float x = (shopOrigin.x + (c * ITEM_BOX_SIZE) + (c * 2.0f) + 3.0f);
@@ -200,7 +212,7 @@ public class ShopState extends BasicGameState implements InputListener {
 				g.fillRect(x, y, ITEM_BOX_SIZE, ITEM_BOX_SIZE);
 				
 				// Draw the item image.
-				Entity item = shop.getItem((r * cols) + c);
+				Entity item = getShop().getItem((r * cols) + c);
 				if(item != null) {
 					if(item instanceof Weapon) {
 						Weapon w = (Weapon)item;
@@ -353,8 +365,7 @@ public class ShopState extends BasicGameState implements InputListener {
 			if(selectedInInventory) {
 				return Globals.player.getInventory().getItem((selected.y * SHOP_COLS) + selected.x);
 			} else {
-				// FIXME: When shop inventory exists, return item from shop inventory instead.
-				return null;
+				return SHOP.getItem((selected.y * SHOP_COLS) + selected.x);
 			}
 		}
 		
@@ -398,6 +409,36 @@ public class ShopState extends BasicGameState implements InputListener {
 	public void mousePressed(int button, int x, int y) {
 		if(button == 0) Globals.mouse.setMouseDown(true);
 		
+		// Check to see if the buy/sell buttons were clicked.
+		if(selected != null) {
+			Entity item = getSelectedItem();
+			if(buyButton.inBounds(x, y) && !selectedInInventory) {
+				if(item instanceof Weapon) {
+					Weapon w = (Weapon)item;
+					int playerMoney = Globals.player.getIntAttribute("money"); 
+					if(playerMoney >= w.getPrice()) {
+						Globals.player.setAttribute("money", (playerMoney - w.getPrice()));
+						Globals.player.getInventory().addItem(w);
+						Globals.player.resetCurrentWeapon();
+						SHOP.dropItem(w.getName());
+						AssetManager.getManager().getSound("buy_ammo2").play();
+					}
+				}
+				// TODO: Add cases for other item types.
+			} else if(sellButton.inBounds(x, y) && selectedInInventory) {
+				if(item instanceof Weapon) {
+					Weapon w = (Weapon)item;
+					int sellValue = (int)(w.getPrice() * SELL_BACK_VALUE);
+					Globals.player.setAttribute("money", (Globals.player.getIntAttribute("money") + sellValue));
+					Globals.player.getInventory().dropItem(w.getName());
+					Globals.player.resetCurrentWeapon();
+					SHOP.addItem(w);
+					AssetManager.getManager().getSound("buy_ammo2").play();
+				}
+				// TODO: Add cases for other item types.
+			}
+		}
+		
 		// Check to see if we've clicked an item.
 		boolean itemClicked = findSelectedItem(x, y);
 	}
@@ -429,6 +470,21 @@ public class ShopState extends BasicGameState implements InputListener {
 	@Override
 	public void keyReleased(int key, char c) {
 		if(key == Input.KEY_B) exit = true;
+	}
+	
+	public static void resetShop() {
+		SHOP = new Inventory(SHOP_SIZE);
+		
+		// Add the default purchasable weapons to the shop inventory.
+		SHOP.addItem(new AssaultRifle());
+		SHOP.addItem(new Shotgun());
+		SHOP.addItem(new BowAndArrow());
+		SHOP.addItem(new Flamethrower());
+		SHOP.addItem(new GrenadeLauncher());
+		SHOP.addItem(new ClaymoreWeapon());
+		SHOP.addItem(new LaserBarrier());
+		SHOP.addItem(new SentryWeapon());
+		SHOP.addItem(new BigRedButton());
 	}
 	
 	@Override

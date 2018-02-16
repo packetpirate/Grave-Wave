@@ -185,6 +185,8 @@ public class GameState extends BasicGameState implements InputListener {
 		console = new Console(this, gc);
 		
 		hud = new HUD();
+		
+		ShopState.resetShop();
 	}
 	
 	@Override

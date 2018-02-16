@@ -22,17 +22,8 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
-import com.gzsr.objects.weapons.AssaultRifle;
-import com.gzsr.objects.weapons.BigRedButton;
-import com.gzsr.objects.weapons.BowAndArrow;
-import com.gzsr.objects.weapons.ClaymoreWeapon;
-import com.gzsr.objects.weapons.Flamethrower;
-import com.gzsr.objects.weapons.GrenadeLauncher;
-import com.gzsr.objects.weapons.LaserBarrier;
 import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Pistol;
-import com.gzsr.objects.weapons.SentryWeapon;
-import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
@@ -91,6 +82,11 @@ public class Player implements Entity {
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
 	public Weapon getCurrentWeapon() { return getWeapons().get(weaponIndex); }
+	public void resetCurrentWeapon() {
+		getWeapons().stream().forEach(w -> w.weaponChanged());
+		weaponIndex = 0;
+		getCurrentWeapon().equip();
+	}
 	public void setCurrentWeapon(int wi) {
 		if((wi < getWeapons().size()) && getWeapons().get(wi).hasWeapon()) {
 			// If the player actually has the weapon bound to the key that was pressed...
@@ -252,17 +248,7 @@ public class Player implements Entity {
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
 		inventory.addItem(new Pistol());
-		inventory.addItem(new AssaultRifle());
-		inventory.addItem(new Shotgun());
-		inventory.addItem(new BowAndArrow());
-		inventory.addItem(new Flamethrower());
-		inventory.addItem(new GrenadeLauncher());
-		inventory.addItem(new ClaymoreWeapon());
-		inventory.addItem(new LaserBarrier());
-		inventory.addItem(new SentryWeapon());
-		inventory.addItem(new BigRedButton());
-		
-		inventory.getWeapons().stream().forEach(w -> w.activate());
+		inventory.getWeapons().get(weaponIndex).activate();
 		inventory.getWeapons().get(weaponIndex).equip();
 		
 		dAttributes.clear();

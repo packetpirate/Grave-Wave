@@ -48,8 +48,10 @@ public class TransactionButton extends Button {
 
 	@Override
 	public boolean inBounds(float x, float y) {
+		float w = AssetManager.getManager().getImage(image).getWidth();
+		float h = AssetManager.getManager().getImage(image).getHeight();
 		return ((x > position.x) && (y > position.y) && 
-				(x < (position.x + size.x)) && (y < (position.y + size.y)));
+				(x < (position.x + w)) && (y < (position.y + h)));
 	}
 	
 	@Override
