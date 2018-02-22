@@ -109,13 +109,17 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_UnlimitedAmmo.png",
 			"images/GZS_SpeedUp.png",
 			"images/GZS_PoisonIcon.png",
-			//Enemy Images
+			// Enemy Images
 			"images/GZS_Zumby2.png",
 			"images/GZS_Rotdog2.png",
 			"images/GZS_Upchuck2.png",
 			"images/GZS_Gasbag2.png",
 			"images/GZS_BigMama2.png",
 			"images/GZS_TinyZumby.png",
+			// Boss Images
+			"images/GZS_Aberration2.png",
+			"images/GZS_Zombat.png",
+			"images/GZS_Stitches.png",
 			// Projectile Images
 			"images/GZS_Arrow.png",
 			"images/GZS_FireParticle.png",
