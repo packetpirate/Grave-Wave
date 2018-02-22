@@ -9,14 +9,7 @@ import com.gzsr.objects.weapons.Weapon;
 
 public class Inventory {
 	private List<Entity> items;
-	public void addItem(Entity item) {
-		if(item instanceof Weapon) {
-			Weapon w = (Weapon)item;
-			w.activate();
-		}
-		
-		items.add(item);
-	}
+	public void addItem(Entity item) { items.add(item); }
 	public void dropItem(String name) {
 		Iterator<Entity> it = items.iterator();
 		while(it.hasNext()) {

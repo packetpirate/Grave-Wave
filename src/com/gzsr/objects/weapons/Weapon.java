@@ -24,7 +24,6 @@ public abstract class Weapon implements Entity {
 	
 	protected int ammoInClip;
 	protected int ammoInInventory;
-	protected boolean active;
 	protected boolean equipped;
 	protected long lastFired;
 	protected boolean reloading;
@@ -37,7 +36,6 @@ public abstract class Weapon implements Entity {
 		this.projectiles = new ArrayList<Projectile>();
 		this.ammoInClip = getClipSize();
 		this.ammoInInventory = (getStartClips() - 1) * getClipSize();
-		this.active = false;
 		this.equipped = false;
 		this.lastFired = -getCooldown();
 		this.reloading = false;
@@ -125,9 +123,6 @@ public abstract class Weapon implements Entity {
 	protected abstract int getStartClips();
 	public int getInventoryAmmo() { return ammoInInventory; }
 	public void addInventoryAmmo(int amnt) { ammoInInventory += amnt; }
-	public boolean hasWeapon() { return active; }
-	public void activate() { active = true; }
-	public void deactivate() { active = false; }
 	public abstract long getCooldown();
 	public List<Projectile> getProjectiles() { return projectiles; }
 	public abstract ProjectileType getProjectile();

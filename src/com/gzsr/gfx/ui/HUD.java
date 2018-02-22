@@ -102,7 +102,7 @@ public class HUD {
 			List<Weapon> weapons = player.getWeapons();
 			int wi = player.getWeaponIndex() - 1;
 			float startY = WEAPONS_ORIGIN.y;
-			for(int i = 0; i < Math.min(3, player.activeWeapons()); i++) {
+			for(int i = 0; i < Math.min(3, player.getWeapons().size()); i++) {
 				Weapon w = weapons.get(Math.floorMod((wi + (i + 1)), weapons.size()));
 				float cy = (startY - (i * 54.0f));
 				
@@ -131,32 +131,30 @@ public class HUD {
 			g.setColor(Color.black);
 			g.drawRect((WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f), 48.0f, 48.0f);
 			
-			if(player.getCurrentWeapon().hasWeapon()) {
-				g.drawImage(player.getCurrentWeapon().getInventoryIcon(),
-							(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
-			
-				// Render the reloading bar, if the player is reloading.
-				if(player.getCurrentWeapon().isReloading(cTime)) {
-					float percentage = 1.0f - (float)player.getCurrentWeapon().getReloadTime(cTime);
-					float height = percentage * 48.0f;
-					float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
-					
-					g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-					g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
-				}
+			g.drawImage(player.getCurrentWeapon().getInventoryIcon(),
+						(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
+		
+			// Render the reloading bar, if the player is reloading.
+			if(player.getCurrentWeapon().isReloading(cTime)) {
+				float percentage = 1.0f - (float)player.getCurrentWeapon().getReloadTime(cTime);
+				float height = percentage * 48.0f;
+				float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
 				
-				if(player.hasStatus(Status.UNLIMITED_AMMO)) {
-					Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
-					float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
-					float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
-					g.drawImage(unlimitedAmmo, x, y);
-				} else {
-					UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
-					String ammoText = String.format("%d / %d", 
-										player.getCurrentWeapon().getClipAmmo(),
-										player.getCurrentWeapon().getInventoryAmmo());
-					FontUtils.drawCenter(f, ammoText, (int)(WEAPONS_ORIGIN.x + 54.0f), (int)(WEAPONS_ORIGIN.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
-				}
+				g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+				g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
+			}
+			
+			if(player.hasStatus(Status.UNLIMITED_AMMO)) {
+				Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
+				float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
+				float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
+				g.drawImage(unlimitedAmmo, x, y);
+			} else {
+				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
+				String ammoText = String.format("%d / %d", 
+									player.getCurrentWeapon().getClipAmmo(),
+									player.getCurrentWeapon().getInventoryAmmo());
+				FontUtils.drawCenter(f, ammoText, (int)(WEAPONS_ORIGIN.x + 54.0f), (int)(WEAPONS_ORIGIN.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
 			}
 		} // End weapons loadout rendering.
 		

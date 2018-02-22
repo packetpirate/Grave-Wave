@@ -26,7 +26,7 @@ public class AmmoCrate extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		List<Weapon> active = player.getActiveWeapons();
+		List<Weapon> active = player.getWeapons();
 		int weapon = Globals.rand.nextInt(active.size());
 		Weapon w = active.get(weapon);
 		w.addInventoryAmmo(w.getClipSize());

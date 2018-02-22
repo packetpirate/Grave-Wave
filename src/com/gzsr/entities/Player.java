@@ -68,17 +68,6 @@ public class Player implements Entity {
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
 	public List<Weapon> getWeapons() { return inventory.getWeapons(); }
-	public int activeWeapons() {
-		return (int)getWeapons().stream()
-						   		.filter(w -> w.hasWeapon())
-						   		.count();
-	}
-	public List<Weapon> getActiveWeapons() {
-		return getWeapons()
-				  .stream()
-				  .filter(w -> w.hasWeapon())
-				  .collect(Collectors.toList());
-	}
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
 	public Weapon getCurrentWeapon() { return getWeapons().get(weaponIndex); }
@@ -88,7 +77,7 @@ public class Player implements Entity {
 		getCurrentWeapon().equip();
 	}
 	public void setCurrentWeapon(int wi) {
-		if((wi < getWeapons().size()) && getWeapons().get(wi).hasWeapon()) {
+		if(wi < getWeapons().size()) {
 			// If the player actually has the weapon bound to the key that was pressed...
 			getCurrentWeapon().weaponChanged();
 			weaponIndex = wi;
@@ -100,7 +89,6 @@ public class Player implements Entity {
 		getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
 		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 		int i = Math.floorMod((weaponIndex + direction), wc);
-		while(!getWeapons().get(i).hasWeapon()) i += direction;
 		weaponIndex = i;
 		getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
 	}
@@ -205,7 +193,7 @@ public class Player implements Entity {
 		}
 		
 		// Update all the player's active weapons.
-		getActiveWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
+		getWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
 		theta = Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (float)(Math.PI / 2);
@@ -215,7 +203,7 @@ public class Player implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Render all the player's active weapons.
-		getActiveWeapons().stream().forEach(w -> w.render(g, cTime));
+		getWeapons().stream().forEach(w -> w.render(g, cTime));
 		
 		Image image = getImage();
 		if(image != null) {
@@ -248,7 +236,6 @@ public class Player implements Entity {
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
 		inventory.addItem(new Pistol());
-		inventory.getWeapons().get(weaponIndex).activate();
 		inventory.getWeapons().get(weaponIndex).equip();
 		
 		dAttributes.clear();
@@ -339,7 +326,7 @@ public class Player implements Entity {
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
 	public boolean checkProjectiles(Enemy enemy, long cTime) {
-		for(Weapon w : getActiveWeapons()) {
+		for(Weapon w : getWeapons()) {
 			Iterator<Projectile> it = w.getProjectiles().iterator();
 			while(it.hasNext()) {
 				Projectile p = it.next();

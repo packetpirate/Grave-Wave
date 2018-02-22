@@ -243,7 +243,7 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void mouseWheelMoved(int change) {
 		Player player = Globals.player;
-		if(player.activeWeapons() > 1) {
+		if(player.getWeapons().size() > 1) {
 			player.weaponRotate((change > 0)?1:-1);
 			hud.queueWeaponCycle();
 		}
