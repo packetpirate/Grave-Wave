@@ -18,6 +18,9 @@ import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
 import com.gzsr.entities.enemies.Upchuck;
 import com.gzsr.entities.enemies.Zumby;
+import com.gzsr.entities.enemies.bosses.Aberration;
+import com.gzsr.entities.enemies.bosses.Stitches;
+import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
 import com.gzsr.objects.items.HealthKit;
@@ -233,6 +236,15 @@ public class Console implements Entity {
 			} else if(entityType.equals("bigmama")) {
 				BigMama bm = new BigMama(position, pauseTime);
 				ec.addAlive(bm);
+			} else if(entityType.equals("aberration")) {
+				Aberration ab = new Aberration(position);
+				ec.addAlive(ab);
+			} else if(entityType.equals("zombat")) {
+				Zombat zb = new Zombat(position);
+				ec.addAlive(zb);
+			} else if(entityType.equals("stitches")) {
+				Stitches st = new Stitches(position);
+				ec.addAlive(st);
 			} else {
 				pastCommands.add("  ERROR: Invalid entity name specified.");
 			}

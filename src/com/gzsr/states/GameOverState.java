@@ -28,7 +28,7 @@ public class GameOverState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
-		UnicodeFont uni = assets.getFont("manaspc");
+		UnicodeFont uni = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		menuButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Main Menu") / 2)), (Globals.HEIGHT - 200.0f)), "Main Menu");
 		exitButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Give Up") / 2)), (Globals.HEIGHT - 150.0f)), "Give Up");
 		
@@ -64,6 +64,11 @@ public class GameOverState extends BasicGameState implements InputListener {
 		
 		menuButton.render(g);
 		exitButton.render(g);
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		// TODO: Stop currently playing music and player game over track.
 	}
 	
 	@Override

@@ -38,7 +38,9 @@ public class TransactionButton extends Button {
 	public void render(Graphics g, long cTime) {
 		// Draw using position as center.
 		Image button = AssetManager.getManager().getImage(image);
-		if(button != null) g.drawImage(button, (position.x - (button.getWidth() / 2)), (position.y - (button.getHeight() / 2)));
+		if(button != null) {
+			g.drawImage(button, (position.x - (button.getWidth() / 2)), (position.y - (button.getHeight() / 2)));
+		}
 	}
 	
 	@Override
@@ -50,8 +52,8 @@ public class TransactionButton extends Button {
 	public boolean inBounds(float x, float y) {
 		float w = AssetManager.getManager().getImage(image).getWidth();
 		float h = AssetManager.getManager().getImage(image).getHeight();
-		return ((x > position.x) && (y > position.y) && 
-				(x < (position.x + w)) && (y < (position.y + h)));
+		return ((x > (position.x - (w / 2))) && (y > (position.y - (h / 2))) && 
+				(x < (position.x + (w / 2))) && (y < (position.y + (h / 2))));
 	}
 	
 	@Override
