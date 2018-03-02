@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Shape;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
@@ -21,10 +22,15 @@ public class Particle implements Entity {
 	public Color getColor() { return color; }
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
+	public void setPosition(Pair<Float> newPos) {
+		position.x = newPos.x;
+		position.y = newPos.y;
+	}
 	protected Shape bounds;
 	public Shape getCollider() { return bounds; }
 	protected float velocity;
 	public float getVelocity() { return velocity; }
+	public void setVelocity(float velocity_) { velocity = velocity_; }
 	protected float theta;
 	public float getTheta() { return theta; }
 	protected float angularVelocity;
@@ -35,7 +41,7 @@ public class Particle implements Entity {
 	public long getLifespan() { return lifespan; }
 	public boolean isAlive(long cTime) {
 		long elapsed = cTime - created;
-		return (!collision && (elapsed < lifespan));
+		return ((lifespan == -1L) || (!collision && (elapsed < lifespan)));
 	}
 	protected long created;
 	public long getCreated() { return created; }
@@ -120,6 +126,10 @@ public class Particle implements Entity {
 	
 	public boolean checkCollision(Enemy enemy) {
 		return enemy.getCollider().intersects(bounds);
+	}
+	
+	public boolean checkCollision(Player player) {
+		return player.getCollider().intersects(bounds);
 	}
 	
 	@Override

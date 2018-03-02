@@ -12,9 +12,9 @@ public enum EnemyType {
 	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 5, 10),
 	
 	// Bosses
-	ABERRATION("GZS_Aberration2", 128, 128, 4, 0, 1_000, 5_000), 
-	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 0, 500, 2_500),
-	STITCHES("GZS_Stitches", 128, 128, 4, 0, 3_000, 10_000);
+	ABERRATION("GZS_Aberration2", 128, 128, 4, 150, 1_000, 5_000), 
+	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50, 500, 2_500),
+	STITCHES("GZS_Stitches", 128, 128, 4, 150, 3_000, 10_000);
 	
 	private String animationName;
 	private int frameWidth;

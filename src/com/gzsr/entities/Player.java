@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -283,13 +282,14 @@ public class Player implements Entity {
 	 * Deal damage to the player.
 	 * @param amnt The amount of damage to apply to the player's health.
 	 */
-	public void takeDamage(double amnt) {
+	public double takeDamage(double amnt) {
 		if(!hasStatus(Status.INVULNERABLE)) {
 			double currentHealth = getDoubleAttribute("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			setAttribute("health", newHealth);
-		}
+			return amnt;
+		} else return -1.0; // Indicates no damage taken.
 	}
 	
 	public void addExperience(int amnt) {

@@ -39,7 +39,7 @@ public class Upchuck extends Enemy {
 	public void update(GameState gs, long cTime, int delta) {
 		if(!dead()) {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-			if(!nearPlayer()) {
+			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.update(cTime);
 				move(delta);
 			} else vomit(cTime);
@@ -117,10 +117,6 @@ public class Upchuck extends Enemy {
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
-	}
-	
-	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Globals.player.getPosition()) <= Upchuck.ATTACK_DIST);
 	}
 
 	@Override

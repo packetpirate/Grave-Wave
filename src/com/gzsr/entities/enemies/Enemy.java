@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Shape;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Animation;
+import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -53,6 +54,10 @@ public abstract class Enemy implements Entity {
 			animation.update(cTime);
 			move(delta);
 		}
+	}
+	
+	protected boolean nearPlayer(float attackDist) {
+		return (Calculate.Distance(position, Globals.player.getPosition()) <= attackDist);
 	}
 	
 	public abstract void move(int delta);
