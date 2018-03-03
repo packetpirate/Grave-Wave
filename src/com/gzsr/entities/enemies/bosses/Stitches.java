@@ -53,7 +53,7 @@ public class Stitches extends Boss {
 			}
 			
 			long sinceLastHook = (cTime - lastHook);
-			if((hook == null) && (sinceLastHook >= Stitches.HOOK_COOLDOWN) && nearPlayer(Stitches.ATTACK_DIST)) {
+			if(Globals.player.isAlive() && (hook == null) && (sinceLastHook >= Stitches.HOOK_COOLDOWN) && nearPlayer(Stitches.ATTACK_DIST)) {
 				// Throw the hook.
 				Pair<Float> hookPos = new Pair<Float>(position.x, position.y);
 				float direction = Calculate.Hypotenuse(position, Globals.player.getPosition()) + (float)(Math.PI / 2);
@@ -61,7 +61,7 @@ public class Stitches extends Boss {
 				AssetManager.getManager().getSound("throw2").play();
 			} else if(hooked) {
 				// If we're close enough to the player now, release the hook.
-				if(nearPlayer(Stitches.RELEASE_DIST)) {
+				if(!Globals.player.isAlive() || nearPlayer(Stitches.RELEASE_DIST)) {
 					hook = null;
 					hooked = false;
 					lastHook = cTime;
@@ -74,7 +74,7 @@ public class Stitches extends Boss {
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);
-				move(delta);
+				if(Globals.player.isAlive()) move(delta);
 			}
 		} else {
 			hook = null;

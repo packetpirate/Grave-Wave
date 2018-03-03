@@ -33,7 +33,7 @@ public class Gasbag extends Enemy {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				move(delta);
+				if(Globals.player.isAlive()) move(delta);
 			} else explode(gs, cTime);
 		}
 	}

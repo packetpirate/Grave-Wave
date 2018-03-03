@@ -25,6 +25,7 @@ import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Pistol;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
+import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 
@@ -32,17 +33,20 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
+	private static final long RESPAWN_TIME = 3_000L;
 	private static final int INVENTORY_SIZE = 16;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void move(float xOff, float yOff) {
-		float tx = position.x + xOff;
-		float ty = position.y + yOff;
-		if((tx >= 0) && (tx < Globals.WIDTH) && 
-		   (ty >= 0) && (ty < Globals.HEIGHT)) {
-			position.x += xOff;
-			position.y += yOff;
+		if(isAlive()) {
+			float tx = position.x + xOff;
+			float ty = position.y + yOff;
+			if((tx >= 0) && (tx < Globals.WIDTH) && 
+			   (ty >= 0) && (ty < Globals.HEIGHT)) {
+				position.x += xOff;
+				position.y += yOff;
+			}
 		}
 	}
 	
@@ -54,6 +58,10 @@ public class Player implements Entity {
 	
 	private float theta;
 	public float getRotation() { return theta; }
+	
+	private boolean respawning;
+	private long respawnTime;
+	public long getRespawnTime() { return respawnTime; }
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
@@ -142,6 +150,35 @@ public class Player implements Entity {
 	
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
+		if(!isAlive()) {
+			if(!respawning) {
+				int lives = getIntAttribute("lives") - 1;
+				if(lives >= 0) {
+					setAttribute("lives", lives);
+					
+					statusEffects.stream().forEach(status -> status.onDestroy(this, cTime));
+					statusEffects.clear();
+					
+					respawning = true;
+					respawnTime = (cTime + Player.RESPAWN_TIME);
+				}
+			} else {
+				long elapsed = (cTime - respawnTime);
+				if(elapsed >= 0) {
+					respawning = false;
+					respawnTime = 0L;
+					
+					// Make the player invincible for a brief period.
+					setAttribute("health", getDoubleAttribute("maxHealth"));
+					statusEffects.add(new InvulnerableEffect(Player.RESPAWN_TIME, cTime));
+					
+					// Reset the player's position.
+					position.x = (float)(Globals.WIDTH / 2);
+					position.y = (float)(Globals.HEIGHT / 2);
+				}
+			}
+		}
+		
 		// Make sure player's health is up to date.
 		double currentMax = getDoubleAttribute("maxHealth");
 		double healthBonus = getIntAttribute("healthUp") * HEALTH_PER_SP;
@@ -204,16 +241,18 @@ public class Player implements Entity {
 		// Render all the player's active weapons.
 		getWeapons().stream().forEach(w -> w.render(g, cTime));
 		
-		Image image = getImage();
-		if(image != null) {
-			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-			g.drawImage(image, (position.x - (image.getWidth() / 2)), 
-							   (position.y - (image.getHeight() / 2)));
-			g.resetTransform();
-		} else {
-			// Draw a shape to represent the missing player image.
-			g.setColor(Color.red);
-			g.fillOval((position.x - 20), (position.y - 20), 40, 40);
+		if(isAlive()) {
+			Image image = getImage();
+			if(image != null) {
+				g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
+				g.drawImage(image, (position.x - (image.getWidth() / 2)), 
+								   (position.y - (image.getHeight() / 2)));
+				g.resetTransform();
+			} else {
+				// Draw a shape to represent the missing player image.
+				g.setColor(Color.red);
+				g.fillOval((position.x - 20), (position.y - 20), 40, 40);
+			}
 		}
 	}
 	
@@ -229,6 +268,9 @@ public class Player implements Entity {
 		
 		speed = Player.DEFAULT_SPEED;
 		theta = 0.0f;
+		
+		respawning = false;
+		respawnTime = 0L;
 		
 		// TODO: When in testing phase, deactivate all but Pistol (index 0).
 		weaponIndex = 0;
@@ -283,7 +325,7 @@ public class Player implements Entity {
 	 * @param amnt The amount of damage to apply to the player's health.
 	 */
 	public double takeDamage(double amnt) {
-		if(!hasStatus(Status.INVULNERABLE)) {
+		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
 			double currentHealth = getDoubleAttribute("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;

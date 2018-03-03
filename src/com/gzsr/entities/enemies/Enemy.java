@@ -52,7 +52,7 @@ public abstract class Enemy implements Entity {
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			animation.update(cTime);
-			move(delta);
+			if(Globals.player.isAlive()) move(delta);
 		}
 	}
 	

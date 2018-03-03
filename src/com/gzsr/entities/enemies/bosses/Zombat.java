@@ -31,10 +31,10 @@ public class Zombat extends Boss {
 			animation.update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
-				move(delta);
-			} else siphoningBlood = true;
+				if(Globals.player.isAlive()) move(delta);
+			} else siphoningBlood = Globals.player.isAlive(); // Only start siphoning if player is alive, obviously...
 			
-			if(siphoningBlood) {
+			if(Globals.player.isAlive() && siphoningBlood) {
 				double damageTaken = Globals.player.takeDamage(SIPHON_RATE);
 				if(damageTaken > 0.0) health += SIPHON_RATE;
 			}
@@ -58,17 +58,18 @@ public class Zombat extends Boss {
 	public boolean isAlive(long cTime) {
 		return (health > 0);
 	}
+	
+	@Override
+	public void blockMovement() {
+		// Do nothing...
+	}
 
 	@Override
 	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 		
-		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * Zombat.SPEED * delta;
-			position.y += (float)Math.sin(theta) * Zombat.SPEED * delta;
-		}
-		
-		moveBlocked = false;
+		position.x += (float)Math.cos(theta) * Zombat.SPEED * delta;
+		position.y += (float)Math.sin(theta) * Zombat.SPEED * delta;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);

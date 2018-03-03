@@ -85,7 +85,7 @@ public class GameState extends BasicGameState implements InputListener {
 					}
 				}
 				
-				if(!player.isAlive()) {
+				if(!player.isAlive() && (player.getIntAttribute("lives") <= 0)) {
 					// If the player has died, transition state.
 					Globals.resetInputs();
 					Globals.gameOver = true;
@@ -94,18 +94,20 @@ public class GameState extends BasicGameState implements InputListener {
 									new FadeInTransition());
 				}
 				
-				if(Globals.released.contains(Input.KEY_T)) {
-					// Open the training screen.
-					Globals.resetInputs();
-					game.enterState(TrainState.ID,
-									new FadeOutTransition(),
-									new FadeInTransition());
-				} else if(Globals.released.contains(Input.KEY_B)) {
-					// Open the weapon shopping screen.
-					Globals.resetInputs();
-					game.enterState(ShopState.ID,
-									new FadeOutTransition(),
-									new FadeInTransition());
+				if(player.isAlive()) {
+					if(Globals.released.contains(Input.KEY_T)) {
+						// Open the training screen.
+						Globals.resetInputs();
+						game.enterState(TrainState.ID,
+										new FadeOutTransition(),
+										new FadeInTransition());
+					} else if(Globals.released.contains(Input.KEY_B)) {
+						// Open the weapon shopping screen.
+						Globals.resetInputs();
+						game.enterState(ShopState.ID,
+										new FadeOutTransition(),
+										new FadeInTransition());
+					}
 				}
 				
 				MusicPlayer.getInstance().update();

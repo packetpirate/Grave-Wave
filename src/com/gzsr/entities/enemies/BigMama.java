@@ -64,7 +64,7 @@ public class BigMama extends Enemy {
 				explosion.play();
 			} else {
 				animation.update(cTime);
-				move(delta);
+				if(Globals.player.isAlive()) move(delta);
 			}
 		}
 	}
@@ -76,8 +76,6 @@ public class BigMama extends Enemy {
 
 	@Override
 	public void move(int delta) {
-		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-		
 		if(!moveBlocked) {
 			position.x += (float)Math.cos(theta) * BigMama.SPEED * delta;
 			position.y += (float)Math.sin(theta) * BigMama.SPEED * delta;

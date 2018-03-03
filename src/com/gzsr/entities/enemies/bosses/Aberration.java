@@ -43,7 +43,7 @@ public class Aberration extends Boss {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.update(cTime);
-				move(delta);
+				if(Globals.player.isAlive()) move(delta);
 			} else vomit(cTime);
 		}
 		
@@ -62,7 +62,7 @@ public class Aberration extends Boss {
 	}
 	
 	private void vomit(long cTime) {
-		if(cTime >= (lastBile + Aberration.BILE_DELAY)) {
+		if(Globals.player.isAlive() && (cTime >= (lastBile + Aberration.BILE_DELAY))) {
 			for(int i = 0; i < Aberration.BILE_PER_TICK; i++) {
 				Color color = ProjectileType.BILE.getColor();
 				float velocity = ProjectileType.BILE.getVelocity();
@@ -110,8 +110,6 @@ public class Aberration extends Boss {
 
 	@Override
 	public void move(int delta) {
-		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-		
 		if(!moveBlocked) {
 			position.x += (float)Math.cos(theta) * Aberration.SPEED * delta;
 			position.y += (float)Math.sin(theta) * Aberration.SPEED * delta;

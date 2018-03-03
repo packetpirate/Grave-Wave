@@ -41,7 +41,7 @@ public class Upchuck extends Enemy {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.update(cTime);
-				move(delta);
+				if(Globals.player.isAlive()) move(delta);
 			} else vomit(cTime);
 		}
 		
@@ -73,7 +73,7 @@ public class Upchuck extends Enemy {
 	}
 	
 	private void vomit(long cTime) {
-		if(cTime >= (lastBile + Upchuck.BILE_DELAY)) {
+		if(Globals.player.isAlive() && (cTime >= (lastBile + Upchuck.BILE_DELAY))) {
 			for(int i = 0; i < Upchuck.BILE_PER_TICK; i++) {
 				Color color = ProjectileType.BILE.getColor();
 				float velocity = ProjectileType.BILE.getVelocity();
