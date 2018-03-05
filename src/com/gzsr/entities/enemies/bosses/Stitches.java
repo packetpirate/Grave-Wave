@@ -12,6 +12,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Stitches extends Boss {
+	private static final int SPAWN_COST = 40;
 	private static final float HEALTH = 15_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
@@ -125,4 +126,17 @@ public class Stitches extends Boss {
 		return Stitches.DPS;
 	}
 
+	public static int getSpawnCost() {
+		return Stitches.SPAWN_COST;
+	}
+	
+	@Override
+	public String getName() {
+		return "Stitches";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Stitches";
+	}
 }

@@ -5,6 +5,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class TinyZumby extends Enemy {
+	private static final int SPAWN_COST = 0;
 	private static final float HEALTH = 25.0f;
 	private static final float SPEED = 0.20f;
 	private static final float DPS = 2.0f;
@@ -42,6 +43,10 @@ public class TinyZumby extends Enemy {
 	@Override
 	public double getDamage() {
 		return TinyZumby.DPS;
+	}
+	
+	public static int getSpawnCost() {
+		return TinyZumby.SPAWN_COST;
 	}
 
 	@Override

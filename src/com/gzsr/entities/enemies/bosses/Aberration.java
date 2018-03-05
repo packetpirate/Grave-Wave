@@ -17,6 +17,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Aberration extends Boss {
+	private static final int SPAWN_COST = 25;
 	private static final float HEALTH = 10_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
@@ -131,4 +132,17 @@ public class Aberration extends Boss {
 		return Aberration.DPS;
 	}
 
+	public static int getSpawnCost() {
+		return Aberration.SPAWN_COST;
+	}
+	
+	@Override
+	public String getName() {
+		return "Aberration";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Aberration";
+	}
 }

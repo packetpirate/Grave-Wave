@@ -10,6 +10,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Zombat extends Boss {
+	private static final int SPAWN_COST = 12;
 	private static final float HEALTH = 500.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
@@ -28,6 +29,8 @@ public class Zombat extends Boss {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			
 			animation.update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
@@ -66,8 +69,6 @@ public class Zombat extends Boss {
 
 	@Override
 	public void move(int delta) {
-		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
-		
 		position.x += (float)Math.cos(theta) * Zombat.SPEED * delta;
 		position.y += (float)Math.sin(theta) * Zombat.SPEED * delta;
 		
@@ -85,4 +86,17 @@ public class Zombat extends Boss {
 		return Zombat.DPS;
 	}
 
+	public static int getSpawnCost() {
+		return Zombat.SPAWN_COST;
+	}
+	
+	@Override
+	public String getName() {
+		return "Zombat";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Zombat";
+	}
 }

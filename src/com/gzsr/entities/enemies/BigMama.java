@@ -10,6 +10,7 @@ import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 
 public class BigMama extends Enemy {
+	private static final int SPAWN_COST = 10;
 	private static final float HEALTH = 300.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 0.0f;
@@ -23,18 +24,19 @@ public class BigMama extends Enemy {
 	private long created;
 	private boolean exploded;
 	
-	public BigMama(Pair<Float> position, long cTime) {
+	public BigMama(Pair<Float> position) {
 		super(EnemyType.BIG_MAMA, position);
 		this.health = BigMama.HEALTH;
 		
 		explosion = AssetManager.getManager().getSound("explosion2");
 		
-		created = cTime;
+		created = -1L;
 		exploded = false;
 	}
 	
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
+		if(created == -1L) created = cTime; // So that we don't have to pass spawn time into constructor.
 		if(!exploded) {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			
@@ -99,6 +101,10 @@ public class BigMama extends Enemy {
 	@Override
 	public double getDamage() {
 		return BigMama.DPS;
+	}
+	
+	public static int getSpawnCost() { 
+		return BigMama.SPAWN_COST; 
 	}
 
 	@Override

@@ -15,13 +15,31 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.bosses.Aberration;
+import com.gzsr.entities.enemies.bosses.Stitches;
+import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class EnemyController implements Entity {
+	private static final int SPAWN_POOL_START = 5;
 	private static final long DEFAULT_SPAWN = 2000L;
 	private static final long WAVE_BREAK_TIME = 10_000L;
 	private static final TrueTypeFont FONT_NORMAL = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 32), true);
+	
+	private static final List<String> SPAWNABLE_NAMES = new ArrayList<String>() {{
+		// Normal Enemies
+		add("Zumby");
+		add("Rotdog");
+		add("Upchuck");
+		add("Gasbag");
+		add("BigMama");
+		
+		// Bosses
+		add("Aberration");
+		add("Zombat");
+		add("Stitches");
+	}};
 	
 	private List<Enemy> unborn;
 	public List<Enemy> getUnbornEnemies() { return unborn; }
@@ -32,6 +50,7 @@ public class EnemyController implements Entity {
 	public List<Enemy> getAliveEnemies() { return alive; }
 	public void addAlive(Enemy e) { alive.add(e); }
 	
+	private int spawnPool;
 	private long spawnRate;
 	private long nextSpawn;
 	private long lastEnemy;
@@ -47,6 +66,7 @@ public class EnemyController implements Entity {
 		addImmediately = new ArrayList<Enemy>();
 		alive = new ArrayList<Enemy>();
 		
+		spawnPool = EnemyController.SPAWN_POOL_START;
 		spawnRate = EnemyController.DEFAULT_SPAWN;
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 		lastEnemy = 0L;
@@ -69,10 +89,10 @@ public class EnemyController implements Entity {
 		alive.clear();
 		
 		// Determine number of zombies based on wave number.
-		int eCount = 5 + (wave / 2);
+		updateSpawnPool();
 		
-		// Create unborn enemies according to eCount.
-		for(int i = 0; i < eCount; i++) {
+		// Create unborn enemies according to spawn pool.
+		while(spawnPool > 0) {
 			int spawn = Globals.rand.nextInt(4); // Determine which side to spawn this enemy on.
 			float x = 0.0f;
 			float y = 0.0f;
@@ -95,12 +115,76 @@ public class EnemyController implements Entity {
 				y = Globals.rand.nextFloat() * Globals.HEIGHT;
 			}
 			
-			// TODO: Have enemy type chosen randomly before spawning.
-			Zumby z = new Zumby(new Pair<Float>(x, y));
-			unborn.add(z);
+			spawnEnemy(new Pair<Float>(x, y));
 		}
 		
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
+	}
+	
+	private void updateSpawnPool() {
+		// Determine spawn pool for next wave.
+		// FIXME: Seems to always return 7? Figure out a better formula.
+		spawnPool = (int)((Math.log(2) / Math.log(wave)) * wave) + EnemyController.SPAWN_POOL_START;
+		System.out.println("INFO: Spawn Pool = " + spawnPool);
+	}
+	
+	private void spawnEnemy(Pair<Float> position) {
+		// Which enemies can still be spawned with our current spawning pool?
+		String [] filteredSpawnables = EnemyController.SPAWNABLE_NAMES.stream()
+													  .filter(name -> getCostByName(name) <= spawnPool)
+													  .toArray(String[]::new);
+		// Choose a random enemy from the filtered list.
+		int i = Globals.rand.nextInt(filteredSpawnables.length);
+		
+		// Spawn the enemy and deduct their cost from the spawning pool.
+		String toSpawn = filteredSpawnables[i];
+		if(toSpawn.equals("Zumby")) {
+			Zumby z = new Zumby(position);
+			spawnPool -= Zumby.getSpawnCost();
+			unborn.add(z);
+		} else if(toSpawn.equals("Rotdog")) {
+			Rotdog r = new Rotdog(position);
+			spawnPool -= Rotdog.getSpawnCost();
+			unborn.add(r);
+		} else if(toSpawn.equals("Upchuck")) {
+			Upchuck u = new Upchuck(position);
+			spawnPool -= Upchuck.getSpawnCost();
+			unborn.add(u);
+		} else if(toSpawn.equals("Gasbag")) {
+			Gasbag g = new Gasbag(position);
+			spawnPool -= Gasbag.getSpawnCost();
+			unborn.add(g);
+		} else if(toSpawn.equals("BigMama")) {
+			BigMama b = new BigMama(position);
+			spawnPool -= BigMama.getSpawnCost();
+			unborn.add(b);
+		} else if(toSpawn.equals("Aberration")) {
+			Aberration a = new Aberration(position);
+			spawnPool -= Aberration.getSpawnCost();
+			unborn.add(a);
+		} else if(toSpawn.equals("Zombat")) {
+			Zombat z = new Zombat(position);
+			spawnPool -= Zombat.getSpawnCost();
+			unborn.add(z);
+		} else if(toSpawn.equals("Stitches")) {
+			Stitches s = new Stitches(position);
+			spawnPool -= Stitches.getSpawnCost();
+			unborn.add(s);
+		}
+	}
+	
+	private int getCostByName(String name) {
+		switch(name) {
+			case "Zumby": return Zumby.getSpawnCost();
+			case "Rotdog": return Rotdog.getSpawnCost();
+			case "Upchuck": return Upchuck.getSpawnCost();
+			case "Gasbag": return Gasbag.getSpawnCost();
+			case "BigMama": return BigMama.getSpawnCost();
+			case "Aberration": return Aberration.getSpawnCost();
+			case "Zombat": return Zombat.getSpawnCost();
+			case "Stitches": return Stitches.getSpawnCost();
+			default: return 1;
+		}
 	}
 
 	@Override

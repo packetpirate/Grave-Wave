@@ -23,6 +23,7 @@ import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
+import com.gzsr.objects.items.ExtraLife;
 import com.gzsr.objects.items.HealthKit;
 import com.gzsr.objects.items.InvulnerableItem;
 import com.gzsr.objects.items.SpeedItem;
@@ -162,6 +163,9 @@ public class Console implements Entity {
 						} else if(itemName.equals("health")) {
 							HealthKit hk = new HealthKit(new Pair<Float>(x, y), cTime);
 							gs.addEntity(String.format("health%d", id), hk);
+						} else if(itemName.equals("life")) {
+							ExtraLife el = new ExtraLife(new Pair<Float>(x, y), cTime);
+							gs.addEntity(String.format("life%d", id), el);
 						} else if(itemName.equals("invulnerability")) {
 							InvulnerableItem inv = new InvulnerableItem(new Pair<Float>(x, y), cTime);
 							gs.addEntity(String.format("invuln%d", id), inv);
@@ -234,7 +238,7 @@ public class Console implements Entity {
 				Gasbag g = new Gasbag(position);
 				ec.addAlive(g);
 			} else if(entityType.equals("bigmama")) {
-				BigMama bm = new BigMama(position, pauseTime);
+				BigMama bm = new BigMama(position);
 				ec.addAlive(bm);
 			} else if(entityType.equals("aberration")) {
 				Aberration ab = new Aberration(position);

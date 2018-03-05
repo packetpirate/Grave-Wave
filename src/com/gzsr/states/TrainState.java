@@ -1,6 +1,5 @@
 package com.gzsr.states;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -28,8 +27,8 @@ import com.gzsr.misc.Pair;
 
 public class TrainState extends BasicGameState implements InputListener {
 	public static final int ID = 3;
-	private static final TrueTypeFont FONT_HEADER = new TrueTypeFont(new Font("Lucida Console", Font.BOLD, 32), true);
-	private static final TrueTypeFont FONT_NORMAL = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 16), true);
+	private static UnicodeFont FONT_HEADER = null;
+	private static UnicodeFont FONT_NORMAL = null;
 	private static final Color EXP_BAR = new Color(0.0f, 0.6f, 0.0f);
 	
 	private AssetManager assets;
@@ -47,6 +46,8 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
+		FONT_HEADER = assets.getFont("PressStart2P-Regular_large");
+		FONT_NORMAL = assets.getFont("PressStart2P-Regular");
 		
 		expToLevelTooltip = new TooltipText(TrainState.FONT_NORMAL, 
 											"Exp To Next Level:", 
@@ -103,7 +104,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		g.setFont(TrainState.FONT_NORMAL);
 		
 		// Display the user's current level.
-		g.setColor(Color.red);
+		g.setColor(Color.white);
 		g.drawString(String.format("Level: %d", player.getIntAttribute("level")), 30.0f, 70.0f);
 		
 		{// Show progress bar indicating how much experience until the next level.
@@ -121,7 +122,7 @@ public class TrainState extends BasicGameState implements InputListener {
 			
 			String expText = String.format("%d / %d", player.getIntAttribute("experience"), player.getIntAttribute("expToLevel"));
 			g.setColor(Color.white);
-			FontUtils.drawCenter(TrainState.FONT_NORMAL, expText, 30, (175 - (TrainState.FONT_NORMAL.getHeight() / 2)), 300);
+			FontUtils.drawCenter(TrainState.FONT_NORMAL, expText, 30, (175 - (TrainState.FONT_NORMAL.getLineHeight() / 2)), 300);
 		} // End drawing of experience bar.
 		
 		{ // Begin drawing health upgrade components.

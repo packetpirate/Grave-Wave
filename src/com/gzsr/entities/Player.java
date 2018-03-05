@@ -33,6 +33,7 @@ public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
 	private static final double HEALTH_PER_SP = 20;
+	private static final int MAX_LIVES = 5;
 	private static final long RESPAWN_TIME = 3_000L;
 	private static final int INVENTORY_SIZE = 16;
 	
@@ -60,8 +61,12 @@ public class Player implements Entity {
 	public float getRotation() { return theta; }
 	
 	private boolean respawning;
+	public boolean isRespawning() { return respawning; }
 	private long respawnTime;
-	public long getRespawnTime() { return respawnTime; }
+	public long getTimeToRespawn(long cTime) {
+		if(cTime > respawnTime) return 0L;
+		return (respawnTime - cTime);
+	}
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
@@ -287,6 +292,7 @@ public class Player implements Entity {
 		setAttribute("health", 100.0);
 		setAttribute("maxHealth", 100.0);
 		setAttribute("lives", 3);
+		setAttribute("maxLives", Player.MAX_LIVES);
 		setAttribute("money", 0);
 		
 		// Experience related attributes.

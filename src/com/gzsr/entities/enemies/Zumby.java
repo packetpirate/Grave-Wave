@@ -5,6 +5,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Zumby extends Enemy {
+	private static final int SPAWN_COST = 1;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 5.0f;
@@ -42,6 +43,10 @@ public class Zumby extends Enemy {
 	@Override
 	public double getDamage() {
 		return Zumby.DPS;
+	}
+	
+	public static int getSpawnCost() {
+		return Zumby.SPAWN_COST;
 	}
 
 	@Override

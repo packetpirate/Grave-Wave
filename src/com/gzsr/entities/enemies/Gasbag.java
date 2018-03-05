@@ -11,6 +11,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
 
 public class Gasbag extends Enemy {
+	private static final int SPAWN_COST = 5;
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
@@ -85,6 +86,10 @@ public class Gasbag extends Enemy {
 		return Gasbag.DPS;
 	}
 
+	public static int getSpawnCost() {
+		return Gasbag.SPAWN_COST;
+	}
+	
 	@Override
 	public String getName() {
 		return "Gasbag";

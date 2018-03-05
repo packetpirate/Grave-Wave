@@ -77,6 +77,15 @@ public class HUD {
 			FontUtils.drawCenter(f, healthText, (int)HEALTH_ORIGIN.x.floatValue(), (int)(HEALTH_ORIGIN.y.floatValue() + f.getLineHeight()), 156);
 		} // End health bar rendering.
 		
+		{ // Draw the player's lives next to the health bar.
+			float startX = HEALTH_ORIGIN.x + 156.0f;
+			float startY = HEALTH_ORIGIN.y + 5.0f;
+			Image img = AssetManager.getManager().getImage("GZS_Life");
+			for(int i = 0; i < player.getIntAttribute("lives"); i++) {
+				g.drawImage(img, (startX + (i * img.getWidth()) + (i * 3.0f) + 5.0f), startY);
+			}
+		} // End of drawing player's lives.
+		
 		{ // Begin experience bar rendering.
 			float currentExp = (float)player.getIntAttribute("experience");
 			float expToLevel = (float)player.getIntAttribute("expToLevel");
@@ -170,5 +179,16 @@ public class HUD {
 				xPlus += img.getWidth() + 5.0f;
 			}
 		} // End Status Effects rendering.
+		
+		// If player is respawning, draw the countdown.
+		if(Globals.player.isRespawning()) {
+			g.setColor(Color.white);
+			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+			long timeToRespawn = Globals.player.getTimeToRespawn(cTime);
+			String respawnText = "Respawn in " + (timeToRespawn / 1000L) + "...";
+			float w = g.getFont().getWidth(respawnText);
+			float h = g.getFont().getLineHeight();
+			FontUtils.drawCenter(g.getFont(), respawnText, (int)((Globals.WIDTH / 2) - (w / 2)), (int)((Globals.HEIGHT / 2) - (h / 2)), (int)w);
+		}
 	}
 }

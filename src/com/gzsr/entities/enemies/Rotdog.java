@@ -5,6 +5,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class Rotdog extends Enemy {
+	private static final int SPAWN_COST = 2;
 	private static final float HEALTH = 50.0f;
 	private static final float SPEED = 0.30f;
 	private static final float DPS = 8.0f;
@@ -42,6 +43,10 @@ public class Rotdog extends Enemy {
 	@Override
 	public double getDamage() {
 		return Rotdog.DPS;
+	}
+	
+	public static int getSpawnCost() {
+		return Rotdog.SPAWN_COST;
 	}
 
 	@Override

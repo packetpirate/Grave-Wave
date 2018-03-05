@@ -16,6 +16,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Upchuck extends Enemy {
+	private static final int SPAWN_COST = 4;
 	private static final float HEALTH = 150.0f;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
@@ -127,6 +128,10 @@ public class Upchuck extends Enemy {
 	@Override
 	public double getDamage() {
 		return Upchuck.DPS;
+	}
+	
+	public static int getSpawnCost() {
+		return Upchuck.SPAWN_COST;
 	}
 
 	@Override

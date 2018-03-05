@@ -2,6 +2,7 @@ package com.gzsr.objects.items;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
@@ -17,6 +18,8 @@ public abstract class Item implements Entity {
 		return AssetManager.getManager().getImage(iconName);
 	}
 	
+	protected Sound pickup;
+	
 	protected long duration;
 	protected long created;
 	
@@ -25,6 +28,7 @@ public abstract class Item implements Entity {
 		position = pos;
 		// You must also set the image or it will be null.
 		iconName = null;
+		pickup = null;
 		created = cTime;
 		duration = 0L;
 	}
