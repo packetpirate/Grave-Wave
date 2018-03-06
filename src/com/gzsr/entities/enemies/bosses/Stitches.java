@@ -12,6 +12,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Stitches extends Boss {
+	private static final int FIRST_WAVE = 25;
 	private static final int SPAWN_COST = 40;
 	private static final float HEALTH = 15_000.0f;
 	private static final float SPEED = 0.10f;
@@ -124,6 +125,10 @@ public class Stitches extends Boss {
 	@Override
 	public double getDamage() {
 		return Stitches.DPS;
+	}
+	
+	public static int appearsOnWave() {
+		return FIRST_WAVE;
 	}
 
 	public static int getSpawnCost() {

@@ -7,9 +7,11 @@ import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
 
 public class BigMama extends Enemy {
+	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 10;
 	private static final float HEALTH = 300.0f;
 	private static final float SPEED = 0.10f;
@@ -59,7 +61,7 @@ public class BigMama extends Enemy {
 				}
 				
 				// Spawn a blood explosion centered on the Big Mama.
-				Explosion blood = new Explosion("GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_DIST);
+				Explosion blood = new Explosion(ExplosionType.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_DIST);
 				gs.addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;
@@ -101,6 +103,10 @@ public class BigMama extends Enemy {
 	@Override
 	public double getDamage() {
 		return BigMama.DPS;
+	}
+	
+	public static int appearsOnWave() {
+		return FIRST_WAVE;
 	}
 	
 	public static int getSpawnCost() { 

@@ -139,7 +139,7 @@ public class Turret extends Projectile {
 	
 	private boolean canFire(Enemy target, long cTime) {
 		long elapsed = cTime - lastProjectile;
-		return ((elapsed >= Turret.PROJECTILE_COOLDOWN) && inRange(target));
+		return (Globals.player.isAlive() && (elapsed >= Turret.PROJECTILE_COOLDOWN) && inRange(target));
 	}
 	
 	private void fire(long cTime) {

@@ -18,7 +18,7 @@ public enum ProjectileType {
 	TURRET(new Color(0x7A221A), 0.0f, 16.0f, 16.0f, 0L),
 	
 	// Enemy projectiles.
-	BILE(new Color(0x8BCE5E), 0.25f, 3.0f, 3.0f, 400);
+	BILE(new Color(0x8BCE5E), 0.25f, 3.0f, 3.0f, 750);
 	
 	private Color color;
 	public Color getColor() { return color; }

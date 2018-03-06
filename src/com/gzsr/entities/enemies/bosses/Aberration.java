@@ -17,6 +17,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Aberration extends Boss {
+	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 25;
 	private static final float HEALTH = 10_000.0f;
 	private static final float SPEED = 0.10f;
@@ -132,6 +133,10 @@ public class Aberration extends Boss {
 		return Aberration.DPS;
 	}
 
+	public static int appearsOnWave() {
+		return FIRST_WAVE;
+	}
+	
 	public static int getSpawnCost() {
 		return Aberration.SPAWN_COST;
 	}

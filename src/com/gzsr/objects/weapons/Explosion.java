@@ -11,6 +11,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.entities.enemies.TinyZumby;
 import com.gzsr.gfx.Animation;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -19,6 +20,8 @@ import com.gzsr.status.StatusEffect;
 
 public class Explosion implements Entity {
 	private Animation anim;
+	private ExplosionType type;
+	public ExplosionType getType() { return type; }
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -32,11 +35,12 @@ public class Explosion implements Entity {
 	
 	private List<Entity> entitiesAffected;
 	
-	public Explosion(String animName_, Pair<Float> position_, double damage_, float radius_) {
-		this(animName_, position_, null, damage_, radius_);
+	public Explosion(ExplosionType type_, String animName_, Pair<Float> position_, double damage_, float radius_) {
+		this(type_, animName_, position_, null, damage_, radius_);
 	}
 	
-	public Explosion(String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
+	public Explosion(ExplosionType type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
+		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
 		this.status = status_;
@@ -96,13 +100,15 @@ public class Explosion implements Entity {
 				} else return false;
 			} else if(e instanceof Enemy) {
 				// TODO: Add support for adding status effect to an enemy.
-				Enemy en = (Enemy)e;
-				float dist = Calculate.Distance(position, en.getPosition());
-				if(dist <= radius) {
-					en.takeDamage(damage * (1.0f - (dist / radius)));
-					entitiesAffected.add(en);
-					return true;
-				} else return false;
+				if(!(type.equals(ExplosionType.BLOOD)) && !(e instanceof TinyZumby)) {
+					Enemy en = (Enemy)e;
+					float dist = Calculate.Distance(position, en.getPosition());
+					if(dist <= radius) {
+						en.takeDamage(damage * (1.0f - (dist / radius)));
+						entitiesAffected.add(en);
+						return true;
+					} else return false;
+				}
 			}
 		}
 		

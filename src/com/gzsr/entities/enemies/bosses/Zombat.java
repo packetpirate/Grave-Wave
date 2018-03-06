@@ -10,6 +10,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Zombat extends Boss {
+	private static final int FIRST_WAVE = 20;
 	private static final int SPAWN_COST = 12;
 	private static final float HEALTH = 500.0f;
 	private static final float SPEED = 0.2f;
@@ -84,6 +85,10 @@ public class Zombat extends Boss {
 	@Override
 	public double getDamage() {
 		return Zombat.DPS;
+	}
+	
+	public static int appearsOnWave() {
+		return FIRST_WAVE;
 	}
 
 	public static int getSpawnCost() {

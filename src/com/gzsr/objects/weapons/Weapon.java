@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
@@ -81,7 +82,7 @@ public abstract class Weapon implements Entity {
 			return false;
 		}
 		
-		return (equipped && (clipNotEmpty || ammoLeft) && cool);
+		return (Globals.player.isAlive() && equipped && (clipNotEmpty || ammoLeft) && cool);
 	}
 	
 	public abstract void fire(Player player, Pair<Float> position, float theta, long cTime);

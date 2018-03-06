@@ -277,7 +277,6 @@ public class Player implements Entity {
 		respawning = false;
 		respawnTime = 0L;
 		
-		// TODO: When in testing phase, deactivate all but Pistol (index 0).
 		weaponIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		

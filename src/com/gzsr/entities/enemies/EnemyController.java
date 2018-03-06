@@ -123,15 +123,14 @@ public class EnemyController implements Entity {
 	
 	private void updateSpawnPool() {
 		// Determine spawn pool for next wave.
-		// FIXME: Seems to always return 7? Figure out a better formula.
-		spawnPool = (int)((Math.log(2) / Math.log(wave)) * wave) + EnemyController.SPAWN_POOL_START;
+		spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
 		System.out.println("INFO: Spawn Pool = " + spawnPool);
 	}
 	
 	private void spawnEnemy(Pair<Float> position) {
 		// Which enemies can still be spawned with our current spawning pool?
 		String [] filteredSpawnables = EnemyController.SPAWNABLE_NAMES.stream()
-													  .filter(name -> getCostByName(name) <= spawnPool)
+													  .filter(name -> ((getCostByName(name) <= spawnPool) && canSpawnThisWave(name)))
 													  .toArray(String[]::new);
 		// Choose a random enemy from the filtered list.
 		int i = Globals.rand.nextInt(filteredSpawnables.length);
@@ -173,6 +172,41 @@ public class EnemyController implements Entity {
 		}
 	}
 	
+	private boolean canSpawnThisWave(String name) {
+		int appearsOn = -1;
+		switch(name) {
+			case "Zumby": 
+				appearsOn = Zumby.appearsOnWave();
+				break;
+			case "Rotdog": 
+				appearsOn = Rotdog.appearsOnWave();
+				break;
+			case "Upchuck": 
+				appearsOn = Upchuck.appearsOnWave();
+				break;
+			case "Gasbag": 
+				appearsOn = Gasbag.appearsOnWave();
+				break;
+			case "BigMama": 
+				appearsOn = BigMama.appearsOnWave();
+				break;
+			case "Aberration": 
+				appearsOn = Aberration.appearsOnWave();
+				break;
+			case "Zombat": 
+				appearsOn = Zombat.appearsOnWave();
+				break;
+			case "Stitches": 
+				appearsOn = Stitches.appearsOnWave();
+				break;
+			default: 
+				appearsOn = 1;
+				break;
+		}
+		
+		return (wave >= appearsOn);
+	}
+	
 	private int getCostByName(String name) {
 		switch(name) {
 			case "Zumby": return Zumby.getSpawnCost();
@@ -190,7 +224,7 @@ public class EnemyController implements Entity {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		// Add all enemies that need to be immediately added.
-		alive.addAll(addImmediately);
+		if(addImmediately.size() > 0) alive.addAll(addImmediately);
 		addImmediately.clear();
 		
 		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.

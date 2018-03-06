@@ -78,7 +78,7 @@ public class BigRedButton extends Weapon {
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			double damage = BigRedButton.DAMAGE + (BigRedButton.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-			Explosion exp = new Explosion(BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
+			Explosion exp = new Explosion(ExplosionType.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
 		

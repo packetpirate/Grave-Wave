@@ -29,6 +29,7 @@ import com.gzsr.objects.items.InvulnerableItem;
 import com.gzsr.objects.items.SpeedItem;
 import com.gzsr.objects.items.UnlimitedAmmoItem;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
 
 public class Console implements Entity {
@@ -198,7 +199,7 @@ public class Console implements Entity {
 							float radius = Float.parseFloat(tokens[4]);
 							int id = Globals.generateEntityID();
 							
-							Explosion exp = new Explosion("GZS_Explosion", new Pair<Float>(x, y), damage, radius);
+							Explosion exp = new Explosion(ExplosionType.NORMAL, "GZS_Explosion", new Pair<Float>(x, y), damage, radius);
 							gs.addEntity(String.format("explosion%d", id), exp);
 						} catch(NumberFormatException nfe) {
 							pastCommands.add("  ERROR: Invalid parameters specified for /explode command.");

@@ -15,7 +15,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends Weapon {
-	private static final int PRICE = 800;
+	private static final int PRICE = 6_000;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 4;
@@ -68,7 +68,7 @@ public class GrenadeLauncher extends Weapon {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-		Explosion exp = new Explosion(GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
+		Explosion exp = new Explosion(ExplosionType.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
