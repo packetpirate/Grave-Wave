@@ -18,6 +18,8 @@ public class Zombat extends Boss {
 	private static final float SIPHON_RATE = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
 	
+	private static final Color BLOOD_COLOR = new Color(0xAA0000);
+	
 	private boolean siphoningBlood;
 	
 	public Zombat(Pair<Float> position_) {
@@ -51,9 +53,11 @@ public class Zombat extends Boss {
 		
 		// Render the blood stream being siphoned from the player.
 		if(siphoningBlood) {
-			g.setColor(Color.red);
+			float x = position.x + ((float)Math.cos(theta) * 5.0f);
+			float y = position.y + ((float)Math.sin(theta) * 5.0f);
+			g.setColor(BLOOD_COLOR);
 			g.setLineWidth(2.0f);
-			g.drawLine(position.x, position.y, Globals.player.getPosition().x, Globals.player.getPosition().y);
+			g.drawLine(x, y, Globals.player.getPosition().x, Globals.player.getPosition().y);
 			g.setLineWidth(1.0f);
 		}
 	}

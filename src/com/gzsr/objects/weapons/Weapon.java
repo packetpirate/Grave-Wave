@@ -92,9 +92,10 @@ public abstract class Weapon implements Entity {
 			reloading = true;
 			reloadStart = cTime;
 			
-			int newClip = (ammoInInventory < getClipSize()) ? ammoInInventory : getClipSize();
-			ammoInInventory -= (newClip - ammoInClip);
-			ammoInClip = newClip;
+			int takeFromInv = getClipSize() - ammoInClip;
+			int taken = Math.min(takeFromInv, ammoInInventory);
+			ammoInInventory -= taken;
+			ammoInClip += taken;
 			
 			if(reloadSound != null) reloadSound.play();
 		}
