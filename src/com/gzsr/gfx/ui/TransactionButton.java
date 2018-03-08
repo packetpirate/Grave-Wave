@@ -8,7 +8,7 @@ import com.gzsr.misc.Pair;
 
 public class TransactionButton extends Button {
 	public static enum Type {
-		BUY, SELL
+		BUY, SELL, AMMO
 	}
 	
 	private Type type;
@@ -25,6 +25,9 @@ public class TransactionButton extends Button {
 			case SELL:
 				image = "GZS_SellButton2";
 				break;
+			case AMMO:
+				image = "GZS_AmmoButton";
+				break;
 			default:
 				image = null;
 				break;
@@ -32,6 +35,13 @@ public class TransactionButton extends Button {
 		
 		this.position = position_;
 		this.size = null;
+		
+		if(image != null) {
+			Image img = AssetManager.getManager().getImage(image); 
+			float w = img.getWidth();
+			float h = img.getHeight();
+			this.size = new Pair<Float>(w, h);
+		}
 	}
 	
 	@Override

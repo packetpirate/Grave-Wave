@@ -16,6 +16,7 @@ import com.gzsr.status.Status;
 
 public class BowAndArrow extends Weapon {
 	private static final int PRICE = 2000;
+	private static final int AMMO_PRICE = 400;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
@@ -186,4 +187,8 @@ public class BowAndArrow extends Weapon {
 		return BowAndArrow.PRICE;
 	}
 
+	@Override
+	public int getAmmoPrice() {
+		return BowAndArrow.AMMO_PRICE;
+	}
 }

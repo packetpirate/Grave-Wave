@@ -16,13 +16,14 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Shotgun extends Weapon {
-	private static final int PRICE = 1200;
-	private static final long COOLDOWN = 1200L;
+	private static final int PRICE = 1_200;
+	private static final int AMMO_PRICE = 250;
+	private static final long COOLDOWN = 1_200L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 5;
 	private static final int SHOT_COUNT = 5;
 	private static final float MAX_SPREAD = (float)(Math.PI / 12);
-	private static final long RELOAD_TIME = 2500L;
+	private static final long RELOAD_TIME = 2_500L;
 	private static final double DAMAGE = 20.0;
 	private static final String ICON_NAME = "GZS_Boomstick";
 	private static final String FIRE_SOUND = "shotgun1";
@@ -139,5 +140,10 @@ public class Shotgun extends Weapon {
 	@Override
 	public int getPrice() {
 		return Shotgun.PRICE;
+	}
+	
+	@Override
+	public int getAmmoPrice() {
+		return Shotgun.AMMO_PRICE;
 	}
 }

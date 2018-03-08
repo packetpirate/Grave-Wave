@@ -15,7 +15,8 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Flamethrower extends Weapon {
-	private static final int PRICE = 3000;
+	private static final int PRICE = 3_000;
+	private static final int AMMO_PRICE = 1_000; 
 	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;
 	private static final int START_CLIPS = 3;
@@ -114,6 +115,11 @@ public class Flamethrower extends Weapon {
 	@Override
 	public int getPrice() {
 		return Flamethrower.PRICE;
+	}
+	
+	@Override
+	public int getAmmoPrice() {
+		return Flamethrower.AMMO_PRICE;
 	}
 	
 	@Override

@@ -16,6 +16,7 @@ import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends Weapon {
 	private static final int PRICE = 6_000;
+	private static final int AMMO_PRICE = 1_500;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 4;
@@ -138,5 +139,10 @@ public class GrenadeLauncher extends Weapon {
 	@Override
 	public int getPrice() {
 		return GrenadeLauncher.PRICE;
+	}
+	
+	@Override
+	public int getAmmoPrice() {
+		return GrenadeLauncher.AMMO_PRICE;
 	}
 }

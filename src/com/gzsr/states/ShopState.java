@@ -75,6 +75,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private TransactionButton buyButton;
 	private TransactionButton sellButton;
+	private TransactionButton ammoButton;
 	
 	private int inventorySize;
 	private boolean exit;
@@ -99,6 +100,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.BUY);
 		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.SELL);
+		ammoButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), ((Globals.HEIGHT / 2) - 30.0f)), TransactionButton.Type.AMMO);
 		
 		inventorySize = 0;
 		exit = false;
@@ -259,10 +261,12 @@ public class ShopState extends BasicGameState implements InputListener {
 				
 				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small"); 
 				g.setFont(f);
+				
 				float barWidth = 157.0f;
 				float barHeight = 50.0f;
 				float barX = ((Globals.WIDTH / 2) - (barWidth / 2));
-				float barY = (Globals.HEIGHT - ((barHeight * 3.0f) + (f.getLineHeight() * 3.0f) + 35.0f) - 198.0f);
+				float barY = (Globals.HEIGHT - ((barHeight * 3.0f) + (f.getLineHeight() * 3.0f) + 35.0f) - 138.0f);
+				
 				// Draw damage rating.
 				{
 					FontUtils.drawCenter(f, "Damage", (int)barX, (int)(barY - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
@@ -332,6 +336,19 @@ public class ShopState extends BasicGameState implements InputListener {
 				FontUtils.drawCenter(g.getFont(), cost, (int)(CONTAINER_WIDTH + 10.0f), 
 									 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
 									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
+				
+				// Draw the "buy ammo" button and label.
+				if(item instanceof Weapon) {
+					String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getAmmoPrice()));
+					FontUtils.drawCenter(g.getFont(), "Buy Ammo", (int)(CONTAINER_WIDTH + 20.0f), 
+										 (int)((Globals.HEIGHT / 2) - 80.0f), 
+										 (int)(Globals.WIDTH - (CONTAINER_WIDTH * 2) - 40.0f), Color.white);
+					ammoButton.render(g, 0L);
+					FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
+										 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
+										 (int)ammoButton.getSize().x.floatValue(), 
+										 Color.black);
+				}
 			} else {
 				buyButton.render(g, 0L);
 				
@@ -355,7 +372,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		// Draw the player's current cash.
 		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Globals.player.getIntAttribute("money"));
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
-		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 110.0f), 300, Color.white);
+		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 70.0f), 300, Color.white);
 	}
 	
 	private Entity getSelectedItem() {
@@ -436,6 +453,19 @@ public class ShopState extends BasicGameState implements InputListener {
 					AssetManager.getManager().getSound("buy_ammo2").play();
 				}
 				// TODO: Add cases for other item types.
+			} else if(ammoButton.inBounds(x, y) && selectedInInventory) {
+				// Buy ammo for the currently selected weapon.
+				if(item instanceof Weapon) {
+					Weapon w = (Weapon)item;
+					int cost = w.getAmmoPrice();
+					int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
+					if(moneyAfterPurchase >= 0) {
+						// Player has enough money. Buy the ammo.
+						Globals.player.setAttribute("money", moneyAfterPurchase);
+						w.addInventoryAmmo(w.getClipSize());
+						AssetManager.getManager().getSound("buy_ammo2").play();
+					}
+				}
 			}
 		}
 		

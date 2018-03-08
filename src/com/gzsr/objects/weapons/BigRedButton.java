@@ -20,6 +20,7 @@ import com.gzsr.status.Status;
 
 public class BigRedButton extends Weapon {
 	private static final int PRICE = 10_000;
+	private static final int AMMO_PRICE = 8_000;
 	private static final long COOLDOWN = 15000L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
@@ -189,4 +190,9 @@ public class BigRedButton extends Weapon {
 		return BigRedButton.PRICE;
 	}
 
+	
+	@Override
+	public int getAmmoPrice() {
+		return BigRedButton.AMMO_PRICE;
+	}
 }

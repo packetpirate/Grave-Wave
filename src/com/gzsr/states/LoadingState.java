@@ -152,7 +152,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_SkillUpButton.png",
 			"images/GZS_SkillDownButton.png",
 			"images/GZS_BuyButton2.png",
-			"images/GZS_SellButton2.png"
+			"images/GZS_SellButton2.png",
+			"images/GZS_AmmoButton.png"
 		};
 		
 		for(String asset : assetList) {

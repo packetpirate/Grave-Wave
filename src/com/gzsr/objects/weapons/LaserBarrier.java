@@ -17,7 +17,8 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class LaserBarrier extends Weapon {
-	private static final int PRICE = 1500;
+	private static final int PRICE = 1_500;
+	private static final int AMMO_PRICE = 750;
 	private static final long COOLDOWN = 1000L;
 	private static final int CLIP_SIZE = 2;
 	private static final int START_CLIPS = 4;
@@ -160,5 +161,10 @@ public class LaserBarrier extends Weapon {
 	@Override
 	public int getPrice() {
 		return LaserBarrier.PRICE;
+	}
+	
+	@Override
+	public int getAmmoPrice() {
+		return LaserBarrier.AMMO_PRICE;
 	}
 }

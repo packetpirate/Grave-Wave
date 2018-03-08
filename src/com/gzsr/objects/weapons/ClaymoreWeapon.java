@@ -16,6 +16,7 @@ import com.gzsr.status.Status;
 
 public class ClaymoreWeapon extends Weapon {
 	private static final int PRICE = 1200;
+	private static final int AMMO_PRICE = 250;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;
@@ -125,5 +126,10 @@ public class ClaymoreWeapon extends Weapon {
 	@Override
 	public int getPrice() {
 		return ClaymoreWeapon.PRICE;
+	}
+	
+	@Override
+	public int getAmmoPrice() {
+		return ClaymoreWeapon.AMMO_PRICE;
 	}
 }
