@@ -6,6 +6,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
@@ -16,6 +17,7 @@ public class BigMama extends Enemy {
 	private static final float HEALTH = 300.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 0.0f;
+	private static final float POWERUP_CHANCE = 0.65f;
 	private static final long LIFESPAN = 10_000L;
 	private static final float EXP_DIST = 128.0f;
 	private static final double EXP_DAMAGE = 75.0f;
@@ -98,6 +100,13 @@ public class BigMama extends Enemy {
 	@Override
 	public void takeDamage(double amnt) {
 		health -= amnt;
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		if(Globals.rand.nextFloat() <= BigMama.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override

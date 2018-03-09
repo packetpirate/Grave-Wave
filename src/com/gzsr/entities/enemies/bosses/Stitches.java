@@ -9,6 +9,7 @@ import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Stitches extends Boss {
@@ -17,6 +18,7 @@ public class Stitches extends Boss {
 	private static final float HEALTH = 15_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
+	private static final float POWERUP_CHANCE = 1.0f;
 	private static final float ATTACK_DIST = 300.0f;
 	private static final float RELEASE_DIST = 100.0f;
 	private static final float HOOK_SPEED = 0.4f;
@@ -120,6 +122,13 @@ public class Stitches extends Boss {
 	@Override
 	public void takeDamage(double amnt) {
 		health -= amnt;
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		if(Globals.rand.nextFloat() <= Stitches.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override

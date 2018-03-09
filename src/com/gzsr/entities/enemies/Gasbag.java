@@ -6,6 +6,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
@@ -17,6 +18,7 @@ public class Gasbag extends Enemy {
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
+	private static final float POWERUP_CHANCE = 0.4f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 150.0f;
 	private static final long POISON_DURATION = 5000L;
@@ -59,6 +61,10 @@ public class Gasbag extends Enemy {
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		explode(gs, cTime);
+		
+		if(Globals.rand.nextFloat() <= Gasbag.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override

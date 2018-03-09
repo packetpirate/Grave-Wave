@@ -7,6 +7,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Zombat extends Boss {
@@ -15,6 +16,7 @@ public class Zombat extends Boss {
 	private static final float HEALTH = 500.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
+	private static final float POWERUP_CHANCE = 0.6f;
 	private static final float SIPHON_RATE = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
 	
@@ -84,6 +86,13 @@ public class Zombat extends Boss {
 	@Override
 	public void takeDamage(double amnt) {
 		health -= amnt;
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		if(Globals.rand.nextFloat() <= Zombat.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override

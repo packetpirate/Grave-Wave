@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Upchuck extends Enemy {
@@ -21,6 +22,7 @@ public class Upchuck extends Enemy {
 	private static final float HEALTH = 150.0f;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
+	private static final float POWERUP_CHANCE = 0.5f;
 	private static final float BILE_DAMAGE = 0.4f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 18);
 	private static final long BILE_DELAY = 25L;
@@ -124,6 +126,13 @@ public class Upchuck extends Enemy {
 	@Override
 	public void takeDamage(double amnt) {
 		health -= amnt;
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		if(Globals.rand.nextFloat() <= Upchuck.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override

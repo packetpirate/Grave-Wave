@@ -14,6 +14,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Aberration extends Boss {
@@ -22,6 +23,7 @@ public class Aberration extends Boss {
 	private static final float HEALTH = 10_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
+	private static final float POWERUP_CHANCE = 0.9f;
 	private static final float BILE_DAMAGE = 1.0f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 9);
 	private static final long BILE_DELAY = 25L;
@@ -126,6 +128,13 @@ public class Aberration extends Boss {
 	@Override
 	public void takeDamage(double amnt) {
 		health -= amnt;
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		if(Globals.rand.nextFloat() <= Aberration.POWERUP_CHANCE) {
+			Powerups.spawnRandomPowerup(gs, position, cTime);
+		}
 	}
 
 	@Override
