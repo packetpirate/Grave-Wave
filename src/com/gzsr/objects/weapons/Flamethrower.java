@@ -20,7 +20,7 @@ public class Flamethrower extends Weapon {
 	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;
 	private static final int START_CLIPS = 3;
-	private static final long RELOAD_TIME = 3000L;
+	private static final long RELOAD_TIME = 3_000L;
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final double EMBER_DAMAGE = 2.0;

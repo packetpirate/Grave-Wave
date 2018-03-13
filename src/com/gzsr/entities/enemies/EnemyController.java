@@ -34,11 +34,6 @@ public class EnemyController implements Entity {
 		add("Upchuck");
 		add("Gasbag");
 		add("BigMama");
-		
-		// Bosses
-		add("Aberration");
-		add("Zombat");
-		add("Stitches");
 	}};
 	
 	private List<Enemy> unborn;
@@ -88,43 +83,59 @@ public class EnemyController implements Entity {
 		addImmediately.clear();
 		alive.clear();
 		
-		// Determine number of zombies based on wave number.
-		updateSpawnPool();
-		
-		// Create unborn enemies according to spawn pool.
-		while(spawnPool > 0) {
-			int spawn = Globals.rand.nextInt(4); // Determine which side to spawn this enemy on.
-			float x = 0.0f;
-			float y = 0.0f;
-			
-			if(spawn == 0) {
-				// Top Spawn
-				x = Globals.rand.nextFloat() * Globals.WIDTH;
-				y -= 48.0f;
-			} else if(spawn == 1) {
-				// Right Spawn
-				x += Globals.WIDTH + 48.0f;
-				y = Globals.rand.nextFloat() * Globals.HEIGHT;
-			} else if(spawn == 2) {
-				// Bottom Spawn
-				x = Globals.rand.nextFloat() * Globals.WIDTH;
-				y += Globals.HEIGHT + 48.0f;
-			} else {
-				// Left Spawn
-				x -= 48.0f;
-				y = Globals.rand.nextFloat() * Globals.HEIGHT;
+		if((wave % Stitches.appearsOnWave()) == 0) {
+			Pair<Float> spawnPos = getSpawnPosition();
+			Stitches st = new Stitches(spawnPos);
+			unborn.add(st);
+		} else if((wave % Zombat.appearsOnWave()) == 0) {
+			for(int i = 0; i < 3; i++) {
+				Pair<Float> spawnPos = getSpawnPosition();
+				Zombat zb = new Zombat(spawnPos);
+				unborn.add(zb);
 			}
+		} else if((wave % Aberration.appearsOnWave()) == 0) {
+			Pair<Float> spawnPos = getSpawnPosition();
+			Aberration ab = new Aberration(spawnPos);
+			unborn.add(ab);
+		} else {
+			// Determine number of zombies based on wave number.
+			spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
 			
-			spawnEnemy(new Pair<Float>(x, y));
+			// Create unborn enemies according to spawn pool.
+			while(spawnPool > 0) {
+				Pair<Float> spawnPos = getSpawnPosition();
+				spawnEnemy(spawnPos);
+			}
 		}
 		
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 	}
 	
-	private void updateSpawnPool() {
-		// Determine spawn pool for next wave.
-		spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
-		System.out.println("INFO: Spawn Pool = " + spawnPool);
+	private Pair<Float> getSpawnPosition() {
+		int spawn = Globals.rand.nextInt(4); // Determine which side to spawn this enemy on.
+		
+		float x = 0.0f;
+		float y = 0.0f;
+		
+		if(spawn == 0) {
+			// Top Spawn
+			x = Globals.rand.nextFloat() * Globals.WIDTH;
+			y -= 48.0f;
+		} else if(spawn == 1) {
+			// Right Spawn
+			x += Globals.WIDTH + 48.0f;
+			y = Globals.rand.nextFloat() * Globals.HEIGHT;
+		} else if(spawn == 2) {
+			// Bottom Spawn
+			x = Globals.rand.nextFloat() * Globals.WIDTH;
+			y += Globals.HEIGHT + 48.0f;
+		} else {
+			// Left Spawn
+			x -= 48.0f;
+			y = Globals.rand.nextFloat() * Globals.HEIGHT;
+		}
+		
+		return new Pair<Float>(x, y);
 	}
 	
 	private void spawnEnemy(Pair<Float> position) {

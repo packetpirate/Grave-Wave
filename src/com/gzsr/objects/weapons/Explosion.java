@@ -19,9 +19,13 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.StatusEffect;
 
 public class Explosion implements Entity {
+	public enum Type {
+		NORMAL, POISON, BLOOD
+	}
+	
 	private Animation anim;
-	private ExplosionType type;
-	public ExplosionType getType() { return type; }
+	private Type type;
+	public Type getType() { return type; }
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -35,11 +39,11 @@ public class Explosion implements Entity {
 	
 	private List<Entity> entitiesAffected;
 	
-	public Explosion(ExplosionType type_, String animName_, Pair<Float> position_, double damage_, float radius_) {
+	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float radius_) {
 		this(type_, animName_, position_, null, damage_, radius_);
 	}
 	
-	public Explosion(ExplosionType type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
+	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
@@ -100,7 +104,7 @@ public class Explosion implements Entity {
 				} else return false;
 			} else if(e instanceof Enemy) {
 				// TODO: Add support for adding status effect to an enemy.
-				if(!(type.equals(ExplosionType.BLOOD)) && !(e instanceof TinyZumby)) {
+				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					float dist = Calculate.Distance(position, en.getPosition());
 					if(dist <= radius) {

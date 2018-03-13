@@ -15,12 +15,12 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class ClaymoreWeapon extends Weapon {
-	private static final int PRICE = 1200;
+	private static final int PRICE = 1_200;
 	private static final int AMMO_PRICE = 250;
-	private static final long COOLDOWN = 0L;
+	private static final long COOLDOWN = 1_500L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;
-	private static final long RELOAD_TIME = 1000L;
+	private static final long RELOAD_TIME = 1_000L;
 	private static final String ICON_NAME = "GZS_ClaymoreWeapon";
 	private static final String PARTICLE_NAME = "GZS_Claymore";
 	private static final String FIRE_SOUND = "landmine_armed";

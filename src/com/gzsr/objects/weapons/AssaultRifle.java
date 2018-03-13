@@ -16,12 +16,12 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class AssaultRifle extends Weapon {
-	private static final int PRICE = 1000;
+	private static final int PRICE = 1_000;
 	private static final int AMMO_PRICE = 200;
 	private static final long COOLDOWN = 100L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
-	private static final long RELOAD_TIME = 2000L;
+	private static final long RELOAD_TIME = 2_000L;
 	private static final double DAMAGE = 50.0;
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "shoot3";

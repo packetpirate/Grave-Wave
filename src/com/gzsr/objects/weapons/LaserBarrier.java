@@ -19,10 +19,10 @@ import com.gzsr.status.Status;
 public class LaserBarrier extends Weapon {
 	private static final int PRICE = 1_500;
 	private static final int AMMO_PRICE = 750;
-	private static final long COOLDOWN = 1000L;
+	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 2;
 	private static final int START_CLIPS = 4;
-	private static final long RELOAD_TIME = 3000L;
+	private static final long RELOAD_TIME = 3_000L;
 	private static final Color BARRIER_RANGE_INDICATOR = new Color(0xA0FAFF);
 	private static final float BARRIER_RANGE = 750.0f;
 	private static final String ICON_NAME = "GZS_LaserWire";

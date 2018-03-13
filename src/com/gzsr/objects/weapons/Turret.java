@@ -25,7 +25,7 @@ import com.gzsr.states.GameState;
 
 public class Turret extends Projectile {
 	private static final double HEALTH_MAX = 2_00.0;
-	private static final long TURRET_LIFESPAN = 15_0000L;
+	private static final long TURRET_LIFESPAN = 60_000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
 	private static final double PROJECTILE_DAMAGE = 25.0;

@@ -11,7 +11,7 @@ import com.gzsr.gfx.particles.Projectile;
 public class LaserNode extends Projectile {
 	private static final Color BARRIER_COLOR = new Color(0xFFA0B9);
 	private static final float BARRIER_WIDTH = 3.0f;
-	private static final double DURABILITY_MAX = 10000.0;
+	private static final double DURABILITY_MAX = 10_000.0;
 	
 	private LaserNode other;
 	private boolean host;

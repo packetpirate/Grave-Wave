@@ -20,7 +20,7 @@ public class Pistol extends Weapon {
 	private static final long COOLDOWN = 300L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
-	private static final long RELOAD_TIME = 1500L;
+	private static final long RELOAD_TIME = 1_500L;
 	private static final double DAMAGE = 75.0;
 	private static final String ICON_NAME = "GZS_Popgun";
 	private static final String FIRE_SOUND = "shoot4";

@@ -8,7 +8,6 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
 
 public class BigMama extends Enemy {
@@ -63,7 +62,7 @@ public class BigMama extends Enemy {
 				}
 				
 				// Spawn a blood explosion centered on the Big Mama.
-				Explosion blood = new Explosion(ExplosionType.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_DIST);
+				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_DIST);
 				gs.addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;

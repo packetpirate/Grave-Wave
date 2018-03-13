@@ -32,6 +32,7 @@ public class ExtraLife extends Item {
 			player.addHealth(amnt);
 		}
 		
+		duration = 0L;
 		pickup.play();
 	}
 	

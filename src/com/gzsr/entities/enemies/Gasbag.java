@@ -8,7 +8,6 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.objects.weapons.ExplosionType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
 
@@ -46,7 +45,7 @@ public class Gasbag extends Enemy {
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
 		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DAMAGE, Gasbag.POISON_DURATION, cTime);
-		Explosion poison = new Explosion(ExplosionType.POISON, "GZS_PoisonExplosion", new Pair<Float>(position.x, position.y), pe, 0.0, Gasbag.EXPLODE_RADIUS);
+		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", new Pair<Float>(position.x, position.y), pe, 0.0, Gasbag.EXPLODE_RADIUS);
 		gs.addEntity(String.format("poisonExplosion%d", id), poison);
 		
 		explode.play();

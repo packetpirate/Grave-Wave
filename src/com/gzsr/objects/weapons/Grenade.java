@@ -10,7 +10,7 @@ import com.gzsr.states.GameState;
 
 public class Grenade extends Projectile {
 	public static final float SPEED = 0.25f;
-	public static final long LIFESPAN = 1000L;
+	public static final long LIFESPAN = 1_000L;
 	
 	private Sound explode;
 	private Explosion exp;

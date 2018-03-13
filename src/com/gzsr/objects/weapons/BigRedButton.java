@@ -21,7 +21,7 @@ import com.gzsr.status.Status;
 public class BigRedButton extends Weapon {
 	private static final int PRICE = 10_000;
 	private static final int AMMO_PRICE = 8_000;
-	private static final long COOLDOWN = 15000L;
+	private static final long COOLDOWN = 15_000L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
 	private static final long RELOAD_TIME = 0L;
@@ -79,7 +79,7 @@ public class BigRedButton extends Weapon {
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			double damage = BigRedButton.DAMAGE + (BigRedButton.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-			Explosion exp = new Explosion(ExplosionType.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
+			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
 		
