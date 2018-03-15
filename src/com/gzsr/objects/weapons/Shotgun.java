@@ -21,6 +21,7 @@ public class Shotgun extends Weapon {
 	private static final long COOLDOWN = 1_200L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 5;
+	private static final int MAX_CLIPS = 8;
 	private static final int SHOT_COUNT = 5;
 	private static final float MAX_SPREAD = (float)(Math.PI / 12);
 	private static final long RELOAD_TIME = 2_500L;
@@ -126,6 +127,9 @@ public class Shotgun extends Weapon {
 
 	@Override
 	protected int getStartClips() { return Shotgun.START_CLIPS; }
+	
+	@Override
+	protected int getMaxClips() { return Shotgun.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

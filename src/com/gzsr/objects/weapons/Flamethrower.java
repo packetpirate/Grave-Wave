@@ -19,7 +19,8 @@ public class Flamethrower extends Weapon {
 	private static final int AMMO_PRICE = 1_000; 
 	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;
-	private static final int START_CLIPS = 3;
+	private static final int START_CLIPS = 2;
+	private static final int MAX_CLIPS = 5;
 	private static final long RELOAD_TIME = 3_000L;
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
@@ -105,6 +106,9 @@ public class Flamethrower extends Weapon {
 
 	@Override
 	protected int getStartClips() { return Flamethrower.START_CLIPS; }
+	
+	@Override
+	protected int getMaxClips() { return Flamethrower.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() { return Flamethrower.COOLDOWN; }

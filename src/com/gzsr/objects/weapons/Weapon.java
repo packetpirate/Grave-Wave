@@ -124,8 +124,20 @@ public abstract class Weapon implements Entity {
 	public abstract int getClipSize();
 	public int getClipAmmo() { return ammoInClip; }
 	protected abstract int getStartClips();
+	protected abstract int getMaxClips();
+	public boolean clipsMaxedOut() {
+		int totalAmmo = ammoInClip + ammoInInventory;
+		int maxAmmo = getMaxClips() * getClipSize();
+		return (totalAmmo >= maxAmmo); 
+	}
 	public int getInventoryAmmo() { return ammoInInventory; }
-	public void addInventoryAmmo(int amnt) { ammoInInventory += amnt; }
+	public void addInventoryAmmo(int amnt) {
+		if(!clipsMaxedOut()) {
+			int totalAmmo = ammoInClip + ammoInInventory;
+			boolean noOverflow = (totalAmmo + amnt) <= (getClipSize() * getMaxClips()); 
+			ammoInInventory += (noOverflow ? amnt : ((getClipSize() * getMaxClips()) - totalAmmo));
+		}
+	}
 	public abstract long getCooldown();
 	public List<Projectile> getProjectiles() { return projectiles; }
 	public abstract ProjectileType getProjectile();

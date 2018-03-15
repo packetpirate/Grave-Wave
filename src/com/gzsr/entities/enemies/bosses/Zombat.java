@@ -13,7 +13,7 @@ import com.gzsr.states.GameState;
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
 	private static final int SPAWN_COST = 12;
-	private static final float HEALTH = 500.0f;
+	private static final float HEALTH = 1_500.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
 	private static final float POWERUP_CHANCE = 0.6f;

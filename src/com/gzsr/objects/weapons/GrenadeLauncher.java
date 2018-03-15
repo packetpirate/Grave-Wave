@@ -19,9 +19,10 @@ public class GrenadeLauncher extends Weapon {
 	private static final int AMMO_PRICE = 1_500;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 8;
-	private static final int START_CLIPS = 4;
+	private static final int START_CLIPS = 2;
+	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
-	private static final double DAMAGE = 250.0;
+	private static final double DAMAGE = 200.0;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
 	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
@@ -125,6 +126,9 @@ public class GrenadeLauncher extends Weapon {
 	protected int getStartClips() {
 		return GrenadeLauncher.START_CLIPS;
 	}
+	
+	@Override
+	protected int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

@@ -8,9 +8,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyController;
@@ -206,6 +208,30 @@ public class Console implements Entity {
 					} else if(command.equals("killall") && (args == 0)) {
 						ec.getAliveEnemies().clear();
 						ec.getUnbornEnemies().clear();
+					} else if(command.equals("music") && (args == 1)) {
+						String action = tokens[1];
+						
+						if(action.equals("pause")) {
+							MusicPlayer.getInstance().pause();
+						} else if(action.equals("resume")) {
+							MusicPlayer.getInstance().resume();
+						} else if(action.equals("reset")) {
+							MusicPlayer.getInstance().reset();
+							
+							try {
+								MusicPlayer.getInstance().nextSong();
+							} catch(SlickException se) {
+								se.printStackTrace();
+								System.err.println("Error with console command: /" + command);
+							}
+						} else if(action.equals("next")) {
+							try {
+								MusicPlayer.getInstance().nextSong();
+							} catch(SlickException se) {
+								se.printStackTrace();
+								System.err.println("Error with console command: /" + command);
+							}
+						}
 					} else {
 						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}

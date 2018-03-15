@@ -20,6 +20,7 @@ public class Pistol extends Weapon {
 	private static final long COOLDOWN = 300L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
+	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
 	private static final double DAMAGE = 75.0;
 	private static final String ICON_NAME = "GZS_Popgun";
@@ -129,6 +130,9 @@ public class Pistol extends Weapon {
 	
 	@Override
 	protected int getStartClips() { return Pistol.START_CLIPS; }
+	
+	@Override
+	protected int getMaxClips() { return Pistol.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

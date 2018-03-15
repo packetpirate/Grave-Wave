@@ -20,6 +20,7 @@ public class ClaymoreWeapon extends Weapon {
 	private static final long COOLDOWN = 1_500L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;
+	private static final int MAX_CLIPS = 8;
 	private static final long RELOAD_TIME = 1_000L;
 	private static final String ICON_NAME = "GZS_ClaymoreWeapon";
 	private static final String PARTICLE_NAME = "GZS_Claymore";
@@ -99,6 +100,9 @@ public class ClaymoreWeapon extends Weapon {
 	protected int getStartClips() {
 		return ClaymoreWeapon.START_CLIPS;
 	}
+	
+	@Override
+	protected int getMaxClips() { return ClaymoreWeapon.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

@@ -19,6 +19,7 @@ public class SentryWeapon extends Weapon {
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
+	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 10_000L;
 	private static final String ICON_NAME = "GZS_Turret";
 	private static final String FIRE_SOUND = "landmine_armed";
@@ -97,6 +98,9 @@ public class SentryWeapon extends Weapon {
 	protected int getStartClips() {
 		return SentryWeapon.START_CLIPS;
 	}
+	
+	@Override
+	protected int getMaxClips() { return SentryWeapon.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

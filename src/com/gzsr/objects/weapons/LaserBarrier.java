@@ -22,6 +22,7 @@ public class LaserBarrier extends Weapon {
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 2;
 	private static final int START_CLIPS = 4;
+	private static final int MAX_CLIPS = 8;
 	private static final long RELOAD_TIME = 3_000L;
 	private static final Color BARRIER_RANGE_INDICATOR = new Color(0xA0FAFF);
 	private static final float BARRIER_RANGE = 750.0f;
@@ -147,6 +148,9 @@ public class LaserBarrier extends Weapon {
 	protected int getStartClips() {
 		return LaserBarrier.START_CLIPS;
 	}
+	
+	@Override
+	protected int getMaxClips() { return LaserBarrier.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

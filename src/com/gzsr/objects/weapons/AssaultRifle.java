@@ -21,6 +21,7 @@ public class AssaultRifle extends Weapon {
 	private static final long COOLDOWN = 100L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;
+	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
 	private static final double DAMAGE = 50.0;
 	private static final String ICON_NAME = "GZS_RTPS";
@@ -120,6 +121,9 @@ public class AssaultRifle extends Weapon {
 
 	@Override
 	protected int getStartClips() { return AssaultRifle.START_CLIPS; }
+	
+	@Override
+	protected int getMaxClips() { return AssaultRifle.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

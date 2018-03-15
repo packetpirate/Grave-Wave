@@ -1,13 +1,11 @@
 package com.gzsr.entities.enemies;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.util.FontUtils;
 
@@ -23,9 +21,9 @@ import com.gzsr.states.GameState;
 
 public class EnemyController implements Entity {
 	private static final int SPAWN_POOL_START = 5;
-	private static final long DEFAULT_SPAWN = 2000L;
+	private static final long DEFAULT_SPAWN = 2_000L;
+	private static final long MIN_SPAWN_RATE = 500L;
 	private static final long WAVE_BREAK_TIME = 10_000L;
-	private static final TrueTypeFont FONT_NORMAL = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 32), true);
 	
 	private static final List<String> SPAWNABLE_NAMES = new ArrayList<String>() {{
 		// Normal Enemies
@@ -83,12 +81,15 @@ public class EnemyController implements Entity {
 		addImmediately.clear();
 		alive.clear();
 		
+		spawnRate = (DEFAULT_SPAWN - (long)((Math.log(wave) / Math.log(8)) * 1000.0));
+		if(spawnRate < MIN_SPAWN_RATE) spawnRate = MIN_SPAWN_RATE;
+		
 		if((wave % Stitches.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Stitches st = new Stitches(spawnPos);
 			unborn.add(st);
 		} else if((wave % Zombat.appearsOnWave()) == 0) {
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < 4; i++) {
 				Pair<Float> spawnPos = getSpawnPosition();
 				Zombat zb = new Zombat(spawnPos);
 				unborn.add(zb);

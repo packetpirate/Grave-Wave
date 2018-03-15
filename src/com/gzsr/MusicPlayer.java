@@ -43,6 +43,7 @@ public class MusicPlayer {
 	
 	public void reset() {
 		currentSong = 0;
+		
 		if(nowPlaying != null) {
 			nowPlaying.pause();
 			nowPlaying = null;
@@ -54,7 +55,7 @@ public class MusicPlayer {
 		if(currentSong > SOUNDTRACK_LENGTH) currentSong = 1; 
 		
 		String songName = String.format("soundtrack_%02d", currentSong);
-		Music song = new Music(String.format("music/%s.ogg", songName));
+		Music song = new Music(String.format("music/%s.ogg", songName), true);
 		if(song != null) {
 			nowPlaying = song;
 			nowPlaying.play();

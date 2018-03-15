@@ -20,6 +20,7 @@ public class BowAndArrow extends Weapon {
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
+	private static final int MAX_CLIPS = 3;
 	private static final double DAMAGE = 150.0;
 	private static final float CHARGE_RATE = 0.00075f;
 	private static final String ICON_NAME = "GZS_Bow";
@@ -171,6 +172,9 @@ public class BowAndArrow extends Weapon {
 	protected int getStartClips() {
 		return BowAndArrow.START_CLIPS;
 	}
+	
+	@Override
+	protected int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

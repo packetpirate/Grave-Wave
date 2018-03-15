@@ -344,6 +344,14 @@ public class ShopState extends BasicGameState implements InputListener {
 										 (int)((Globals.HEIGHT / 2) - 80.0f), 
 										 (int)(Globals.WIDTH - (CONTAINER_WIDTH * 2) - 40.0f), Color.white);
 					ammoButton.render(g, 0L);
+					if(((Weapon)item).clipsMaxedOut()) {
+						// If the player has max ammo for this weapon, show a "disabled" overlay on the button.
+						float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
+						float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
+						
+						g.setColor(new Color(0xBB333333));
+						g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
+					}
 					FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
 										 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
 										 (int)ammoButton.getSize().x.floatValue(), 
@@ -457,13 +465,16 @@ public class ShopState extends BasicGameState implements InputListener {
 				// Buy ammo for the currently selected weapon.
 				if(item instanceof Weapon) {
 					Weapon w = (Weapon)item;
-					int cost = w.getAmmoPrice();
-					int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
-					if(moneyAfterPurchase >= 0) {
-						// Player has enough money. Buy the ammo.
-						Globals.player.setAttribute("money", moneyAfterPurchase);
-						w.addInventoryAmmo(w.getClipSize());
-						AssetManager.getManager().getSound("buy_ammo2").play();
+					
+					if(!w.clipsMaxedOut()) {
+						int cost = w.getAmmoPrice();
+						int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
+						if(moneyAfterPurchase >= 0) {
+							// Player has enough money. Buy the ammo.
+							Globals.player.setAttribute("money", moneyAfterPurchase);
+							w.addInventoryAmmo(w.getClipSize());
+							AssetManager.getManager().getSound("buy_ammo2").play();
+						}
 					}
 				}
 			}

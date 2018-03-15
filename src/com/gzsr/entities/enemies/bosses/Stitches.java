@@ -21,6 +21,7 @@ public class Stitches extends Boss {
 	private static final float POWERUP_CHANCE = 1.0f;
 	private static final float ATTACK_DIST = 300.0f;
 	private static final float RELEASE_DIST = 100.0f;
+	private static final float HOOK_DAMAGE = 0.3f;
 	private static final float HOOK_SPEED = 0.4f;
 	private static final long HOOK_COOLDOWN = 5_000L;
 	
@@ -71,10 +72,13 @@ public class Stitches extends Boss {
 					lastHook = cTime;
 				} else {
 					// Otherwise, reel the player in.
-					float xOff = (float)(Math.cos(theta) * -(Stitches.HOOK_SPEED * 2));
-					float yOff = (float)(Math.sin(theta) * -(Stitches.HOOK_SPEED * 2));
+					float xOff = (float)(Math.cos(theta) * -(Stitches.HOOK_SPEED * 4));
+					float yOff = (float)(Math.sin(theta) * -(Stitches.HOOK_SPEED * 4));
 					Globals.player.move(xOff, yOff);
 					hook.setPosition(new Pair<Float>(Globals.player.getPosition().x, Globals.player.getPosition().y));
+					
+					// Make the player take bleed damage.
+					Globals.player.takeDamage(Stitches.HOOK_DAMAGE);
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);

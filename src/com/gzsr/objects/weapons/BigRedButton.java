@@ -24,6 +24,7 @@ public class BigRedButton extends Weapon {
 	private static final long COOLDOWN = 15_000L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
+	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 0L;
 	private static final double DAMAGE = 250.0;
 	private static final float EXP_RADIUS = 150.0f;
@@ -175,6 +176,9 @@ public class BigRedButton extends Weapon {
 		return BigRedButton.START_CLIPS;
 	}
 
+	@Override
+	protected int getMaxClips() { return BigRedButton.MAX_CLIPS; }
+	
 	@Override
 	public long getCooldown() {
 		return BigRedButton.COOLDOWN;
