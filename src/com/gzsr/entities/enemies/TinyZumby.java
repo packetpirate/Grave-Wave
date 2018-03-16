@@ -14,11 +14,6 @@ public class TinyZumby extends Enemy {
 		super(EnemyType.LIL_ZUMBY, position);
 		this.health = TinyZumby.HEALTH;
 	}
-	
-	@Override
-	public boolean isAlive(long cTime) {
-		return (health > 0);
-	}
 
 	@Override
 	public void move(int delta) {

@@ -264,11 +264,11 @@ public class EnemyController implements Entity {
 			player.checkProjectiles(enemy, cTime);
 			
 			if(Globals.player.isAlive()) {
+				if(enemy.dead()) enemy.onDeath(gs, cTime);
 				if(!enemy.isAlive(cTime)) {
 					// If the enemy died, give the player experience and cash, and remove the enemy.
 					player.addExperience(enemy.getExpValue());
 					player.addIntAttribute("money", enemy.getCashValue());
-					enemy.onDeath(gs, cTime);
 					it.remove();
 				}
 				

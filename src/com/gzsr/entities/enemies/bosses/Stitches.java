@@ -29,6 +29,8 @@ public class Stitches extends Boss {
 	private boolean hooked;
 	private long lastHook;
 	
+	private boolean deathHandled;
+	
 	public Stitches(Pair<Float> position_) {
 		super(EnemyType.STITCHES, position_);
 		this.health = Stitches.HEALTH;
@@ -36,6 +38,8 @@ public class Stitches extends Boss {
 		hook = null;
 		hooked = false;
 		lastHook = -Stitches.HOOK_COOLDOWN;
+		
+		deathHandled = false;
 	}
 	
 	@Override
@@ -82,7 +86,7 @@ public class Stitches extends Boss {
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			}
 		} else {
 			hook = null;
@@ -106,11 +110,6 @@ public class Stitches extends Boss {
 	}
 
 	@Override
-	public boolean isAlive(long cTime) {
-		return (health > 0);
-	}
-
-	@Override
 	public void move(int delta) {
 		if(!moveBlocked) {
 			position.x += (float)Math.cos(theta) * Stitches.SPEED * delta;
@@ -130,9 +129,11 @@ public class Stitches extends Boss {
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		if(Globals.rand.nextFloat() <= Stitches.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= Stitches.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override

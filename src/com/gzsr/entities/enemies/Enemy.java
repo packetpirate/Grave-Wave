@@ -45,14 +45,20 @@ public abstract class Enemy implements Entity {
 		this.experience = type.getExperience();
 	}
 	
-	public abstract boolean isAlive(long cTime);
+	public boolean dead() {
+		return (health <= 0);
+	}
+	
+	public boolean isAlive(long cTime) {
+		return !dead();
+	}
 	
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			animation.update(cTime);
-			if(Globals.player.isAlive()) move(delta);
+			if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 		}
 	}
 	
@@ -74,6 +80,9 @@ public abstract class Enemy implements Entity {
 	}
 	
 	public Shape getCollider() { return bounds; }
+	public boolean touchingPlayer() {
+		return bounds.intersects(Globals.player.getCollider());
+	}
 	
 	public abstract void takeDamage(double amnt);
 	public void onDeath(GameState gs, long cTime) {}

@@ -32,11 +32,14 @@ public class Upchuck extends Enemy {
 	private List<Projectile> bile;
 	private long lastBile;
 	
+	private boolean deathHandled;
+	
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
 		this.health = Upchuck.HEALTH;
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
+		this.deathHandled = false;
 	}
 	
 	@Override
@@ -45,7 +48,7 @@ public class Upchuck extends Enemy {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			} else vomit(cTime);
 		}
 		
@@ -105,10 +108,6 @@ public class Upchuck extends Enemy {
 	public boolean isAlive(long cTime) {
 		return !dead() || !bile.isEmpty();
 	}
-	
-	private boolean dead() {
-		return (health <= 0);
-	}
 
 	@Override
 	public void move(int delta) {
@@ -130,9 +129,11 @@ public class Upchuck extends Enemy {
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		if(Globals.rand.nextFloat() <= Upchuck.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= Upchuck.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override

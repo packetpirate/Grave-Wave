@@ -23,12 +23,14 @@ public class Zombat extends Boss {
 	private static final Color BLOOD_COLOR = new Color(0xAA0000);
 	
 	private boolean siphoningBlood;
+	private boolean deathHandled;
 	
 	public Zombat(Pair<Float> position_) {
 		super(EnemyType.ZOMBAT_SWARM, position_);
 		this.health = Zombat.HEALTH;
 		
 		siphoningBlood = false;
+		deathHandled = false;
 	}
 	
 	@Override
@@ -39,7 +41,7 @@ public class Zombat extends Boss {
 			animation.update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			} else siphoningBlood = Globals.player.isAlive(); // Only start siphoning if player is alive, obviously...
 			
 			if(Globals.player.isAlive() && siphoningBlood) {
@@ -63,15 +65,10 @@ public class Zombat extends Boss {
 			g.setLineWidth(1.0f);
 		}
 	}
-
-	@Override
-	public boolean isAlive(long cTime) {
-		return (health > 0);
-	}
 	
 	@Override
 	public void blockMovement() {
-		// Do nothing...
+		// Do nothing... can't block a Zombat with laser barriers.
 	}
 
 	@Override
@@ -90,9 +87,11 @@ public class Zombat extends Boss {
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		if(Globals.rand.nextFloat() <= Zombat.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= Zombat.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override

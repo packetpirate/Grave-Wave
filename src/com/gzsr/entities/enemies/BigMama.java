@@ -27,6 +27,8 @@ public class BigMama extends Enemy {
 	private long created;
 	private boolean exploded;
 	
+	private boolean deathHandled;
+	
 	public BigMama(Pair<Float> position) {
 		super(EnemyType.BIG_MAMA, position);
 		this.health = BigMama.HEALTH;
@@ -35,6 +37,8 @@ public class BigMama extends Enemy {
 		
 		created = -1L;
 		exploded = false;
+		
+		deathHandled = false;
 	}
 	
 	@Override
@@ -69,14 +73,14 @@ public class BigMama extends Enemy {
 				explosion.play();
 			} else {
 				animation.update(cTime);
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			}
 		}
 	}
 	
 	@Override
 	public boolean isAlive(long cTime) {
-		return (!exploded && (health > 0));
+		return (!exploded && !dead());
 	}
 
 	@Override
@@ -103,9 +107,11 @@ public class BigMama extends Enemy {
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		if(Globals.rand.nextFloat() <= BigMama.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= BigMama.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override

@@ -17,11 +17,6 @@ public class Rotdog extends Enemy {
 	}
 
 	@Override
-	public boolean isAlive(long cTime) {
-		return (health > 0);
-	}
-
-	@Override
 	public void move(int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 		

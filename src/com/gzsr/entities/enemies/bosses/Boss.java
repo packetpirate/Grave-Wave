@@ -18,12 +18,4 @@ public abstract class Boss extends Enemy {
 	public String getDescription() {
 		return "Stronger than the average enemy. This thing means business.";
 	}
-
-	public abstract boolean isAlive(long cTime);
-
-	public abstract void move(int delta);
-
-	public abstract void takeDamage(double amnt);
-	public abstract double getDamage();
-
 }

@@ -25,10 +25,13 @@ public class Gasbag extends Enemy {
 	
 	private Sound explode;
 	
+	private boolean deathHandled;
+	
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
 		this.health = Gasbag.HEALTH;
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
+		this.deathHandled = false;
 	}
 	
 	@Override
@@ -37,7 +40,7 @@ public class Gasbag extends Enemy {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			} else explode(gs, cTime);
 		}
 	}
@@ -51,19 +54,16 @@ public class Gasbag extends Enemy {
 		explode.play();
 		health = 0.0;
 	}
-
-	@Override
-	public boolean isAlive(long cTime) {
-		return (health > 0);
-	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		explode(gs, cTime);
 		
-		if(Globals.rand.nextFloat() <= Gasbag.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= Gasbag.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override

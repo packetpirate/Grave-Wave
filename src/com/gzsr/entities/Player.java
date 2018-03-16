@@ -298,7 +298,7 @@ public class Player implements Entity {
 		setAttribute("experience", 0);
 		setAttribute("expToLevel", 100);
 		setAttribute("level", 1);
-		setAttribute("skillPoints", 10);
+		setAttribute("skillPoints", 0);
 		
 		// Upgrade level attributes.
 		setAttribute("healthUp", 0);

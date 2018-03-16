@@ -33,12 +33,16 @@ public class Aberration extends Boss {
 	private List<Projectile> bile;
 	private long lastBile;
 	
+	private boolean deathHandled;
+	
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
 		this.health = Aberration.HEALTH;
 		
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
+		
+		this.deathHandled = false;
 	}
 	
 	@Override
@@ -47,7 +51,7 @@ public class Aberration extends Boss {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 			} else vomit(cTime);
 		}
 		
@@ -107,10 +111,6 @@ public class Aberration extends Boss {
 	public boolean isAlive(long cTime) {
 		return (!dead() || !bile.isEmpty());
 	}
-	
-	private boolean dead() {
-		return (health <= 0);
-	}
 
 	@Override
 	public void move(int delta) {
@@ -132,9 +132,11 @@ public class Aberration extends Boss {
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		if(Globals.rand.nextFloat() <= Aberration.POWERUP_CHANCE) {
+		if(!deathHandled && (Globals.rand.nextFloat() <= Aberration.POWERUP_CHANCE)) {
 			Powerups.spawnRandomPowerup(gs, position, cTime);
 		}
+		
+		deathHandled = true;
 	}
 
 	@Override
