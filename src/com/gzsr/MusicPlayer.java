@@ -4,7 +4,7 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
 public class MusicPlayer {
-	private static final int SOUNDTRACK_LENGTH = 15;
+	private static final int SOUNDTRACK_LENGTH = 9;
 	
 	private static MusicPlayer instance;
 	
@@ -61,6 +61,6 @@ public class MusicPlayer {
 			nowPlaying.play();
 		}
 		
-		System.out.println("Playing next song: " + songName);
+		//System.out.println("Playing next song: " + songName);
 	}
 }

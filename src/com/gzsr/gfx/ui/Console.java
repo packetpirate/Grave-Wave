@@ -41,7 +41,7 @@ public class Console implements Entity {
 	private static final Color CONSOLE_TEXTBOX = Color.darkGray;
 	private static final Color CONSOLE_TEXTBORDER = Color.black;
 	private static final TrueTypeFont CONSOLE_FONT = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 12), true);
-	private static final long DELETE_FREQ = 2L;
+	private static final long DELETE_FREQ = 4L;
 	
 	private GameState gs;
 	

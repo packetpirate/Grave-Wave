@@ -223,16 +223,14 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		if(key == Input.KEY_GRAVE) {
+		if((key == Input.KEY_GRAVE) && Globals.ENABLE_CONSOLE) {
 			console.setPauseTime(time);
 			consoleOpen = !consoleOpen;
-		}
-		else if((key == Input.KEY_P) && !consoleOpen) {
+		} else if((key == Input.KEY_P) && !consoleOpen) {
 			if(!paused) MusicPlayer.getInstance().pause();
 			else MusicPlayer.getInstance().resume();
 			paused = !paused;
-		}
-		else {
+		} else {
 			if(consoleOpen) {
 				console.keyReleased(key, c);
 			} else {

@@ -9,7 +9,7 @@ import com.gzsr.misc.MouseInfo;
 
 public class Globals {
 	// Contains global constants.
-	public static final String VERSION = "0.15";
+	public static final String VERSION = "1.0";
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;
@@ -18,7 +18,8 @@ public class Globals {
 	public static final int STEP_TIME = 1000 / TARGET_FPS;
 	public static final int MAX_STEPS = 4;
 	
-	public static final boolean SHOW_COLLIDERS = false;
+	public static final boolean SHOW_COLLIDERS = false; // Disabled in player releases.
+	public static final boolean ENABLE_CONSOLE = true; // TODO: Disable for player releases.
 	
 	public static int WIDTH = 1024;
 	public static int HEIGHT = 768;
