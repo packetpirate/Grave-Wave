@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -25,6 +21,7 @@ public class EnemyController implements Entity {
 	private static final long MIN_SPAWN_RATE = 500L;
 	private static final long WAVE_BREAK_TIME = 10_000L;
 	
+	@SuppressWarnings("serial")
 	private static final List<EnemyType> SPAWNABLE_NAMES = new ArrayList<EnemyType>() {{
 		// Normal Enemies
 		add(EnemyType.ZUMBY);
@@ -49,10 +46,15 @@ public class EnemyController implements Entity {
 	private long lastEnemy;
 	
 	private int wave;
+	public int getWave() { return wave; }
 	private long lastWave;
 	private boolean breakTime;
 	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
 	public boolean isRestarting() { return breakTime; }
+	public int timeToNextWave(long cTime) {
+		long elapsed = cTime - lastWave;
+		return (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
+	}
 	
 	public EnemyController() {
 		unborn = new ArrayList<Enemy>();
@@ -211,31 +213,13 @@ public class EnemyController implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_large");
-		if(breakTime) {
-			// Render the countdown to the next wave.
-			long elapsed = cTime - lastWave;
-			int time = (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
-			String text = String.format("Next Wave: %d", time);
-			int w = f.getWidth(text);
-			
-			g.setColor(Color.white);
-			FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
-		} else {
+		if(!isRestarting()) {
 			// Render all living enemies.
 			Iterator<Enemy> it = alive.iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
 				e.render(g, cTime);
 			}
-			
-			// Render the wave counter.
-			String text = String.format("Wave: %d", wave);
-			int w = f.getWidth(text);
-			
-			g.setColor(Color.white);
-			FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
-			
 		}
 	}
 	

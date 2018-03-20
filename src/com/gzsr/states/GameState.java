@@ -142,26 +142,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		player.getFlashlight().render(g, player, time);
 		
-		/*
-		// Draw the "shadow layer".
-		g.clearAlphaMap();
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		g.setDrawMode(Graphics.MODE_ALPHA_MAP);
-		
-		g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.85f));
-		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
-
-		AssetManager.getManager().getImage("GZS_LightAlphaMap").drawCentered(Globals.player.getPosition().x, Globals.player.getPosition().y);
-		
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		g.setDrawMode(Graphics.MODE_ALPHA_BLEND);
-		
-		g.setColor(Color.black);
-		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
-		
-		g.setDrawMode(Graphics.MODE_NORMAL);*/
-		
-		hud.render(g, player, time);
+		hud.render(g, this, time);
 		
 		if(paused) {
 			g.setColor(Color.white);

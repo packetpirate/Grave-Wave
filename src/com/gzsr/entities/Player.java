@@ -252,6 +252,14 @@ public class Player implements Entity {
 				g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
 				g.drawImage(image, (position.x - (image.getWidth() / 2)), 
 								   (position.y - (image.getHeight() / 2)));
+				
+				if(Globals.SHOW_COLLIDERS) {
+					g.setColor(Color.red);
+					g.drawRect((position.x - (image.getWidth() / 2)), 
+							   (position.y - (image.getHeight() / 2)), 
+							   image.getWidth(), image.getHeight());
+				}
+				
 				g.resetTransform();
 			} else {
 				// Draw a shape to represent the missing player image.
@@ -264,7 +272,6 @@ public class Player implements Entity {
 	/**
 	 * Reset all dAttributes and iAttributes members.
 	 */
-	@SuppressWarnings("serial")
 	public void reset() {
 		position.x = (float)(Globals.WIDTH / 2);
 		position.y = (float)(Globals.HEIGHT / 2);
