@@ -25,13 +25,13 @@ public class EnemyController implements Entity {
 	private static final long MIN_SPAWN_RATE = 500L;
 	private static final long WAVE_BREAK_TIME = 10_000L;
 	
-	private static final List<String> SPAWNABLE_NAMES = new ArrayList<String>() {{
+	private static final List<EnemyType> SPAWNABLE_NAMES = new ArrayList<EnemyType>() {{
 		// Normal Enemies
-		add("Zumby");
-		add("Rotdog");
-		add("Upchuck");
-		add("Gasbag");
-		add("BigMama");
+		add(EnemyType.ZUMBY);
+		add(EnemyType.ROTDOG);
+		add(EnemyType.CHUCK);
+		add(EnemyType.GASBAG);
+		add(EnemyType.BIG_MAMA);
 	}};
 	
 	private List<Enemy> unborn;
@@ -141,96 +141,17 @@ public class EnemyController implements Entity {
 	
 	private void spawnEnemy(Pair<Float> position) {
 		// Which enemies can still be spawned with our current spawning pool?
-		String [] filteredSpawnables = EnemyController.SPAWNABLE_NAMES.stream()
-													  .filter(name -> ((getCostByName(name) <= spawnPool) && canSpawnThisWave(name)))
-													  .toArray(String[]::new);
+		EnemyType [] filteredSpawnables = EnemyController.SPAWNABLE_NAMES
+														 .stream()
+													  	 .filter(type -> ((EnemyType.spawnCost(type) <= spawnPool) && (wave >= EnemyType.appearsOnWave(type))))
+													  	 .toArray(EnemyType[]::new);
 		// Choose a random enemy from the filtered list.
 		int i = Globals.rand.nextInt(filteredSpawnables.length);
 		
 		// Spawn the enemy and deduct their cost from the spawning pool.
-		String toSpawn = filteredSpawnables[i];
-		if(toSpawn.equals("Zumby")) {
-			Zumby z = new Zumby(position);
-			spawnPool -= Zumby.getSpawnCost();
-			unborn.add(z);
-		} else if(toSpawn.equals("Rotdog")) {
-			Rotdog r = new Rotdog(position);
-			spawnPool -= Rotdog.getSpawnCost();
-			unborn.add(r);
-		} else if(toSpawn.equals("Upchuck")) {
-			Upchuck u = new Upchuck(position);
-			spawnPool -= Upchuck.getSpawnCost();
-			unborn.add(u);
-		} else if(toSpawn.equals("Gasbag")) {
-			Gasbag g = new Gasbag(position);
-			spawnPool -= Gasbag.getSpawnCost();
-			unborn.add(g);
-		} else if(toSpawn.equals("BigMama")) {
-			BigMama b = new BigMama(position);
-			spawnPool -= BigMama.getSpawnCost();
-			unborn.add(b);
-		} else if(toSpawn.equals("Aberration")) {
-			Aberration a = new Aberration(position);
-			spawnPool -= Aberration.getSpawnCost();
-			unborn.add(a);
-		} else if(toSpawn.equals("Zombat")) {
-			Zombat z = new Zombat(position);
-			spawnPool -= Zombat.getSpawnCost();
-			unborn.add(z);
-		} else if(toSpawn.equals("Stitches")) {
-			Stitches s = new Stitches(position);
-			spawnPool -= Stitches.getSpawnCost();
-			unborn.add(s);
-		}
-	}
-	
-	private boolean canSpawnThisWave(String name) {
-		int appearsOn = -1;
-		switch(name) {
-			case "Zumby": 
-				appearsOn = Zumby.appearsOnWave();
-				break;
-			case "Rotdog": 
-				appearsOn = Rotdog.appearsOnWave();
-				break;
-			case "Upchuck": 
-				appearsOn = Upchuck.appearsOnWave();
-				break;
-			case "Gasbag": 
-				appearsOn = Gasbag.appearsOnWave();
-				break;
-			case "BigMama": 
-				appearsOn = BigMama.appearsOnWave();
-				break;
-			case "Aberration": 
-				appearsOn = Aberration.appearsOnWave();
-				break;
-			case "Zombat": 
-				appearsOn = Zombat.appearsOnWave();
-				break;
-			case "Stitches": 
-				appearsOn = Stitches.appearsOnWave();
-				break;
-			default: 
-				appearsOn = 1;
-				break;
-		}
-		
-		return (wave >= appearsOn);
-	}
-	
-	private int getCostByName(String name) {
-		switch(name) {
-			case "Zumby": return Zumby.getSpawnCost();
-			case "Rotdog": return Rotdog.getSpawnCost();
-			case "Upchuck": return Upchuck.getSpawnCost();
-			case "Gasbag": return Gasbag.getSpawnCost();
-			case "BigMama": return BigMama.getSpawnCost();
-			case "Aberration": return Aberration.getSpawnCost();
-			case "Zombat": return Zombat.getSpawnCost();
-			case "Stitches": return Stitches.getSpawnCost();
-			default: return 1;
-		}
+		EnemyType toSpawn = filteredSpawnables[i];
+		spawnPool -= EnemyType.spawnCost(toSpawn);
+		unborn.add(EnemyType.createInstance(toSpawn, position));
 	}
 
 	@Override

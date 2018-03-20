@@ -140,6 +140,8 @@ public class GameState extends BasicGameState implements InputListener {
 			pair.getValue().render(g, time);
 		}
 		
+		player.getFlashlight().render(g, player, time);
+		
 		/*
 		// Draw the "shadow layer".
 		g.clearAlphaMap();
