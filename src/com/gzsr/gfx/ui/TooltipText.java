@@ -2,7 +2,6 @@ package com.gzsr.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 
 import com.gzsr.Globals;

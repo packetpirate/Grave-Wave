@@ -33,8 +33,6 @@ public class Powerups {
 			List<Type> types = new ArrayList<Type>(Arrays.asList(Type.values()));
 			types = types.stream().filter(t -> (roll <= t.getDropChance())).collect(Collectors.toList());
 			
-			System.out.println(String.format("Roll: %.2f, Drops Available: %s", roll, types));
-			
 			if(types.size() > 0) {
 				int r = Globals.rand.nextInt(types.size());
 				return types.get(r);

@@ -36,9 +36,6 @@ public class HUD {
 	public HUD() throws SlickException {
 		lastWeaponSwitch = 0L;
 		cycleWeapons = false;
-		
-		AssetManager assets = AssetManager.getManager();
-		assets.addFont("eurostile.oblique", "fonts/eurostile.oblique.ttf", 16, false, false);
 	}
 	
 	private boolean displayWeapons(long cTime) {

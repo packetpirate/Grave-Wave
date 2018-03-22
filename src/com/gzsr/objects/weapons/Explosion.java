@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -32,6 +34,8 @@ public class Explosion implements Entity {
 		position.x = newPos.x;
 		position.y = newPos.y;
 	}
+	private Shape bounds;
+	public Shape getCollider() { return bounds; }
 	private StatusEffect status;
 	private double damage;
 	private float radius;
@@ -47,6 +51,11 @@ public class Explosion implements Entity {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
+		
+		float w = anim.getSrcSize().x;
+		float h = anim.getSrcSize().y;
+		this.bounds = new Rectangle((position.x - (w / 2)), (position.y - (h / 2)), w, h);
+		
 		this.status = status_;
 		this.damage = damage_;
 		this.radius = radius_;
@@ -96,7 +105,7 @@ public class Explosion implements Entity {
 			// If damage is taken, calculate damage based on distance from source.
 			if(e instanceof Player) {
 				float dist = Calculate.Distance(position, Globals.player.getPosition());
-				if(dist <= radius) {
+				if(Globals.player.getCollider().intersects(getCollider())) {
 					Globals.player.takeDamage(damage * (1.0f - (dist / radius)));
 					if(status != null) Globals.player.addStatus(status, status.getDuration());
 					entitiesAffected.add(Globals.player);
@@ -107,7 +116,7 @@ public class Explosion implements Entity {
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					float dist = Calculate.Distance(position, en.getPosition());
-					if(dist <= radius) {
+					if(en.getCollider().intersects(getCollider())) {
 						en.takeDamage(damage * (1.0f - (dist / radius)));
 						entitiesAffected.add(en);
 						return true;

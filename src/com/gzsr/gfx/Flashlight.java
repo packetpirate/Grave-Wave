@@ -33,7 +33,7 @@ public class Flashlight {
 		theta = player.getRotation();
 	}
 
-	public void render(Graphics g, Player player, long cTime) {
+	public void render(Graphics g, long cTime) {
 		g.clearAlphaMap();
 		
 		g.setDrawMode(Graphics.MODE_NORMAL);
@@ -43,11 +43,13 @@ public class Flashlight {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
-		if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
-		if(flashlight != null) {
-			g.rotate(origin.x, origin.y, (float)Math.toDegrees(theta - (Math.PI / 2)));
-			g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 42.0f));
-			g.resetTransform();
+		if(Globals.player.isAlive()) {
+			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
+			if(flashlight != null) {
+				g.rotate(origin.x, origin.y, (float)Math.toDegrees(theta - (Math.PI / 2)));
+				g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 42.0f));
+				g.resetTransform();
+			}
 		}
 		
 		GL11.glDisable(GL11.GL_BLEND);

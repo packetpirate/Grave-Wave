@@ -1,6 +1,5 @@
 package com.gzsr.states;
 
-import java.awt.Font;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,7 +12,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -32,7 +30,6 @@ import com.gzsr.objects.items.Item;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
-	private static final TrueTypeFont FONT_PAUSE = new TrueTypeFont(new Font("Lucida Console", Font.BOLD, 32), true);
 	
 	private AssetManager assets;
 	private long time, accu, consoleTimer;
@@ -140,15 +137,16 @@ public class GameState extends BasicGameState implements InputListener {
 			pair.getValue().render(g, time);
 		}
 		
-		player.getFlashlight().render(g, player, time);
+		player.getFlashlight().render(g, time);
 		
 		hud.render(g, this, time);
 		
 		if(paused) {
+			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 			g.setColor(Color.white);
-			int w = GameState.FONT_PAUSE.getWidth("Paused");
-			int h = GameState.FONT_PAUSE.getHeight();
-			FontUtils.drawCenter(GameState.FONT_PAUSE, "Paused", 
+			int w = g.getFont().getWidth("Paused");
+			int h = g.getFont().getLineHeight();
+			FontUtils.drawCenter(g.getFont(), "Paused", 
 								 ((Globals.WIDTH / 2) - (w / 2)), ((Globals.HEIGHT / 2) - (h / 2)), w);
 		}
 		

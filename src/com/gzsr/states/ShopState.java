@@ -481,7 +481,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		}
 		
 		// Check to see if we've clicked an item.
-		boolean itemClicked = findSelectedItem(x, y);
+		findSelectedItem(x, y);
 	}
 	
 	@Override

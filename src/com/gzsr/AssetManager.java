@@ -17,6 +17,7 @@ import com.gzsr.gfx.Animation;
 public class AssetManager {
 	private static int ASSETS_TO_LOAD = 0;
 	private static int ASSETS_LOADED = 0;
+	private static boolean LOADING_COMPLETE = false;
 	
 	private static AssetManager instance = null;
 	
@@ -40,6 +41,14 @@ public class AssetManager {
 		return ASSETS_LOADED;
 	}
 	
+	public static boolean loadingComplete() {
+		return LOADING_COMPLETE;
+	}
+	
+	public static void finishLoad() {
+		LOADING_COMPLETE = true;
+	}
+	
 	public static AssetManager getManager() {
 		if(instance == null) instance = new AssetManager();
 		return instance;
@@ -53,7 +62,7 @@ public class AssetManager {
 			images.put(key, image);
 			
 			AssetManager.ASSETS_LOADED++;
-			System.out.println(String.format("Image Loaded: %s", key));
+			//System.out.println(String.format("Image Loaded: %s", key));
 		}
 	}
 	
@@ -72,7 +81,7 @@ public class AssetManager {
 			animations.put(key, anim);
 			
 			AssetManager.ASSETS_LOADED++;
-			System.out.println(String.format("Animation Loaded: %s", key));
+			//System.out.println(String.format("Animation Loaded: %s", key));
 		}
 	}
 	
@@ -92,7 +101,7 @@ public class AssetManager {
 			sounds.put(key, sound);
 			
 			AssetManager.ASSETS_LOADED++;
-			System.out.println(String.format("Sound Loaded: %s", key));
+			//System.out.println(String.format("Sound Loaded: %s", key));
 		}
 	}
 	
@@ -123,7 +132,7 @@ public class AssetManager {
 				fonts.put(key, uni);
 				
 				AssetManager.ASSETS_LOADED++;
-				System.out.println(String.format("Font Loaded: %s", key));
+				//System.out.println(String.format("Font Loaded: %s", key));
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

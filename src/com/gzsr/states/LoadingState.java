@@ -29,10 +29,14 @@ public class LoadingState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
-		loadFonts();
-		loadImages();
-		loadAnimations(); // has to be loaded after images
-		loadSounds();
+		if(!AssetManager.loadingComplete()) {
+			loadFonts();
+			loadImages();
+			loadAnimations(); // has to be loaded after images
+			loadSounds();
+			
+			AssetManager.finishLoad();
+		}
 	}
 	
 	@Override
@@ -81,7 +85,6 @@ public class LoadingState extends BasicGameState {
 	private void loadFonts() throws SlickException {
 		String [] assetList = new String [] {
 			"fonts/PressStart2P-Regular.ttf",
-			"fonts/manaspc.ttf"
 		};
 		
 		for(String asset : assetList) {

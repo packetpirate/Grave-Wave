@@ -132,12 +132,13 @@ public class Console implements Entity {
 					
 					if(command.equals("help") && (args == 0)) {
 						pastCommands.add("  HELP: Here are some commands and example usage.");
-						pastCommands.add("    /help - display this help dialog");
 						pastCommands.add("    /spawn entityName - (usage: /spawn zumby) will enable Zumby spawning. Left click to spawn. Right click to stop.");
 						pastCommands.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
 						pastCommands.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
 						pastCommands.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
 						pastCommands.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
+						pastCommands.add("    /killall - will kill all enemies on the screen");
+						pastCommands.add("    /music [pause|resume|reset|next] - controls the music - (usage: /music next) will skip to the next song in the soundtrack.");
 					} else if(command.equals("spawn")) {
 						// Requires entity name and (x, y) coordinates.
 						if(args == 1) {

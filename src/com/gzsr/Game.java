@@ -1,5 +1,7 @@
 package com.gzsr;
 
+import java.io.File;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -13,6 +15,9 @@ public class Game extends StateBasedGame {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("java.library.path", "libs");
+		System.setProperty("org.lwjgl.librarypath", new File("libs/natives").getAbsolutePath());
+		
 		try {
 			AppGameContainer app = new AppGameContainer(new Game());
 			app.setDisplayMode(Globals.WIDTH, Globals.HEIGHT, false);
