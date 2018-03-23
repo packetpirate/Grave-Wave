@@ -379,12 +379,12 @@ public class Player implements Entity {
 	 * @param enemy The enemy to test against the projectiles.
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
-	public boolean checkProjectiles(Enemy enemy, long cTime) {
+	public boolean checkProjectiles(Enemy enemy, long cTime, int delta) {
 		for(Weapon w : getWeapons()) {
 			Iterator<Projectile> it = w.getProjectiles().iterator();
 			while(it.hasNext()) {
 				Projectile p = it.next();
-				if(p.isAlive(cTime) && p.checkCollision(enemy)) {
+				if(p.isAlive(cTime) && p.checkCollision(enemy) && enemy.isAlive(cTime)) {
 					if(p instanceof LaserNode) {
 						LaserNode node = (LaserNode) p;
 						node.damage(enemy.getDamage());
@@ -392,7 +392,7 @@ public class Player implements Entity {
 					} else {
 						p.collide();
 						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
-						enemy.takeDamage(p.getDamage() * damagePercentage);
+						enemy.takeDamage((p.getDamage() * damagePercentage), w.getKnockback(), cTime, delta);
 					}
 					
 					return true;

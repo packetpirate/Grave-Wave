@@ -77,6 +77,11 @@ public class Flamethrower extends Weapon {
 	}
 	
 	@Override
+	public float getKnockback() {
+		return 0.0f;
+	}
+	
+	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((elapsed < Flamethrower.RELOAD_TIME) && reloading);

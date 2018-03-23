@@ -30,15 +30,15 @@ public class Zumby extends Enemy {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public double getDamage() {
 		return Zumby.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Zumby.SPEED;
 	}
 	
 	public static int appearsOnWave() {

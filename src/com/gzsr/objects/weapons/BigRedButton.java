@@ -27,6 +27,7 @@ public class BigRedButton extends Weapon {
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 0L;
 	private static final double DAMAGE = 250.0;
+	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final long EXP_DELAY = 500L;
 	private static final int EXP_COUNT = 5;
@@ -80,7 +81,7 @@ public class BigRedButton extends Weapon {
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			double damage = BigRedButton.DAMAGE + (BigRedButton.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.EXP_RADIUS);
+			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
 		
@@ -132,6 +133,11 @@ public class BigRedButton extends Weapon {
 	@Override
 	public double getDamage() {
 		return BigRedButton.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return 0.0f;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -36,6 +37,7 @@ public class Zombat extends Boss {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			
 			animation.update(cTime);
@@ -79,11 +81,6 @@ public class Zombat extends Boss {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
@@ -97,6 +94,11 @@ public class Zombat extends Boss {
 	@Override
 	public double getDamage() {
 		return Zombat.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Zombat.SPEED;
 	}
 	
 	public static int appearsOnWave() {

@@ -22,6 +22,7 @@ public class Gasbag extends Enemy {
 	private static final float EXPLODE_RADIUS = 150.0f;
 	private static final long POISON_DURATION = 5000L;
 	private static final double POISON_DAMAGE = 0.01; // multiply by 1,000 to get damage done in 1 second
+	private static final float POISON_KNOCKBACK = 5.0f;
 	
 	private Sound explode;
 	
@@ -37,6 +38,7 @@ public class Gasbag extends Enemy {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
@@ -48,7 +50,7 @@ public class Gasbag extends Enemy {
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
 		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DAMAGE, Gasbag.POISON_DURATION, cTime);
-		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", new Pair<Float>(position.x, position.y), pe, 0.0, Gasbag.EXPLODE_RADIUS);
+		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", new Pair<Float>(position.x, position.y), pe, 0.0, Gasbag.POISON_KNOCKBACK, Gasbag.EXPLODE_RADIUS);
 		gs.addEntity(String.format("poisonExplosion%d", id), poison);
 		
 		explode.play();
@@ -84,13 +86,13 @@ public class Gasbag extends Enemy {
 	}
 
 	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
-
-	@Override
 	public double getDamage() {
 		return Gasbag.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Gasbag.SPEED;
 	}
 
 	public static int appearsOnWave() {

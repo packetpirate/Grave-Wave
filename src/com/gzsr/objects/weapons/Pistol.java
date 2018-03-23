@@ -23,6 +23,7 @@ public class Pistol extends Weapon {
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
 	private static final double DAMAGE = 75.0;
+	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_Popgun";
 	private static final String FIRE_SOUND = "shoot4";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -91,6 +92,11 @@ public class Pistol extends Weapon {
 	@Override
 	public double getDamage() {
 		return Pistol.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return Pistol.KNOCKBACK;
 	}
 	
 	@Override

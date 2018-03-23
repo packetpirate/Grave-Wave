@@ -21,6 +21,7 @@ public class SentryWeapon extends Weapon {
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 10_000L;
+	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_Turret";
 	private static final String FIRE_SOUND = "landmine_armed";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -55,6 +56,11 @@ public class SentryWeapon extends Weapon {
 	@Override
 	public double getDamage() {
 		return Turret.getTotalDamage(); 
+	}
+	
+	@Override
+	public float getKnockback() {
+		return SentryWeapon.KNOCKBACK;
 	}
 	
 	@Override

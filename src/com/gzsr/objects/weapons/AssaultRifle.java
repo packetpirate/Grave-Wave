@@ -24,6 +24,7 @@ public class AssaultRifle extends Weapon {
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
 	private static final double DAMAGE = 50.0;
+	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "shoot3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -80,6 +81,11 @@ public class AssaultRifle extends Weapon {
 	@Override
 	public double getDamage() {
 		return AssaultRifle.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return AssaultRifle.KNOCKBACK;
 	}
 
 	@Override

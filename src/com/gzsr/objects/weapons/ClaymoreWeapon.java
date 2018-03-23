@@ -22,6 +22,7 @@ public class ClaymoreWeapon extends Weapon {
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 8;
 	private static final long RELOAD_TIME = 1_000L;
+	private static final float KNOCKBACK = 5.0f;
 	private static final String ICON_NAME = "GZS_ClaymoreWeapon";
 	private static final String PARTICLE_NAME = "GZS_Claymore";
 	private static final String FIRE_SOUND = "landmine_armed";
@@ -107,6 +108,11 @@ public class ClaymoreWeapon extends Weapon {
 	@Override
 	public long getCooldown() {
 		return ClaymoreWeapon.COOLDOWN;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return ClaymoreWeapon.KNOCKBACK;
 	}
 	
 	@Override

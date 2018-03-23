@@ -136,7 +136,18 @@ public class Animation {
 	 * @param theta The angle to rotate the animation by. Measured in radians.
 	 */
 	public void render(Graphics g, Pair<Float> position, float theta) {
-		render(g, position, position, theta);
+		render(g, position, position, theta, false);
+	}
+	
+	/**
+	 * Render the current frame of the animation.
+	 * @param g The graphics context used for drawing.
+	 * @param position The position to render the animation at.
+	 * @param theta The angle to rotate the animation by. Measured in radians.
+	 * @param drawFlash Whether or not to draw this frame of the animation as a white silhouette.
+	 */
+	public void render(Graphics g, Pair<Float> position, float theta, boolean drawFlash) {
+		render(g, position, position, theta, drawFlash);
 	}
 	
 	/**
@@ -147,14 +158,27 @@ public class Animation {
 	 * @param theta The angle to rotate the animation by. Measured in radians.
 	 */
 	public void render(Graphics g, Pair<Float> position, Pair<Float> pivot, float theta) {
-		Image image = getImage();
+		render(g, position, pivot, theta, false);
+	}
+	
+	/**
+	 * Render the current frame of the animation.
+	 * @param g The graphics context used for drawing.
+	 * @param position The position to render the animation at.
+	 * @param pivot The pivot point by which to rotate the animation around.
+	 * @param theta The angle to rotate the animation by. Measured in radians.
+	 */
+	public void render(Graphics g, Pair<Float> position, Pair<Float> pivot, float theta, boolean drawFlash) {
+		float tlx = position.x - (srcSize.x / 2);
+		float tly = position.y - (srcSize.y / 2);
+		Image image = getImage().getSubImage((int)srcPos.x, (int)srcPos.y, srcSize.x, srcSize.y);
+		
 		if(image != null) {
-			float tlx = position.x - (srcSize.x / 2);
-			float tly = position.y - (srcSize.y / 2);
 			g.rotate(pivot.x, pivot.y, (float)Math.toDegrees(theta + (float)(Math.PI / 2)));
-			g.drawImage(image, 
-						tlx, tly, (tlx + srcSize.x), (tly + srcSize.y), 
-						srcPos.x, srcPos.y, (srcPos.x + srcSize.x), (srcPos.y + srcSize.y));
+			
+			if(drawFlash) image.drawFlash(tlx, tly);
+			else g.drawImage(image, tlx, tly);
+			
 			g.resetTransform();
 		}
 	}
@@ -166,13 +190,15 @@ public class Animation {
 	 * @param size The size to override the size of the image with.
 	 */
 	public void render(Graphics g, Pair<Float> position, Pair<Float> size) {
-		Image image = getImage();
-		if(image != null) {
-			float tlx = position.x - (size.x / 2);
-			float tly = position.y - (size.y / 2);
-			g.drawImage(image, 
+		float tlx = position.x - (size.x / 2);
+		float tly = position.y - (size.y / 2);
+		Image image = getImage().getSubImage((int)srcPos.x, (int)srcPos.y, srcSize.x, srcSize.y);
+		
+		if(image != null) {	
+			/*g.drawImage(image, 
 						tlx, tly, (tlx + size.x), (tly + size.y), 
-						srcPos.x, srcPos.y, (srcPos.x + srcSize.x), (srcPos.y + srcSize.y));
+						srcPos.x, srcPos.y, (srcPos.x + srcSize.x), (srcPos.y + srcSize.y));*/
+			g.drawImage(image, tlx, tly);
 			g.resetTransform();
 		}
 	}

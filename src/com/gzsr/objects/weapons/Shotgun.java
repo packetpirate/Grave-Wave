@@ -26,6 +26,7 @@ public class Shotgun extends Weapon {
 	private static final float MAX_SPREAD = (float)(Math.PI / 12);
 	private static final long RELOAD_TIME = 2_500L;
 	private static final double DAMAGE = 20.0;
+	private static final float KNOCKBACK = 5.0f;
 	private static final String ICON_NAME = "GZS_Boomstick";
 	private static final String FIRE_SOUND = "shotgun1";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -86,6 +87,11 @@ public class Shotgun extends Weapon {
 	@Override
 	public double getDamage() {
 		return Shotgun.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return Shotgun.KNOCKBACK;
 	}
 
 	@Override

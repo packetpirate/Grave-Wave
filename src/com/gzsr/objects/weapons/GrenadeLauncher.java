@@ -23,6 +23,7 @@ public class GrenadeLauncher extends Weapon {
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
 	private static final double DAMAGE = 200.0;
+	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
 	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
@@ -70,7 +71,7 @@ public class GrenadeLauncher extends Weapon {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.EXP_RADIUS);
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -83,6 +84,11 @@ public class GrenadeLauncher extends Weapon {
 	@Override
 	public double getDamage() {
 		return GrenadeLauncher.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return GrenadeLauncher.KNOCKBACK;
 	}
 
 	@Override

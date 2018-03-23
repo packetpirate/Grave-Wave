@@ -30,15 +30,15 @@ public class Rotdog extends Enemy {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public double getDamage() {
 		return Rotdog.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Rotdog.SPEED;
 	}
 	
 	public static int appearsOnWave() {

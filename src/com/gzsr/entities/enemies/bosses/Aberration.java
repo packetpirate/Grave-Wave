@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -48,6 +49,7 @@ public class Aberration extends Boss {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(!dead()) {
+			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.update(cTime);
@@ -97,7 +99,7 @@ public class Aberration extends Boss {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Only render the Aberration until it dies.
-		if(!dead()) animation.render(g, position, theta);
+		if(!dead()) animation.render(g, position, theta, shouldDrawFlash(cTime));
 		// Even if Aberration is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		
@@ -124,11 +126,6 @@ public class Aberration extends Boss {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
@@ -142,6 +139,11 @@ public class Aberration extends Boss {
 	@Override
 	public double getDamage() {
 		return Aberration.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Aberration.SPEED;
 	}
 
 	public static int appearsOnWave() {

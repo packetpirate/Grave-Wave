@@ -22,6 +22,7 @@ public class BowAndArrow extends Weapon {
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 3;
 	private static final double DAMAGE = 150.0;
+	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.00075f;
 	private static final String ICON_NAME = "GZS_Bow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
@@ -131,6 +132,11 @@ public class BowAndArrow extends Weapon {
 	@Override
 	public double getDamage() {
 		return BowAndArrow.DAMAGE;
+	}
+	
+	@Override
+	public float getKnockback() {
+		return BowAndArrow.KNOCKBACK;
 	}
 
 	@Override

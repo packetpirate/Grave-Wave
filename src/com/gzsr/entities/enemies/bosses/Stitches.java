@@ -5,6 +5,7 @@ import org.newdawn.slick.Graphics;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
@@ -45,6 +46,7 @@ public class Stitches extends Boss {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			
 			if((hook != null) && !hooked) {
@@ -121,11 +123,6 @@ public class Stitches extends Boss {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
@@ -139,6 +136,11 @@ public class Stitches extends Boss {
 	@Override
 	public double getDamage() {
 		return Stitches.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return Stitches.SPEED;
 	}
 	
 	public static int appearsOnWave() {

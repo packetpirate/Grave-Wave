@@ -13,6 +13,8 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public abstract class Enemy implements Entity {
+	private static long FLASH_DURATION = 100L;
+	
 	// TODO: Add support for enemies having status effects.
 	protected EnemyType type;
 	protected Animation animation;
@@ -29,6 +31,22 @@ public abstract class Enemy implements Entity {
 	protected int experience;
 	public int getExpValue() { return experience; }
 	
+	protected boolean hit;
+	protected long hitTime;
+	protected void updateFlash(long cTime) {
+		if(hit) {
+			long elapsed = (cTime - hitTime);
+			if(elapsed > Enemy.FLASH_DURATION) {
+				hit = false;
+				hitTime = 0L;
+			}
+		}
+	}
+	protected boolean shouldDrawFlash(long cTime) {
+		long elapsed = (cTime - hitTime);
+		return (hit && (elapsed <= Enemy.FLASH_DURATION));
+	}
+	
 	public Enemy(EnemyType type_, Pair<Float> position_) {
 		this.type = type_;
 		this.animation = type.getAnimation();
@@ -43,6 +61,9 @@ public abstract class Enemy implements Entity {
 		this.health = 0.0;
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
+		
+		this.hit = false;
+		this.hitTime = 0L;
 	}
 	
 	public boolean dead() {
@@ -57,6 +78,7 @@ public abstract class Enemy implements Entity {
 	public void update(GameState gs, long cTime, int delta) {
 		// All enemies should update.
 		if(isAlive(cTime)) {
+			updateFlash(cTime);
 			animation.update(cTime);
 			if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
 		}
@@ -71,7 +93,7 @@ public abstract class Enemy implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// All enemies should render their animation.
-		if(isAlive(cTime)) animation.render(g, position, theta);
+		if(isAlive(cTime)) animation.render(g, position, theta, shouldDrawFlash(cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
@@ -84,7 +106,19 @@ public abstract class Enemy implements Entity {
 		return bounds.intersects(Globals.player.getCollider());
 	}
 	
-	public abstract void takeDamage(double amnt);
+	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
+		health -= amnt;
+		hit = true;
+		hitTime = cTime;
+		
+		if(knockback > 0.0f) {
+			float dx = (float)(Math.cos(theta) * knockback * delta);
+			float dy = (float)(Math.sin(theta) * knockback * delta);
+			position.x += -dx;
+			position.y += -dy;
+		}
+	}
 	public void onDeath(GameState gs, long cTime) {}
 	public abstract double getDamage();
+	public abstract float getSpeed();
 }

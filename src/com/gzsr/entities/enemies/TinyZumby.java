@@ -31,13 +31,13 @@ public class TinyZumby extends Enemy {
 	}
 
 	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
-
-	@Override
 	public double getDamage() {
 		return TinyZumby.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return TinyZumby.SPEED;
 	}
 	
 	public static int getSpawnCost() {

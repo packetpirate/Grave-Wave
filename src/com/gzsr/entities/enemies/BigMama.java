@@ -20,6 +20,7 @@ public class BigMama extends Enemy {
 	private static final long LIFESPAN = 10_000L;
 	private static final float EXP_DIST = 128.0f;
 	private static final double EXP_DAMAGE = 75.0f;
+	private static final float EXP_KNOCKBACK = 10.0f;
 	private static final int ZUMBY_COUNT = 10;
 	
 	private Sound explosion;
@@ -66,7 +67,7 @@ public class BigMama extends Enemy {
 				}
 				
 				// Spawn a blood explosion centered on the Big Mama.
-				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_DIST);
+				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_KNOCKBACK, BigMama.EXP_DIST);
 				gs.addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;
@@ -99,11 +100,6 @@ public class BigMama extends Enemy {
 	private boolean nearPlayer() {
 		return (Calculate.Distance(position, Globals.player.getPosition()) <= BigMama.EXP_DIST);
 	}
-
-	@Override
-	public void takeDamage(double amnt) {
-		health -= amnt;
-	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
@@ -117,6 +113,11 @@ public class BigMama extends Enemy {
 	@Override
 	public double getDamage() {
 		return BigMama.DPS;
+	}
+	
+	@Override
+	public float getSpeed() {
+		return BigMama.SPEED;
 	}
 	
 	public static int appearsOnWave() {

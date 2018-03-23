@@ -38,16 +38,17 @@ public class Explosion implements Entity {
 	public Shape getCollider() { return bounds; }
 	private StatusEffect status;
 	private double damage;
+	private float knockback;
 	private float radius;
 	private boolean started;
 	
 	private List<Entity> entitiesAffected;
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float radius_) {
-		this(type_, animName_, position_, null, damage_, radius_);
+	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float knockback_, float radius_) {
+		this(type_, animName_, position_, null, damage_, knockback_, radius_);
 	}
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float radius_) {
+	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float knockback_, float radius_) {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
@@ -58,6 +59,7 @@ public class Explosion implements Entity {
 		
 		this.status = status_;
 		this.damage = damage_;
+		this.knockback = knockback_;
 		this.radius = radius_;
 		this.started = false;
 		
@@ -77,11 +79,11 @@ public class Explosion implements Entity {
 		if(isActive(cTime)) {
 			// TODO: In future, will have to also check for collision with player structures (turret, barrier, etc).
 			// Check for collision with player.
-			checkCollision(Globals.player);
+			checkCollision(Globals.player, cTime, delta);
 			
 			// Check for collisions with enemies.
 			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
-			ec.getAliveEnemies().stream().forEach(e -> checkCollision(e));
+			ec.getAliveEnemies().stream().forEach(e -> checkCollision(e, cTime, delta));
 		}
 	}
 
@@ -99,7 +101,7 @@ public class Explosion implements Entity {
 	 * @param e The entity to check for a collision against.
 	 * @return Whether or not the entity has collided with the explosion.
 	 */
-	public boolean checkCollision(Entity e) {
+	public boolean checkCollision(Entity e, long cTime, int delta) {
 		// If this entity has been damaged by this explosion already, ignore this collision.
 		if(!entitiesAffected.contains(e)) {
 			// If damage is taken, calculate damage based on distance from source.
@@ -117,7 +119,7 @@ public class Explosion implements Entity {
 					Enemy en = (Enemy)e;
 					float dist = Calculate.Distance(position, en.getPosition());
 					if(en.getCollider().intersects(getCollider())) {
-						en.takeDamage(damage * (1.0f - (dist / radius)));
+						en.takeDamage((damage * (1.0f - (dist / radius))), knockback, cTime, delta);
 						entitiesAffected.add(en);
 						return true;
 					} else return false;

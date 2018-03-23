@@ -184,7 +184,7 @@ public class EnemyController implements Entity {
 			enemy.update(gs, cTime, delta);
 			
 			// Check collisions with player projectiles, then see if the enemy is still alive.
-			player.checkProjectiles(enemy, cTime);
+			player.checkProjectiles(enemy, cTime, delta);
 			
 			if(Globals.player.isAlive()) {
 				if(enemy.dead()) enemy.onDeath(gs, cTime);

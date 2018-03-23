@@ -106,6 +106,11 @@ public class LaserBarrier extends Weapon {
 	public double getDamage() {
 		return 0.0;
 	}
+	
+	@Override
+	public float getKnockback() {
+		return 0.0f;
+	}
 
 	@Override
 	public boolean isReloading(long cTime) {
