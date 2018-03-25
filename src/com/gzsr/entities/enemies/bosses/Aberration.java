@@ -8,7 +8,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
-import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -134,6 +133,13 @@ public class Aberration extends Boss {
 		}
 		
 		deathHandled = true;
+	}
+	
+	@Override
+	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
+		health -= amnt;
+		hit = true;
+		hitTime = cTime;
 	}
 
 	@Override

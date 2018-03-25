@@ -17,7 +17,7 @@ import com.gzsr.status.Status;
 
 public class Pistol extends Weapon {
 	private static final int AMMO_PRICE = 100;
-	private static final long COOLDOWN = 300L;
+	private static final long COOLDOWN = 150L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 10;

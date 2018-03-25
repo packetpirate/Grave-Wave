@@ -5,7 +5,6 @@ import org.newdawn.slick.Graphics;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
-import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
@@ -133,6 +132,13 @@ public class Stitches extends Boss {
 		deathHandled = true;
 	}
 
+	@Override
+	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
+		health -= amnt;
+		hit = true;
+		hitTime = cTime;
+	}
+	
 	@Override
 	public double getDamage() {
 		return Stitches.DPS;

@@ -15,8 +15,10 @@ import org.newdawn.slick.geom.Rectangle;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.particles.Projectile;
+import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
@@ -346,7 +348,7 @@ public class Player implements Entity {
 		} else return -1.0; // Indicates no damage taken.
 	}
 	
-	public void addExperience(int amnt) {
+	public void addExperience(GameState gs, int amnt, long cTime) {
 		int currentExp = getIntAttribute("experience");
 		int adjusted = currentExp + amnt;
 		int expToLevel = getIntAttribute("expToLevel");
@@ -361,6 +363,32 @@ public class Player implements Entity {
 			setAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
 			setAttribute("level", newLevel);
 			addIntAttribute("skillPoints", 1);
+			
+			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
+				String key = String.format("vanishText%d", Globals.generateEntityID());
+				VanishingText vt = new VanishingText("Ding!", "PressStart2P-Regular_small", 
+													 new Pair<Float>(position.x, (position.y - 32.0f)), Color.white, 
+													 cTime, 2_000L);
+				GameState.addVanishingText(key, vt);
+			}
+			
+			{ // Random chance for the enemies to say "Gratz!".
+				float chance = Globals.rand.nextFloat();
+				if(chance <= 0.02f) {
+					Iterator<Enemy> it = ((EnemyController)gs.getEntity("enemyController")).getAliveEnemies().iterator();
+					while(it.hasNext()) {
+						Enemy e = it.next();
+						if(e.isAlive(cTime)) {
+							String key = String.format("vanishText%d", Globals.generateEntityID());
+							VanishingText vt = new VanishingText("Gratz!", "PressStart2P-Regular_small", 
+																 new Pair<Float>(e.getPosition().x, (e.getPosition().y - 32.0f)), Color.white, 
+																 cTime, 2_000L);
+							GameState.addVanishingText(key, vt);
+						}
+					}
+				}
+			}
+			
 			// TODO: Add level up sound.
 		}
 	}

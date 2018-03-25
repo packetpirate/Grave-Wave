@@ -1,6 +1,10 @@
 .metadata
 bin/
 bin/*.*
+target/
+target/*.*
+libs/
+libs/*.*
 tmp/
 *.class
 *.xcf

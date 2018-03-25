@@ -21,7 +21,7 @@ public class Gasbag extends Enemy {
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 150.0f;
 	private static final long POISON_DURATION = 5000L;
-	private static final double POISON_DAMAGE = 0.01; // multiply by 1,000 to get damage done in 1 second
+	private static final double POISON_DAMAGE = 0.05; // multiply by 1,000 to get damage done in 1 second
 	private static final float POISON_KNOCKBACK = 5.0f;
 	
 	private Sound explode;
