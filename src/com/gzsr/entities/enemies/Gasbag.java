@@ -62,7 +62,7 @@ public class Gasbag extends Enemy {
 		explode(gs, cTime);
 		
 		if(!deathHandled && (Globals.rand.nextFloat() <= Gasbag.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, position, cTime);
+			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
 		}
 		
 		deathHandled = true;

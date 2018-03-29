@@ -1,6 +1,8 @@
 package com.gzsr.gfx.ui;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -200,6 +202,16 @@ public class HUD {
 				FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
 			}
 		} // End Wave Counter rendering.
+		
+		{ // Begin Drawing Player Money
+			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Globals.player.getIntAttribute("money")));
+			float w = g.getFont().getWidth(money);
+			float h = g.getFont().getLineHeight();
+			float x = (Globals.WIDTH - w - 20.0f);
+			float y = (Globals.HEIGHT - h - 20.0f);
+			FontUtils.drawCenter(g.getFont(), money, (int)x, (int)y, (int)w, Color.white);
+		} // End Player Money Drawing
 		
 		// If Globals.player is respawning, draw the countdown.
 		if(Globals.player.isRespawning()) {

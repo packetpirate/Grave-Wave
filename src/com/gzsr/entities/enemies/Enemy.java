@@ -107,15 +107,17 @@ public abstract class Enemy implements Entity {
 	}
 	
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		health -= amnt;
-		hit = true;
-		hitTime = cTime;
-		
-		if(knockback > 0.0f) {
-			float dx = (float)(Math.cos(theta) * knockback * delta);
-			float dy = (float)(Math.sin(theta) * knockback * delta);
-			position.x += -dx;
-			position.y += -dy;
+		if(!dead()) {
+			health -= amnt;
+			hit = true;
+			hitTime = cTime;
+			
+			if(knockback > 0.0f) {
+				float dx = (float)(Math.cos(theta) * knockback * delta);
+				float dy = (float)(Math.sin(theta) * knockback * delta);
+				position.x += -dx;
+				position.y += -dy;
+			}
 		}
 	}
 	public void onDeath(GameState gs, long cTime) {}

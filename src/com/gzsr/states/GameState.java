@@ -181,6 +181,8 @@ public class GameState extends BasicGameState implements InputListener {
 		entities.clear();
 		entities.put("enemyController", new EnemyController());
 		
+		messages.clear();
+		
 		gameStarted = false;
 		paused = false;
 		consoleOpen = false;

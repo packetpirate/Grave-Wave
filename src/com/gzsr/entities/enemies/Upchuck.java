@@ -126,7 +126,7 @@ public class Upchuck extends Enemy {
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		if(!deathHandled && (Globals.rand.nextFloat() <= Upchuck.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, position, cTime);
+			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
 		}
 		
 		deathHandled = true;

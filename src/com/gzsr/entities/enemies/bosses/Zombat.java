@@ -84,7 +84,7 @@ public class Zombat extends Boss {
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		if(!deathHandled && (Globals.rand.nextFloat() <= Zombat.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, position, cTime);
+			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
 		}
 		
 		deathHandled = true;
@@ -92,9 +92,11 @@ public class Zombat extends Boss {
 	
 	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		health -= amnt;
-		hit = true;
-		hitTime = cTime;
+		if(!dead()) {
+			health -= amnt;
+			hit = true;
+			hitTime = cTime;
+		}
 	}
 
 	@Override

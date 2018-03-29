@@ -116,6 +116,14 @@ public abstract class Weapon implements Entity {
 	
 	public abstract int getPrice();
 	public abstract int getAmmoPrice();
+	public int getMaxAmmoPrice() {
+		int maxAmmo = getMaxClips() * getClipSize();
+		int currentAmmo = ammoInClip + ammoInInventory;
+		int difference = maxAmmo - currentAmmo;
+		float pricePerAmmo = getAmmoPrice() / getClipSize();
+		
+		return Math.round(pricePerAmmo * difference);
+	}
 	public abstract double getDamage();
 	public abstract float getKnockback();
 	public abstract boolean isReloading(long cTime);
@@ -138,6 +146,10 @@ public abstract class Weapon implements Entity {
 			boolean noOverflow = (totalAmmo + amnt) <= (getClipSize() * getMaxClips()); 
 			ammoInInventory += (noOverflow ? amnt : ((getClipSize() * getMaxClips()) - totalAmmo));
 		}
+	}
+	public void maxOutAmmo() {
+		ammoInClip = getClipSize();
+		ammoInInventory = (getMaxClips() - 1) * getClipSize();
 	}
 	public abstract long getCooldown();
 	public List<Projectile> getProjectiles() { return projectiles; }

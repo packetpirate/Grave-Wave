@@ -76,6 +76,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	private TransactionButton buyButton;
 	private TransactionButton sellButton;
 	private TransactionButton ammoButton;
+	private TransactionButton maxAmmoButton;
 	
 	private int inventorySize;
 	private boolean exit;
@@ -101,6 +102,19 @@ public class ShopState extends BasicGameState implements InputListener {
 		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.BUY);
 		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.SELL);
 		ammoButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), ((Globals.HEIGHT / 2) - 30.0f)), TransactionButton.Type.AMMO);
+		{ // Adjust ammo button position.
+			float x = ammoButton.getPosition().x;
+			float w = ammoButton.getSize().x;
+			
+			ammoButton.setPosition(new Pair<Float>((x - w), ammoButton.getPosition().y));
+		} // Done adjusting ammo button.
+		maxAmmoButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (float)((Globals.HEIGHT / 2) - 30.0f)), TransactionButton.Type.AMMO);
+		{ // Adjust max ammo button position.
+			float x = maxAmmoButton.getPosition().x;
+			float w = maxAmmoButton.getSize().x;
+			
+			maxAmmoButton.setPosition(new Pair<Float>((x + w), maxAmmoButton.getPosition().y));
+		} // Done adjusting max ammo button.
 		
 		inventorySize = 0;
 		exit = false;
@@ -160,6 +174,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	private void drawInventory(Graphics g) {
 		// Draw the inventory container.
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));
 		g.setColor(new Color(0x2e2e2e));
 		g.fillRect(INVENTORY_CONTAINER.x, INVENTORY_CONTAINER.y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 		
@@ -180,7 +195,16 @@ public class ShopState extends BasicGameState implements InputListener {
 					if(item instanceof Weapon) {
 						Weapon w = (Weapon)item;
 						Image img = w.getInventoryIcon();
-						img.draw(x, y, 2.0f);
+						
+						float ix = (x + (img.getWidth() / 4));
+						float iy = (y + (img.getHeight() / 4) - 5.0f);
+						
+						img.draw(ix, iy, 1.5f);
+						
+						// Draw the weapon's current ammo below.
+						String ammoText = String.format("%d / %d", w.getClipAmmo(), w.getInventoryAmmo());
+						float ty = (y + ITEM_BOX_SIZE - g.getFont().getLineHeight() - 5.0f);
+						FontUtils.drawCenter(g.getFont(), ammoText, (int)x, (int)ty, (int)ITEM_BOX_SIZE, Color.white);
 					}
 					// TODO: Add cases for other item types.
 				}
@@ -337,25 +361,46 @@ public class ShopState extends BasicGameState implements InputListener {
 									 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
 									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
 				
-				// Draw the "buy ammo" button and label.
+				// Draw the "buy ammo" and "max ammo" buttons and labels.
 				if(item instanceof Weapon) {
-					String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getAmmoPrice()));
-					FontUtils.drawCenter(g.getFont(), "Buy Ammo", (int)(CONTAINER_WIDTH + 20.0f), 
-										 (int)((Globals.HEIGHT / 2) - 80.0f), 
-										 (int)(Globals.WIDTH - (CONTAINER_WIDTH * 2) - 40.0f), Color.white);
-					ammoButton.render(g, 0L);
-					if(((Weapon)item).clipsMaxedOut()) {
-						// If the player has max ammo for this weapon, show a "disabled" overlay on the button.
-						float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
-						float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
-						
-						g.setColor(new Color(0xBB333333));
-						g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
-					}
-					FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
-										 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
-										 (int)ammoButton.getSize().x.floatValue(), 
-										 Color.black);
+					{ // Draw ammo button.
+						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getAmmoPrice()));
+						FontUtils.drawCenter(g.getFont(), "Buy Ammo", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)), 
+											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
+											 (int)ammoButton.getSize().x.floatValue(), Color.white);
+						ammoButton.render(g, 0L);
+						if(((Weapon)item).clipsMaxedOut()) {
+							// If the player has max ammo for this weapon, show a "disabled" overlay on the button.
+							float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
+							float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
+							
+							g.setColor(new Color(0xBB333333));
+							g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
+						}
+						FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
+											 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
+											 (int)ammoButton.getSize().x.floatValue(), 
+											 Color.black);
+					} // End draw ammo button.
+					{ // Draw max ammo button.
+						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getMaxAmmoPrice()));
+						FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)), 
+											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
+											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
+						maxAmmoButton.render(g, 0L);
+						if(((Weapon)item).clipsMaxedOut()) {
+							// If the player has max ammo for this weapon, show a "disabled" overlay on the button.
+							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
+							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
+							
+							g.setColor(new Color(0xBB333333));
+							g.fillRect(x, y, maxAmmoButton.getSize().x, maxAmmoButton.getSize().y);
+						}
+						FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x.floatValue() / 2)), 
+											 (int)(maxAmmoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
+											 (int)maxAmmoButton.getSize().x.floatValue(), 
+											 Color.black);
+					} // End draw max ammo button.
 				}
 			} else {
 				buyButton.render(g, 0L);
@@ -473,6 +518,22 @@ public class ShopState extends BasicGameState implements InputListener {
 							// Player has enough money. Buy the ammo.
 							Globals.player.setAttribute("money", moneyAfterPurchase);
 							w.addInventoryAmmo(w.getClipSize());
+							AssetManager.getManager().getSound("buy_ammo2").play();
+						}
+					}
+				}
+			} else if(maxAmmoButton.inBounds(x, y) && selectedInInventory) {
+				// Buy max ammo for the currently selected weapon.
+				if(item instanceof Weapon) {
+					Weapon w = (Weapon)item;
+					
+					if(!w.clipsMaxedOut()) {
+						int cost = w.getMaxAmmoPrice();
+						int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
+						if(moneyAfterPurchase >= 0) {
+							// Player has enough money. Buy the ammo.
+							Globals.player.setAttribute("money", moneyAfterPurchase);
+							w.maxOutAmmo();
 							AssetManager.getManager().getSound("buy_ammo2").play();
 						}
 					}

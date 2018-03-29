@@ -24,7 +24,7 @@ public class Flashlight {
 		this.theta = 0.0f;
 		
 		this.lightMap = AssetManager.getManager().getImage("GZS_LightAlphaMap3");
-		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight2");
+		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight3");
 	}
 	
 	public void update(Player player, long cTime) {
@@ -47,7 +47,7 @@ public class Flashlight {
 			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
 			if(flashlight != null) {
 				g.rotate(origin.x, origin.y, (float)Math.toDegrees(theta - (Math.PI / 2)));
-				g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 42.0f));
+				g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 96.0f));
 				g.resetTransform();
 			}
 		}

@@ -46,6 +46,7 @@ public abstract class Button implements Entity {
 	}
 
 	public Pair<Float> getPosition() { return position; }
+	public void setPosition(Pair<Float> position_) { this.position = position_; }
 	public Pair<Float> getSize() { return size; }
 	public abstract void click();
 	public abstract boolean inBounds(float x, float y);

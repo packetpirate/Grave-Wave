@@ -58,9 +58,7 @@ public class MusicPlayer {
 		Music song = new Music(String.format("music/%s.ogg", songName), true);
 		if(song != null) {
 			nowPlaying = song;
-			nowPlaying.play();
+			nowPlaying.play(1.0f, 0.5f);
 		}
-		
-		//System.out.println("Playing next song: " + songName);
 	}
 }
