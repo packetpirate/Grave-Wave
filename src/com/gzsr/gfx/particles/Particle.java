@@ -33,6 +33,7 @@ public class Particle implements Entity {
 	public void setVelocity(float velocity_) { velocity = velocity_; }
 	protected float theta;
 	public float getTheta() { return theta; }
+	public void setTheta(float theta_) { theta = theta_; }
 	protected float angularVelocity;
 	public float getAngularVelocity() { return angularVelocity; }
 	protected Pair<Float> size;
@@ -45,6 +46,7 @@ public class Particle implements Entity {
 	}
 	protected long created;
 	public long getCreated() { return created; }
+	public void setCreated(long created_) { created = created_; }
 	protected boolean collision;
 	public void collide() { collision = true; }
 	
@@ -68,7 +70,7 @@ public class Particle implements Entity {
 		this.created = created_;
 		this.collision = false;
 		
-		this.bounds = new Rectangle((position.x - (size.x / 2)), (position.y - (size.y / 2)), size.x, size.y);
+		resetBounds();
 	}
 	
 	public Particle(Particle p) {
@@ -122,6 +124,10 @@ public class Particle implements Entity {
 		}
 		
 		g.resetTransform();
+	}
+	
+	public void resetBounds() {
+		bounds = new Rectangle((position.x - (size.x / 2)), (position.y - (size.y / 2)), size.x, size.y);
 	}
 	
 	public boolean checkCollision(Enemy enemy) {

@@ -225,6 +225,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
+		EnemyController ec = (EnemyController) getEntity("enemyController");
 		if((key == Input.KEY_GRAVE) && Globals.ENABLE_CONSOLE) {
 			console.setPauseTime(time);
 			consoleOpen = !consoleOpen;
@@ -232,6 +233,8 @@ public class GameState extends BasicGameState implements InputListener {
 			if(!paused) MusicPlayer.getInstance().pause();
 			else MusicPlayer.getInstance().resume();
 			paused = !paused;
+		} else if((key == Input.KEY_N) && !consoleOpen && !paused && ec.isRestarting()) {
+			ec.skipToNextWave();
 		} else {
 			if(consoleOpen) {
 				console.keyReleased(key, c);

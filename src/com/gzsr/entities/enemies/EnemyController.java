@@ -19,7 +19,7 @@ public class EnemyController implements Entity {
 	private static final int SPAWN_POOL_START = 5;
 	private static final long DEFAULT_SPAWN = 2_000L;
 	private static final long MIN_SPAWN_RATE = 500L;
-	private static final long WAVE_BREAK_TIME = 10_000L;
+	private static final long WAVE_BREAK_TIME = 15_000L;
 	
 	@SuppressWarnings("serial")
 	private static final List<EnemyType> SPAWNABLE_NAMES = new ArrayList<EnemyType>() {{
@@ -51,6 +51,7 @@ public class EnemyController implements Entity {
 	private boolean breakTime;
 	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
 	public boolean isRestarting() { return breakTime; }
+	public void skipToNextWave() { breakTime = false; }
 	public int timeToNextWave(long cTime) {
 		long elapsed = cTime - lastWave;
 		return (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
