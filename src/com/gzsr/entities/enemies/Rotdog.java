@@ -3,12 +3,13 @@ package com.gzsr.entities.enemies;
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class Rotdog extends Enemy {
 	private static final int FIRST_WAVE = 2;
 	private static final int SPAWN_COST = 2;
 	private static final float HEALTH = 50.0f;
-	private static final float SPEED = 0.30f;
+	private static final float SPEED = 0.20f;
 	private static final float DPS = 8.0f;
 	
 	public Rotdog(Pair<Float> position_) {
@@ -17,18 +18,32 @@ public class Rotdog extends Enemy {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		velocity.x = (float)Math.cos(theta) * Rotdog.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * Rotdog.SPEED * delta;
+
+		avoidObstacles(gs, delta);
 		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * Rotdog.SPEED * delta;
-			position.y += (float)Math.sin(theta) * Rotdog.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
+	}
+	
+	@Override
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
 	@Override

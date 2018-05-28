@@ -49,7 +49,7 @@ public class Upchuck extends Enemy {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
 			} else vomit(cTime);
 		}
 		
@@ -70,7 +70,8 @@ public class Upchuck extends Enemy {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Only render the Upchuck until it dies.
-		if(!dead()) animation.render(g, position, theta, shouldDrawFlash(cTime));
+		float pTheta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		
@@ -111,16 +112,31 @@ public class Upchuck extends Enemy {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
+		velocity.x = (float)Math.cos(theta) * Upchuck.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * Upchuck.SPEED * delta;
+
+		avoidObstacles(gs, delta);
+		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * Upchuck.SPEED * delta;
-			position.y += (float)Math.sin(theta) * Upchuck.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
+	}
+	
+	@Override
+	public float getCohesionDistance() {
+		return 0.0f;
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
 	@Override

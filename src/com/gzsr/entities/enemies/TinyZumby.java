@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class TinyZumby extends Enemy {
 	private static final int SPAWN_COST = 0;
@@ -16,12 +17,16 @@ public class TinyZumby extends Enemy {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		velocity.x = (float)Math.cos(theta) * TinyZumby.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * TinyZumby.SPEED * delta;
+
+		avoidObstacles(gs, delta);
 		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * TinyZumby.SPEED * delta;
-			position.y += (float)Math.sin(theta) * TinyZumby.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
@@ -30,6 +35,16 @@ public class TinyZumby extends Enemy {
 		bounds.setCenterY(position.y);
 	}
 
+	@Override
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
+	}
+	
 	@Override
 	public double getDamage() {
 		return TinyZumby.DPS;

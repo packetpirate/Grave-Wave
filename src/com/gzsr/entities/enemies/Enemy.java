@@ -1,5 +1,7 @@
 package com.gzsr.entities.enemies;
 
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
@@ -10,6 +12,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Animation;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.misc.Vector2f;
 import com.gzsr.states.GameState;
 
 public abstract class Enemy implements Entity {
@@ -22,6 +25,8 @@ public abstract class Enemy implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected float theta;
+	protected Vector2f velocity;
+	public Vector2f getVelocity() { return velocity; }
 	protected boolean moveBlocked;
 	public void blockMovement() { moveBlocked = true; }
 	
@@ -58,6 +63,7 @@ public abstract class Enemy implements Entity {
 		
 		this.moveBlocked = false;
 		this.theta = 0.0f;
+		this.velocity = new Vector2f(0.0f, 0.0f);
 		this.health = 0.0;
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
@@ -80,7 +86,7 @@ public abstract class Enemy implements Entity {
 		if(isAlive(cTime)) {
 			updateFlash(cTime);
 			animation.update(cTime);
-			if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
+			if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
 		}
 	}
 	
@@ -88,12 +94,93 @@ public abstract class Enemy implements Entity {
 		return (Calculate.Distance(position, Globals.player.getPosition()) <= attackDist);
 	}
 	
-	public abstract void move(int delta);
+	public abstract void move(GameState gs, int delta);
+	protected void avoidObstacles(GameState gs, int delta) {
+		EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+		List<Enemy> allies = ec.getAliveEnemies();
+		
+		if(!allies.isEmpty()) {
+			Vector2f alignment = computeAlignment(allies);
+			Vector2f cohesion = computeCohesion(allies);
+			Vector2f separation = computeSeparation(allies);
+			
+			velocity.x += (alignment.x + cohesion.x + (separation.x * 5));
+			velocity.y += (alignment.y + cohesion.y + (separation.y * 5));
+			
+			// Compute the new vector based on alignment, cohesion and separation. Then calculate new theta value.
+			velocity = Vector2f.normalize(velocity, (getSpeed() * delta));
+			theta = Calculate.Hypotenuse(position, new Pair<Float>((position.x + velocity.x), (position.y + velocity.y)));
+		}
+	}
+	
+	private Vector2f computeAlignment(List<Enemy> allies) {
+		Vector2f v = new Vector2f();
+		int neighbors = 0;
+		
+		for(Enemy e : allies) {
+			if((e != this) && (Calculate.Distance(position, e.getPosition()) < 300)) {
+				v.x += e.getVelocity().x;
+				v.y += e.getVelocity().y;
+				neighbors++;
+			}
+		}
+		
+		if(neighbors == 0) return v;
+		
+		v.x /= neighbors;
+		v.y /= neighbors;
+		v = Vector2f.normalize(v, 1);
+		return v;
+	}
+	
+	private Vector2f computeCohesion(List<Enemy> allies) {
+		Vector2f v = new Vector2f();
+		int neighbors = 0;
+		
+		for(Enemy e : allies) {
+			if((e != this) && (Calculate.Distance(position, e.getPosition()) < getCohesionDistance())) {
+				v.x += e.getPosition().x;
+				v.y += e.getPosition().y;
+				neighbors++;
+			}
+		}
+		
+		if(neighbors == 0) return v;
+		
+		v.x /= neighbors;
+		v.y /= neighbors;
+		v = new Vector2f((v.x - position.x), (v.y - position.y));
+		v = Vector2f.normalize(v, 1);
+		return v;
+	}
+	
+	private Vector2f computeSeparation(List<Enemy> allies) {
+		Vector2f v = new Vector2f();
+		int neighbors = 0;
+		
+		for(Enemy e : allies) {
+			if((e != this) && (Calculate.Distance(position, e.getPosition()) < getSeparationDistance())) {
+				v.x += e.getPosition().x - position.x;
+				v.y += e.getPosition().y - position.y;
+				neighbors++;
+			}
+		}
+		
+		if(neighbors == 0) return v;
+		
+		v.x /= neighbors;
+		v.y /= neighbors;
+		v.x *= -1;
+		v.y *= -1;
+		v = Vector2f.normalize(v, 1);
+		return v;
+	}
 
 	@Override
 	public void render(Graphics g, long cTime) {
 		// All enemies should render their animation.
-		if(isAlive(cTime)) animation.render(g, position, theta, shouldDrawFlash(cTime));
+		float pTheta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		if(isAlive(cTime)) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
@@ -105,6 +192,8 @@ public abstract class Enemy implements Entity {
 	public boolean touchingPlayer() {
 		return bounds.intersects(Globals.player.getCollider());
 	}
+	public abstract float getCohesionDistance();
+	public abstract float getSeparationDistance();
 	
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
 		if(!dead()) {

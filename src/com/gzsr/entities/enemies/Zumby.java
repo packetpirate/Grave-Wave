@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import com.gzsr.Globals;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class Zumby extends Enemy {
 	private static final int FIRST_WAVE = 1;
@@ -17,18 +18,32 @@ public class Zumby extends Enemy {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
 		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		velocity.x = (float)Math.cos(theta) * Zumby.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * Zumby.SPEED * delta;
+
+		avoidObstacles(gs, delta);
 		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * Zumby.SPEED * delta;
-			position.y += (float)Math.sin(theta) * Zumby.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
+	}
+	
+	@Override
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
 	@Override

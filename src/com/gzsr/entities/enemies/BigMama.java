@@ -74,7 +74,7 @@ public class BigMama extends Enemy {
 				explosion.play();
 			} else {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
 			}
 		}
 	}
@@ -85,16 +85,31 @@ public class BigMama extends Enemy {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
+		velocity.x = (float)Math.cos(theta) * BigMama.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * BigMama.SPEED * delta;
+
+		avoidObstacles(gs, delta);
+		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * BigMama.SPEED * delta;
-			position.y += (float)Math.sin(theta) * BigMama.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
+	}
+	
+	@Override
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
 	private boolean nearPlayer() {

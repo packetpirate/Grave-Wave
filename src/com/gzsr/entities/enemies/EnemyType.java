@@ -23,7 +23,9 @@ public enum EnemyType {
 	
 	private String animationName;
 	private int frameWidth;
+	public int getFrameWidth() { return frameWidth; }
 	private int frameHeight;
+	public int getFrameHeight() { return frameHeight; }
 	private int frameCount;
 	private long frameDelay;
 	public Animation getAnimation() { return new Animation(animationName, frameWidth, frameHeight, frameCount, frameDelay); }

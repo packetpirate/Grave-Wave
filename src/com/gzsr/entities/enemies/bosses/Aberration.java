@@ -52,7 +52,7 @@ public class Aberration extends Boss {
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(delta);
+				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
 			} else vomit(cTime);
 		}
 		
@@ -114,16 +114,31 @@ public class Aberration extends Boss {
 	}
 
 	@Override
-	public void move(int delta) {
+	public void move(GameState gs, int delta) {
+		velocity.x = (float)Math.cos(theta) * Aberration.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * Aberration.SPEED * delta;
+
+		avoidObstacles(gs, delta);
+		
 		if(!moveBlocked) {
-			position.x += (float)Math.cos(theta) * Aberration.SPEED * delta;
-			position.y += (float)Math.sin(theta) * Aberration.SPEED * delta;
+			position.x += velocity.x;
+			position.y += velocity.y;
 		}
 		
 		moveBlocked = false;
 		
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
+	}
+	
+	@Override
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
+	
+	@Override
+	public float getSeparationDistance() {
+		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
 	@Override
