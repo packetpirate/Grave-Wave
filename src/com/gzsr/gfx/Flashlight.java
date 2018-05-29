@@ -9,9 +9,11 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.status.Status;
 
 public class Flashlight {
 	private static final Color SHADOW = new Color(0xCC000009);
+	private static final Color NIGHT_VISION = new Color(0x66004409);
 	
 	private Pair<Float> origin;
 	private float theta;
@@ -37,7 +39,7 @@ public class Flashlight {
 		g.clearAlphaMap();
 		
 		g.setDrawMode(Graphics.MODE_NORMAL);
-		g.setColor(SHADOW);
+		g.setColor((Globals.player.hasStatus(Status.NIGHT_VISION)) ? NIGHT_VISION : SHADOW);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		
 		GL11.glEnable(GL11.GL_BLEND);

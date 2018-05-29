@@ -28,6 +28,7 @@ import com.gzsr.objects.items.AmmoCrate;
 import com.gzsr.objects.items.ExtraLife;
 import com.gzsr.objects.items.HealthKit;
 import com.gzsr.objects.items.InvulnerableItem;
+import com.gzsr.objects.items.NightVisionItem;
 import com.gzsr.objects.items.SpeedItem;
 import com.gzsr.objects.items.UnlimitedAmmoItem;
 import com.gzsr.objects.weapons.Explosion;
@@ -155,28 +156,30 @@ public class Console implements Entity {
 						}
 					} else if(command.equals("item") && (args == 3)) {
 						String itemName = tokens[1];
-						float x = Float.parseFloat(tokens[2]);
-						float y = Float.parseFloat(tokens[3]);
+						Pair<Float> pos = new Pair<Float>(Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
 						long cTime = gs.getTime();
 						int id = Globals.generateEntityID();
 						
 						if(itemName.equals("ammo")) {
-							AmmoCrate ac = new AmmoCrate(new Pair<Float>(x, y), cTime);
+							AmmoCrate ac = new AmmoCrate(pos, cTime);
 							gs.addEntity(String.format("ammo%d", id), ac);
 						} else if(itemName.equals("health")) {
-							HealthKit hk = new HealthKit(new Pair<Float>(x, y), cTime);
+							HealthKit hk = new HealthKit(pos, cTime);
 							gs.addEntity(String.format("health%d", id), hk);
 						} else if(itemName.equals("life")) {
-							ExtraLife el = new ExtraLife(new Pair<Float>(x, y), cTime);
+							ExtraLife el = new ExtraLife(pos, cTime);
 							gs.addEntity(String.format("life%d", id), el);
 						} else if(itemName.equals("invulnerability")) {
-							InvulnerableItem inv = new InvulnerableItem(new Pair<Float>(x, y), cTime);
+							InvulnerableItem inv = new InvulnerableItem(pos, cTime);
 							gs.addEntity(String.format("invuln%d", id), inv);
+						} else if(itemName.equals("nightvision")) {
+							NightVisionItem night = new NightVisionItem(pos, cTime);
+							gs.addEntity(String.format("nightvision%d", id), night);
 						} else if(itemName.equals("speed")) {
-							SpeedItem spd = new SpeedItem(new Pair<Float>(x, y), cTime);
+							SpeedItem spd = new SpeedItem(pos, cTime);
 							gs.addEntity(String.format("speed%d", id), spd);
 						} else if(itemName.equals("unlimitedammo")) {
-							UnlimitedAmmoItem una = new UnlimitedAmmoItem(new Pair<Float>(x, y), cTime);
+							UnlimitedAmmoItem una = new UnlimitedAmmoItem(pos, cTime);
 							gs.addEntity(String.format("unlimAmmo%d", args), una);
 						} else {
 							pastCommands.add("  ERROR: Invalid item name specified.");

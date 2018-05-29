@@ -15,6 +15,7 @@ public class Powerups {
 		AMMO("ammo", 0.6f),
 		EXTRA_LIFE("life", 0.1f),
 		INVULNERABILITY("invuln", 0.1f),
+		NIGHT_VISION("nightvision", 0.4f),
 		SPEED("speed", 0.4f),
 		UNLIMITED_AMMO("unlimitedammo", 0.4f);
 		
@@ -57,6 +58,9 @@ public class Powerups {
 					break;
 				case INVULNERABILITY:
 					item = new InvulnerableItem(position, cTime);
+					break;
+				case NIGHT_VISION:
+					item = new NightVisionItem(position, cTime);
 					break;
 				case SPEED:
 					item = new SpeedItem(position, cTime);
