@@ -15,6 +15,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.StatusEffect;
 
 public class Upchuck extends Enemy {
 	private static final int FIRST_WAVE = 5;
@@ -45,6 +46,18 @@ public class Upchuck extends Enemy {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(!dead()) {
+			// Need to make sure to update the status effects first.
+			Iterator<StatusEffect> it = statusEffects.iterator();
+			while(it.hasNext()) {
+				StatusEffect status = (StatusEffect) it.next();
+				if(status.isActive(cTime)) {
+					status.update(this, cTime);
+				} else {
+					status.onDestroy(this, cTime);
+					it.remove();
+				}
+			}
+			
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {

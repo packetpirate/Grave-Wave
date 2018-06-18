@@ -1,6 +1,6 @@
 package com.gzsr.status;
 
-import com.gzsr.entities.Player;
+import com.gzsr.entities.Entity;
 
 public class UnlimitedAmmoEffect extends StatusEffect {
 	public UnlimitedAmmoEffect(long duration_, long created_) {
@@ -8,12 +8,12 @@ public class UnlimitedAmmoEffect extends StatusEffect {
 	}
 
 	@Override
-	public void update(Player player, long cTime) {
+	public void update(Entity e, long cTime) {
 		// Not needed.
 	}
 
 	@Override
-	public void onDestroy(Player player, long cTime) {
+	public void onDestroy(Entity e, long cTime) {
 		// Not needed.
 	}
 }

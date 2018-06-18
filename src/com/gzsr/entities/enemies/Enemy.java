@@ -1,5 +1,7 @@
 package com.gzsr.entities.enemies;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -14,6 +16,8 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
 import com.gzsr.states.GameState;
+import com.gzsr.status.Status;
+import com.gzsr.status.StatusEffect;
 
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;
@@ -35,6 +39,7 @@ public abstract class Enemy implements Entity {
 	public int getCashValue() { return cash; }
 	protected int experience;
 	public int getExpValue() { return experience; }
+	protected List<StatusEffect> statusEffects;
 	
 	protected boolean hit;
 	protected long hitTime;
@@ -67,6 +72,7 @@ public abstract class Enemy implements Entity {
 		this.health = 0.0;
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
+		this.statusEffects = new ArrayList<StatusEffect>();
 		
 		this.hit = false;
 		this.hitTime = 0L;
@@ -84,6 +90,18 @@ public abstract class Enemy implements Entity {
 	public void update(GameState gs, long cTime, int delta) {
 		// All enemies should update.
 		if(isAlive(cTime)) {
+			// Need to make sure to update the status effects first.
+			Iterator<StatusEffect> it = statusEffects.iterator();
+			while(it.hasNext()) {
+				StatusEffect status = (StatusEffect) it.next();
+				if(status.isActive(cTime)) {
+					status.update(this, cTime);
+				} else {
+					status.onDestroy(this, cTime);
+					it.remove();
+				}
+			}
+			
 			updateFlash(cTime);
 			animation.update(cTime);
 			if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
@@ -195,11 +213,42 @@ public abstract class Enemy implements Entity {
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
 	
+	public void addStatus(StatusEffect effect, long cTime) {
+		// First check to see if the enemy already has this status.
+		for(StatusEffect se : statusEffects) {
+			Status s = se.getStatus();
+			if(s.equals(effect.getStatus())) {
+				// Refresh the effect rather than adding it to the list.
+				se.refresh(cTime);
+				return;
+			}
+		}
+		
+		// The enemy does not have this effect. Add it.
+		statusEffects.add(effect);
+	}
+	
+	public boolean hasStatus(Status status) {
+		for(StatusEffect se : statusEffects) {
+			Status ses = se.getStatus();
+			if(ses.equals(status)) return true;
+		}
+		
+		return false;
+	}
+	
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
+		takeDamage(amnt, knockback, cTime, delta, true);
+	}
+	
+	public void takeDamage(double amnt, float knockback, long cTime, int delta, boolean flash) {
 		if(!dead()) {
 			health -= amnt;
-			hit = true;
-			hitTime = cTime;
+			
+			if(flash) {
+				hit = true;
+				hitTime = cTime;
+			}
 			
 			if(knockback > 0.0f) {
 				float dx = (float)(Math.cos(theta) * knockback * delta);
@@ -209,6 +258,7 @@ public abstract class Enemy implements Entity {
 			}
 		}
 	}
+	
 	public void onDeath(GameState gs, long cTime) {}
 	public abstract double getDamage();
 	public abstract float getSpeed();

@@ -1,5 +1,7 @@
 package com.gzsr.entities.enemies;
 
+import java.util.Iterator;
+
 import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
@@ -10,6 +12,7 @@ import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
+import com.gzsr.status.StatusEffect;
 
 public class Gasbag extends Enemy {
 	public static final int FIRST_WAVE = 8;
@@ -38,6 +41,18 @@ public class Gasbag extends Enemy {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			// Need to make sure to update the status effects first.
+			Iterator<StatusEffect> it = statusEffects.iterator();
+			while(it.hasNext()) {
+				StatusEffect status = (StatusEffect) it.next();
+				if(status.isActive(cTime)) {
+					status.update(this, cTime);
+				} else {
+					status.onDestroy(this, cTime);
+					it.remove();
+				}
+			}
+			
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer()) {

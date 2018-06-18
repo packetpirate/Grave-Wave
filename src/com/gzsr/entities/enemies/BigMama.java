@@ -1,5 +1,7 @@
 package com.gzsr.entities.enemies;
 
+import java.util.Iterator;
+
 import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
@@ -9,6 +11,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
+import com.gzsr.status.StatusEffect;
 
 public class BigMama extends Enemy {
 	private static final int FIRST_WAVE = 15;
@@ -73,6 +76,19 @@ public class BigMama extends Enemy {
 				exploded = true;
 				explosion.play();
 			} else {
+				// Need to make sure to update the status effects first.
+				Iterator<StatusEffect> it = statusEffects.iterator();
+				while(it.hasNext()) {
+					StatusEffect status = (StatusEffect) it.next();
+					if(status.isActive(cTime)) {
+						status.update(this, cTime);
+					} else {
+						status.onDestroy(this, cTime);
+						it.remove();
+					}
+				}
+				
+				updateFlash(cTime);
 				animation.update(cTime);
 				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
 			}

@@ -1,5 +1,6 @@
 package com.gzsr.status;
 
+import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 
 public class PoisonEffect extends StatusEffect {
@@ -11,12 +12,15 @@ public class PoisonEffect extends StatusEffect {
 	}
 
 	@Override
-	public void update(Player player, long cTime) {
-		if(isActive(cTime)) player.takeDamage(damage);
+	public void update(Entity e, long cTime) {
+		if(e instanceof Player) {
+			Player player = (Player) e;
+			if(isActive(cTime)) player.takeDamage(damage);
+		}
 	}
 
 	@Override
-	public void onDestroy(Player player, long cTime) {
+	public void onDestroy(Entity e, long cTime) {
 		// No logic needed.
 	}
 }

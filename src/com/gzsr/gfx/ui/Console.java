@@ -193,6 +193,9 @@ public class Console implements Entity {
 						} else if(attributeName.equals("money")) {
 							int money = Integer.parseInt(tokens[2]);
 							Globals.player.setAttribute("money", money);
+						} else if(attributeName.equals("experience")) {
+							int exp = Integer.parseInt(tokens[2]);
+							Globals.player.addExperience(gs, exp, 0L);
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
 						}

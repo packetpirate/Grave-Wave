@@ -22,6 +22,7 @@ public class MenuState extends BasicGameState implements InputListener {
 	private AssetManager assets = null;
 	
 	private MenuButton gameStart;
+	private MenuButton settings;
 	private MenuButton credits;
 	private MenuButton exit;
 	
@@ -29,7 +30,8 @@ public class MenuState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
-		gameStart = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Start Game");
+		gameStart = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 260.0f)), "Start Game");
+		settings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Settings");
 		credits = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 140.0f)), "Credits");
 		exit = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Exit");
 	}
@@ -50,6 +52,11 @@ public class MenuState extends BasicGameState implements InputListener {
 				game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
 			}
 		} else gameStart.mouseExit();
+		
+		if(settings.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+			settings.mouseEnter();
+			if(Globals.mouse.isMouseDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+		} else settings.mouseExit();
 		
 		if(credits.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) credits.mouseEnter();
 		else credits.mouseExit();
@@ -73,6 +80,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
 		gameStart.render(g);
+		settings.render(g);
 		credits.render(g);
 		exit.render(g);
 	}

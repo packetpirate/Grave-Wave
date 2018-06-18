@@ -18,6 +18,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.particles.Projectile;
+import com.gzsr.gfx.particles.SpecialProjectile;
 import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -136,7 +137,7 @@ public class Player implements Entity {
 		Iterator<StatusEffect> it = statusEffects.iterator();
 		while(it.hasNext()) {
 			Status s = it.next().getStatus();
-			if(s == Status.POISON) it.remove();
+			if((s == Status.POISON) || (s == Status.BURNING)) it.remove();
 		}
 	}
 	
@@ -404,6 +405,7 @@ public class Player implements Entity {
 	
 	/**
 	 * Checks for a collision between the enemy and the player's projectiles.
+	 * TODO: This logic should be separated from player and put in Projectile class.
 	 * @param enemy The enemy to test against the projectiles.
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
@@ -419,6 +421,13 @@ public class Player implements Entity {
 						enemy.blockMovement();
 					} else {
 						p.collide();
+						
+						// If this is a special projectile, apply its status effect to the target.
+						if(p instanceof SpecialProjectile) {
+							SpecialProjectile sp = (SpecialProjectile) p;
+							sp.applyEffect(enemy, cTime);
+						}
+						
 						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
 						enemy.takeDamage((p.getDamage() * damagePercentage), w.getKnockback(), cTime, delta);
 					}

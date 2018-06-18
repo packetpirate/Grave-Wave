@@ -8,10 +8,11 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.SpecialProjectile;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
+import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
 
 public class Flamethrower extends Weapon {
@@ -62,7 +63,7 @@ public class Flamethrower extends Weapon {
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			double damage = Flamethrower.EMBER_DAMAGE + (Flamethrower.EMBER_DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
-			Projectile projectile = new Projectile(particle, damage);
+			SpecialProjectile projectile = new SpecialProjectile(particle, damage, new BurningEffect(cTime));
 			projectiles.add(projectile);
 		}
 		

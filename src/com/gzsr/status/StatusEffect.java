@@ -3,7 +3,7 @@ package com.gzsr.status;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.entities.Player;
+import com.gzsr.entities.Entity;
 
 public abstract class StatusEffect {
 	protected Status status;
@@ -34,6 +34,6 @@ public abstract class StatusEffect {
 		this.created = created_;
 	}
 	
-	public abstract void update(Player player, long cTime);
-	public abstract void onDestroy(Player player, long cTime);
+	public abstract void update(Entity e, long cTime);
+	public abstract void onDestroy(Entity e, long cTime);
 }

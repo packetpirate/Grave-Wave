@@ -11,15 +11,13 @@ public class SkillButton extends Button {
 	private static final float SIZE = 50.0f;
 	
 	private String skillName;
-	private boolean increase;
 	
-	public SkillButton(String skillName_, boolean increase_, Pair<Float> position_) {
+	public SkillButton(String skillName_, Pair<Float> position_) {
 		super();
 		
 		this.skillName = skillName_;
-		this.increase = increase_;
 		
-		this.image = (increase ? "GZS_SkillUpButton" : "GZS_SkillDownButton");
+		this.image = "GZS_SkillUpButton";
 		
 		this.position = position_;
 		this.size = new Pair<Float>(SIZE, SIZE);
@@ -36,21 +34,13 @@ public class SkillButton extends Button {
 		int skillPoints = Globals.player.getIntAttribute("skillPoints");
 		int currentSkillLevel = Globals.player.getIntAttribute(skillName);
 		
-		if(increase) {
-			if((skillPoints > 0) && (currentSkillLevel < 10)) {
-				// Add a skill point to the associated skill.
-				Globals.player.setAttribute(skillName, (currentSkillLevel + 1));
-				Globals.player.setAttribute("skillPoints", (skillPoints - 1));
-			}
-		} else {
-			if(currentSkillLevel > 0) {
-				// Remove a skill point from the associated skill.
-				Globals.player.setAttribute(skillName, (currentSkillLevel - 1));
-				Globals.player.setAttribute("skillPoints", (skillPoints + 1));
-			}
+		if((skillPoints > 0) && (currentSkillLevel < 10)) {
+			// Add a skill point to the associated skill.
+			Globals.player.setAttribute(skillName, (currentSkillLevel + 1));
+			Globals.player.setAttribute("skillPoints", (skillPoints - 1));
+			
+			AssetManager.getManager().getSound("point_buy").play();
 		}
-		
-		AssetManager.getManager().getSound("point_buy").play();
 	}
 	
 	@Override

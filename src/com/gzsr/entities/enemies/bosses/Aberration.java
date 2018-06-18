@@ -16,6 +16,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.StatusEffect;
 
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
@@ -48,6 +49,18 @@ public class Aberration extends Boss {
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(!dead()) {
+			// Need to make sure to update the status effects first.
+			Iterator<StatusEffect> it = statusEffects.iterator();
+			while(it.hasNext()) {
+				StatusEffect status = (StatusEffect) it.next();
+				if(status.isActive(cTime)) {
+					status.update(this, cTime);
+				} else {
+					status.onDestroy(this, cTime);
+					it.remove();
+				}
+			}
+			
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
@@ -152,10 +165,18 @@ public class Aberration extends Boss {
 	
 	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
+		takeDamage(amnt, knockback, cTime, delta, true);
+	}
+	
+	@Override
+	public void takeDamage(double amnt, float knockback, long cTime, int delta, boolean flash) {
 		if(!dead()) {
 			health -= amnt;
-			hit = true;
-			hitTime = cTime;
+			
+			if(flash) {
+				hit = true;
+				hitTime = cTime;
+			}
 		}
 	}
 
