@@ -1,9 +1,11 @@
 package com.gzsr.status;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
+import com.gzsr.states.GameState;
 
 public abstract class StatusEffect {
 	protected Status status;
@@ -34,6 +36,9 @@ public abstract class StatusEffect {
 		this.created = created_;
 	}
 	
-	public abstract void update(Entity e, long cTime);
+	public abstract void onApply(Entity e, long cTime);
+	public abstract void handleEntity(Entity e, long cTime); // used in case special effects require entity knowledge, such as setting emitter position for particle effects
+	public abstract void update(Entity e, GameState gs, long cTime, int delta);
+	public abstract void render(Graphics g, long cTime);
 	public abstract void onDestroy(Entity e, long cTime);
 }

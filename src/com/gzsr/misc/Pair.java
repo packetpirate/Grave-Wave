@@ -1,7 +1,9 @@
 package com.gzsr.misc;
 
 public class Pair<T> {
-public T x, y;
+	public static final Pair<Float> ZERO = new Pair<Float>(0.0f, 0.0f);
+	
+	public T x, y;
 	
 	public Pair(T x, T y) {
 		this.x = x;

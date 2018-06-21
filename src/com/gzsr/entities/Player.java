@@ -18,7 +18,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.SpecialProjectile;
+import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -200,7 +200,7 @@ public class Player implements Entity {
 		while(it.hasNext()) {
 			StatusEffect status = (StatusEffect) it.next();
 			if(status.isActive(cTime)) {
-				status.update(this, cTime);
+				status.update(this, gs, cTime, delta);
 			} else {
 				status.onDestroy(this, cTime);
 				it.remove();
@@ -423,8 +423,8 @@ public class Player implements Entity {
 						p.collide();
 						
 						// If this is a special projectile, apply its status effect to the target.
-						if(p instanceof SpecialProjectile) {
-							SpecialProjectile sp = (SpecialProjectile) p;
+						if(p instanceof StatusProjectile) {
+							StatusProjectile sp = (StatusProjectile) p;
 							sp.applyEffect(enemy, cTime);
 						}
 						

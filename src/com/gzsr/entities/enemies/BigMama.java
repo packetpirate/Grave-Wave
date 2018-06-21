@@ -81,7 +81,7 @@ public class BigMama extends Enemy {
 				while(it.hasNext()) {
 					StatusEffect status = (StatusEffect) it.next();
 					if(status.isActive(cTime)) {
-						status.update(this, cTime);
+						status.update(this, gs, cTime, delta);
 					} else {
 						status.onDestroy(this, cTime);
 						it.remove();

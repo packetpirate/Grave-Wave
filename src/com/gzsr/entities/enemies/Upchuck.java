@@ -51,7 +51,7 @@ public class Upchuck extends Enemy {
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, cTime);
+					status.update(this, gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -87,6 +87,7 @@ public class Upchuck extends Enemy {
 		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
+		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);

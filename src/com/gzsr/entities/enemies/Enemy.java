@@ -95,7 +95,7 @@ public abstract class Enemy implements Entity {
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, cTime);
+					status.update(this, gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -199,6 +199,7 @@ public abstract class Enemy implements Entity {
 		// All enemies should render their animation.
 		float pTheta = Calculate.Hypotenuse(position, Globals.player.getPosition());
 		if(isAlive(cTime)) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
+		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
