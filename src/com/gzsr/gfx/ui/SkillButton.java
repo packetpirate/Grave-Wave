@@ -4,7 +4,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
 
 public class SkillButton extends Button {
@@ -31,13 +31,13 @@ public class SkillButton extends Button {
 	
 	@Override
 	public void click() {
-		int skillPoints = Globals.player.getIntAttribute("skillPoints");
-		int currentSkillLevel = Globals.player.getIntAttribute(skillName);
+		int skillPoints = Player.getPlayer().getIntAttribute("skillPoints");
+		int currentSkillLevel = Player.getPlayer().getIntAttribute(skillName);
 		
 		if((skillPoints > 0) && (currentSkillLevel < 10)) {
 			// Add a skill point to the associated skill.
-			Globals.player.setAttribute(skillName, (currentSkillLevel + 1));
-			Globals.player.setAttribute("skillPoints", (skillPoints - 1));
+			Player.getPlayer().setAttribute(skillName, (currentSkillLevel + 1));
+			Player.getPlayer().setAttribute("skillPoints", (skillPoints - 1));
 			
 			AssetManager.getManager().getSound("point_buy").play();
 		}

@@ -7,7 +7,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -98,7 +97,7 @@ public class LaserBarrier extends Weapon {
 	@Override
 	public boolean canFire(long cTime) {
 		boolean notUnpaired = (lastNode == null);
-		boolean inRange = notUnpaired ? true : ((Calculate.Distance(Globals.player.getPosition(), lastNode.getPosition())) <= (LaserBarrier.BARRIER_RANGE / 2));
+		boolean inRange = notUnpaired ? true : ((Calculate.Distance(Player.getPlayer().getPosition(), lastNode.getPosition())) <= (LaserBarrier.BARRIER_RANGE / 2));
 		return super.canFire(cTime) && (notUnpaired || inRange);
 	}
 	

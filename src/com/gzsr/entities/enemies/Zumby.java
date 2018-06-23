@@ -1,6 +1,6 @@
 package com.gzsr.entities.enemies;
 
-import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
@@ -19,7 +19,7 @@ public class Zumby extends Enemy {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		velocity.x = (float)Math.cos(theta) * Zumby.SPEED * delta;
 		velocity.y = (float)Math.sin(theta) * Zumby.SPEED * delta;
 

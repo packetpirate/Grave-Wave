@@ -9,10 +9,11 @@ import java.util.Map;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
+import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -21,6 +22,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.math.Calculate;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
@@ -39,6 +41,8 @@ public class Player implements Entity {
 	private static final int MAX_LIVES = 5;
 	private static final long RESPAWN_TIME = 3_000L;
 	private static final int INVENTORY_SIZE = 16;
+	
+	private static Player instance = null;
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -156,6 +160,11 @@ public class Player implements Entity {
 		reset();
 	}
 	
+	public static Player getPlayer() {
+		if(instance == null) instance = new Player();
+		return instance;
+	}
+	
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
 		if(!isAlive()) {
@@ -208,11 +217,11 @@ public class Player implements Entity {
 		}
 		
 		float adjSpeed = (getSpeed() + (getIntAttribute("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)getDoubleAttribute("spdMult") * delta;
-		if(Globals.inputs.contains(Input.KEY_W)) move(0.0f, -adjSpeed);
-		if(Globals.inputs.contains(Input.KEY_A)) move(-adjSpeed, 0.0f);
-		if(Globals.inputs.contains(Input.KEY_S)) move(0.0f, adjSpeed);
-		if(Globals.inputs.contains(Input.KEY_D)) move(adjSpeed, 0.0f);
-		if(Globals.inputs.contains(Input.KEY_R) && 
+		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
+		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
+		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
+		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
+		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && 
 		   !getCurrentWeapon().isReloading(cTime) &&
 		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
 			getCurrentWeapon().reload(cTime);
@@ -220,18 +229,21 @@ public class Player implements Entity {
 		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
 		// Check to see if the player is trying to change weapon by number.
-		int [] codes = new int[] { Input.KEY_0, Input.KEY_1, Input.KEY_2, Input.KEY_3, Input.KEY_4,
-								   Input.KEY_5, Input.KEY_6, Input.KEY_7, Input.KEY_8, Input.KEY_9 };
+		Layout [] keys = new Layout[] { Controls.Layout.WEAPON_1, Controls.Layout.WEAPON_2, Controls.Layout.WEAPON_3, Controls.Layout.WEAPON_4,
+										Controls.Layout.WEAPON_5, Controls.Layout.WEAPON_6, Controls.Layout.WEAPON_7, Controls.Layout.WEAPON_8,
+										Controls.Layout.WEAPON_9, Controls.Layout.WEAPON_10 };
 		for(int i = 0; i < 10; i++) {
-			if(Globals.inputs.contains(codes[i])) {
+			if(Controls.getInstance().isPressed(keys[i])) {
 				if(i == 0) setCurrentWeapon(9);
 				else setCurrentWeapon(i - 1);
 				break; // To avoid conflicts when holding multiple numerical keys.
 			}
 		}
 		
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		
 		Weapon cWeapon = getCurrentWeapon();
-		if((Globals.mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
+		if((mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
 			cWeapon.fire(this, new Pair<Float>(position.x, position.y), 
 						 theta, cTime);
 		}
@@ -240,7 +252,7 @@ public class Player implements Entity {
 		getWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
-		theta = Calculate.Hypotenuse(position, Globals.mouse.getPosition()) + (float)(Math.PI / 2);
+		theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
 		flashlight.update(this, cTime);
 	}
 

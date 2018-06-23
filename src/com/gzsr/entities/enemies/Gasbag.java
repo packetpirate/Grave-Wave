@@ -6,6 +6,7 @@ import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
@@ -54,10 +55,10 @@ public class Gasbag extends Enemy {
 			}
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
 			} else explode(gs, cTime);
 		}
 	}
@@ -112,7 +113,7 @@ public class Gasbag extends Enemy {
 	}
 	
 	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Globals.player.getPosition()) <= Gasbag.ATTACK_DIST);
+		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= Gasbag.ATTACK_DIST);
 	}
 
 	@Override

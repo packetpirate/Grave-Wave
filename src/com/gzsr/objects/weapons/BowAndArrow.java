@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
+import com.gzsr.Controls;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -57,7 +57,7 @@ public class BowAndArrow extends Weapon {
 				if(charge > 1.0f) charge = 1.0f;
 			}
 			
-			if(Globals.mouse.isMouseDown()) {
+			if(Controls.getInstance().getMouse().isMouseDown()) {
 				// If the mouse is down and we're not charging, start charging.
 				if(!charging) charging = true;
 			} else {
@@ -77,7 +77,7 @@ public class BowAndArrow extends Weapon {
 		
 		if(equipped && charging) {
 			// Render the charge bar.
-			Player player = Globals.player;
+			Player player = Player.getPlayer();
 			g.setColor(Color.white);
 			g.drawRect((player.getPosition().x - 24.0f), (player.getPosition().y - 44.0f), 48.0f, 15.0f);
 			

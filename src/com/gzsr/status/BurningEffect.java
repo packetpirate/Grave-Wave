@@ -56,7 +56,7 @@ public class BurningEffect extends StatusEffect {
 			
 			if(e instanceof Enemy) {
 				Enemy enemy = (Enemy) e;
-				double totalDamage = (cDamage + (cDamage * Globals.player.getIntAttribute("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
+				double totalDamage = (cDamage + (cDamage * Player.getPlayer().getIntAttribute("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
 				enemy.takeDamage(totalDamage, 0.0f, cTime, 0, false);
 			} else if(e instanceof Player) {
 				Player player = (Player) e;

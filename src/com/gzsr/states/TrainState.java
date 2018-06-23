@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Player;
@@ -77,7 +78,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
+		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 250));
 		MusicPlayer.getInstance().update();
 	}
 
@@ -89,7 +90,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		g.setColor(Color.darkGray);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		
-		Player player = Globals.player;
+		Player player = Player.getPlayer();
 		
 		// Draw the header and footer.
 		g.setColor(Color.white);
@@ -192,12 +193,12 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(true);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
 		
 		// Check all skill buttons to see if they've been clicked.
 		Iterator<SkillButton> it = skillButtons.iterator();
@@ -212,7 +213,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(false);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
 	}
 	
 	@Override

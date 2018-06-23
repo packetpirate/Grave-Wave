@@ -11,9 +11,11 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.gfx.ui.MenuButton;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 
 public class MenuState extends BasicGameState implements InputListener {
@@ -44,26 +46,28 @@ public class MenuState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(gameStart.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		
+		if(gameStart.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			gameStart.mouseEnter();
-			if(Globals.mouse.isMouseDown()) {
+			if(mouse.isMouseDown()) {
 				Globals.resetEntityNum();
-				Globals.resetInputs();
+				Controls.getInstance().resetAll();
 				game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
 			}
 		} else gameStart.mouseExit();
 		
-		if(settings.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+		if(settings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			settings.mouseEnter();
-			if(Globals.mouse.isMouseDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+			if(mouse.isMouseDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 		} else settings.mouseExit();
 		
-		if(credits.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) credits.mouseEnter();
+		if(credits.inBounds(mouse.getPosition().x, mouse.getPosition().y)) credits.mouseEnter();
 		else credits.mouseExit();
 		
-		if(exit.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+		if(exit.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exit.mouseEnter();
-			if(Globals.mouse.isMouseDown()) gc.exit();
+			if(mouse.isMouseDown()) gc.exit();
 		}
 		else exit.mouseExit();
 		
@@ -87,17 +91,17 @@ public class MenuState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(true);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(false);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
 	}
 	
 	@Override

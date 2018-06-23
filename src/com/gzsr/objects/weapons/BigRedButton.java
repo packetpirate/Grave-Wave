@@ -61,7 +61,7 @@ public class BigRedButton extends Weapon {
 		if(!explosions.isEmpty() && (elapsed >= BigRedButton.EXP_DELAY)) {
 			int id = Globals.generateEntityID();
 			Explosion exp = explosions.remove();
-			exp.setPosition(getExplosionLocation(gs, Globals.player, Globals.player.getPosition()));
+			exp.setPosition(getExplosionLocation(gs, Player.getPlayer(), Player.getPlayer().getPosition()));
 			gs.addEntity(String.format("explosion%d", id), exp);
 			AssetManager.getManager().getSound(BigRedButton.EXP_SOUND).play();
 			lastExplosion = cTime;

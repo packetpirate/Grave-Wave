@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -59,10 +60,10 @@ public class Upchuck extends Enemy {
 			}
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
 			} else vomit(cTime);
 		}
 		
@@ -72,8 +73,8 @@ public class Upchuck extends Enemy {
 			Projectile p = it.next();
 			if(p.isAlive(cTime)) {
 				p.update(gs, cTime, delta);
-				if(Globals.player.checkCollision(p)) {
-					Globals.player.takeDamage(p.getDamage());
+				if(Player.getPlayer().checkCollision(p)) {
+					Player.getPlayer().takeDamage(p.getDamage());
 					it.remove();
 				}
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/
@@ -83,7 +84,7 @@ public class Upchuck extends Enemy {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Only render the Upchuck until it dies.
-		float pTheta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
@@ -96,7 +97,7 @@ public class Upchuck extends Enemy {
 	}
 	
 	private void vomit(long cTime) {
-		if(Globals.player.isAlive() && (cTime >= (lastBile + Upchuck.BILE_DELAY))) {
+		if(Player.getPlayer().isAlive() && (cTime >= (lastBile + Upchuck.BILE_DELAY))) {
 			for(int i = 0; i < Upchuck.BILE_PER_TICK; i++) {
 				Color color = ProjectileType.BILE.getColor();
 				float velocity = ProjectileType.BILE.getVelocity();

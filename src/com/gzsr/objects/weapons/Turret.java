@@ -13,14 +13,15 @@ import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
-import com.gzsr.misc.RotationLerp;
 import com.gzsr.misc.Pair;
+import com.gzsr.misc.RotationLerp;
 import com.gzsr.states.GameState;
 
 public class Turret extends Projectile {
@@ -139,7 +140,7 @@ public class Turret extends Projectile {
 	
 	private boolean canFire(Enemy target, long cTime) {
 		long elapsed = cTime - lastProjectile;
-		return (Globals.player.isAlive() && (elapsed >= Turret.PROJECTILE_COOLDOWN) && inRange(target));
+		return (Player.getPlayer().isAlive() && (elapsed >= Turret.PROJECTILE_COOLDOWN) && inRange(target));
 	}
 	
 	private void fire(long cTime) {
@@ -153,7 +154,7 @@ public class Turret extends Projectile {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double damage = Turret.PROJECTILE_DAMAGE + (Turret.PROJECTILE_DAMAGE * (Globals.player.getIntAttribute("damageUp") * 0.10));
+		double damage = Turret.PROJECTILE_DAMAGE + (Turret.PROJECTILE_DAMAGE * (Player.getPlayer().getIntAttribute("damageUp") * 0.10));
 		Projectile projectile = new Projectile(particle, damage);
 		
 		projectiles.add(projectile);

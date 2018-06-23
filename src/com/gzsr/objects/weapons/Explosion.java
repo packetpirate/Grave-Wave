@@ -8,7 +8,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
@@ -79,7 +78,7 @@ public class Explosion implements Entity {
 		if(isActive(cTime)) {
 			// TODO: In future, will have to also check for collision with player structures (turret, barrier, etc).
 			// Check for collision with player.
-			checkCollision(Globals.player, cTime, delta);
+			checkCollision(Player.getPlayer(), cTime, delta);
 			
 			// Check for collisions with enemies.
 			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
@@ -106,11 +105,11 @@ public class Explosion implements Entity {
 		if(!entitiesAffected.contains(e)) {
 			// If damage is taken, calculate damage based on distance from source.
 			if(e instanceof Player) {
-				float dist = Calculate.Distance(position, Globals.player.getPosition());
-				if(Globals.player.getCollider().intersects(getCollider())) {
-					Globals.player.takeDamage(damage * (1.0f - (dist / radius)));
-					if(status != null) Globals.player.addStatus(status, status.getDuration());
-					entitiesAffected.add(Globals.player);
+				float dist = Calculate.Distance(position, Player.getPlayer().getPosition());
+				if(Player.getPlayer().getCollider().intersects(getCollider())) {
+					Player.getPlayer().takeDamage(damage * (1.0f - (dist / radius)));
+					if(status != null) Player.getPlayer().addStatus(status, status.getDuration());
+					entitiesAffected.add(Player.getPlayer());
 					return true;
 				} else return false;
 			} else if(e instanceof Enemy) {

@@ -9,7 +9,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -19,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
@@ -55,7 +55,6 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
 		
-		Globals.player = new Player();
 		entities = new ConcurrentHashMap<String, Entity>();
 		
 		reset(gc);
@@ -69,7 +68,7 @@ public class GameState extends BasicGameState implements InputListener {
 			if(!paused && !consoleOpen) {
 				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
 				
-				Player player = Globals.player;
+				Player player = Player.getPlayer();
 				player.update(this, time, Globals.STEP_TIME);
 				
 				Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
@@ -87,28 +86,30 @@ public class GameState extends BasicGameState implements InputListener {
 					}
 				}
 				
+				Controls controls = Controls.getInstance();
+				
 				if(!player.isAlive() && (player.getIntAttribute("lives") <= 0)) {
 					// If the player has died, transition state.
-					Globals.resetInputs();
+					controls.resetAll();
 					Globals.gameOver = true;
 					game.enterState(GameOverState.ID, 
-									new FadeOutTransition(), 
-									new FadeInTransition());
+									new FadeOutTransition(Color.black, 250), 
+									new FadeInTransition(Color.black, 250));
 				}
 				
 				if(player.isAlive()) {
-					if(Globals.released.contains(Input.KEY_T)) {
+					if(controls.isPressed(Controls.Layout.TRAIN_SCREEN)) {
 						// Open the training screen.
-						Globals.resetInputs();
+						controls.resetAll();
 						game.enterState(TrainState.ID,
-										new FadeOutTransition(),
-										new FadeInTransition());
-					} else if(Globals.released.contains(Input.KEY_B)) {
+										new FadeOutTransition(Color.black, 250),
+										new FadeInTransition(Color.black, 250));
+					} else if(controls.isPressed(Controls.Layout.SHOP_SCREEN)) {
 						// Open the weapon shopping screen.
-						Globals.resetInputs();
+						controls.resetAll();
 						game.enterState(ShopState.ID,
-										new FadeOutTransition(),
-										new FadeInTransition());
+										new FadeOutTransition(Color.black, 250),
+										new FadeInTransition(Color.black, 250));
 					}
 				}
 				
@@ -127,14 +128,14 @@ public class GameState extends BasicGameState implements InputListener {
 				console.update(this, consoleTimer, Globals.STEP_TIME);
 			}
 			
-			Globals.released.clear();
+			Controls.Layout.clearReleased();
 			accu -= Globals.STEP_TIME;
 		}
 	}
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-		Player player = Globals.player;
+		Player player = Player.getPlayer();
 		
 		g.resetTransform();
 		g.clear();
@@ -177,7 +178,9 @@ public class GameState extends BasicGameState implements InputListener {
 		accu = 0L;
 		consoleTimer = 0L;
 		
-		Globals.player.reset();
+		Controls.getInstance().resetAll();
+		
+		Player.getPlayer().reset();
 		entities.clear();
 		entities.put("enemyController", new EnemyController());
 		
@@ -195,23 +198,23 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if(consoleOpen) console.mousePressed(this, button, x, y);
-		Globals.mouse.setMouseDown(true);
+		Controls.getInstance().getMouse().setMouseDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(false);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
 	}
 	
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
@@ -219,35 +222,31 @@ public class GameState extends BasicGameState implements InputListener {
 		if(consoleOpen) {
 			console.keyPressed(key, c);
 		} else {
-			Globals.inputs.add(key);
+			Controls.getInstance().press(key);
 		}
 	}
 	
 	@Override
 	public void keyReleased(int key, char c) {
 		EnemyController ec = (EnemyController) getEntity("enemyController");
-		if((key == Input.KEY_GRAVE) && Globals.ENABLE_CONSOLE) {
+		if((Controls.Layout.identify(key).equals(Controls.Layout.OPEN_CONSOLE)) && Globals.ENABLE_CONSOLE) {
 			console.setPauseTime(time);
 			consoleOpen = !consoleOpen;
-		} else if((key == Input.KEY_P) && !consoleOpen) {
+		} else if((Controls.Layout.identify(key).equals(Controls.Layout.PAUSE_GAME)) && !consoleOpen) {
 			if(!paused) MusicPlayer.getInstance().pause();
 			else MusicPlayer.getInstance().resume();
 			paused = !paused;
-		} else if((key == Input.KEY_N) && !consoleOpen && !paused && ec.isRestarting()) {
+		} else if((Controls.Layout.identify(key).equals(Controls.Layout.NEXT_WAVE)) && !consoleOpen && !paused && ec.isRestarting()) {
 			ec.skipToNextWave();
 		} else {
-			if(consoleOpen) {
-				console.keyReleased(key, c);
-			} else {
-				Globals.inputs.remove(key);
-				Globals.released.add(key);
-			}
+			if(consoleOpen) console.keyReleased(key, c);
+			else Controls.getInstance().release(key);
 		}
 	}
 	
 	@Override
 	public void mouseWheelMoved(int change) {
-		Player player = Globals.player;
+		Player player = Player.getPlayer();
 		if(player.getWeapons().size() > 1) {
 			player.weaponRotate((change > 0)?1:-1);
 			hud.queueWeaponCycle();

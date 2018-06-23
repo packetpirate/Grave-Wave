@@ -6,6 +6,7 @@ import org.newdawn.slick.Sound;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
@@ -49,7 +50,7 @@ public class BigMama extends Enemy {
 	public void update(GameState gs, long cTime, int delta) {
 		if(created == -1L) created = cTime; // So that we don't have to pass spawn time into constructor.
 		if(!exploded) {
-			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			
 			// Has the Big Mama's lifespan elapsed, or have they been killed? Are they near the player?
 			boolean timesUp = (cTime - created) >= BigMama.LIFESPAN;
@@ -90,7 +91,7 @@ public class BigMama extends Enemy {
 				
 				updateFlash(cTime);
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
 			}
 		}
 	}
@@ -129,7 +130,7 @@ public class BigMama extends Enemy {
 	}
 	
 	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Globals.player.getPosition()) <= BigMama.EXP_DIST);
+		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= BigMama.EXP_DIST);
 	}
 	
 	@Override

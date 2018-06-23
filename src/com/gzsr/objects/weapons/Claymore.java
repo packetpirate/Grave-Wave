@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
@@ -85,7 +86,7 @@ public class Claymore extends Projectile {
 												 0.0f, new Pair<Float>(width, height), 
 												 lifespan, cTime);
 				
-				double damage = Claymore.SHRAPNEL_DAMAGE + (Claymore.SHRAPNEL_DAMAGE * (Globals.player.getIntAttribute("damageUp") * 0.10));
+				double damage = Claymore.SHRAPNEL_DAMAGE + (Claymore.SHRAPNEL_DAMAGE * (Player.getPlayer().getIntAttribute("damageUp") * 0.10));
 				Projectile projectile = new Projectile(particle, damage);
 				
 				shrapnel.add(projectile);

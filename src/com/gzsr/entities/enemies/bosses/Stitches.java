@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
@@ -61,10 +62,10 @@ public class Stitches extends Boss {
 			}
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			
 			if((hook != null) && !hooked) {
-				float distToPlayer = Calculate.Distance(hook.getPosition(), Globals.player.getPosition());
+				float distToPlayer = Calculate.Distance(hook.getPosition(), Player.getPlayer().getPosition());
 				if(distToPlayer > Stitches.ATTACK_DIST) {
 					// If the hook missed the player, get rid of it.
 					hook = null;
@@ -73,20 +74,20 @@ public class Stitches extends Boss {
 				} else {
 					// Move the hook toward the player until it collides or misses.
 					hook.update(gs, cTime, delta);
-					if(hook.checkCollision(Globals.player)) hooked = true;
+					if(hook.checkCollision(Player.getPlayer())) hooked = true;
 				}
 			}
 			
 			long sinceLastHook = (cTime - lastHook);
-			if(Globals.player.isAlive() && (hook == null) && (sinceLastHook >= Stitches.HOOK_COOLDOWN) && nearPlayer(Stitches.ATTACK_DIST)) {
+			if(Player.getPlayer().isAlive() && (hook == null) && (sinceLastHook >= Stitches.HOOK_COOLDOWN) && nearPlayer(Stitches.ATTACK_DIST)) {
 				// Throw the hook.
 				Pair<Float> hookPos = new Pair<Float>(position.x, position.y);
-				float direction = Calculate.Hypotenuse(position, Globals.player.getPosition()) + (float)(Math.PI / 2);
+				float direction = Calculate.Hypotenuse(position, Player.getPlayer().getPosition()) + (float)(Math.PI / 2);
 				hook = new Particle("GZS_Hook", Color.gray, hookPos, Stitches.HOOK_SPEED, direction, 0.0f, new Pair<Float>(16.0f, 16.0f), -1L, cTime);
 				AssetManager.getManager().getSound("throw2").play();
 			} else if(hooked) {
 				// If we're close enough to the player now, release the hook.
-				if(!Globals.player.isAlive() || nearPlayer(Stitches.RELEASE_DIST)) {
+				if(!Player.getPlayer().isAlive() || nearPlayer(Stitches.RELEASE_DIST)) {
 					hook = null;
 					hooked = false;
 					lastHook = cTime;
@@ -94,15 +95,15 @@ public class Stitches extends Boss {
 					// Otherwise, reel the player in.
 					float xOff = (float)(Math.cos(theta) * -(Stitches.HOOK_SPEED * 4));
 					float yOff = (float)(Math.sin(theta) * -(Stitches.HOOK_SPEED * 4));
-					Globals.player.move(xOff, yOff);
-					hook.setPosition(new Pair<Float>(Globals.player.getPosition().x, Globals.player.getPosition().y));
+					Player.getPlayer().move(xOff, yOff);
+					hook.setPosition(new Pair<Float>(Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y));
 					
 					// Make the player take bleed damage.
-					Globals.player.takeDamage(Stitches.HOOK_DAMAGE);
+					Player.getPlayer().takeDamage(Stitches.HOOK_DAMAGE);
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);
-				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
 			}
 		} else {
 			hook = null;

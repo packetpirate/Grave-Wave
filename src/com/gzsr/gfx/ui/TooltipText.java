@@ -4,8 +4,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
 
-import com.gzsr.Globals;
+import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -37,9 +38,10 @@ public class TooltipText implements Entity {
 		g.drawString(text, pos.x, pos.y);
 		
 		// If the mouse cursor is hovering over the text, display the tooltip.
+		MouseInfo mouse = Controls.getInstance().getMouse();
 		if(isMouseInside()) {
-			float mx = Globals.mouse.getPosition().x;
-			float my = Globals.mouse.getPosition().y;
+			float mx = mouse.getPosition().x;
+			float my = mouse.getPosition().y;
 			float txtWidth = font.getWidth(tooltip);
 			
 			g.setColor(Color.gray);
@@ -52,8 +54,10 @@ public class TooltipText implements Entity {
 	}
 	
 	private boolean isMouseInside() {
-		float x = Globals.mouse.getPosition().x;
-		float y = Globals.mouse.getPosition().y;
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		
+		float x = mouse.getPosition().x;
+		float y = mouse.getPosition().y;
 		float txtWidth = font.getWidth(text);
 		return ((x >= pos.x) && (y >= pos.y) && 
 				(x <= (pos.x + txtWidth)) && (y <= (pos.y + font.getLineHeight())));

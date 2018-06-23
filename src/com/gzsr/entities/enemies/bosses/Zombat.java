@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -52,16 +53,16 @@ public class Zombat extends Boss {
 			}
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			
 			animation.update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
-				if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
-			} else siphoningBlood = Globals.player.isAlive(); // Only start siphoning if player is alive, obviously...
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
+			} else siphoningBlood = Player.getPlayer().isAlive(); // Only start siphoning if player is alive, obviously...
 			
-			if(Globals.player.isAlive() && siphoningBlood) {
-				double damageTaken = Globals.player.takeDamage(SIPHON_RATE);
+			if(Player.getPlayer().isAlive() && siphoningBlood) {
+				double damageTaken = Player.getPlayer().takeDamage(SIPHON_RATE);
 				if(damageTaken > 0.0) health += SIPHON_RATE;
 			}
 		}
@@ -77,7 +78,7 @@ public class Zombat extends Boss {
 			float y = position.y + ((float)Math.sin(theta) * 5.0f);
 			g.setColor(BLOOD_COLOR);
 			g.setLineWidth(2.0f);
-			g.drawLine(x, y, Globals.player.getPosition().x, Globals.player.getPosition().y);
+			g.drawLine(x, y, Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y);
 			g.setLineWidth(1.0f);
 		}
 	}

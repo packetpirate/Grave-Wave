@@ -14,6 +14,7 @@ import org.newdawn.slick.TrueTypeFont;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
@@ -189,13 +190,13 @@ public class Console implements Entity {
 						
 						if(attributeName.equals("health")) {
 							double health = Double.parseDouble(tokens[2]);
-							Globals.player.setAttribute("health", health);
+							Player.getPlayer().setAttribute("health", health);
 						} else if(attributeName.equals("money")) {
 							int money = Integer.parseInt(tokens[2]);
-							Globals.player.setAttribute("money", money);
+							Player.getPlayer().setAttribute("money", money);
 						} else if(attributeName.equals("experience")) {
 							int exp = Integer.parseInt(tokens[2]);
-							Globals.player.addExperience(gs, exp, 0L);
+							Player.getPlayer().addExperience(gs, exp, 0L);
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
 						}

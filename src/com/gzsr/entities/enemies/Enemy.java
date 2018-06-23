@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Shape;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -104,12 +105,12 @@ public abstract class Enemy implements Entity {
 			
 			updateFlash(cTime);
 			animation.update(cTime);
-			if(Globals.player.isAlive() && !touchingPlayer()) move(gs, delta);
+			if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
 		}
 	}
 	
 	protected boolean nearPlayer(float attackDist) {
-		return (Calculate.Distance(position, Globals.player.getPosition()) <= attackDist);
+		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= attackDist);
 	}
 	
 	public abstract void move(GameState gs, int delta);
@@ -197,7 +198,7 @@ public abstract class Enemy implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// All enemies should render their animation.
-		float pTheta = Calculate.Hypotenuse(position, Globals.player.getPosition());
+		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(isAlive(cTime)) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
@@ -209,7 +210,7 @@ public abstract class Enemy implements Entity {
 	
 	public Shape getCollider() { return bounds; }
 	public boolean touchingPlayer() {
-		return bounds.intersects(Globals.player.getCollider());
+		return bounds.intersects(Player.getPlayer().getCollider());
 	}
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();

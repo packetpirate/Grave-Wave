@@ -19,11 +19,14 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.TransactionButton;
 import com.gzsr.math.Calculate;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.ItemConstants;
@@ -122,7 +125,7 @@ public class ShopState extends BasicGameState implements InputListener {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(exit) game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition());
+		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 250));
 		MusicPlayer.getInstance().update();
 	}
 	
@@ -190,7 +193,7 @@ public class ShopState extends BasicGameState implements InputListener {
 				g.fillRect(x, y, ITEM_BOX_SIZE, ITEM_BOX_SIZE);
 				
 				// Draw the item image.
-				Entity item = Globals.player.getInventory().getItem((r * cols) + c);
+				Entity item = Player.getPlayer().getInventory().getItem((r * cols) + c);
 				if(item != null) {
 					if(item instanceof Weapon) {
 						Weapon w = (Weapon)item;
@@ -369,7 +372,7 @@ public class ShopState extends BasicGameState implements InputListener {
 											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)ammoButton.getSize().x.floatValue(), Color.white);
 						ammoButton.render(g, 0L);
-						if(((Weapon)item).clipsMaxedOut() || (Globals.player.getIntAttribute("money") < ((Weapon)item).getAmmoPrice())) {
+						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getIntAttribute("money") < ((Weapon)item).getAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
 							float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
@@ -388,7 +391,7 @@ public class ShopState extends BasicGameState implements InputListener {
 											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
 						maxAmmoButton.render(g, 0L);
-						if(((Weapon)item).clipsMaxedOut() || (Globals.player.getIntAttribute("money") < ((Weapon)item).getMaxAmmoPrice())) {
+						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getIntAttribute("money") < ((Weapon)item).getMaxAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
 							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
@@ -423,7 +426,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		g.drawRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
 		
 		// Draw the player's current cash.
-		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Globals.player.getIntAttribute("money"));
+		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getIntAttribute("money"));
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
 		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 70.0f), 300, Color.white);
 	}
@@ -433,7 +436,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		if(selected != null) {
 			if(selectedInInventory) {
-				return Globals.player.getInventory().getItem((selected.y * SHOP_COLS) + selected.x);
+				return Player.getPlayer().getInventory().getItem((selected.y * SHOP_COLS) + selected.x);
 			} else {
 				return SHOP.getItem((selected.y * SHOP_COLS) + selected.x);
 			}
@@ -472,12 +475,12 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(true);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
 		
 		// Check to see if the buy/sell buttons were clicked.
 		if(selected != null) {
@@ -485,11 +488,11 @@ public class ShopState extends BasicGameState implements InputListener {
 			if(buyButton.inBounds(x, y) && !selectedInInventory) {
 				if(item instanceof Weapon) {
 					Weapon w = (Weapon)item;
-					int playerMoney = Globals.player.getIntAttribute("money"); 
+					int playerMoney = Player.getPlayer().getIntAttribute("money"); 
 					if(playerMoney >= w.getPrice()) {
-						Globals.player.setAttribute("money", (playerMoney - w.getPrice()));
-						Globals.player.getInventory().addItem(w);
-						Globals.player.resetCurrentWeapon();
+						Player.getPlayer().setAttribute("money", (playerMoney - w.getPrice()));
+						Player.getPlayer().getInventory().addItem(w);
+						Player.getPlayer().resetCurrentWeapon();
 						SHOP.dropItem(w.getName());
 						AssetManager.getManager().getSound("buy_ammo2").play();
 					}
@@ -499,9 +502,9 @@ public class ShopState extends BasicGameState implements InputListener {
 				if(item instanceof Weapon) {
 					Weapon w = (Weapon)item;
 					int sellValue = (int)(w.getPrice() * SELL_BACK_VALUE);
-					Globals.player.setAttribute("money", (Globals.player.getIntAttribute("money") + sellValue));
-					Globals.player.getInventory().dropItem(w.getName());
-					Globals.player.resetCurrentWeapon();
+					Player.getPlayer().setAttribute("money", (Player.getPlayer().getIntAttribute("money") + sellValue));
+					Player.getPlayer().getInventory().dropItem(w.getName());
+					Player.getPlayer().resetCurrentWeapon();
 					SHOP.addItem(w);
 					AssetManager.getManager().getSound("buy_ammo2").play();
 				}
@@ -513,10 +516,10 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getAmmoPrice();
-						int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
+						int moneyAfterPurchase = Player.getPlayer().getIntAttribute("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
-							Globals.player.setAttribute("money", moneyAfterPurchase);
+							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
 							w.addInventoryAmmo(w.getClipSize());
 							AssetManager.getManager().getSound("buy_ammo2").play();
 						}
@@ -529,10 +532,10 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getMaxAmmoPrice();
-						int moneyAfterPurchase = Globals.player.getIntAttribute("money") - cost; 
+						int moneyAfterPurchase = Player.getPlayer().getIntAttribute("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
-							Globals.player.setAttribute("money", moneyAfterPurchase);
+							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
 							w.maxOutAmmo();
 							AssetManager.getManager().getSound("buy_ammo2").play();
 						}
@@ -547,15 +550,17 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(false);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
 	}
 	
 	@Override
 	public void mouseWheelMoved(int change) {
-		boolean mouseInInventory = ((Globals.mouse.getPosition().x >= INVENTORY_CONTAINER.x) && (Globals.mouse.getPosition().y >= INVENTORY_CONTAINER.y) && 
-									(Globals.mouse.getPosition().x <= (INVENTORY_CONTAINER.x + CONTAINER_WIDTH)) && (Globals.mouse.getPosition().y <= INVENTORY_CONTAINER.y + CONTAINER_HEIGHT));
-		boolean mouseInShop = ((Globals.mouse.getPosition().x >= SHOP_CONTAINER.x) && (Globals.mouse.getPosition().y >= SHOP_CONTAINER.y) && 
-				(Globals.mouse.getPosition().x <= (SHOP_CONTAINER.x + CONTAINER_WIDTH)) && (Globals.mouse.getPosition().y <= SHOP_CONTAINER.y + CONTAINER_HEIGHT));
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		
+		boolean mouseInInventory = ((mouse.getPosition().x >= INVENTORY_CONTAINER.x) && (mouse.getPosition().y >= INVENTORY_CONTAINER.y) && 
+									(mouse.getPosition().x <= (INVENTORY_CONTAINER.x + CONTAINER_WIDTH)) && (mouse.getPosition().y <= INVENTORY_CONTAINER.y + CONTAINER_HEIGHT));
+		boolean mouseInShop = ((mouse.getPosition().x >= SHOP_CONTAINER.x) && (mouse.getPosition().y >= SHOP_CONTAINER.y) && 
+				(mouse.getPosition().x <= (SHOP_CONTAINER.x + CONTAINER_WIDTH)) && (mouse.getPosition().y <= SHOP_CONTAINER.y + CONTAINER_HEIGHT));
 		
 		float scrollAmount = (change > 0) ? SCROLL_SPEED : -SCROLL_SPEED;
 		if(mouseInInventory) {
@@ -593,9 +598,9 @@ public class ShopState extends BasicGameState implements InputListener {
 	public void enter(GameContainer gc, StateBasedGame game) {
 		exit = false;
 		
-		if(Globals.player.getInventory().getCapacity() != inventorySize) {
+		if(Player.getPlayer().getInventory().getCapacity() != inventorySize) {
 			// Inventory size has changed. Re-build inventory layout.
-			inventorySize = Globals.player.getInventory().getCapacity();
+			inventorySize = Player.getPlayer().getInventory().getCapacity();
 			int cols = SHOP_COLS;
 			int rows = (int)(Math.ceil((float)inventorySize / (float)cols));
 			if(inventoryBoxes == null) {

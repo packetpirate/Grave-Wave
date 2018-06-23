@@ -10,8 +10,10 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.gfx.ui.MenuButton;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 
 public class GameOverState extends BasicGameState implements InputListener {
@@ -39,17 +41,18 @@ public class GameOverState extends BasicGameState implements InputListener {
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		time += (long)delta;
 		
-		if(menuButton.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		if(menuButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			menuButton.mouseEnter();
-			if(Globals.mouse.isMouseDown()) {
-				Globals.resetInputs();
+			if(mouse.isMouseDown()) {
+				Controls.getInstance().resetAll();
 				game.enterState(MenuState.ID);
 			}
 		} else menuButton.mouseExit();
 		
-		if(exitButton.inBounds(Globals.mouse.getPosition().x, Globals.mouse.getPosition().y)) {
+		if(exitButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exitButton.mouseEnter();
-			if(Globals.mouse.isMouseDown()) gc.exit();
+			if(mouse.isMouseDown()) gc.exit();
 		} else exitButton.mouseExit();
 	}
 	
@@ -73,17 +76,17 @@ public class GameOverState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Globals.mouse.setPosition(newx, newy);
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(true);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Globals.mouse.setMouseDown(false);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
 	}
 
 	@Override

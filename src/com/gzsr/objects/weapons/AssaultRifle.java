@@ -25,6 +25,7 @@ public class AssaultRifle extends Weapon {
 	private static final long RELOAD_TIME = 2_000L;
 	private static final double DAMAGE = 50.0;
 	private static final float KNOCKBACK = 1.0f;
+	private static final float MAX_DEVIATION = (float)(Math.PI / 12.0);
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "shoot3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
@@ -54,8 +55,8 @@ public class AssaultRifle extends Weapon {
 		super.render(g, cTime);
 		
 		// Render muzzle flash.
-		Pair<Float> mp = new Pair<Float>((Globals.player.getPosition().x + 5.0f), (Globals.player.getPosition().y - 28.0f));
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Globals.player.getPosition(), (Globals.player.getRotation() - (float)(Math.PI / 2)));
+		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
+		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
 	}
 
 	@Override
@@ -65,11 +66,14 @@ public class AssaultRifle extends Weapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(color, position, velocity, theta,
+		double damage = AssaultRifle.DAMAGE + (AssaultRifle.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
+		
+		Particle particle = new Particle(color, position, velocity, (theta + deviation),
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = AssaultRifle.DAMAGE + (AssaultRifle.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
 		Projectile projectile = new Projectile(particle, damage);
+		
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;

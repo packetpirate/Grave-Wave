@@ -55,8 +55,8 @@ public class HUD {
 	public void render(Graphics g, GameState gs, long cTime) {
 		AssetManager assets = AssetManager.getManager();
 		{ // Render the health bar.
-			float currentHealth = (float)Globals.player.getDoubleAttribute("health");
-			float maxHealth = (float)Globals.player.getDoubleAttribute("maxHealth");
+			float currentHealth = (float)Player.getPlayer().getDoubleAttribute("health");
+			float maxHealth = (float)Player.getPlayer().getDoubleAttribute("maxHealth");
 			float percentage = currentHealth / maxHealth;
 			
 			g.setColor(Color.black);
@@ -64,7 +64,7 @@ public class HUD {
 			g.setColor(Color.lightGray);
 			g.drawRect(HEALTH_ORIGIN.x, HEALTH_ORIGIN.y, 156.0f, 26.0f);
 			
-			g.setColor(Globals.player.hasStatus(Status.POISON) ? HUD.POISON_HEALTH : Color.red);
+			g.setColor(Player.getPlayer().hasStatus(Status.POISON) ? HUD.POISON_HEALTH : Color.red);
 			g.fillRect((HEALTH_ORIGIN.x + 3.0f), 
 					   (HEALTH_ORIGIN.y + 3.0f), 
 					   (percentage * 150.0f), 20.0f);
@@ -78,18 +78,18 @@ public class HUD {
 			FontUtils.drawCenter(f, healthText, (int)HEALTH_ORIGIN.x.floatValue(), (int)(HEALTH_ORIGIN.y.floatValue() + f.getLineHeight()), 156);
 		} // End health bar rendering.
 		
-		{ // Draw the Globals.player's lives next to the health bar.
+		{ // Draw the Player.getPlayer()'s lives next to the health bar.
 			float startX = HEALTH_ORIGIN.x + 156.0f;
 			float startY = HEALTH_ORIGIN.y + 5.0f;
 			Image img = AssetManager.getManager().getImage("GZS_Life");
-			for(int i = 0; i < Globals.player.getIntAttribute("lives"); i++) {
+			for(int i = 0; i < Player.getPlayer().getIntAttribute("lives"); i++) {
 				g.drawImage(img, (startX + (i * img.getWidth()) + (i * 3.0f) + 5.0f), startY);
 			}
-		} // End of drawing Globals.player's lives.
+		} // End of drawing Player.getPlayer()'s lives.
 		
 		{ // Begin experience bar rendering.
-			float currentExp = (float)Globals.player.getIntAttribute("experience");
-			float expToLevel = (float)Globals.player.getIntAttribute("expToLevel");
+			float currentExp = (float)Player.getPlayer().getIntAttribute("experience");
+			float expToLevel = (float)Player.getPlayer().getIntAttribute("expToLevel");
 			float percentage = currentExp / expToLevel;
 			
 			g.setColor(Color.black);
@@ -108,11 +108,11 @@ public class HUD {
 		} // End experience bar rendering.
 		
 		if(displayWeapons(cTime)) {
-			// Render the three weapons (or the Globals.player's active weapons - 1) on top of the current weapon.
-			List<Weapon> weapons = Globals.player.getWeapons();
-			int wi = Globals.player.getWeaponIndex() - 1;
+			// Render the three weapons (or the Player.getPlayer()'s active weapons - 1) on top of the current weapon.
+			List<Weapon> weapons = Player.getPlayer().getWeapons();
+			int wi = Player.getPlayer().getWeaponIndex() - 1;
 			float startY = WEAPONS_ORIGIN.y;
-			for(int i = 0; i < Math.min(3, Globals.player.getWeapons().size()); i++) {
+			for(int i = 0; i < Math.min(3, Player.getPlayer().getWeapons().size()); i++) {
 				Weapon w = weapons.get(Math.floorMod((wi + (i + 1)), weapons.size()));
 				float cy = (startY - (i * 54.0f));
 				
@@ -141,12 +141,12 @@ public class HUD {
 			g.setColor(Color.black);
 			g.drawRect((WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f), 48.0f, 48.0f);
 			
-			g.drawImage(Globals.player.getCurrentWeapon().getInventoryIcon(),
+			g.drawImage(Player.getPlayer().getCurrentWeapon().getInventoryIcon(),
 						(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
 		
-			// Render the reloading bar, if the Globals.player is reloading.
-			if(Globals.player.getCurrentWeapon().isReloading(cTime)) {
-				float percentage = 1.0f - (float)Globals.player.getCurrentWeapon().getReloadTime(cTime);
+			// Render the reloading bar, if the Player.getPlayer() is reloading.
+			if(Player.getPlayer().getCurrentWeapon().isReloading(cTime)) {
+				float percentage = 1.0f - (float)Player.getPlayer().getCurrentWeapon().getReloadTime(cTime);
 				float height = percentage * 48.0f;
 				float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
 				
@@ -154,7 +154,7 @@ public class HUD {
 				g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
 			}
 			
-			if(Globals.player.hasStatus(Status.UNLIMITED_AMMO)) {
+			if(Player.getPlayer().hasStatus(Status.UNLIMITED_AMMO)) {
 				Image unlimitedAmmo = assets.getImage("GZS_UnlimitedAmmo");
 				float x = WEAPONS_ORIGIN.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
 				float y = WEAPONS_ORIGIN.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
@@ -162,15 +162,15 @@ public class HUD {
 			} else {
 				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 				String ammoText = String.format("%d / %d", 
-									Globals.player.getCurrentWeapon().getClipAmmo(),
-									Globals.player.getCurrentWeapon().getInventoryAmmo());
+									Player.getPlayer().getCurrentWeapon().getClipAmmo(),
+									Player.getPlayer().getCurrentWeapon().getInventoryAmmo());
 				FontUtils.drawCenter(f, ammoText, (int)(WEAPONS_ORIGIN.x + 54.0f), (int)(WEAPONS_ORIGIN.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
 			}
 		} // End weapons loadout rendering.
 		
 		{ // Begin Status Effects rendering.
 			float xPlus = 0.0f;
-			List<StatusEffect> statusEffects = Globals.player.getStatuses();
+			List<StatusEffect> statusEffects = Player.getPlayer().getStatuses();
 			for(StatusEffect status : statusEffects) {
 				// Render each individual status underneath the health and experience bars.
 				Image img = status.getIcon();
@@ -205,7 +205,7 @@ public class HUD {
 		
 		{ // Begin Drawing Player Money
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Globals.player.getIntAttribute("money")));
+			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getIntAttribute("money")));
 			float w = g.getFont().getWidth(money);
 			float h = g.getFont().getLineHeight();
 			float x = (Globals.WIDTH - w - 20.0f);
@@ -213,11 +213,11 @@ public class HUD {
 			FontUtils.drawCenter(g.getFont(), money, (int)x, (int)y, (int)w, Color.white);
 		} // End Player Money Drawing
 		
-		// If Globals.player is respawning, draw the countdown.
-		if(Globals.player.isRespawning()) {
+		// If Player.getPlayer() is respawning, draw the countdown.
+		if(Player.getPlayer().isRespawning()) {
 			g.setColor(Color.white);
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-			long timeToRespawn = Globals.player.getTimeToRespawn(cTime);
+			long timeToRespawn = Player.getPlayer().getTimeToRespawn(cTime);
 			String respawnText = "Respawn in " + (timeToRespawn / 1000L) + "...";
 			float w = g.getFont().getWidth(respawnText);
 			float h = g.getFont().getLineHeight();
