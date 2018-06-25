@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
+import com.gzsr.entities.enemies.LootTable;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -25,17 +26,20 @@ public class Aberration extends Boss {
 	private static final float HEALTH = 10_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
-	private static final float POWERUP_CHANCE = 0.9f;
 	private static final float BILE_DAMAGE = 1.0f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 9);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
 	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 1.0f)
+			.addItem(Powerups.Type.AMMO, 1.0f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.60f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.40f);
+	
 	private List<Projectile> bile;
 	private long lastBile;
-	
-	private boolean deathHandled;
 	
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
@@ -43,8 +47,6 @@ public class Aberration extends Boss {
 		
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
-		
-		this.deathHandled = false;
 	}
 	
 	@Override
@@ -157,15 +159,6 @@ public class Aberration extends Boss {
 	}
 	
 	@Override
-	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled && (Globals.rand.nextFloat() <= Aberration.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
-	}
-	
-	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
 		takeDamage(amnt, knockback, cTime, delta, true);
 	}
@@ -208,5 +201,10 @@ public class Aberration extends Boss {
 	@Override
 	public String getDescription() {
 		return "Aberration";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Aberration.LOOT;
 	}
 }

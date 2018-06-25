@@ -6,9 +6,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
+import com.gzsr.entities.enemies.LootTable;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -22,18 +22,21 @@ public class Stitches extends Boss {
 	private static final float HEALTH = 15_000.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
-	private static final float POWERUP_CHANCE = 1.0f;
 	private static final float ATTACK_DIST = 300.0f;
 	private static final float RELEASE_DIST = 100.0f;
 	private static final float HOOK_DAMAGE = 0.3f;
 	private static final float HOOK_SPEED = 0.4f;
 	private static final long HOOK_COOLDOWN = 5_000L;
 	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 1.0f)
+			.addItem(Powerups.Type.AMMO, 1.0f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.75f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.50f);
+	
 	private Particle hook;
 	private boolean hooked;
 	private long lastHook;
-	
-	private boolean deathHandled;
 	
 	public Stitches(Pair<Float> position_) {
 		super(EnemyType.STITCHES, position_);
@@ -42,8 +45,6 @@ public class Stitches extends Boss {
 		hook = null;
 		hooked = false;
 		lastHook = -Stitches.HOOK_COOLDOWN;
-		
-		deathHandled = false;
 	}
 	
 	@Override
@@ -153,15 +154,6 @@ public class Stitches extends Boss {
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-	
-	@Override
-	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled && (Globals.rand.nextFloat() <= Stitches.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
-	}
 
 	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
@@ -206,5 +198,10 @@ public class Stitches extends Boss {
 	@Override
 	public String getDescription() {
 		return "Stitches";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Stitches.LOOT;
 	}
 }

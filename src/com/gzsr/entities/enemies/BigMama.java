@@ -20,19 +20,24 @@ public class BigMama extends Enemy {
 	private static final float HEALTH = 300.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 0.0f;
-	private static final float POWERUP_CHANCE = 0.65f;
 	private static final long LIFESPAN = 10_000L;
 	private static final float EXP_DIST = 128.0f;
 	private static final double EXP_DAMAGE = 75.0f;
 	private static final float EXP_KNOCKBACK = 10.0f;
 	private static final int ZUMBY_COUNT = 10;
 	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 0.75f)
+			.addItem(Powerups.Type.AMMO, 0.40f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.15f)
+			.addItem(Powerups.Type.INVULNERABILITY, 0.10f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.30f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.30f);
+	
 	private Sound explosion;
 	
 	private long created;
 	private boolean exploded;
-	
-	private boolean deathHandled;
 	
 	public BigMama(Pair<Float> position) {
 		super(EnemyType.BIG_MAMA, position);
@@ -42,8 +47,6 @@ public class BigMama extends Enemy {
 		
 		created = -1L;
 		exploded = false;
-		
-		deathHandled = false;
 	}
 	
 	@Override
@@ -132,15 +135,6 @@ public class BigMama extends Enemy {
 	private boolean nearPlayer() {
 		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= BigMama.EXP_DIST);
 	}
-	
-	@Override
-	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled && (Globals.rand.nextFloat() <= BigMama.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
-	}
 
 	@Override
 	public double getDamage() {
@@ -168,5 +162,10 @@ public class BigMama extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Big Mama";
+	}
+
+	@Override
+	public LootTable getLootTable() {
+		return BigMama.LOOT;
 	}
 }

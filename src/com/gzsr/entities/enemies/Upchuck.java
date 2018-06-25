@@ -24,24 +24,27 @@ public class Upchuck extends Enemy {
 	private static final float HEALTH = 150.0f;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
-	private static final float POWERUP_CHANCE = 0.5f;
 	private static final float BILE_DAMAGE = 0.4f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 18);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
 	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 0.50f)
+			.addItem(Powerups.Type.AMMO, 0.25f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.10f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.40f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.15f);
+	
 	private List<Projectile> bile;
 	private long lastBile;
-	
-	private boolean deathHandled;
 	
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
 		this.health = Upchuck.HEALTH;
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
-		this.deathHandled = false;
 	}
 	
 	@Override
@@ -153,15 +156,6 @@ public class Upchuck extends Enemy {
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-	
-	@Override
-	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled && (Globals.rand.nextFloat() <= Upchuck.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
-	}
 
 	@Override
 	public double getDamage() {
@@ -189,5 +183,10 @@ public class Upchuck extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Upchuck";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Upchuck.LOOT;
 	}
 }

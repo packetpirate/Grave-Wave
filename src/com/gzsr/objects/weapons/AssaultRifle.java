@@ -25,7 +25,7 @@ public class AssaultRifle extends Weapon {
 	private static final long RELOAD_TIME = 2_000L;
 	private static final double DAMAGE = 50.0;
 	private static final float KNOCKBACK = 1.0f;
-	private static final float MAX_DEVIATION = (float)(Math.PI / 12.0);
+	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "shoot3";
 	private static final String RELOAD_SOUND = "buy_ammo2";

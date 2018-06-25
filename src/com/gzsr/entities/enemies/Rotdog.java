@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Rotdog extends Enemy {
@@ -11,6 +12,9 @@ public class Rotdog extends Enemy {
 	private static final float HEALTH = 50.0f;
 	private static final float SPEED = 0.20f;
 	private static final float DPS = 8.0f;
+	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.SPEED, 0.05f);
 	
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);
@@ -72,5 +76,10 @@ public class Rotdog extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Rotdog";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Rotdog.LOOT;
 	}
 }

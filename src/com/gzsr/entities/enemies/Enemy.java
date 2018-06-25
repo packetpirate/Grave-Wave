@@ -16,6 +16,7 @@ import com.gzsr.gfx.Animation;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
@@ -41,6 +42,7 @@ public abstract class Enemy implements Entity {
 	protected int experience;
 	public int getExpValue() { return experience; }
 	protected List<StatusEffect> statusEffects;
+	protected boolean deathHandled;
 	
 	protected boolean hit;
 	protected long hitTime;
@@ -74,6 +76,7 @@ public abstract class Enemy implements Entity {
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
 		this.statusEffects = new ArrayList<StatusEffect>();
+		this.deathHandled = false;
 		
 		this.hit = false;
 		this.hitTime = 0L;
@@ -261,7 +264,12 @@ public abstract class Enemy implements Entity {
 		}
 	}
 	
-	public void onDeath(GameState gs, long cTime) {}
+	public void onDeath(GameState gs, long cTime) {
+		if(!deathHandled) Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
+		deathHandled = true;
+	}
+	
 	public abstract double getDamage();
 	public abstract float getSpeed();
+	public abstract LootTable getLootTable();
 }

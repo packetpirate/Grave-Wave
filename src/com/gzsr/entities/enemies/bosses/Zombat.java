@@ -5,9 +5,9 @@ import java.util.Iterator;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
+import com.gzsr.entities.enemies.LootTable;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
@@ -20,21 +20,24 @@ public class Zombat extends Boss {
 	private static final float HEALTH = 1_500.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
-	private static final float POWERUP_CHANCE = 0.6f;
 	private static final float SIPHON_RATE = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
 	
 	private static final Color BLOOD_COLOR = new Color(0xAA0000);
 	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 1.0f)
+			.addItem(Powerups.Type.AMMO, 0.75f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.50f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.50f);
+	
 	private boolean siphoningBlood;
-	private boolean deathHandled;
 	
 	public Zombat(Pair<Float> position_) {
 		super(EnemyType.ZOMBAT_SWARM, position_);
 		this.health = Zombat.HEALTH;
 		
 		siphoningBlood = false;
-		deathHandled = false;
 	}
 	
 	@Override
@@ -113,15 +116,6 @@ public class Zombat extends Boss {
 	}
 	
 	@Override
-	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled && (Globals.rand.nextFloat() <= Zombat.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
-	}
-	
-	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
 		takeDamage(amnt, knockback, cTime, delta, true);
 	}
@@ -164,5 +158,10 @@ public class Zombat extends Boss {
 	@Override
 	public String getDescription() {
 		return "Zombat";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Zombat.LOOT;
 	}
 }

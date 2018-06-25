@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class Zumby extends Enemy {
@@ -11,6 +12,10 @@ public class Zumby extends Enemy {
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 5.0f;
+	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 0.05f)
+			.addItem(Powerups.Type.AMMO, 0.02f);
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
@@ -72,5 +77,10 @@ public class Zumby extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Zumby";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Zumby.LOOT;
 	}
 }

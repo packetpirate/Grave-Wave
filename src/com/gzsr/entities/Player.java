@@ -234,8 +234,7 @@ public class Player implements Entity {
 										Controls.Layout.WEAPON_9, Controls.Layout.WEAPON_10 };
 		for(int i = 0; i < 10; i++) {
 			if(Controls.getInstance().isPressed(keys[i])) {
-				if(i == 0) setCurrentWeapon(9);
-				else setCurrentWeapon(i - 1);
+				setCurrentWeapon(i);
 				break; // To avoid conflicts when holding multiple numerical keys.
 			}
 		}

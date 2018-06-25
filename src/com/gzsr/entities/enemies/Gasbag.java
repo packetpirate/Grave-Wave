@@ -21,22 +21,25 @@ public class Gasbag extends Enemy {
 	private static final float HEALTH = 100.0f;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
-	private static final float POWERUP_CHANCE = 0.4f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 150.0f;
 	private static final long POISON_DURATION = 5000L;
 	private static final double POISON_DAMAGE = 0.05; // multiply by 1,000 to get damage done in 1 second
 	private static final float POISON_KNOCKBACK = 5.0f;
 	
-	private Sound explode;
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 0.50f)
+			.addItem(Powerups.Type.AMMO, 0.25f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.10f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.40f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.15f);
 	
-	private boolean deathHandled;
+	private Sound explode;
 	
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
 		this.health = Gasbag.HEALTH;
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
-		this.deathHandled = false;
 	}
 	
 	@Override
@@ -71,17 +74,6 @@ public class Gasbag extends Enemy {
 		
 		explode.play();
 		health = 0.0;
-	}
-	
-	@Override
-	public void onDeath(GameState gs, long cTime) {
-		explode(gs, cTime);
-		
-		if(!deathHandled && (Globals.rand.nextFloat() <= Gasbag.POWERUP_CHANCE)) {
-			Powerups.spawnRandomPowerup(gs, new Pair<Float>(position), cTime);
-		}
-		
-		deathHandled = true;
 	}
 
 	@Override
@@ -142,5 +134,10 @@ public class Gasbag extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Gasbag";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return Gasbag.LOOT;
 	}
 }

@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 
 public class TinyZumby extends Enemy {
@@ -10,6 +11,12 @@ public class TinyZumby extends Enemy {
 	private static final float HEALTH = 25.0f;
 	private static final float SPEED = 0.20f;
 	private static final float DPS = 2.0f;
+	
+	public static final LootTable LOOT = new LootTable()
+			.addItem(Powerups.Type.HEALTH, 0.25f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.30f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.10f);
 	
 	public TinyZumby(Pair<Float> position) {
 		super(EnemyType.LIL_ZUMBY, position);
@@ -67,5 +74,10 @@ public class TinyZumby extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Tiny Zumby";
+	}
+	
+	@Override
+	public LootTable getLootTable() {
+		return TinyZumby.LOOT;
 	}
 }

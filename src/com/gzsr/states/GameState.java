@@ -229,18 +229,22 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void keyReleased(int key, char c) {
 		EnemyController ec = (EnemyController) getEntity("enemyController");
-		if((Controls.Layout.identify(key).equals(Controls.Layout.OPEN_CONSOLE)) && Globals.ENABLE_CONSOLE) {
+		if((key == Controls.Layout.OPEN_CONSOLE.getKey()) && Globals.ENABLE_CONSOLE) {
 			console.setPauseTime(time);
 			consoleOpen = !consoleOpen;
-		} else if((Controls.Layout.identify(key).equals(Controls.Layout.PAUSE_GAME)) && !consoleOpen) {
-			if(!paused) MusicPlayer.getInstance().pause();
-			else MusicPlayer.getInstance().resume();
-			paused = !paused;
-		} else if((Controls.Layout.identify(key).equals(Controls.Layout.NEXT_WAVE)) && !consoleOpen && !paused && ec.isRestarting()) {
-			ec.skipToNextWave();
 		} else {
 			if(consoleOpen) console.keyReleased(key, c);
-			else Controls.getInstance().release(key);
+			else {
+				if(Controls.Layout.identify(key).equals(Controls.Layout.PAUSE_GAME)) {
+					if(!paused) MusicPlayer.getInstance().pause();
+					else MusicPlayer.getInstance().resume();
+					paused = !paused;
+				} else if(Controls.Layout.identify(key).equals(Controls.Layout.NEXT_WAVE) && !paused && ec.isRestarting()) {
+					ec.skipToNextWave();
+				} else {
+					Controls.getInstance().release(key);
+				}
+			}
 		}
 	}
 	
