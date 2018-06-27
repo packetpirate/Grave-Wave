@@ -425,7 +425,7 @@ public class Player implements Entity {
 			Iterator<Projectile> it = w.getProjectiles().iterator();
 			while(it.hasNext()) {
 				Projectile p = it.next();
-				if(p.isAlive(cTime) && p.checkCollision(enemy) && enemy.isAlive(cTime)) {
+				if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
 					if(p instanceof LaserNode) {
 						LaserNode node = (LaserNode) p;
 						node.damage(enemy.getDamage());
@@ -440,7 +440,7 @@ public class Player implements Entity {
 						}
 						
 						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
-						enemy.takeDamage((p.getDamage() * damagePercentage), w.getKnockback(), cTime, delta);
+						enemy.takeDamage((p.getDamage() * damagePercentage), w.getKnockback(), (float)(p.getTheta() + (Math.PI / 2)), cTime, delta, true);
 					}
 					
 					return true;

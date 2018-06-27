@@ -31,11 +31,11 @@ public class Upchuck extends Enemy {
 	private static final float ATTACK_DIST = 200.0f;
 	
 	public static final LootTable LOOT = new LootTable()
-			.addItem(Powerups.Type.HEALTH, 0.50f)
-			.addItem(Powerups.Type.AMMO, 0.25f)
-			.addItem(Powerups.Type.EXTRA_LIFE, 0.10f)
-			.addItem(Powerups.Type.NIGHT_VISION, 0.40f)
-			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.15f);
+			.addItem(Powerups.Type.HEALTH, 0.20f)
+			.addItem(Powerups.Type.AMMO, 0.20f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.15f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	
 	private List<Projectile> bile;
 	private long lastBile;

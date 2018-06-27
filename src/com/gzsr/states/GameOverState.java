@@ -65,8 +65,8 @@ public class GameOverState extends BasicGameState implements InputListener {
 						0.0f, 0.0f, deathScreen.getWidth(), deathScreen.getHeight());
 		}
 		
-		menuButton.render(g);
-		exitButton.render(g);
+		menuButton.render(g, 0L);
+		exitButton.render(g, 0L);
 	}
 	
 	@Override

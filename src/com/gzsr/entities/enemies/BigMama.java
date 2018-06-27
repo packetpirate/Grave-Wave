@@ -27,12 +27,12 @@ public class BigMama extends Enemy {
 	private static final int ZUMBY_COUNT = 10;
 	
 	public static final LootTable LOOT = new LootTable()
-			.addItem(Powerups.Type.HEALTH, 0.75f)
-			.addItem(Powerups.Type.AMMO, 0.40f)
-			.addItem(Powerups.Type.EXTRA_LIFE, 0.15f)
-			.addItem(Powerups.Type.INVULNERABILITY, 0.10f)
-			.addItem(Powerups.Type.NIGHT_VISION, 0.30f)
-			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.30f);
+			.addItem(Powerups.Type.HEALTH, 0.35f)
+			.addItem(Powerups.Type.AMMO, 0.25f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.10f)
+			.addItem(Powerups.Type.INVULNERABILITY, 0.025f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.10f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.05f);
 	
 	private Sound explosion;
 	

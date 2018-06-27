@@ -157,11 +157,11 @@ public class Stitches extends Boss {
 
 	@Override
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		takeDamage(amnt, knockback, cTime, delta, true);
+		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, long cTime, int delta, boolean flash) {
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
 		if(!dead()) {
 			health -= amnt;
 			

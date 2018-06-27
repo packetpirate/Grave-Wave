@@ -13,10 +13,10 @@ public class TinyZumby extends Enemy {
 	private static final float DPS = 2.0f;
 	
 	public static final LootTable LOOT = new LootTable()
-			.addItem(Powerups.Type.HEALTH, 0.25f)
-			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
-			.addItem(Powerups.Type.NIGHT_VISION, 0.30f)
-			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.10f);
+			.addItem(Powerups.Type.HEALTH, 0.05f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.025f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.025f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	
 	public TinyZumby(Pair<Float> position) {
 		super(EnemyType.LIL_ZUMBY, position);

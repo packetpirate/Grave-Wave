@@ -243,10 +243,10 @@ public abstract class Enemy implements Entity {
 	}
 	
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		takeDamage(amnt, knockback, cTime, delta, true);
+		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
 	}
 	
-	public void takeDamage(double amnt, float knockback, long cTime, int delta, boolean flash) {
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
 		if(!dead()) {
 			health -= amnt;
 			
@@ -256,8 +256,8 @@ public abstract class Enemy implements Entity {
 			}
 			
 			if(knockback > 0.0f) {
-				float dx = (float)(Math.cos(theta) * knockback * delta);
-				float dy = (float)(Math.sin(theta) * knockback * delta);
+				float dx = (float)(Math.cos(knockbackTheta) * knockback * delta);
+				float dy = (float)(Math.sin(knockbackTheta) * knockback * delta);
 				position.x += -dx;
 				position.y += -dy;
 			}

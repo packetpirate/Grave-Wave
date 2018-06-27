@@ -6,6 +6,8 @@ import org.newdawn.slick.SlickException;
 public class MusicPlayer {
 	private static final int SOUNDTRACK_LENGTH = 9;
 	
+	private float MUSIC_VOLUME = 0.5f;
+	
 	private static MusicPlayer instance;
 	
 	private boolean autoplay;
@@ -58,7 +60,19 @@ public class MusicPlayer {
 		Music song = new Music(String.format("music/%s.ogg", songName), true);
 		if(song != null) {
 			nowPlaying = song;
-			nowPlaying.play(1.0f, 0.5f);
+			nowPlaying.play(1.0f, MUSIC_VOLUME);
 		}
+	}
+	
+	public float getMusicVolume() {
+		return MUSIC_VOLUME;
+	}
+	
+	public void setMusicVolume(float val_) {
+		if(val_ < 0.0f) MUSIC_VOLUME = 0.0f;
+		else if(val_ > 1.0f) MUSIC_VOLUME = 1.0f;
+		else MUSIC_VOLUME = val_;
+		
+		if(nowPlaying != null) nowPlaying.setVolume(MUSIC_VOLUME);
 	}
 }

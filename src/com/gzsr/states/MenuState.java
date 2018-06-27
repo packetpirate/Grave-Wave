@@ -40,6 +40,7 @@ public class MenuState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		Controls.getInstance().resetAll();
 		MusicPlayer.getInstance().reset();
 		MusicPlayer.getInstance().nextSong();
 	}
@@ -68,8 +69,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		if(exit.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exit.mouseEnter();
 			if(mouse.isMouseDown()) gc.exit();
-		}
-		else exit.mouseExit();
+		} else exit.mouseExit();
 		
 		MusicPlayer.getInstance().update();
 	}
@@ -83,10 +83,10 @@ public class MenuState extends BasicGameState implements InputListener {
 		
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
-		gameStart.render(g);
-		settings.render(g);
-		credits.render(g);
-		exit.render(g);
+		gameStart.render(g, 0L);
+		settings.render(g, 0L);
+		credits.render(g, 0L);
+		exit.render(g, 0L);
 	}
 	
 	@Override

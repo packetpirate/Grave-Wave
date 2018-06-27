@@ -12,6 +12,10 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.gfx.Animation;
+import com.gzsr.states.settings.AudioSettingsState;
+import com.gzsr.states.settings.ControlSettingsState;
+import com.gzsr.states.settings.DisplaySettingsState;
+import com.gzsr.states.settings.GameSettingsState;
 
 public class LoadingState extends BasicGameState {
 	public static final int ID = 7;
@@ -44,6 +48,13 @@ public class LoadingState extends BasicGameState {
 		percentLoaded = (float)AssetManager.assetsLoaded() / (float)AssetManager.assetsToLoad();
 		if(AssetManager.assetsLoaded() == AssetManager.assetsToLoad()) {
 			game.addState(new MenuState());
+			
+			game.addState(new SettingsState());
+			game.addState(new GameSettingsState());
+			game.addState(new AudioSettingsState());
+			game.addState(new DisplaySettingsState());
+			game.addState(new ControlSettingsState());
+			
 			game.addState(new GameState());
 			game.addState(new ShopState());
 			game.addState(new TrainState());

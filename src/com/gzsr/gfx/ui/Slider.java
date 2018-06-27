@@ -1,0 +1,121 @@
+package com.gzsr.gfx.ui;
+
+import java.util.function.Consumer;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+
+import com.gzsr.AssetManager;
+import com.gzsr.Controls;
+import com.gzsr.entities.Entity;
+import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
+
+public class Slider implements Entity {
+	private static final float HEIGHT = 20.0f;
+	
+	private String label;
+	public String getLabel() { return label; }
+	
+	private Pair<Float> position;
+	public Pair<Float> getPosition() { return position; }
+	private float width;
+	public float getWidth() { return width; }
+	
+	private Pair<Float> sliderBounds;
+	public Pair<Float> getSliderBounds() { return sliderBounds; }
+	public void setSliderBounds(Pair<Float> bounds_) { this.sliderBounds = bounds_; }
+	
+	private float sliderVal, defaultVal;
+	public float getSliderVal() { return sliderVal; }
+	public void setSliderVal(float val_) { this.sliderVal = val_; }
+	public void setDefaultVal(float val_) { this.defaultVal = val_; }
+	
+	private Consumer<Float> operation;
+	
+	public Slider(String label_, Pair<Float> position_, float width_, Consumer<Float> operation_) {
+		this.label = label_;
+		
+		this.position = position_;
+		this.width = width_;
+		
+		this.sliderBounds = new Pair<Float>(0.0f, 100.0f);
+		this.sliderVal = 0.0f;
+		this.defaultVal = 0.0f;
+		
+		this.operation = operation_;
+	}
+
+	@Override
+	public void update(GameState gs, long cTime, int delta) {
+	}
+
+	@Override
+	public void render(Graphics g, long cTime) {
+		// Draw the label just above the slider.
+		g.setColor(Color.white);
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+		g.drawString(label, position.x, (position.y - g.getFont().getLineHeight() - 5.0f));
+		
+		// Draw the slider bar in the center of the bounds of the slider.
+		g.setLineWidth(2.0f);
+		g.drawLine(position.x, (position.y + (HEIGHT / 2)), (position.x + width), (position.y + (HEIGHT / 2)));
+		g.setLineWidth(1.0f);
+		
+		// Draw the bars at the edge of the slider.
+		g.drawLine(position.x, position.y, position.x, (position.y + HEIGHT));
+		g.drawLine((position.x + width), position.y, (position.x + width), (position.y + HEIGHT));
+		
+		// Draw the slider bar.
+		float barPos = (sliderVal / sliderBounds.y) * width;
+		g.setLineWidth(5.0f);
+		g.drawLine((position.x + barPos), (position.y + 2.0f), (position.x + barPos), (position.y + HEIGHT - 2.0f));
+		g.setLineWidth(1.0f);
+	}
+	
+	public void apply(boolean save) {
+		if(save) {
+			defaultVal = sliderVal;
+		} else {
+			sliderVal = defaultVal;
+			operation.accept(defaultVal); // Revert to old value.
+		}
+	}
+	
+	public boolean contains(float x, float y) {
+		return ((x >= position.x) && (x <= (position.x + width)) && 
+				(y >= position.y) && (y <= (position.y + HEIGHT)));
+	}
+	
+	public boolean contains(Pair<Float> pos_) {
+		return contains(pos_.x, pos_.y);
+	}
+	
+	public void move() {
+		// Calculate ratio of mouse position to slider value.  
+		float mx = Controls.getInstance().getMouse().getPosition().x;
+		float pos = mx;
+		
+		if(mx < position.x) pos = position.x;
+		else if(mx > (position.x + width)) pos = (position.x + width);
+		
+		float val = (pos - position.x) / width;
+		if(val < sliderBounds.x) val = sliderBounds.x;
+		else if(val > sliderBounds.y) val = sliderBounds.y;
+		
+		setSliderVal(val);
+		
+		// Save the value on the slider by accepting the operation attached to it.
+		operation.accept(getSliderVal());
+	}
+	
+	@Override
+	public String getName() {
+		return "Slider";
+	}
+
+	@Override
+	public String getDescription() {
+		return "A sliding value that allows the user to adjust a property.";
+	}
+}

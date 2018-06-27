@@ -596,6 +596,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) {
+		Controls.getInstance().resetAll();
 		exit = false;
 		
 		if(Player.getPlayer().getInventory().getCapacity() != inventorySize) {

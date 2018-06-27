@@ -14,7 +14,7 @@ public class Rotdog extends Enemy {
 	private static final float DPS = 8.0f;
 	
 	public static final LootTable LOOT = new LootTable()
-			.addItem(Powerups.Type.SPEED, 0.05f);
+			.addItem(Powerups.Type.SPEED, 0.10f);
 	
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);

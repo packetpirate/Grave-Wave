@@ -25,7 +25,8 @@ public class MenuButton extends Button {
 		this.text = text_;
 	}
 	
-	public void render(Graphics g) {
+	@Override
+	public void render(Graphics g, long cTime) {
 		Image img = AssetManager.getManager().getImage(image);
 		if(img == null) {
 			// Draw the text representing the button.

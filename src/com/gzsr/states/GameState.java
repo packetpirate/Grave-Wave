@@ -231,22 +231,20 @@ public class GameState extends BasicGameState implements InputListener {
 	public void keyReleased(int key, char c) {
 		EnemyController ec = (EnemyController) getEntity("enemyController");
 		Layout keyID = Controls.Layout.identify(key);
-		if(keyID != null) {
-			if((keyID.equals(Controls.Layout.OPEN_CONSOLE)) && Globals.ENABLE_CONSOLE) {
-				console.setPauseTime(time);
-				consoleOpen = !consoleOpen;
-			} else {
-				if(consoleOpen) console.keyReleased(key, c);
-				else {
-					if(keyID.equals(Controls.Layout.PAUSE_GAME)) {
-						if(!paused) MusicPlayer.getInstance().pause();
-						else MusicPlayer.getInstance().resume();
-						paused = !paused;
-					} else if(keyID.equals(Controls.Layout.NEXT_WAVE) && !paused && ec.isRestarting()) {
-						ec.skipToNextWave();
-					} else {
-						Controls.getInstance().release(key);
-					}
+		if((keyID == Controls.Layout.OPEN_CONSOLE) && Globals.ENABLE_CONSOLE) {
+			console.setPauseTime(time);
+			consoleOpen = !consoleOpen;
+		} else {
+			if(consoleOpen) console.keyReleased(key, c);
+			else {
+				if(keyID == Controls.Layout.PAUSE_GAME) {
+					if(!paused) MusicPlayer.getInstance().pause();
+					else MusicPlayer.getInstance().resume();
+					paused = !paused;
+				} else if((keyID == Controls.Layout.NEXT_WAVE) && !paused && ec.isRestarting()) {
+					ec.skipToNextWave();
+				} else {
+					Controls.getInstance().release(key);
 				}
 			}
 		}
@@ -263,6 +261,8 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		Controls.getInstance().resetAll();
+		
 		if(!gameStarted) {
 			gameStarted = true;
 		}

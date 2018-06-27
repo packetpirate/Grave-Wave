@@ -223,6 +223,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) {
+		Controls.getInstance().resetAll();
 		exit = false;
 	}
 
