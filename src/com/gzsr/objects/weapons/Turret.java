@@ -159,7 +159,7 @@ public class Turret extends Projectile {
 		
 		projectiles.add(projectile);
 		lastProjectile = cTime;
-		fireSound.play();
+		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	public static double getTotalDamage() {

@@ -108,7 +108,7 @@ public class BowAndArrow extends Weapon {
 		release = false;
 		charge = 0.0f;
 		lastFired = cTime;
-		fireSound.play();
+		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override

@@ -25,9 +25,10 @@ public class MusicPlayer {
 		nowPlaying = null;
 	}
 	
-	public void update() throws SlickException {
+	public void update(boolean menu) throws SlickException {
 		if((nowPlaying != null) && !nowPlaying.playing() && autoplay) {
-			nextSong();
+			if(!menu) nextSong();
+			else nowPlaying.play(1.0f, MUSIC_VOLUME); // If we're on the main menu, we effectively want to "loop" the song.
 		}
 	}
 	

@@ -79,7 +79,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 250));
-		MusicPlayer.getInstance().update();
+		MusicPlayer.getInstance().update(false);
 	}
 
 	@Override

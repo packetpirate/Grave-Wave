@@ -25,7 +25,7 @@ public class HealthKit extends Item {
 		player.addHealth(amnt);
 		player.clearHarmful();
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override

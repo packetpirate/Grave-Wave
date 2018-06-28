@@ -49,7 +49,7 @@ public class Grenade extends Projectile {
 		int id = Globals.generateEntityID();
 		exp.setPosition(position);
 		gs.addEntity(String.format("explosion%d", id), exp);
-		explode.play();
+		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;
 	}
 	

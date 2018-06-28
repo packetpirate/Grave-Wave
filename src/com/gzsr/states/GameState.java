@@ -122,7 +122,7 @@ public class GameState extends BasicGameState implements InputListener {
 					if(!vt.isActive()) vit.remove(); 
 				}
 				
-				MusicPlayer.getInstance().update();
+				MusicPlayer.getInstance().update(false);
 				hud.update(player, time);
 			} else if(consoleOpen) {
 				consoleTimer += (long)delta;

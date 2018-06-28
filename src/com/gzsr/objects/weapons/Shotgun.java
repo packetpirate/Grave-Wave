@@ -81,7 +81,7 @@ public class Shotgun extends Weapon {
 		lastFired = cTime;
 		
 		muzzleFlash.restart(cTime);
-		fireSound.play();
+		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override

@@ -26,6 +26,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	public static final int ID = 10;
 
 	private Slider musicVolumeSlider;
+	private Slider soundVolumeSlider;
 	
 	private MenuButton applyButton;
 	private MenuButton backButton;
@@ -36,6 +37,11 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 		musicVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
 		musicVolumeSlider.setDefaultVal(MusicPlayer.getInstance().getMusicVolume());
 		musicVolumeSlider.setSliderVal(MusicPlayer.getInstance().getMusicVolume());
+		
+		soundVolumeSlider = new Slider("Sound FX Volume", new Pair<Float>(50.0f, (Globals.HEIGHT - 170.0f)), 200.0f, soundVolumeOperation);
+		soundVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
+		soundVolumeSlider.setDefaultVal(AssetManager.getManager().getSoundVolume());
+		soundVolumeSlider.setSliderVal(AssetManager.getManager().getSoundVolume());
 		
 		applyButton = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Apply");
 		backButton = new MenuButton(new Pair<Float>((Globals.WIDTH - 200.0f), (Globals.HEIGHT - 80.0f)), "Back");
@@ -68,7 +74,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 			}
 		} else backButton.mouseExit();
 		
-		MusicPlayer.getInstance().update();
+		MusicPlayer.getInstance().update(true);
 	}
 	
 	@Override
@@ -81,6 +87,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
 		musicVolumeSlider.render(g, 0L);
+		soundVolumeSlider.render(g, 0L);
 		applyButton.render(g, 0L);
 		backButton.render(g, 0L);
 	}
@@ -88,6 +95,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	@Override
 	public void mouseClicked(int button, int x, int y, int count) {
 		if(musicVolumeSlider.contains(x, y)) musicVolumeSlider.move();
+		else if(soundVolumeSlider.contains(x, y)) soundVolumeSlider.move();
 	}
 	
 	@Override
@@ -97,7 +105,9 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		Controls.getInstance().getMouse().setPosition(newx, newy);
 		if(musicVolumeSlider.contains(newx, newy)) musicVolumeSlider.move();
+		else if(soundVolumeSlider.contains(newx, newy)) soundVolumeSlider.move();
 	}
 	
 	@Override
@@ -114,6 +124,13 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 		@Override
 		public void accept(Float val_) {
 			MusicPlayer.getInstance().setMusicVolume(val_);
+		}
+	};
+	
+	private static Consumer<Float> soundVolumeOperation = new Consumer<Float>() {
+		@Override
+		public void accept(Float val_) {
+			AssetManager.getManager().setSoundVolume(val_);
 		}
 	};
 

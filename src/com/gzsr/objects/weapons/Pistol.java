@@ -86,7 +86,7 @@ public class Pistol extends Weapon {
 		release = false;
 		
 		muzzleFlash.restart(cTime);
-		fireSound.play();
+		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override

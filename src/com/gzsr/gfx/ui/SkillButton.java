@@ -39,7 +39,7 @@ public class SkillButton extends Button {
 			Player.getPlayer().setAttribute(skillName, (currentSkillLevel + 1));
 			Player.getPlayer().setAttribute("skillPoints", (skillPoints - 1));
 			
-			AssetManager.getManager().getSound("point_buy").play();
+			AssetManager.getManager().getSound("point_buy").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}
 	

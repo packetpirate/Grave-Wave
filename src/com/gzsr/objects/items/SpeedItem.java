@@ -24,7 +24,7 @@ public class SpeedItem extends Item {
 		player.addStatus(effect, cTime);
 		player.setAttribute("spdMult", SpeedEffect.EFFECT);
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override

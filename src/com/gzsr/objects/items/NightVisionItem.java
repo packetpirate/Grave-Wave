@@ -32,7 +32,7 @@ public class NightVisionItem extends Item {
 		NightVisionEffect effect = new NightVisionEffect(NightVisionItem.DURATION, cTime);
 		player.addStatus(effect, cTime);
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 }

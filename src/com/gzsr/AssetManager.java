@@ -21,6 +21,14 @@ public class AssetManager {
 	
 	private static AssetManager instance = null;
 	
+	private float SOUND_VOLUME = 1.0f;
+	public float getSoundVolume() { return SOUND_VOLUME; }
+	public void setSoundVolume(float val_) {
+		if(val_ < 0.0f) SOUND_VOLUME = 0.0f;
+		else if(val_ > 1.0f) SOUND_VOLUME = 1.0f;
+		else SOUND_VOLUME = val_;
+	}
+	
 	private Map<String, Image> images = null;
 	private Map<String, Animation> animations = null;
 	private Map<String, Sound> sounds = null;
@@ -62,7 +70,6 @@ public class AssetManager {
 			images.put(key, image);
 			
 			AssetManager.ASSETS_LOADED++;
-			//System.out.println(String.format("Image Loaded: %s", key));
 		}
 	}
 	
@@ -81,7 +88,6 @@ public class AssetManager {
 			animations.put(key, anim);
 			
 			AssetManager.ASSETS_LOADED++;
-			//System.out.println(String.format("Animation Loaded: %s", key));
 		}
 	}
 	
@@ -101,7 +107,6 @@ public class AssetManager {
 			sounds.put(key, sound);
 			
 			AssetManager.ASSETS_LOADED++;
-			//System.out.println(String.format("Sound Loaded: %s", key));
 		}
 	}
 	
@@ -132,7 +137,6 @@ public class AssetManager {
 				fonts.put(key, uni);
 				
 				AssetManager.ASSETS_LOADED++;
-				//System.out.println(String.format("Font Loaded: %s", key));
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -33,7 +33,7 @@ public class ExtraLife extends Item {
 		}
 		
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override

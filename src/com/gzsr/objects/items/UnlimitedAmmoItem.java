@@ -23,7 +23,7 @@ public class UnlimitedAmmoItem extends Item {
 		UnlimitedAmmoEffect effect = new UnlimitedAmmoEffect(UnlimitedAmmoItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override

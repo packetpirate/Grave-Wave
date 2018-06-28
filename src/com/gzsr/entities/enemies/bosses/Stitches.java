@@ -85,7 +85,7 @@ public class Stitches extends Boss {
 				Pair<Float> hookPos = new Pair<Float>(position.x, position.y);
 				float direction = Calculate.Hypotenuse(position, Player.getPlayer().getPosition()) + (float)(Math.PI / 2);
 				hook = new Particle("GZS_Hook", Color.gray, hookPos, Stitches.HOOK_SPEED, direction, 0.0f, new Pair<Float>(16.0f, 16.0f), -1L, cTime);
-				AssetManager.getManager().getSound("throw2").play();
+				AssetManager.getManager().getSound("throw2").play(1.0f, AssetManager.getManager().getSoundVolume());
 			} else if(hooked) {
 				// If we're close enough to the player now, release the hook.
 				if(!Player.getPlayer().isAlive() || nearPlayer(Stitches.RELEASE_DIST)) {

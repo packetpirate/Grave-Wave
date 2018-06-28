@@ -67,7 +67,8 @@ public class Slider implements Entity {
 		g.drawLine((position.x + width), position.y, (position.x + width), (position.y + HEIGHT));
 		
 		// Draw the slider bar.
-		float barPos = (sliderVal / sliderBounds.y) * width;
+		// Determine the bar position by figuring out what percentage the slider value is between the bound values.
+		float barPos = ((sliderVal - sliderBounds.x) / (sliderBounds.y - sliderBounds.x)) * width;
 		g.setLineWidth(5.0f);
 		g.drawLine((position.x + barPos), (position.y + 2.0f), (position.x + barPos), (position.y + HEIGHT - 2.0f));
 		g.setLineWidth(1.0f);
@@ -99,11 +100,10 @@ public class Slider implements Entity {
 		if(mx < position.x) pos = position.x;
 		else if(mx > (position.x + width)) pos = (position.x + width);
 		
-		float val = (pos - position.x) / width;
-		if(val < sliderBounds.x) val = sliderBounds.x;
-		else if(val > sliderBounds.y) val = sliderBounds.y;
+		float val = (pos - position.x) / width; // Value between 0.0 and 1.0 representing percentage of full slider width.
 		
-		setSliderVal(val);
+		// Figure out the percentage of the difference between the slider bounds and add the lower bound.
+		setSliderVal((val * (sliderBounds.y - sliderBounds.x)) + sliderBounds.x); // This gets us the distance between bounds equivalent to the slider position.
 		
 		// Save the value on the slider by accepting the operation attached to it.
 		operation.accept(getSliderVal());

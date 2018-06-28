@@ -68,7 +68,7 @@ public class Claymore extends Projectile {
 				if(checkRange(e)) {
 					collide();
 					exploded = true;
-					explosion.play();
+					explosion.play(1.0f, AssetManager.getManager().getSoundVolume());
 				}
 			}
 		}

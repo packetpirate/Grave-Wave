@@ -50,7 +50,7 @@ public class SentryWeapon extends Weapon {
 		ammoInClip--;
 		lastFired = cTime;
 		
-		fireSound.play();
+		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override

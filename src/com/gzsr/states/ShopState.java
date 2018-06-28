@@ -126,7 +126,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 250));
-		MusicPlayer.getInstance().update();
+		MusicPlayer.getInstance().update(false);
 	}
 	
 	/**
@@ -484,6 +484,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		// Check to see if the buy/sell buttons were clicked.
 		if(selected != null) {
+			AssetManager assets = AssetManager.getManager();
 			Entity item = getSelectedItem();
 			if(buyButton.inBounds(x, y) && !selectedInInventory) {
 				if(item instanceof Weapon) {
@@ -494,7 +495,7 @@ public class ShopState extends BasicGameState implements InputListener {
 						Player.getPlayer().getInventory().addItem(w);
 						Player.getPlayer().resetCurrentWeapon();
 						SHOP.dropItem(w.getName());
-						AssetManager.getManager().getSound("buy_ammo2").play();
+						assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 					}
 				}
 				// TODO: Add cases for other item types.
@@ -506,7 +507,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					Player.getPlayer().getInventory().dropItem(w.getName());
 					Player.getPlayer().resetCurrentWeapon();
 					SHOP.addItem(w);
-					AssetManager.getManager().getSound("buy_ammo2").play();
+					assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 				}
 				// TODO: Add cases for other item types.
 			} else if(ammoButton.inBounds(x, y) && selectedInInventory) {
@@ -521,7 +522,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							// Player has enough money. Buy the ammo.
 							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
 							w.addInventoryAmmo(w.getClipSize());
-							AssetManager.getManager().getSound("buy_ammo2").play();
+							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
 					}
 				}
@@ -537,7 +538,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							// Player has enough money. Buy the ammo.
 							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
 							w.maxOutAmmo();
-							AssetManager.getManager().getSound("buy_ammo2").play();
+							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
 					}
 				}

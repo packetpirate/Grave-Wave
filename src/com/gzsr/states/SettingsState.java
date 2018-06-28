@@ -79,7 +79,7 @@ public class SettingsState extends BasicGameState implements InputListener {
 			if(mouse.isMouseDown()) game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
 		} else backButton.mouseExit();
 		
-		MusicPlayer.getInstance().update();
+		MusicPlayer.getInstance().update(true);
 	}
 	
 	@Override

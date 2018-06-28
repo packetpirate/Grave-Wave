@@ -12,11 +12,22 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class Flashlight {
-	private static final Color SHADOW = new Color(0xCC000009);
+	private static Color SHADOW = new Color(0xCC000009);
 	private static final Color NIGHT_VISION = new Color(0x66004409);
 	
+	public static float getShadowOpacity() { return Flashlight.SHADOW.a; }
+	public static void setShadowOpacity(float val_) { Flashlight.SHADOW.a = val_; }
+	
 	private Pair<Float> origin;
+	public Pair<Float> getOrigin() { return origin; }
+	public void setOrigin(float x_, float y_) {
+		origin.x = x_;
+		origin.y = y_;
+	}
+	
 	private float theta;
+	public float getTheta() { return theta; }
+	public void setTheta(float theta_) { this.theta = theta_; }
 	
 	private Image lightMap;
 	private Image flashlight;

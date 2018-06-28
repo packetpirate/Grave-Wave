@@ -78,7 +78,7 @@ public class BigMama extends Enemy {
 				gs.addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;
-				explosion.play();
+				explosion.play(1.0f, AssetManager.getManager().getSoundVolume());
 			} else {
 				// Need to make sure to update the status effects first.
 				Iterator<StatusEffect> it = statusEffects.iterator();

@@ -23,7 +23,7 @@ public class InvulnerableItem extends Item {
 		InvulnerableEffect effect = new InvulnerableEffect(InvulnerableItem.EFFECT_DURATION, cTime);
 		player.addStatus(effect, cTime);
 		duration = 0L;
-		pickup.play();
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override

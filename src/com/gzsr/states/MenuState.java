@@ -71,7 +71,7 @@ public class MenuState extends BasicGameState implements InputListener {
 			if(mouse.isMouseDown()) gc.exit();
 		} else exit.mouseExit();
 		
-		MusicPlayer.getInstance().update();
+		MusicPlayer.getInstance().update(true);
 	}
 	
 	@Override
