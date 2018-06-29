@@ -198,6 +198,10 @@ public class LoadingState extends BasicGameState {
 	
 	private void loadSounds() throws SlickException {
 		String [] assetList = new String [] {
+			"sounds/grunt1.wav",
+			"sounds/grunt2.wav",
+			"sounds/grunt3.wav",
+			"sounds/grunt4.wav",
 			"sounds/shoot4.wav",
 			"sounds/shoot3.wav",
 			"sounds/throw2.wav",

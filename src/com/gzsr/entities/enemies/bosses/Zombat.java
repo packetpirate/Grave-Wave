@@ -65,7 +65,7 @@ public class Zombat extends Boss {
 			} else siphoningBlood = Player.getPlayer().isAlive(); // Only start siphoning if player is alive, obviously...
 			
 			if(Player.getPlayer().isAlive() && siphoningBlood) {
-				double damageTaken = Player.getPlayer().takeDamage(SIPHON_RATE);
+				double damageTaken = Player.getPlayer().takeDamage(SIPHON_RATE, cTime);
 				if(damageTaken > 0.0) health += SIPHON_RATE;
 			}
 		}

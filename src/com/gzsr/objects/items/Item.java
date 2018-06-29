@@ -11,6 +11,10 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public abstract class Item implements Entity {
+	private static final long BLINK_START = 3000L;
+	private static final long BLINK_INTERVAL = 500L;
+	private static final long BLINK_DURATION = 250L;
+	
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected String iconName;
@@ -23,6 +27,9 @@ public abstract class Item implements Entity {
 	protected long duration;
 	protected long created;
 	
+	protected boolean blinking;
+	protected long lastBlink;
+	
 	public Item(Pair<Float> pos, long cTime) {
 		// If you do not use a custom constructor, the item will die instantly.
 		position = pos;
@@ -31,20 +38,31 @@ public abstract class Item implements Entity {
 		pickup = null;
 		created = cTime;
 		duration = 0L;
+		blinking = false;
+		lastBlink = 0L;
 	}
 	
 	@Override
 	public void update(GameState gs, long cTime, int delta) {
-		// Must be overridden.
+		if(!blinking && ((cTime - created) >= (duration - BLINK_START))) {
+			blinking = true;
+			lastBlink = cTime;
+		} else if(blinking && ((cTime - lastBlink) >= BLINK_INTERVAL)) {
+			lastBlink = cTime;
+		}
+		
 	}
 
 	@Override
 	public void render(Graphics g, long cTime) {
 		Image icon = getIcon();
 		if(isActive(cTime) && (icon != null)) {
-			float x = position.x - (icon.getWidth() / 2);
-			float y = position.y - (icon.getHeight() / 2);
-			g.drawImage(icon, x, y);
+			boolean draw = !blinking || (blinking && ((cTime - lastBlink) >= BLINK_DURATION));
+			if(draw) {
+				float x = position.x - (icon.getWidth() / 2);
+				float y = position.y - (icon.getHeight() / 2);
+				g.drawImage(icon, x, y);
+			}
 		}
 	}
 	

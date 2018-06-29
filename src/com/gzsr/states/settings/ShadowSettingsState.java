@@ -29,6 +29,8 @@ import com.gzsr.misc.Pair;
 public class ShadowSettingsState extends BasicGameState implements InputListener {
 	public static final int ID = 13;
 	
+	private static final String EXPLANATION = "Adjust the slider until you can just barely see the zombies outside the flashlight area.";
+	
 	private static final Pair<Float> playerPos = new Pair<Float>(150.0f, 150.0f);
 	private static final List<Pair<Float>> positions = new ArrayList<Pair<Float>>() {{
 		add(new Pair<Float>(300.0f, 150.0f));
@@ -128,6 +130,11 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 		g.fillRect(0.0f, 300.0f, Globals.WIDTH, (Globals.HEIGHT - 300.0f));
 		
 		opacitySlider.render(g, 0L);
+		
+		// Draw the text explaining what the slider is for.
+		g.setFont(assets.getFont("PressStart2P-Regular"));
+		Calculate.TextWrap(g, EXPLANATION, g.getFont(), ((Globals.WIDTH / 2) - 250.0f), (Globals.HEIGHT - 250.0f), 500.0f, true);
+		
 		applyButton.render(g, 0L);
 		backButton.render(g, 0L);
 	}

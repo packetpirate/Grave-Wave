@@ -40,6 +40,7 @@ public class Player implements Entity {
 	private static final double HEALTH_PER_SP = 20;
 	private static final int MAX_LIVES = 5;
 	private static final long RESPAWN_TIME = 3_000L;
+	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
 	
 	private static Player instance = null;
@@ -74,6 +75,8 @@ public class Player implements Entity {
 		if(cTime > respawnTime) return 0L;
 		return (respawnTime - cTime);
 	}
+	
+	private long lastGrunt;
 	
 	private Map<String, Integer> iAttributes;
 	public int getIntAttribute(String key) { return iAttributes.get(key); }
@@ -298,6 +301,8 @@ public class Player implements Entity {
 		respawning = false;
 		respawnTime = 0L;
 		
+		lastGrunt = 0L;
+		
 		weaponIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
@@ -350,12 +355,19 @@ public class Player implements Entity {
 	 * Deal damage to the player.
 	 * @param amnt The amount of damage to apply to the player's health.
 	 */
-	public double takeDamage(double amnt) {
+	public double takeDamage(double amnt, long cTime) {
 		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
 			double currentHealth = getDoubleAttribute("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			setAttribute("health", newHealth);
+			
+			if((cTime - lastGrunt) >= GRUNT_TIMER) {
+				int grunt = Globals.rand.nextInt(4) + 1;
+				AssetManager.getManager().getSound(String.format("grunt%d", grunt)).play();
+				lastGrunt = cTime;
+			}
+			
 			return amnt;
 		} else return -1.0; // Indicates no damage taken.
 	}

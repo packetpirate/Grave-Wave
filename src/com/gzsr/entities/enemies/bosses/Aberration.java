@@ -79,7 +79,7 @@ public class Aberration extends Boss {
 			if(p.isAlive(cTime)) {
 				p.update(gs, cTime, delta);
 				if(Player.getPlayer().checkCollision(p)) {
-					Player.getPlayer().takeDamage(p.getDamage());
+					Player.getPlayer().takeDamage(p.getDamage(), cTime);
 					it.remove();
 				}
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/

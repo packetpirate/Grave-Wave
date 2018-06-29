@@ -100,7 +100,7 @@ public class Stitches extends Boss {
 					hook.setPosition(new Pair<Float>(Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y));
 					
 					// Make the player take bleed damage.
-					Player.getPlayer().takeDamage(Stitches.HOOK_DAMAGE);
+					Player.getPlayer().takeDamage(Stitches.HOOK_DAMAGE, cTime);
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);

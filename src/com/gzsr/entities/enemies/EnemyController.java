@@ -200,7 +200,7 @@ public class EnemyController implements Entity {
 				if(enemy.isAlive(cTime) && 
 				   player.touchingEnemy(enemy)) {
 					double damage = enemy.getDamage() / (1_000L / Globals.STEP_TIME);
-					player.takeDamage(damage);
+					player.takeDamage(damage, cTime);
 				}
 			}
 		}

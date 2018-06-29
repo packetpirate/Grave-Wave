@@ -107,7 +107,7 @@ public class Explosion implements Entity {
 			if(e instanceof Player) {
 				float dist = Calculate.Distance(position, Player.getPlayer().getPosition());
 				if(Player.getPlayer().getCollider().intersects(getCollider())) {
-					Player.getPlayer().takeDamage(damage * (1.0f - (dist / radius)));
+					Player.getPlayer().takeDamage(damage * (1.0f - (dist / radius)), cTime);
 					if(status != null) Player.getPlayer().addStatus(status, status.getDuration());
 					entitiesAffected.add(Player.getPlayer());
 					return true;

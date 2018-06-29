@@ -60,7 +60,7 @@ public class BurningEffect extends StatusEffect {
 				enemy.takeDamage(totalDamage, 0.0f, 0.0f, cTime, 0, false);
 			} else if(e instanceof Player) {
 				Player player = (Player) e;
-				player.takeDamage(cDamage / (1000L / Globals.STEP_TIME));
+				player.takeDamage(cDamage / (1000L / Globals.STEP_TIME), cTime);
 			}
 		}
 	}
