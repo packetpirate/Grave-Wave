@@ -7,6 +7,7 @@ import java.util.List;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -43,7 +44,7 @@ public abstract class Weapon implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
 		if(!isReloading(cTime)) reloading = false;
 		
@@ -55,7 +56,7 @@ public abstract class Weapon implements Entity {
 				if(p.isAlive(cTime)) {
 					p.update(gs, cTime, delta);
 				} else {
-					p.onDestroy(gs, cTime);
+					p.onDestroy((GameState)gs, cTime);
 					it.remove();
 				}
 			}

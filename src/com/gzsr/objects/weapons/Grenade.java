@@ -3,6 +3,7 @@ package com.gzsr.objects.weapons;
 import java.util.Iterator;
 
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -28,7 +29,7 @@ public class Grenade extends Projectile {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!exploded) {
 			// Move the grenade entity along its path.
 			position.x += (float)Math.cos(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
@@ -36,11 +37,11 @@ public class Grenade extends Projectile {
 			bounds.setLocation((position.x - (size.x / 2)), (position.y - (size.y / 2)));
 			
 			// Check to see if the grenade has collided with an enemy. If so, explode.
-			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
-				if(e.getCollider().intersects(getCollider())) explode(gs, cTime);
+				if(e.getCollider().intersects(getCollider())) explode((GameState)gs, cTime);
 			}
 		}
 	}

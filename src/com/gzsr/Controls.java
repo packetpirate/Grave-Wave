@@ -12,37 +12,58 @@ public class Controls {
 	}
 	
 	public enum Layout {
-		MOVE_UP(Input.KEY_W),
-		MOVE_DOWN(Input.KEY_S),
-		MOVE_LEFT(Input.KEY_A),
-		MOVE_RIGHT(Input.KEY_D),
-		RELOAD(Input.KEY_R),
-		WEAPON_1(Input.KEY_1),
-		WEAPON_2(Input.KEY_2),
-		WEAPON_3(Input.KEY_3),
-		WEAPON_4(Input.KEY_4),
-		WEAPON_5(Input.KEY_5),
-		WEAPON_6(Input.KEY_6),
-		WEAPON_7(Input.KEY_7),
-		WEAPON_8(Input.KEY_8),
-		WEAPON_9(Input.KEY_9),
-		WEAPON_10(Input.KEY_0),
-		NEXT_WAVE(Input.KEY_N),
-		TRAIN_SCREEN(Input.KEY_T),
-		SHOP_SCREEN(Input.KEY_B),
-		OPEN_CONSOLE(Input.KEY_GRAVE),
-		PAUSE_GAME(Input.KEY_P);
+		MOVE_UP(Input.KEY_W, "Move Up", "W"),
+		MOVE_DOWN(Input.KEY_S, "Move Down", "A"),
+		MOVE_LEFT(Input.KEY_A, "Move Left", "S"),
+		MOVE_RIGHT(Input.KEY_D, "Move Right", "D"),
+		RELOAD(Input.KEY_R, "Reload", "R"),
+		NEXT_WAVE(Input.KEY_N, "Next Wave", "N"),
+		TRAIN_SCREEN(Input.KEY_T, "Train", "T"),
+		SHOP_SCREEN(Input.KEY_B, "Shop", "B"),
+		PAUSE_GAME(Input.KEY_P, "Pause", "P"),
+		OPEN_CONSOLE(Input.KEY_GRAVE, "Console", "~"),
+		WEAPON_1(Input.KEY_1, "Weapon 1", "1"),
+		WEAPON_2(Input.KEY_2, "Weapon 2", "2"),
+		WEAPON_3(Input.KEY_3, "Weapon 3", "3"),
+		WEAPON_4(Input.KEY_4, "Weapon 4", "4"),
+		WEAPON_5(Input.KEY_5, "Weapon 5", "5"),
+		WEAPON_6(Input.KEY_6, "Weapon 6", "6"),
+		WEAPON_7(Input.KEY_7, "Weapon 7", "7"),
+		WEAPON_8(Input.KEY_8, "Weapon 8", "8"),
+		WEAPON_9(Input.KEY_9, "Weapon 9", "9"),
+		WEAPON_10(Input.KEY_0, "Weapon 10", "10");
 		
 		private int key;
 		public int getKey() { return key; }
-		public void setKey(int key_) { this.key = key_; }
+		public void setKey(int key_) { 
+			this.key = key_;
+			
+			if(key_ != -1) {
+				for(Layout key : values()) {
+					if((key != this) && (key.getKey() == key_)) {
+						// Unset the other mapping using this input.
+						key.setKey(-1);
+						key.setDisplay("None");
+					}
+				}
+			}
+		}
+		
+		private String name;
+		public String getName() { return name; }
+		
+		private String display;
+		public String getDisplay() { return display; }
+		public void setDisplay(String display_) { this.display = display_; }
 		
 		private KeyState state;
 		public KeyState getState() { return state; }
 		public void setState(KeyState state_) { this.state = state_; }
 		
-		Layout(int key_) {
+		Layout(int key_, String name_, String display_) {
 			this.key = key_;
+			this.name = name_;
+			this.display = display_;
 		}
 		
 		public static Layout identify(int key) {

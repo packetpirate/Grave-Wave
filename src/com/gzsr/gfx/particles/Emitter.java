@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public class Emitter implements Entity {
 	private List<Particle> particles;
@@ -40,7 +40,7 @@ public class Emitter implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		Iterator<Particle> it = particles.iterator();
 		while(it.hasNext()) {
 			Particle p = it.next();

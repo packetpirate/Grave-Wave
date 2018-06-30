@@ -2,12 +2,12 @@ package com.gzsr.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public class VanishingText implements Entity {
 	private String text;
@@ -41,7 +41,7 @@ public class VanishingText implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		long elapsed = (cTime - creationTime);
 		if(elapsed > duration) active = false; 
 	}

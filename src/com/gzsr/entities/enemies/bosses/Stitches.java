@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Player;
@@ -48,14 +49,14 @@ public class Stitches extends Boss {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
 			Iterator<StatusEffect> it = statusEffects.iterator();
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, gs, cTime, delta);
+					status.update(this, (GameState)gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -104,7 +105,7 @@ public class Stitches extends Boss {
 				}
 			} else if(!hooked && (hook == null)) {
 				animation.update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			}
 		} else {
 			hook = null;

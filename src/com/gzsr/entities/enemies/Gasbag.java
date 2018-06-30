@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import java.util.Iterator;
 
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -43,14 +44,14 @@ public class Gasbag extends Enemy {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
 			Iterator<StatusEffect> it = statusEffects.iterator();
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, gs, cTime, delta);
+					status.update(this, (GameState)gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -61,8 +62,8 @@ public class Gasbag extends Enemy {
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer()) {
 				animation.update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
-			} else explode(gs, cTime);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+			} else explode((GameState)gs, cTime);
 		}
 	}
 	

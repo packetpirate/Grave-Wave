@@ -3,6 +3,7 @@ package com.gzsr.objects.weapons;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
@@ -12,7 +13,6 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class Pistol extends Weapon {
@@ -44,7 +44,7 @@ public class Pistol extends Weapon {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
 		
 		// If mouse released, release fire lock.

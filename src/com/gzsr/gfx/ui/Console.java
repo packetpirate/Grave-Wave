@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
@@ -70,7 +71,7 @@ public class Console implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(deleting && (cTime > (lastDelete + Console.DELETE_FREQ)) && (currentCommand.length() > 0)) {
 			deleteLastCommandChar();
 			lastDelete = cTime;

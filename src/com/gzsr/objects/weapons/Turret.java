@@ -10,6 +10,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -63,7 +64,7 @@ public class Turret extends Projectile {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			if((target != null) && !target.isAlive(cTime)) {
 				lerp = null;
@@ -73,7 +74,7 @@ public class Turret extends Projectile {
 			// Acquire a target only if we're not currently firing on one..
 			if(target == null) {
 				float targetDist = Float.MAX_VALUE;
-				EnemyController ec = (EnemyController) gs.getEntity("enemyController");
+				EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
 				Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 				while(it.hasNext()) {
 					Enemy e = it.next();

@@ -4,12 +4,12 @@ import java.util.function.Consumer;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public class Slider implements Entity {
 	private static final float HEIGHT = 20.0f;
@@ -47,7 +47,7 @@ public class Slider implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -58,9 +59,9 @@ public class Claymore extends Projectile {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!exploded) {
-			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
 			
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
@@ -100,7 +101,7 @@ public class Claymore extends Projectile {
 			while(it.hasNext()) {
 				Projectile p = it.next();
 				if(!p.isAlive(cTime)) {
-					p.onDestroy(gs, cTime);
+					p.onDestroy((GameState)gs, cTime);
 					it.remove();
 				}
 			}

@@ -3,6 +3,7 @@ package com.gzsr.entities.enemies;
 import java.util.Iterator;
 
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -50,7 +51,7 @@ public class BigMama extends Enemy {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(created == -1L) created = cTime; // So that we don't have to pass spawn time into constructor.
 		if(!exploded) {
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
@@ -60,7 +61,7 @@ public class BigMama extends Enemy {
 			boolean dead = health <= 0;
 			if(nearPlayer() || timesUp || dead) {
 				// Big Mama self-detonates.
-				EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+				EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
 				
 				// Spawn zumbies around the Big Mama's explosion area.
 				for(int i = 0; i < BigMama.ZUMBY_COUNT; i++) {
@@ -75,7 +76,7 @@ public class BigMama extends Enemy {
 				
 				// Spawn a blood explosion centered on the Big Mama.
 				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_KNOCKBACK, BigMama.EXP_DIST);
-				gs.addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
+				((GameState)gs).addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;
 				explosion.play(1.0f, AssetManager.getManager().getSoundVolume());
@@ -85,7 +86,7 @@ public class BigMama extends Enemy {
 				while(it.hasNext()) {
 					StatusEffect status = (StatusEffect) it.next();
 					if(status.isActive(cTime)) {
-						status.update(this, gs, cTime, delta);
+						status.update(this, (GameState)gs, cTime, delta);
 					} else {
 						status.onDestroy(this, cTime);
 						it.remove();
@@ -94,7 +95,7 @@ public class BigMama extends Enemy {
 				
 				updateFlash(cTime);
 				animation.update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			}
 		}
 	}

@@ -2,15 +2,16 @@ package com.gzsr.states.settings;
 
 import java.util.function.Consumer;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
@@ -33,12 +34,12 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		musicVolumeSlider = new Slider("Music Volume", new Pair<Float>(50.0f, (Globals.HEIGHT - 250.0f)), 200.0f, musicVolumeOperation);
+		musicVolumeSlider = new Slider("Music Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 300.0f), 300.0f, musicVolumeOperation);
 		musicVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
 		musicVolumeSlider.setDefaultVal(MusicPlayer.getInstance().getMusicVolume());
 		musicVolumeSlider.setSliderVal(MusicPlayer.getInstance().getMusicVolume());
 		
-		soundVolumeSlider = new Slider("Sound FX Volume", new Pair<Float>(50.0f, (Globals.HEIGHT - 170.0f)), 200.0f, soundVolumeOperation);
+		soundVolumeSlider = new Slider("Sound FX Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 400.0f), 300.0f, soundVolumeOperation);
 		soundVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
 		soundVolumeSlider.setDefaultVal(AssetManager.getManager().getSoundVolume());
 		soundVolumeSlider.setSliderVal(AssetManager.getManager().getSoundVolume());
@@ -79,15 +80,12 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-		Image background = AssetManager.getManager().getImage("GZS_Background02");
-		
-		g.resetTransform();
-		g.clear();
-		
-		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
+		FontUtils.drawCenter(g.getFont(), "Audio Settings", 0, 40, Globals.WIDTH, Color.white);
 		
 		musicVolumeSlider.render(g, 0L);
 		soundVolumeSlider.render(g, 0L);
+		
 		applyButton.render(g, 0L);
 		backButton.render(g, 0L);
 	}

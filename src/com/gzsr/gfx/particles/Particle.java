@@ -5,6 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -93,7 +94,7 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			position.x += velocity * delta * (float)Math.cos(theta - (Math.PI / 2));
 			position.y += velocity * delta * (float)Math.sin(theta - (Math.PI / 2));

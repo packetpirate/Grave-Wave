@@ -9,8 +9,10 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -27,11 +29,17 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.gfx.ui.HUD;
+import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.misc.MouseInfo;
+import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
+	
+	private static final float PROMPT_WIDTH = 350.0f;
+	private static final float PROMPT_HEIGHT = 100.0f;
 	
 	private AssetManager assets;
 	private long time, accu, consoleTimer;
@@ -47,8 +55,10 @@ public class GameState extends BasicGameState implements InputListener {
 	private static ConcurrentHashMap<String, VanishingText> messages = new ConcurrentHashMap<String, VanishingText>();
 	public static void addVanishingText(String key, VanishingText vt) { messages.put(key, vt); }
 	
-	private boolean gameStarted, paused, consoleOpen;
+	private boolean gameStarted, paused, consoleOpen, exitPrompt;
 	public boolean isConsoleOpen() { return consoleOpen; }
+	
+	private MenuButton exitYes, exitNo;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -59,6 +69,10 @@ public class GameState extends BasicGameState implements InputListener {
 		entities = new ConcurrentHashMap<String, Entity>();
 		
 		reset(gc);
+		
+		UnicodeFont f = assets.getFont("PressStart2P-Regular_large");
+		exitYes = new MenuButton(new Pair<Float>((((Globals.WIDTH / 2) - (PROMPT_WIDTH / 2)) + 20.0f), (float)(Globals.HEIGHT / 2)), "Yes");
+		exitNo = new MenuButton(new Pair<Float>((((Globals.WIDTH / 2) + (PROMPT_WIDTH / 2)) - f.getWidth("No") - 20.0f), (float)(Globals.HEIGHT / 2)), "No");
 	}
 
 	@Override
@@ -66,7 +80,25 @@ public class GameState extends BasicGameState implements InputListener {
 		accu = Math.min((accu + delta), (Globals.STEP_TIME * Globals.MAX_STEPS));
 		
 		while(accu >= Globals.STEP_TIME) {
-			if(!paused && !consoleOpen) {
+			if(exitPrompt) {
+				MouseInfo mouse = Controls.getInstance().getMouse();
+				
+				if(exitYes.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+					exitYes.mouseEnter();
+					if(mouse.isMouseDown()) {
+						reset(gc);
+						game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
+					}
+				} else exitYes.mouseExit();
+				
+				if(exitNo.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+					exitNo.mouseEnter();
+					if(mouse.isMouseDown()) {
+						mouse.setMouseDown(false);
+						exitPrompt = false;
+					}
+				} else exitNo.mouseExit();
+			} else if(!paused && !consoleOpen) {
 				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
 				
 				Player player = Player.getPlayer();
@@ -171,7 +203,22 @@ public class GameState extends BasicGameState implements InputListener {
 								 ((Globals.WIDTH / 2) - (w / 2)), ((Globals.HEIGHT / 2) - (h / 2)), w);
 		}
 		
-		if(consoleOpen) console.render(g, time);
+		if(exitPrompt) {
+			// Draw the exit prompt in the center of the screen.
+			float px = ((Globals.WIDTH / 2) - (PROMPT_WIDTH / 2));
+			float py = ((Globals.HEIGHT / 2) - (PROMPT_HEIGHT / 2));
+			
+			g.setColor(Color.gray);
+			g.fillRect(px, py, PROMPT_WIDTH, PROMPT_HEIGHT);
+			g.setColor(Color.white);
+			g.drawRect(px, py, PROMPT_WIDTH, PROMPT_HEIGHT);
+			
+			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+			FontUtils.drawCenter(g.getFont(), "DO YOU WANT TO QUIT?", (int)(px + 5.0f), (int)(py + 10.0f), (int)(PROMPT_WIDTH - 10.0f), Color.white);
+			
+			exitYes.render(g, 0L);
+			exitNo.render(g, 0L);
+		} else if(consoleOpen) console.render(g, time);
 	}
 	
 	public void reset(GameContainer gc) throws SlickException{
@@ -190,6 +237,7 @@ public class GameState extends BasicGameState implements InputListener {
 		gameStarted = false;
 		paused = false;
 		consoleOpen = false;
+		exitPrompt = false;
 		console = new Console(this, gc);
 		
 		hud = new HUD();
@@ -230,21 +278,27 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void keyReleased(int key, char c) {
 		EnemyController ec = (EnemyController) getEntity("enemyController");
-		Layout keyID = Controls.Layout.identify(key);
-		if((keyID == Controls.Layout.OPEN_CONSOLE) && Globals.ENABLE_CONSOLE) {
-			console.setPauseTime(time);
-			consoleOpen = !consoleOpen;
+		
+		if(key == Input.KEY_ESCAPE) {
+			if(!exitPrompt) exitPrompt = true;
+			else exitPrompt = false;
 		} else {
-			if(consoleOpen) console.keyReleased(key, c);
-			else {
-				if(keyID == Controls.Layout.PAUSE_GAME) {
-					if(!paused) MusicPlayer.getInstance().pause();
-					else MusicPlayer.getInstance().resume();
-					paused = !paused;
-				} else if((keyID == Controls.Layout.NEXT_WAVE) && !paused && ec.isRestarting()) {
-					ec.skipToNextWave();
-				} else {
-					Controls.getInstance().release(key);
+			Layout keyID = Controls.Layout.identify(key);
+			if((keyID == Controls.Layout.OPEN_CONSOLE) && Globals.ENABLE_CONSOLE) {
+				console.setPauseTime(time);
+				consoleOpen = !consoleOpen;
+			} else {
+				if(consoleOpen) console.keyReleased(key, c);
+				else {
+					if(keyID == Controls.Layout.PAUSE_GAME) {
+						if(!paused) MusicPlayer.getInstance().pause();
+						else MusicPlayer.getInstance().resume();
+						paused = !paused;
+					} else if((keyID == Controls.Layout.NEXT_WAVE) && !paused && ec.isRestarting()) {
+						ec.skipToNextWave();
+					} else {
+						Controls.getInstance().release(key);
+					}
 				}
 			}
 		}

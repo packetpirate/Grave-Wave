@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
@@ -50,14 +51,14 @@ public class Aberration extends Boss {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!dead()) {
 			// Need to make sure to update the status effects first.
 			Iterator<StatusEffect> it = statusEffects.iterator();
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, gs, cTime, delta);
+					status.update(this, (GameState)gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -68,7 +69,7 @@ public class Aberration extends Boss {
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
 		

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
@@ -158,7 +159,7 @@ public class EnemyController implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// Add all enemies that need to be immediately added.
 		if(addImmediately.size() > 0) alive.addAll(addImmediately);
 		addImmediately.clear();

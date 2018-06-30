@@ -6,6 +6,7 @@ import java.util.List;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
@@ -66,7 +67,7 @@ public class Explosion implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!started) {
 			anim.restart(cTime);
 			started = true; 
@@ -81,7 +82,7 @@ public class Explosion implements Entity {
 			checkCollision(Player.getPlayer(), cTime, delta);
 			
 			// Check for collisions with enemies.
-			EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
 			ec.getAliveEnemies().stream().forEach(e -> checkCollision(e, cTime, delta));
 		}
 	}

@@ -3,12 +3,12 @@ package com.gzsr.objects.items;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public abstract class Item implements Entity {
 	private static final long BLINK_START = 3000L;
@@ -43,7 +43,7 @@ public abstract class Item implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!blinking && ((cTime - created) >= (duration - BLINK_START))) {
 			blinking = true;
 			lastBlink = cTime;

@@ -1,10 +1,10 @@
 package com.gzsr.gfx.ui;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public abstract class Button implements Entity {
 	protected String image;
@@ -12,6 +12,8 @@ public abstract class Button implements Entity {
 	protected Pair<Float> size;
 	
 	protected String text;
+	public String getText() { return text; }
+	public void setText(String text_) { this.text = text_; }
 	
 	private boolean mouseIn;
 	public boolean mouseOver() { return mouseIn; }
@@ -24,19 +26,9 @@ public abstract class Button implements Entity {
 		
 		mouseIn = false;
 	}
-	
-	@Override
-	public String getName() {
-		return "Button";
-	}
-	
-	@Override
-	public String getDescription() {
-		return "Button";
-	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// To be overridden.
 	}
 
@@ -48,6 +40,17 @@ public abstract class Button implements Entity {
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> position_) { this.position = position_; }
 	public Pair<Float> getSize() { return size; }
+	public void setSize(Pair<Float> size_) { this.size = size_; }
 	public abstract void click();
 	public abstract boolean inBounds(float x, float y);
+	
+	@Override
+	public String getName() {
+		return "Button";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Button";
+	}
 }

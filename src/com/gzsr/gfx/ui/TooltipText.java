@@ -3,12 +3,12 @@ package com.gzsr.gfx.ui;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public class TooltipText implements Entity {
 	private UnicodeFont font;
@@ -26,7 +26,7 @@ public class TooltipText implements Entity {
 	}
 
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// No need for update.
 	}
 

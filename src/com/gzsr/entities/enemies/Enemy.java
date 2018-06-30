@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
@@ -91,7 +92,7 @@ public abstract class Enemy implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
@@ -99,7 +100,7 @@ public abstract class Enemy implements Entity {
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
 				if(status.isActive(cTime)) {
-					status.update(this, gs, cTime, delta);
+					status.update(this, (GameState)gs, cTime, delta);
 				} else {
 					status.onDestroy(this, cTime);
 					it.remove();
@@ -108,7 +109,7 @@ public abstract class Enemy implements Entity {
 			
 			updateFlash(cTime);
 			animation.update(cTime);
-			if(Player.getPlayer().isAlive() && !touchingPlayer()) move(gs, delta);
+			if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 		}
 	}
 	

@@ -10,6 +10,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
@@ -169,7 +170,7 @@ public class Player implements Entity {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!isAlive()) {
 			if(!respawning) {
 				int lives = getIntAttribute("lives") - 1;
@@ -212,7 +213,7 @@ public class Player implements Entity {
 		while(it.hasNext()) {
 			StatusEffect status = (StatusEffect) it.next();
 			if(status.isActive(cTime)) {
-				status.update(this, gs, cTime, delta);
+				status.update(this, (GameState)gs, cTime, delta);
 			} else {
 				status.onDestroy(this, cTime);
 				it.remove();

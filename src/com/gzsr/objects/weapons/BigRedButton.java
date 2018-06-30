@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
@@ -53,7 +54,7 @@ public class BigRedButton extends Weapon {
 	}
 	
 	@Override
-	public void update(GameState gs, long cTime, int delta) {
+	public void update(BasicGameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
 		if(!isReloading(cTime)) reloading = false;
 		
@@ -61,8 +62,8 @@ public class BigRedButton extends Weapon {
 		if(!explosions.isEmpty() && (elapsed >= BigRedButton.EXP_DELAY)) {
 			int id = Globals.generateEntityID();
 			Explosion exp = explosions.remove();
-			exp.setPosition(getExplosionLocation(gs, Player.getPlayer(), Player.getPlayer().getPosition()));
-			gs.addEntity(String.format("explosion%d", id), exp);
+			exp.setPosition(getExplosionLocation((GameState)gs, Player.getPlayer(), Player.getPlayer().getPosition()));
+			((GameState)gs).addEntity(String.format("explosion%d", id), exp);
 			AssetManager.getManager().getSound(BigRedButton.EXP_SOUND).play(1.0f, AssetManager.getManager().getSoundVolume());
 			lastExplosion = cTime;
 		}
