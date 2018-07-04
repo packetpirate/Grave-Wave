@@ -79,14 +79,19 @@ public class Player implements Entity {
 	
 	private long lastGrunt;
 	
-	private Map<String, Integer> iAttributes;
-	public int getIntAttribute(String key) { return iAttributes.get(key); }
-	public void setAttribute(String key, int val) { iAttributes.put(key, val); }
-	public void addIntAttribute(String key, int amnt) { iAttributes.put(key, (getIntAttribute(key) + amnt)); }
-	private Map<String, Double> dAttributes;
-	public double getDoubleAttribute(String key) { return dAttributes.get(key); }
-	public void setAttribute(String key, double val) { dAttributes.put(key, val); }
-	public void addDoubleAttribute(String key, double amnt) { dAttributes.put(key, (getDoubleAttribute(key) + amnt)); }
+	private Map<String, Object> attributes;
+	public int getIntAttribute(String key) { return ((Integer)attributes.get(key)).intValue(); }
+	public float getFloatAttribute(String key) { return ((Float)attributes.get(key)).floatValue(); }
+	public double getDoubleAttribute(String key) { return ((Double)attributes.get(key)).doubleValue(); }
+	public long getLongAttribute(String key) { return ((Long)attributes.get(key)).longValue(); }
+	public void setAttribute(String key, int val) { attributes.put(key, val); }
+	public void setAttribute(String key, float val) { attributes.put(key, val); }
+	public void setAttribute(String key, double val) { attributes.put(key, val); }
+	public void setAttribute(String key, long val) { attributes.put(key, val); }
+	public void addToAttribute(String key, int val) { attributes.put(key, (getIntAttribute(key) + val)); }
+	public void addToAttribute(String key, float val) { attributes.put(key, (getFloatAttribute(key) + val)); }
+	public void addToAttribute(String key, double val) { attributes.put(key, (getDoubleAttribute(key) + val)); }
+	public void addToAttribute(String key, long val) { attributes.put(key, (getLongAttribute(key) + val)); }
 	
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
@@ -157,8 +162,7 @@ public class Player implements Entity {
 	public Player() {
 		position = new Pair<Float>(0.0f, 0.0f);
 		
-		iAttributes = new HashMap<String, Integer>();
-		dAttributes = new HashMap<String, Double>();
+		attributes = new HashMap<String, Object>();
 		statusEffects = new ArrayList<StatusEffect>();
 		
 		reset();
@@ -310,8 +314,7 @@ public class Player implements Entity {
 		inventory.addItem(new Pistol());
 		inventory.getWeapons().get(weaponIndex).equip();
 		
-		dAttributes.clear();
-		iAttributes.clear();
+		attributes.clear();
 		statusEffects.clear();
 		
 		// Basic attributes.
@@ -332,10 +335,14 @@ public class Player implements Entity {
 		setAttribute("speedUp", 0);
 		setAttribute("damageUp", 0);
 		
+		// Miscellaneous Modifiers
+		setAttribute("critChance", 0.05f);
+		
 		// Multipliers
 		setAttribute("expMult", 1.0);
 		setAttribute("spdMult", 1.0);
 		setAttribute("damMult", 1.0);
+		setAttribute("critMult", 2);
 		
 		flashlight = new Flashlight();
 	}
@@ -387,7 +394,7 @@ public class Player implements Entity {
 			setAttribute("experience", carryOver);
 			setAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
 			setAttribute("level", newLevel);
-			addIntAttribute("skillPoints", 1);
+			addToAttribute("skillPoints", 1);
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
 				String key = String.format("vanishText%d", Globals.generateEntityID());
@@ -452,8 +459,12 @@ public class Player implements Entity {
 							sp.applyEffect(enemy, cTime);
 						}
 						
-						float damagePercentage = (1.0f + (iAttributes.get("damageUp") * 0.10f));
-						enemy.takeDamage((p.getDamage() * damagePercentage), w.getKnockback(), (float)(p.getTheta() + (Math.PI / 2)), cTime, delta, true);
+						// TODO: Change to include powerup crit chance modifiers.
+						boolean critical = (Globals.rand.nextFloat() <= getFloatAttribute("critChance"));
+						float damagePercentage = (1.0f + (getIntAttribute("damageUp") * 0.10f));
+						double totalDamage = (p.getDamage() * damagePercentage);
+						if(critical) totalDamage *= getIntAttribute("critMult");
+						enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, critical);
 					}
 					
 					return true;

@@ -88,6 +88,10 @@ public class MenuState extends BasicGameState implements InputListener {
 		settings.render(g, 0L);
 		credits.render(g, 0L);
 		exit.render(g, 0L);
+		
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));
+		float vWidth = g.getFont().getWidth(Globals.VERSION);
+		g.drawString(Globals.VERSION, (Globals.WIDTH - vWidth - 20.0f), 20.0f);
 	}
 	
 	@Override

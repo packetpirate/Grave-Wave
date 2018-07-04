@@ -14,6 +14,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.ui.DamageText;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
@@ -61,6 +62,8 @@ public abstract class Enemy implements Entity {
 		return (hit && (elapsed <= Enemy.FLASH_DURATION));
 	}
 	
+	protected List<DamageText> damageTexts;
+	
 	public Enemy(EnemyType type_, Pair<Float> position_) {
 		this.type = type_;
 		this.animation = type.getAnimation();
@@ -81,6 +84,8 @@ public abstract class Enemy implements Entity {
 		
 		this.hit = false;
 		this.hitTime = 0L;
+		
+		this.damageTexts = new ArrayList<DamageText>();
 	}
 	
 	public boolean dead() {
@@ -110,6 +115,15 @@ public abstract class Enemy implements Entity {
 			updateFlash(cTime);
 			animation.update(cTime);
 			if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+		}
+		
+		postDamageTexts();
+	}
+	
+	protected void postDamageTexts() {
+		if(!damageTexts.isEmpty()) {
+			damageTexts.stream().forEach(dt -> GameState.addVanishingText(String.format("dt%d", Globals.generateEntityID()), dt));
+			damageTexts.clear();
 		}
 	}
 	
@@ -248,8 +262,14 @@ public abstract class Enemy implements Entity {
 	}
 	
 	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	}
+	
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead()) {
 			health -= amnt;
+			
+			createDamageText(amnt, 24.0f, knockbackTheta, cTime, isCritical);
 			
 			if(flash) {
 				hit = true;
@@ -259,14 +279,26 @@ public abstract class Enemy implements Entity {
 			if(knockback > 0.0f) {
 				float dx = (float)(Math.cos(knockbackTheta) * knockback * delta);
 				float dy = (float)(Math.sin(knockbackTheta) * knockback * delta);
-				position.x += -dx;
-				position.y += -dy;
+				position.x += dx;
+				position.y += dy;
 			}
 		}
 	}
 	
+	protected void createDamageText(double amnt, float dist, float knockbackTheta, long cTime, boolean isCritical) {
+		float tOff = Globals.rand.nextFloat() * (Globals.rand.nextBoolean() ? 1 : -1) * (float)(Math.PI / 9);
+		float x = position.x + (float)(Math.cos(knockbackTheta + tOff) * (dist + (Globals.rand.nextFloat() * 10.0f)));
+		float y = position.y + (float)(Math.sin(knockbackTheta + tOff) * dist + (Globals.rand.nextFloat() * 10.0f));
+		Pair<Float> dtPos = new Pair<Float>(x, y);
+		DamageText dt = new DamageText(Integer.toString((int)amnt), dtPos, (knockbackTheta + tOff), cTime, 500L, isCritical);
+		damageTexts.add(dt);
+	}
+	
 	public void onDeath(GameState gs, long cTime) {
-		if(!deathHandled) Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
+		if(!deathHandled) {
+			Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
+			postDamageTexts();
+		}
 		deathHandled = true;
 	}
 	

@@ -7,7 +7,6 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
@@ -218,7 +217,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		if(key == Input.KEY_T) exit = true;
+		if(key == Controls.Layout.TRAIN_SCREEN.getKey()) exit = true;
 	}
 	
 	@Override

@@ -14,15 +14,22 @@ public class BurningEffect extends StatusEffect {
 	public static final double DPS_INC = 0.25;
 	public static final double MAX_DPS = 40.0;
 	public static final long DURATION = 5000L;
+	public static final long DAMAGE_INTERVAL = 1000L;
 	
 	private BurningEmitter emitter;
 	private double cDamage;
+	
+	private double cumulativeDamage;
+	private long lastDamage;
 	
 	public BurningEffect(long created_) {
 		super(Status.BURNING, DURATION, created_);
 		
 		this.emitter = new BurningEmitter(Pair.ZERO);
 		this.cDamage = 0.0;
+		
+		this.cumulativeDamage = 0.0;
+		this.lastDamage = 0L;
 	}
 	
 	@Override
@@ -56,8 +63,15 @@ public class BurningEffect extends StatusEffect {
 			
 			if(e instanceof Enemy) {
 				Enemy enemy = (Enemy) e;
+				long elapsed = cTime - lastDamage;
 				double totalDamage = (cDamage + (cDamage * Player.getPlayer().getIntAttribute("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
-				enemy.takeDamage(totalDamage, 0.0f, 0.0f, cTime, 0, false);
+				cumulativeDamage += totalDamage;
+				
+				if(elapsed >= DAMAGE_INTERVAL) {
+					enemy.takeDamage(cumulativeDamage, 0.0f, 0.0f, cTime, 0, false);
+					cumulativeDamage = 0.0;
+					lastDamage = cTime;
+				}
 			} else if(e instanceof Player) {
 				Player player = (Player) e;
 				player.takeDamage(cDamage / (1000L / Globals.STEP_TIME), cTime);

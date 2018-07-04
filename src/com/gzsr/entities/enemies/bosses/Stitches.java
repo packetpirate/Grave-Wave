@@ -111,6 +111,8 @@ public class Stitches extends Boss {
 			hook = null;
 			hooked = false;
 		}
+		
+		postDamageTexts();
 	}
 	
 	@Override
@@ -163,8 +165,15 @@ public class Stitches extends Boss {
 	
 	@Override
 	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	}
+	
+	@Override
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead()) {
 			health -= amnt;
+			
+			createDamageText(amnt, 64.0f, knockbackTheta, cTime, isCritical);
 			
 			if(flash) {
 				hit = true;

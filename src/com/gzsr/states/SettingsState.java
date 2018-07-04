@@ -96,6 +96,10 @@ public class SettingsState extends BasicGameState implements InputListener {
 		displaySettings.render(g, 0L);
 		controlSettings.render(g, 0L);
 		backButton.render(g, 0L);
+		
+		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));
+		float vWidth = g.getFont().getWidth(Globals.VERSION);
+		g.drawString(Globals.VERSION, (Globals.WIDTH - vWidth - 20.0f), 20.0f);
 	}
 	
 	@Override

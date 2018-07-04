@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Globals {
 	// Contains global constants.
-	public static final String VERSION = "1.1.0";
+	public static final String VERSION = "v1.1.2";
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;

@@ -70,6 +70,8 @@ public class Zombat extends Boss {
 				if(damageTaken > 0.0) health += SIPHON_RATE;
 			}
 		}
+		
+		postDamageTexts();
 	}
 	
 	@Override
@@ -123,8 +125,15 @@ public class Zombat extends Boss {
 	
 	@Override
 	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	}
+	
+	@Override
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead()) {
 			health -= amnt;
+			
+			createDamageText(amnt, 32.0f, knockbackTheta, cTime, isCritical);
 			
 			if(flash) {
 				hit = true;

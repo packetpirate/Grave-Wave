@@ -10,15 +10,15 @@ import com.gzsr.entities.Entity;
 import com.gzsr.misc.Pair;
 
 public class VanishingText implements Entity {
-	private String text;
-	private String font;
-	private Pair<Float> position;
-	private Color color;
+	protected String text;
+	protected String font;
+	protected Pair<Float> position;
+	protected Color color;
 	
-	private long creationTime;
-	private long duration;
+	protected long creationTime;
+	protected long duration;
 	
-	private boolean active;
+	protected boolean active;
 	public boolean isActive() { return active; }
 	
 	/**

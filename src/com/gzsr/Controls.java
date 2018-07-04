@@ -13,8 +13,8 @@ public class Controls {
 	
 	public enum Layout {
 		MOVE_UP(Input.KEY_W, "Move Up", "W"),
-		MOVE_DOWN(Input.KEY_S, "Move Down", "A"),
-		MOVE_LEFT(Input.KEY_A, "Move Left", "S"),
+		MOVE_DOWN(Input.KEY_S, "Move Down", "S"),
+		MOVE_LEFT(Input.KEY_A, "Move Left", "A"),
 		MOVE_RIGHT(Input.KEY_D, "Move Right", "D"),
 		RELOAD(Input.KEY_R, "Reload", "R"),
 		NEXT_WAVE(Input.KEY_N, "Next Wave", "N"),
@@ -31,7 +31,7 @@ public class Controls {
 		WEAPON_7(Input.KEY_7, "Weapon 7", "7"),
 		WEAPON_8(Input.KEY_8, "Weapon 8", "8"),
 		WEAPON_9(Input.KEY_9, "Weapon 9", "9"),
-		WEAPON_10(Input.KEY_0, "Weapon 10", "10");
+		WEAPON_10(Input.KEY_0, "Weapon 10", "0");
 		
 		private int key;
 		public int getKey() { return key; }
@@ -64,6 +64,7 @@ public class Controls {
 			this.key = key_;
 			this.name = name_;
 			this.display = display_;
+			this.state = KeyState.NONE;
 		}
 		
 		public static Layout identify(int key) {

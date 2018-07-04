@@ -93,6 +93,12 @@ public class BigMama extends Enemy {
 					}
 				}
 				
+				// If there are any damage texts recently added, add them to the entities list.
+				if(!damageTexts.isEmpty()) {
+					damageTexts.stream().forEach(dt -> ((GameState)gs).addEntity(String.format("dt%d", Globals.generateEntityID()), dt));
+					damageTexts.clear();
+				}
+				
 				updateFlash(cTime);
 				animation.update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);

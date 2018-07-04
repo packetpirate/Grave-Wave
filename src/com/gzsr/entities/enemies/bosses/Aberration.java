@@ -73,6 +73,8 @@ public class Aberration extends Boss {
 			} else vomit(cTime);
 		}
 		
+		postDamageTexts();
+		
 		// Update bile projectiles.
 		Iterator<Projectile> it = bile.iterator();
 		while(it.hasNext()) {
@@ -166,8 +168,15 @@ public class Aberration extends Boss {
 	
 	@Override
 	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	}
+	
+	@Override
+	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead()) {
 			health -= amnt;
+			
+			createDamageText(amnt, 64.0f, knockbackTheta, cTime, isCritical);
 			
 			if(flash) {
 				hit = true;
