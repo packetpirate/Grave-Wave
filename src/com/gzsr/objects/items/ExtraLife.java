@@ -21,12 +21,12 @@ public class ExtraLife extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		int max = player.getIntAttribute("maxLives");
-		int lives = player.getIntAttribute("lives");
+		int max = player.getAttributes().getInt("maxLives");
+		int lives = player.getAttributes().getInt("lives");
 		
 		if(lives < max) {
 			lives++;
-			player.setAttribute("lives", lives);
+			player.getAttributes().set("lives", lives);
 		} else {
 			double amnt = (Globals.rand.nextDouble() * (ExtraLife.RESTORE_MAX - ExtraLife.RESTORE_MIN)) + ExtraLife.RESTORE_MIN;
 			player.addHealth(amnt);

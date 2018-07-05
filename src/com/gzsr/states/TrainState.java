@@ -102,10 +102,10 @@ public class TrainState extends BasicGameState implements InputListener {
 		
 		// Display the user's current level.
 		g.setColor(Color.white);
-		g.drawString(String.format("Level: %d", player.getIntAttribute("level")), 30.0f, 70.0f);
+		g.drawString(String.format("Level: %d", player.getAttributes().getInt("level")), 30.0f, 70.0f);
 		
 		{// Show progress bar indicating how much experience until the next level.
-			float expWidth = (float)player.getIntAttribute("experience") / (float)player.getIntAttribute("expToLevel");
+			float expWidth = (float)player.getAttributes().getInt("experience") / (float)player.getAttributes().getInt("expToLevel");
 			g.setColor(Color.black);
 			g.fillRect(30.0f, 150.0f, 300.0f, 50.0f);
 			g.setColor(Color.lightGray);
@@ -117,13 +117,13 @@ public class TrainState extends BasicGameState implements InputListener {
 				g.drawRect(35.0f, 155.0f, (expWidth * 290.0f), 40.0f);
 			}
 			
-			String expText = String.format("%d / %d", player.getIntAttribute("experience"), player.getIntAttribute("expToLevel"));
+			String expText = String.format("%d / %d", player.getAttributes().getInt("experience"), player.getAttributes().getInt("expToLevel"));
 			g.setColor(Color.white);
 			FontUtils.drawCenter(TrainState.FONT_NORMAL, expText, 30, (175 - (TrainState.FONT_NORMAL.getLineHeight() / 2)), 300);
 		} // End drawing of experience bar.
 		
 		{ // Begin drawing health upgrade components.
-			int healthLevel = player.getIntAttribute("healthUp");
+			int healthLevel = player.getAttributes().getInt("healthUp");
 			g.setColor(Color.black);
 			g.fillRect(30.0f, 240.0f, 300.0f, 50.0f);
 			g.setColor(Color.lightGray);
@@ -139,7 +139,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		} // End drawing health upgrade components.
 		
 		{ // Begin drawing speed upgrade components.
-			int speedLevel = player.getIntAttribute("speedUp");
+			int speedLevel = player.getAttributes().getInt("speedUp");
 			g.setColor(Color.black);
 			g.fillRect(30.0f, 330.0f, 300.0f, 50.0f);
 			g.setColor(Color.lightGray);
@@ -155,7 +155,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		} // End drawing speed upgrade components.
 		
 		{ // Begin drawing damage upgrade components.
-			int damageLevel = player.getIntAttribute("damageUp");
+			int damageLevel = player.getAttributes().getInt("damageUp");
 			g.setColor(Color.black);
 			g.fillRect(30.0f, 420.0f, 300.0f, 50.0f);
 			g.setColor(Color.lightGray);
@@ -180,7 +180,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		
 		// Show how many skill points the player has.
 		g.setColor(Color.white);
-		g.drawString(String.format("Skill Points: %d", player.getIntAttribute("skillPoints")), 30.0f, (Globals.HEIGHT - 66.0f));
+		g.drawString(String.format("Skill Points: %d", player.getAttributes().getInt("skillPoints")), 30.0f, (Globals.HEIGHT - 66.0f));
 		
 		{ // Draw tooltips last, since they need to be drawn over everything else.
 			expToLevelTooltip.render(g, 0L);

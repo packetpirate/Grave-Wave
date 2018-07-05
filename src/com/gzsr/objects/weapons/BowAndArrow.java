@@ -99,7 +99,7 @@ public class BowAndArrow extends Weapon {
 		Particle particle = new Particle(BowAndArrow.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = (BowAndArrow.DAMAGE + (BowAndArrow.DAMAGE * (player.getIntAttribute("damageUp") * 0.10))) * charge;
+		double damage = (BowAndArrow.DAMAGE + (BowAndArrow.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10))) * charge;
 		Projectile projectile = new Projectile(particle, damage);
 		
 		projectiles.add(projectile);

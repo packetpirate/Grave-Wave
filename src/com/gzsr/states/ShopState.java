@@ -371,7 +371,7 @@ public class ShopState extends BasicGameState implements InputListener {
 											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)ammoButton.getSize().x.floatValue(), Color.white);
 						ammoButton.render(g, 0L);
-						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getIntAttribute("money") < ((Weapon)item).getAmmoPrice())) {
+						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < ((Weapon)item).getAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
 							float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
@@ -390,7 +390,7 @@ public class ShopState extends BasicGameState implements InputListener {
 											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
 						maxAmmoButton.render(g, 0L);
-						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getIntAttribute("money") < ((Weapon)item).getMaxAmmoPrice())) {
+						if(((Weapon)item).clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < ((Weapon)item).getMaxAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
 							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
@@ -425,7 +425,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		g.drawRect(ITEM_PORTRAIT.x, (ITEM_PORTRAIT.y + h), ITEM_BOX_SIZE, ITEM_BOX_SIZE);
 		
 		// Draw the player's current cash.
-		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getIntAttribute("money"));
+		String myCash = "$" + NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getAttributes().getInt("money"));
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
 		FontUtils.drawCenter(g.getFont(), myCash, (int)((Globals.WIDTH / 2) - 150.0f), (int)(Globals.HEIGHT - g.getFont().getLineHeight() - 70.0f), 300, Color.white);
 	}
@@ -488,9 +488,9 @@ public class ShopState extends BasicGameState implements InputListener {
 			if(buyButton.inBounds(x, y) && !selectedInInventory) {
 				if(item instanceof Weapon) {
 					Weapon w = (Weapon)item;
-					int playerMoney = Player.getPlayer().getIntAttribute("money"); 
+					int playerMoney = Player.getPlayer().getAttributes().getInt("money"); 
 					if(playerMoney >= w.getPrice()) {
-						Player.getPlayer().setAttribute("money", (playerMoney - w.getPrice()));
+						Player.getPlayer().getAttributes().set("money", (playerMoney - w.getPrice()));
 						Player.getPlayer().getInventory().addItem(w);
 						Player.getPlayer().resetCurrentWeapon();
 						SHOP.dropItem(w.getName());
@@ -502,7 +502,7 @@ public class ShopState extends BasicGameState implements InputListener {
 				if(item instanceof Weapon) {
 					Weapon w = (Weapon)item;
 					int sellValue = (int)(w.getPrice() * SELL_BACK_VALUE);
-					Player.getPlayer().setAttribute("money", (Player.getPlayer().getIntAttribute("money") + sellValue));
+					Player.getPlayer().getAttributes().set("money", (Player.getPlayer().getAttributes().getInt("money") + sellValue));
 					Player.getPlayer().getInventory().dropItem(w.getName());
 					Player.getPlayer().resetCurrentWeapon();
 					SHOP.addItem(w);
@@ -516,10 +516,10 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getAmmoPrice();
-						int moneyAfterPurchase = Player.getPlayer().getIntAttribute("money") - cost; 
+						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
-							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
+							Player.getPlayer().getAttributes().set("money", moneyAfterPurchase);
 							w.addInventoryAmmo(w.getClipSize());
 							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
@@ -532,10 +532,10 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getMaxAmmoPrice();
-						int moneyAfterPurchase = Player.getPlayer().getIntAttribute("money") - cost; 
+						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
-							Player.getPlayer().setAttribute("money", moneyAfterPurchase);
+							Player.getPlayer().getAttributes().set("money", moneyAfterPurchase);
 							w.maxOutAmmo();
 							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}

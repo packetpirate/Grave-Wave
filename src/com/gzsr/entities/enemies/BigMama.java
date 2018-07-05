@@ -31,6 +31,7 @@ public class BigMama extends Enemy {
 			.addItem(Powerups.Type.HEALTH, 0.35f)
 			.addItem(Powerups.Type.AMMO, 0.25f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.10f)
+			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.10f)
 			.addItem(Powerups.Type.INVULNERABILITY, 0.025f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.10f)
 			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.05f);

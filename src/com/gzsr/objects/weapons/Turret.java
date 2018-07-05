@@ -155,7 +155,7 @@ public class Turret extends Projectile {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double damage = Turret.PROJECTILE_DAMAGE + (Turret.PROJECTILE_DAMAGE * (Player.getPlayer().getIntAttribute("damageUp") * 0.10));
+		double damage = Turret.PROJECTILE_DAMAGE + (Turret.PROJECTILE_DAMAGE * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 		Projectile projectile = new Projectile(particle, damage);
 		
 		projectiles.add(projectile);

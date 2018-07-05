@@ -121,7 +121,7 @@ public class GameState extends BasicGameState implements InputListener {
 				
 				Controls controls = Controls.getInstance();
 				
-				if(!player.isAlive() && (player.getIntAttribute("lives") <= 0)) {
+				if(!player.isAlive() && (player.getAttributes().getInt("lives") <= 0)) {
 					// If the player has died, transition state.
 					controls.resetAll();
 					Globals.gameOver = true;

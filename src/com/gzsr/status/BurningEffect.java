@@ -64,7 +64,7 @@ public class BurningEffect extends StatusEffect {
 			if(e instanceof Enemy) {
 				Enemy enemy = (Enemy) e;
 				long elapsed = cTime - lastDamage;
-				double totalDamage = (cDamage + (cDamage * Player.getPlayer().getIntAttribute("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
+				double totalDamage = (cDamage + (cDamage * Player.getPlayer().getAttributes().getInt("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
 				cumulativeDamage += totalDamage;
 				
 				if(elapsed >= DAMAGE_INTERVAL) {

@@ -27,6 +27,7 @@ import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
+import com.gzsr.objects.items.ExpMultiplierItem;
 import com.gzsr.objects.items.ExtraLife;
 import com.gzsr.objects.items.HealthKit;
 import com.gzsr.objects.items.InvulnerableItem;
@@ -171,6 +172,9 @@ public class Console implements Entity {
 						} else if(itemName.equals("life")) {
 							ExtraLife el = new ExtraLife(pos, cTime);
 							gs.addEntity(String.format("life%d", id), el);
+						} else if(itemName.equals("expmult")) {
+							ExpMultiplierItem exp = new ExpMultiplierItem(pos, cTime);
+							gs.addEntity(String.format("exp%d", id), exp);
 						} else if(itemName.equals("invulnerability")) {
 							InvulnerableItem inv = new InvulnerableItem(pos, cTime);
 							gs.addEntity(String.format("invuln%d", id), inv);
@@ -191,10 +195,10 @@ public class Console implements Entity {
 						
 						if(attributeName.equals("health")) {
 							double health = Double.parseDouble(tokens[2]);
-							Player.getPlayer().setAttribute("health", health);
+							Player.getPlayer().getAttributes().set("health", health);
 						} else if(attributeName.equals("money")) {
 							int money = Integer.parseInt(tokens[2]);
-							Player.getPlayer().setAttribute("money", money);
+							Player.getPlayer().getAttributes().set("money", money);
 						} else if(attributeName.equals("experience")) {
 							int exp = Integer.parseInt(tokens[2]);
 							Player.getPlayer().addExperience(gs, exp, 0L);

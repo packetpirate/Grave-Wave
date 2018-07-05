@@ -72,7 +72,7 @@ public class Shotgun extends Weapon {
 			Particle particle = new Particle(color, position, velocity, devTheta,
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
-			double damage = Shotgun.DAMAGE + (Shotgun.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+			double damage = Shotgun.DAMAGE + (Shotgun.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
 			Projectile projectile = new Projectile(particle, damage);
 			projectiles.add(projectile);
 		}

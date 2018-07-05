@@ -35,6 +35,7 @@ public class Upchuck extends Enemy {
 			.addItem(Powerups.Type.HEALTH, 0.20f)
 			.addItem(Powerups.Type.AMMO, 0.20f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
+			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.10f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.15f)
 			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	

@@ -55,8 +55,8 @@ public class HUD {
 	public void render(Graphics g, GameState gs, long cTime) {
 		AssetManager assets = AssetManager.getManager();
 		{ // Render the health bar.
-			float currentHealth = (float)Player.getPlayer().getDoubleAttribute("health");
-			float maxHealth = (float)Player.getPlayer().getDoubleAttribute("maxHealth");
+			float currentHealth = (float)Player.getPlayer().getAttributes().getDouble("health");
+			float maxHealth = (float)Player.getPlayer().getAttributes().getDouble("maxHealth");
 			float percentage = currentHealth / maxHealth;
 			
 			g.setColor(Color.black);
@@ -82,14 +82,14 @@ public class HUD {
 			float startX = HEALTH_ORIGIN.x + 156.0f;
 			float startY = HEALTH_ORIGIN.y + 5.0f;
 			Image img = AssetManager.getManager().getImage("GZS_Life");
-			for(int i = 0; i < Player.getPlayer().getIntAttribute("lives"); i++) {
+			for(int i = 0; i < Player.getPlayer().getAttributes().getInt("lives"); i++) {
 				g.drawImage(img, (startX + (i * img.getWidth()) + (i * 3.0f) + 5.0f), startY);
 			}
 		} // End of drawing Player.getPlayer()'s lives.
 		
 		{ // Begin experience bar rendering.
-			float currentExp = (float)Player.getPlayer().getIntAttribute("experience");
-			float expToLevel = (float)Player.getPlayer().getIntAttribute("expToLevel");
+			float currentExp = (float)Player.getPlayer().getAttributes().getInt("experience");
+			float expToLevel = (float)Player.getPlayer().getAttributes().getInt("expToLevel");
 			float percentage = currentExp / expToLevel;
 			
 			g.setColor(Color.black);
@@ -205,7 +205,7 @@ public class HUD {
 		
 		{ // Begin Drawing Player Money
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getIntAttribute("money")));
+			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getAttributes().getInt("money")));
 			float w = g.getFont().getWidth(money);
 			float h = g.getFont().getLineHeight();
 			float x = (Globals.WIDTH - w - 20.0f);

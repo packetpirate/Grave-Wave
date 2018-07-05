@@ -1,10 +1,8 @@
 package com.gzsr.entities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -79,19 +77,8 @@ public class Player implements Entity {
 	
 	private long lastGrunt;
 	
-	private Map<String, Object> attributes;
-	public int getIntAttribute(String key) { return ((Integer)attributes.get(key)).intValue(); }
-	public float getFloatAttribute(String key) { return ((Float)attributes.get(key)).floatValue(); }
-	public double getDoubleAttribute(String key) { return ((Double)attributes.get(key)).doubleValue(); }
-	public long getLongAttribute(String key) { return ((Long)attributes.get(key)).longValue(); }
-	public void setAttribute(String key, int val) { attributes.put(key, val); }
-	public void setAttribute(String key, float val) { attributes.put(key, val); }
-	public void setAttribute(String key, double val) { attributes.put(key, val); }
-	public void setAttribute(String key, long val) { attributes.put(key, val); }
-	public void addToAttribute(String key, int val) { attributes.put(key, (getIntAttribute(key) + val)); }
-	public void addToAttribute(String key, float val) { attributes.put(key, (getFloatAttribute(key) + val)); }
-	public void addToAttribute(String key, double val) { attributes.put(key, (getDoubleAttribute(key) + val)); }
-	public void addToAttribute(String key, long val) { attributes.put(key, (getLongAttribute(key) + val)); }
+	private Attributes attributes;
+	public Attributes getAttributes() { return attributes; }
 	
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
@@ -162,7 +149,7 @@ public class Player implements Entity {
 	public Player() {
 		position = new Pair<Float>(0.0f, 0.0f);
 		
-		attributes = new HashMap<String, Object>();
+		attributes = new Attributes();
 		statusEffects = new ArrayList<StatusEffect>();
 		
 		reset();
@@ -177,9 +164,9 @@ public class Player implements Entity {
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!isAlive()) {
 			if(!respawning) {
-				int lives = getIntAttribute("lives") - 1;
+				int lives = attributes.getInt("lives") - 1;
 				if(lives >= 0) {
-					setAttribute("lives", lives);
+					attributes.set("lives", lives);
 					
 					statusEffects.stream().forEach(status -> status.onDestroy(this, cTime));
 					statusEffects.clear();
@@ -194,7 +181,7 @@ public class Player implements Entity {
 					respawnTime = 0L;
 					
 					// Make the player invincible for a brief period.
-					setAttribute("health", getDoubleAttribute("maxHealth"));
+					attributes.set("health", attributes.getDouble("maxHealth"));
 					statusEffects.add(new InvulnerableEffect(Player.RESPAWN_TIME, cTime));
 					
 					// Reset the player's position.
@@ -205,11 +192,11 @@ public class Player implements Entity {
 		}
 		
 		// Make sure player's health is up to date.
-		double currentMax = getDoubleAttribute("maxHealth");
-		double healthBonus = getIntAttribute("healthUp") * HEALTH_PER_SP;
+		double currentMax = attributes.getDouble("maxHealth");
+		double healthBonus = attributes.getInt("healthUp") * HEALTH_PER_SP;
 		if(currentMax != (DEFAULT_MAX_HEALTH + healthBonus)) {
 			// Update player's max health.
-			setAttribute("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
+			attributes.set("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
 		}
 		
 		// Need to make sure to update the status effects first.
@@ -224,7 +211,7 @@ public class Player implements Entity {
 			}
 		}
 		
-		float adjSpeed = (getSpeed() + (getIntAttribute("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)getDoubleAttribute("spdMult") * delta;
+		float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
@@ -314,35 +301,35 @@ public class Player implements Entity {
 		inventory.addItem(new Pistol());
 		inventory.getWeapons().get(weaponIndex).equip();
 		
-		attributes.clear();
+		attributes.reset();
 		statusEffects.clear();
 		
 		// Basic attributes.
-		setAttribute("health", 100.0);
-		setAttribute("maxHealth", 100.0);
-		setAttribute("lives", 3);
-		setAttribute("maxLives", Player.MAX_LIVES);
-		setAttribute("money", 0);
+		attributes.set("health", 100.0);
+		attributes.set("maxHealth", 100.0);
+		attributes.set("lives", 3);
+		attributes.set("maxLives", Player.MAX_LIVES);
+		attributes.set("money", 0);
 		
 		// Experience related attributes.
-		setAttribute("experience", 0);
-		setAttribute("expToLevel", 100);
-		setAttribute("level", 1);
-		setAttribute("skillPoints", 0);
+		attributes.set("experience", 0);
+		attributes.set("expToLevel", 100);
+		attributes.set("level", 1);
+		attributes.set("skillPoints", 0);
 		
 		// Upgrade level attributes.
-		setAttribute("healthUp", 0);
-		setAttribute("speedUp", 0);
-		setAttribute("damageUp", 0);
+		attributes.set("healthUp", 0);
+		attributes.set("speedUp", 0);
+		attributes.set("damageUp", 0);
 		
 		// Miscellaneous Modifiers
-		setAttribute("critChance", 0.05f);
+		attributes.set("critChance", 0.05f);
 		
 		// Multipliers
-		setAttribute("expMult", 1.0);
-		setAttribute("spdMult", 1.0);
-		setAttribute("damMult", 1.0);
-		setAttribute("critMult", 2);
+		attributes.set("expMult", 1.0);
+		attributes.set("spdMult", 1.0);
+		attributes.set("damMult", 1.0);
+		attributes.set("critMult", 2.0);
 		
 		flashlight = new Flashlight();
 	}
@@ -352,11 +339,11 @@ public class Player implements Entity {
 	 * @param amnt The amount of health to give the player.
 	 */
 	public void addHealth(double amnt) {
-		double currentHealth = getDoubleAttribute("health");
-		double maxHealth = getDoubleAttribute("maxHealth");
+		double currentHealth = attributes.getDouble("health");
+		double maxHealth = attributes.getDouble("maxHealth");
 		double adjusted = currentHealth + amnt;
 		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
-		setAttribute("health", newHealth);
+		attributes.set("health", newHealth);
 	}
 	
 	/**
@@ -365,10 +352,10 @@ public class Player implements Entity {
 	 */
 	public double takeDamage(double amnt, long cTime) {
 		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
-			double currentHealth = getDoubleAttribute("health");
+			double currentHealth = attributes.getDouble("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
-			setAttribute("health", newHealth);
+			attributes.set("health", newHealth);
 			
 			if((cTime - lastGrunt) >= GRUNT_TIMER) {
 				int grunt = Globals.rand.nextInt(4) + 1;
@@ -381,20 +368,22 @@ public class Player implements Entity {
 	}
 	
 	public void addExperience(GameState gs, int amnt, long cTime) {
-		int currentExp = getIntAttribute("experience");
-		int adjusted = currentExp + amnt;
-		int expToLevel = getIntAttribute("expToLevel");
-		int newLevel = getIntAttribute("level") + 1;
+		int totalAmnt = (int)(amnt * attributes.getDouble("expMult"));
+		int currentExp = attributes.getInt("experience");
+		int adjusted = currentExp + totalAmnt;
+		int expToLevel = attributes.getInt("expToLevel");
+		int newLevel = attributes.getInt("level") + 1;
+		System.out.printf("Total Exp Gained: %d\n", totalAmnt);
 		
-		setAttribute("experience", adjusted);
+		attributes.set("experience", adjusted);
 		
 		if(adjusted >= expToLevel) {
 			// Level up!
 			int carryOver = adjusted % expToLevel;
-			setAttribute("experience", carryOver);
-			setAttribute("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
-			setAttribute("level", newLevel);
-			addToAttribute("skillPoints", 1);
+			attributes.set("experience", carryOver);
+			attributes.set("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
+			attributes.set("level", newLevel);
+			attributes.addTo("skillPoints", 1);
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
 				String key = String.format("vanishText%d", Globals.generateEntityID());
@@ -427,7 +416,7 @@ public class Player implements Entity {
 	
 	public boolean isAlive() {
 		// TODO: May need to revise this in the future.
-		return (getDoubleAttribute("health") > 0);
+		return (attributes.getDouble("health") > 0);
 	}
 	
 	public boolean touchingEnemy(Enemy enemy) {
@@ -460,10 +449,10 @@ public class Player implements Entity {
 						}
 						
 						// TODO: Change to include powerup crit chance modifiers.
-						boolean critical = (Globals.rand.nextFloat() <= getFloatAttribute("critChance"));
-						float damagePercentage = (1.0f + (getIntAttribute("damageUp") * 0.10f));
+						boolean critical = (Globals.rand.nextFloat() <= attributes.getFloat("critChance"));
+						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 						double totalDamage = (p.getDamage() * damagePercentage);
-						if(critical) totalDamage *= getIntAttribute("critMult");
+						if(critical) totalDamage *= attributes.getInt("critMult");
 						enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, critical);
 					}
 					

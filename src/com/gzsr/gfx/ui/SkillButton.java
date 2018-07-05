@@ -31,13 +31,13 @@ public class SkillButton extends Button {
 	
 	@Override
 	public void click() {
-		int skillPoints = Player.getPlayer().getIntAttribute("skillPoints");
-		int currentSkillLevel = Player.getPlayer().getIntAttribute(skillName);
+		int skillPoints = Player.getPlayer().getAttributes().getInt("skillPoints");
+		int currentSkillLevel = Player.getPlayer().getAttributes().getInt(skillName);
 		
 		if((skillPoints > 0) && (currentSkillLevel < 10)) {
 			// Add a skill point to the associated skill.
-			Player.getPlayer().setAttribute(skillName, (currentSkillLevel + 1));
-			Player.getPlayer().setAttribute("skillPoints", (skillPoints - 1));
+			Player.getPlayer().getAttributes().set(skillName, (currentSkillLevel + 1));
+			Player.getPlayer().getAttributes().set("skillPoints", (skillPoints - 1));
 			
 			AssetManager.getManager().getSound("point_buy").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}

@@ -69,7 +69,7 @@ public class GrenadeLauncher extends Weapon {
 		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);

@@ -66,7 +66,7 @@ public class AssaultRifle extends Weapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		double damage = AssaultRifle.DAMAGE + (AssaultRifle.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+		double damage = AssaultRifle.DAMAGE + (AssaultRifle.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		
 		Particle particle = new Particle(color, position, velocity, (theta + deviation),

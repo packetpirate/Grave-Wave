@@ -37,7 +37,7 @@ public class SpeedEffect extends StatusEffect {
 	public void onDestroy(Entity e, long cTime) {
 		if(e instanceof Player) {
 			Player player = (Player) e;
-			player.setAttribute("spdMult", 1.0);
+			player.getAttributes().set("spdMult", 1.0);
 		}
 	}
 }

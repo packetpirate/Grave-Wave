@@ -78,7 +78,7 @@ public class Pistol extends Weapon {
 		Particle particle = new Particle(color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = Pistol.DAMAGE + (Pistol.DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+		double damage = Pistol.DAMAGE + (Pistol.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
 		Projectile projectile = new Projectile(particle, damage);
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;

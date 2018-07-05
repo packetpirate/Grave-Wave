@@ -9,23 +9,20 @@ import com.gzsr.states.GameState;
 
 public class Powerups {
 	public enum Type {
-		HEALTH("health", 0.8f),
-		AMMO("ammo", 0.6f),
-		EXTRA_LIFE("life", 0.1f),
-		INVULNERABILITY("invuln", 0.1f),
-		NIGHT_VISION("nightvision", 0.4f),
-		SPEED("speed", 0.4f),
-		UNLIMITED_AMMO("unlimitedammo", 0.4f);
+		HEALTH("health"),
+		AMMO("ammo"),
+		EXTRA_LIFE("life"),
+		EXP_MULTIPLIER("exp"),
+		INVULNERABILITY("invuln"),
+		NIGHT_VISION("nightvision"),
+		SPEED("speed"),
+		UNLIMITED_AMMO("unlimitedammo");
 		
 		private String name;
 		public String getName() { return name; }
 		
-		private float dropChance;
-		public float getDropChance() { return dropChance; }
-		
-		Type(String name_, float dropChance_) {
+		Type(String name_) {
 			this.name = name_;
-			this.dropChance = dropChance_;
 		}
 	}
 	
@@ -45,6 +42,9 @@ public class Powerups {
 						break;
 					case EXTRA_LIFE:
 						item = new ExtraLife(position, cTime);
+						break;
+					case EXP_MULTIPLIER:
+						item = new ExpMultiplierItem(position, cTime);
 						break;
 					case INVULNERABILITY:
 						item = new InvulnerableItem(position, cTime);

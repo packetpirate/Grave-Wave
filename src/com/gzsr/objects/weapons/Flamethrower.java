@@ -62,7 +62,7 @@ public class Flamethrower extends Weapon {
 			Particle particle = new Particle(Flamethrower.PROJECTILE_NAME, color, position, velocity, devTheta,
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
-			double damage = Flamethrower.EMBER_DAMAGE + (Flamethrower.EMBER_DAMAGE * (player.getIntAttribute("damageUp") * 0.10));
+			double damage = Flamethrower.EMBER_DAMAGE + (Flamethrower.EMBER_DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
 			StatusProjectile projectile = new StatusProjectile(particle, damage, new BurningEffect(cTime));
 			projectiles.add(projectile);
 		}

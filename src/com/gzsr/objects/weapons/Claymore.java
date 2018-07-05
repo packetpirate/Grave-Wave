@@ -87,7 +87,7 @@ public class Claymore extends Projectile {
 												 0.0f, new Pair<Float>(width, height), 
 												 lifespan, cTime);
 				
-				double damage = Claymore.SHRAPNEL_DAMAGE + (Claymore.SHRAPNEL_DAMAGE * (Player.getPlayer().getIntAttribute("damageUp") * 0.10));
+				double damage = Claymore.SHRAPNEL_DAMAGE + (Claymore.SHRAPNEL_DAMAGE * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 				Projectile projectile = new Projectile(particle, damage);
 				
 				shrapnel.add(projectile);
