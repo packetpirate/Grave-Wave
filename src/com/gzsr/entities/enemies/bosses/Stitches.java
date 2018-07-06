@@ -12,6 +12,7 @@ import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
@@ -20,7 +21,9 @@ import com.gzsr.status.StatusEffect;
 public class Stitches extends Boss {
 	private static final int FIRST_WAVE = 25;
 	private static final int SPAWN_COST = 40;
-	private static final float HEALTH = 15_000.0f;
+	private static final int MIN_HEALTH_COUNT = 25;
+	private static final int MIN_HEALTH_SIDES = 10;
+	private static final int MIN_HEALTH_MOD = 500;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
 	private static final float ATTACK_DIST = 300.0f;
@@ -42,7 +45,7 @@ public class Stitches extends Boss {
 	
 	public Stitches(Pair<Float> position_) {
 		super(EnemyType.STITCHES, position_);
-		this.health = Stitches.HEALTH;
+		this.health = Dice.roll(Stitches.MIN_HEALTH_COUNT, Stitches.MIN_HEALTH_SIDES, Stitches.MIN_HEALTH_MOD);
 		
 		hook = null;
 		hooked = false;

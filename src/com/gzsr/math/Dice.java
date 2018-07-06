@@ -38,6 +38,16 @@ public class Dice {
 		return roll(0, critical);
 	}
 	
+	public static int roll(int count, int sides, int modifier) {
+		int total = 0;
+		
+		for(int i = 0; i < count; i++) {
+			total += (Globals.rand.nextInt(sides) + 1);
+		}
+		
+		return (total + modifier);
+	}
+	
 	public int roll(int modifier, boolean critical) {
 		if(critical) return ((count * sides) + modifier);
 		

@@ -10,6 +10,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
@@ -18,7 +19,9 @@ import com.gzsr.status.StatusEffect;
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
 	private static final int SPAWN_COST = 12;
-	private static final float HEALTH = 1_500.0f;
+	private static final int MIN_HEALTH_COUNT = 10;
+	private static final int MIN_HEALTH_SIDES = 10;
+	private static final int MIN_HEALTH_MOD = 100;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
 	private static final float SIPHON_RATE = 0.15f;
@@ -37,7 +40,7 @@ public class Zombat extends Boss {
 	
 	public Zombat(Pair<Float> position_) {
 		super(EnemyType.ZOMBAT_SWARM, position_);
-		this.health = Zombat.HEALTH;
+		this.health = Dice.roll(Zombat.MIN_HEALTH_COUNT, Zombat.MIN_HEALTH_SIDES, Zombat.MIN_HEALTH_MOD);
 		
 		siphoningBlood = false;
 	}

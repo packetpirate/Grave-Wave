@@ -19,10 +19,11 @@ public class Game extends StateBasedGame {
 		System.setProperty("org.lwjgl.librarypath", new File("libs/natives").getAbsolutePath());
 		
 		try {
-			AppGameContainer app = new AppGameContainer(new Game());
-			app.setDisplayMode(Globals.WIDTH, Globals.HEIGHT, false);
-			app.setShowFPS(false);
-			app.start();
+			Globals.app = new AppGameContainer(new Game());
+			
+			Globals.app.setDisplayMode(Globals.WIDTH, Globals.HEIGHT, false);
+			Globals.app.setShowFPS(false);
+			Globals.app.start();
 		} catch(SlickException se) {
 			se.printStackTrace();
 		}

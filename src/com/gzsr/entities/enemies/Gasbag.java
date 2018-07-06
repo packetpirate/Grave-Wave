@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
@@ -19,7 +20,9 @@ import com.gzsr.status.StatusEffect;
 public class Gasbag extends Enemy {
 	public static final int FIRST_WAVE = 8;
 	private static final int SPAWN_COST = 5;
-	private static final float HEALTH = 100.0f;
+	private static final int MIN_HEALTH_COUNT = 2;
+	private static final int MIN_HEALTH_SIDES = 8;
+	private static final int MIN_HEALTH_MOD = 4;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
 	private static final float ATTACK_DIST = 100.0f;
@@ -41,7 +44,7 @@ public class Gasbag extends Enemy {
 	
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
-		this.health = Gasbag.HEALTH;
+		this.health = Dice.roll(Gasbag.MIN_HEALTH_COUNT, Gasbag.MIN_HEALTH_SIDES, Gasbag.MIN_HEALTH_MOD);
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
 	}
 	

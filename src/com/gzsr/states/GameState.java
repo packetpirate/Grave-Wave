@@ -253,7 +253,7 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if(consoleOpen) console.mousePressed(this, button, x, y);
-		Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
 	}
 	
 	@Override

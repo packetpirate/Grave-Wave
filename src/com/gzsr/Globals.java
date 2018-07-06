@@ -2,6 +2,8 @@ package com.gzsr;
 
 import java.util.Random;
 
+import org.newdawn.slick.AppGameContainer;
+
 public class Globals {
 	// Contains global constants.
 	public static final String VERSION = "v1.1.2";
@@ -18,6 +20,8 @@ public class Globals {
 	
 	public static int WIDTH = 1024;
 	public static int HEIGHT = 768;
+	
+	public static AppGameContainer app = null;
 	
 	public static Random rand = new Random();
 	

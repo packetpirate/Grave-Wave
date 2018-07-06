@@ -25,8 +25,8 @@ import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
-import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Beretta;
+import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.InvulnerableEffect;
@@ -85,27 +85,34 @@ public class Player implements Entity {
 	public List<Weapon> getWeapons() { return inventory.getWeapons(); }
 	private int weaponIndex;
 	public int getWeaponIndex() { return weaponIndex; }
-	public Weapon getCurrentWeapon() { return getWeapons().get(weaponIndex); }
+	public Weapon getCurrentWeapon() { 
+		if(!getWeapons().isEmpty()) return getWeapons().get(weaponIndex);
+		else return null;
+	}
 	public void resetCurrentWeapon() {
 		getWeapons().stream().forEach(w -> w.weaponChanged());
 		weaponIndex = 0;
-		getCurrentWeapon().equip();
+		if(!inventory.getWeapons().isEmpty()) getCurrentWeapon().equip();
 	}
 	public void setCurrentWeapon(int wi) {
-		if(wi < getWeapons().size()) {
-			// If the player actually has the weapon bound to the key that was pressed...
-			getCurrentWeapon().weaponChanged();
-			weaponIndex = wi;
-			getCurrentWeapon().equip();
+		if(!getWeapons().isEmpty()) {
+			if((wi >= 0) && (wi < getWeapons().size())) {
+				// If the player actually has the weapon bound to the key that was pressed...
+				getCurrentWeapon().weaponChanged();
+				weaponIndex = wi;
+				getCurrentWeapon().equip();
+			}
 		}
 	}
 	public void weaponRotate(int direction) {
 		int wc = getWeapons().size();
-		getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
-		// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
-		int i = Math.floorMod((weaponIndex + direction), wc);
-		weaponIndex = i;
-		getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
+		if(wc > 0) {
+			getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
+			// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
+			int i = Math.floorMod((weaponIndex + direction), wc);
+			weaponIndex = i;
+			getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
+		}
 	}
 	
 	private List<StatusEffect> statusEffects;
@@ -211,15 +218,15 @@ public class Player implements Entity {
 			}
 		}
 		
+		Weapon cWeapon = getCurrentWeapon();
 		float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
-		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && 
-		   !getCurrentWeapon().isReloading(cTime) &&
-		   (getCurrentWeapon().getClipAmmo() != getCurrentWeapon().getClipSize())) {
-			getCurrentWeapon().reload(cTime);
+		if (Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && !cWeapon.isReloading(cTime)
+				&& (cWeapon.getClipAmmo() != cWeapon.getClipSize())) {
+			cWeapon.reload(cTime);
 		}
 		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
@@ -236,10 +243,11 @@ public class Player implements Entity {
 		
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
-		Weapon cWeapon = getCurrentWeapon();
-		if((mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
-			cWeapon.fire(this, new Pair<Float>(position.x, position.y), 
-						 theta, cTime);
+		if(cWeapon != null) {
+			if((mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
+				cWeapon.fire(this, new Pair<Float>(position.x, position.y), 
+							 theta, cTime);
+			}
 		}
 		
 		// Update all the player's active weapons.
@@ -373,7 +381,6 @@ public class Player implements Entity {
 		int adjusted = currentExp + totalAmnt;
 		int expToLevel = attributes.getInt("expToLevel");
 		int newLevel = attributes.getInt("level") + 1;
-		System.out.printf("Total Exp Gained: %d\n", totalAmnt);
 		
 		attributes.set("experience", adjusted);
 		

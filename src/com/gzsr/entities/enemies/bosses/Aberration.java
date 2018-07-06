@@ -16,6 +16,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
@@ -24,7 +25,9 @@ import com.gzsr.status.StatusEffect;
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 25;
-	private static final float HEALTH = 10_000.0f;
+	private static final int MIN_HEALTH_COUNT = 25;
+	private static final int MIN_HEALTH_SIDES = 10;
+	private static final int MIN_HEALTH_MOD = 250;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 20.0f;
 	private static final float BILE_DAMAGE = 1.0f;
@@ -45,7 +48,7 @@ public class Aberration extends Boss {
 	
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
-		this.health = Aberration.HEALTH;
+		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
 		
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;

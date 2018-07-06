@@ -2,6 +2,7 @@ package com.gzsr.entities.enemies;
 
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
@@ -9,7 +10,8 @@ import com.gzsr.states.GameState;
 public class Zumby extends Enemy {
 	private static final int FIRST_WAVE = 1;
 	private static final int SPAWN_COST = 1;
-	private static final float HEALTH = 100.0f;
+	private static final int MIN_HEALTH_COUNT = 2;
+	private static final int MIN_HEALTH_SIDES = 8;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 5.0f;
 	
@@ -19,7 +21,7 @@ public class Zumby extends Enemy {
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
-		this.health = Zumby.HEALTH;
+		this.health = Dice.roll(Zumby.MIN_HEALTH_COUNT, Zumby.MIN_HEALTH_SIDES, 0);
 	}
 
 	@Override

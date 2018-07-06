@@ -141,17 +141,19 @@ public class HUD {
 			g.setColor(Color.black);
 			g.drawRect((WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f), 48.0f, 48.0f);
 			
-			g.drawImage(Player.getPlayer().getCurrentWeapon().getInventoryIcon(),
-						(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
-		
-			// Render the reloading bar, if the Player.getPlayer() is reloading.
-			if(Player.getPlayer().getCurrentWeapon().isReloading(cTime)) {
-				float percentage = 1.0f - (float)Player.getPlayer().getCurrentWeapon().getReloadTime(cTime);
-				float height = percentage * 48.0f;
-				float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
+			if(!Player.getPlayer().getWeapons().isEmpty()) {
+				g.drawImage(Player.getPlayer().getCurrentWeapon().getInventoryIcon(),
+							(WEAPONS_ORIGIN.x + 3.0f), (WEAPONS_ORIGIN.y + 3.0f));
 				
-				g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
-				g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
+				// Render the reloading bar, if the Player.getPlayer() is reloading.
+				if(Player.getPlayer().getCurrentWeapon().isReloading(cTime)) {
+					float percentage = 1.0f - (float)Player.getPlayer().getCurrentWeapon().getReloadTime(cTime);
+					float height = percentage * 48.0f;
+					float y = (WEAPONS_ORIGIN.y + 3.0f + (48.0f - height));
+					
+					g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.5f));
+					g.fillRect((WEAPONS_ORIGIN.x + 3.0f), y, 48.0f, height);
+				}
 			}
 			
 			if(Player.getPlayer().hasStatus(Status.UNLIMITED_AMMO)) {
@@ -161,9 +163,10 @@ public class HUD {
 				g.drawImage(unlimitedAmmo, x, y);
 			} else {
 				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
-				String ammoText = String.format("%d / %d", 
-									Player.getPlayer().getCurrentWeapon().getClipAmmo(),
-									Player.getPlayer().getCurrentWeapon().getInventoryAmmo());
+				Weapon w = Player.getPlayer().getCurrentWeapon();
+				String ammoText = String.format("%d / %d",
+						((w != null) ? w.getClipAmmo() : 0),
+						((w != null) ? w.getInventoryAmmo() : 0));
 				FontUtils.drawCenter(f, ammoText, (int)(WEAPONS_ORIGIN.x + 54.0f), (int)(WEAPONS_ORIGIN.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
 			}
 		} // End weapons loadout rendering.
