@@ -10,6 +10,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
@@ -21,7 +22,8 @@ public class GrenadeLauncher extends Weapon {
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
-	private static final double DAMAGE = 200.0;
+	private static final int MIN_DAMAGE_COUNT = 10;
+	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
@@ -36,6 +38,8 @@ public class GrenadeLauncher extends Weapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
+		
+		this.damage = new Dice(GrenadeLauncher.MIN_DAMAGE_COUNT, GrenadeLauncher.MIN_DAMAGE_SIDES);
 		
 		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.fireSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
@@ -69,8 +73,11 @@ public class GrenadeLauncher extends Weapon {
 		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = GrenadeLauncher.DAMAGE + (GrenadeLauncher.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
+		double dmg = damage.roll();
+		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
+		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
+
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -81,8 +88,8 @@ public class GrenadeLauncher extends Weapon {
 	}
 	
 	@Override
-	public double getDamage() {
-		return GrenadeLauncher.DAMAGE;
+	public Pair<Integer> getDamage() {
+		return damage.getRange();
 	}
 	
 	@Override

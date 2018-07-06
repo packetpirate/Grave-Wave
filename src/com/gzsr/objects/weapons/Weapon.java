@@ -9,11 +9,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -21,6 +23,7 @@ public abstract class Weapon implements Entity {
 	protected Sound fireSound;
 	protected Sound reloadSound;
 	
+	protected Dice damage;
 	protected List<Projectile> projectiles;
 	
 	protected int ammoInClip;
@@ -34,7 +37,9 @@ public abstract class Weapon implements Entity {
 		this.fireSound = null;
 		this.reloadSound = null;
 		
+		this.damage = null; // Must be set by each individual weapon.
 		this.projectiles = new ArrayList<Projectile>();
+		
 		this.ammoInClip = getClipSize();
 		this.ammoInInventory = (getStartClips() - 1) * getClipSize();
 		this.equipped = false;
@@ -124,7 +129,8 @@ public abstract class Weapon implements Entity {
 		
 		return Math.round(pricePerAmmo * difference);
 	}
-	public abstract double getDamage();
+	public abstract Pair<Integer> getDamage();
+	protected boolean isCritical() { return (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance")); }
 	public abstract float getKnockback();
 	public abstract boolean isReloading(long cTime);
 	public abstract double getReloadTime(long cTime);

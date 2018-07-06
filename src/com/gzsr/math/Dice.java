@@ -1,6 +1,7 @@
 package com.gzsr.math;
 
 import com.gzsr.Globals;
+import com.gzsr.misc.Pair;
 
 public class Dice {
 	private int count;
@@ -16,11 +17,30 @@ public class Dice {
 		this.sides = sides_;
 	}
 	
+	public Pair<Integer> getRange() {
+		return getRange(0);
+	}
+	
+	public Pair<Integer> getRange(int modifier) {
+		int high = (count * sides) + modifier;
+		return new Pair<Integer>((count + modifier), high);
+	}
+	
 	public int roll() {
 		return roll(0);
 	}
 	
 	public int roll(int modifier) {
+		return roll(modifier, false);
+	}
+	
+	public int roll(boolean critical) {
+		return roll(0, critical);
+	}
+	
+	public int roll(int modifier, boolean critical) {
+		if(critical) return ((count * sides) + modifier);
+		
 		int total = 0;
 		
 		for(int i = 0; i < count; i++) {

@@ -29,15 +29,15 @@ import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.ItemConstants;
-import com.gzsr.objects.weapons.AssaultRifle;
+import com.gzsr.objects.weapons.AK47;
 import com.gzsr.objects.weapons.BigRedButton;
 import com.gzsr.objects.weapons.BowAndArrow;
 import com.gzsr.objects.weapons.ClaymoreWeapon;
 import com.gzsr.objects.weapons.Flamethrower;
 import com.gzsr.objects.weapons.GrenadeLauncher;
 import com.gzsr.objects.weapons.LaserBarrier;
+import com.gzsr.objects.weapons.Mossberg;
 import com.gzsr.objects.weapons.SentryWeapon;
-import com.gzsr.objects.weapons.Shotgun;
 import com.gzsr.objects.weapons.Weapon;
 
 public class ShopState extends BasicGameState implements InputListener {
@@ -295,20 +295,19 @@ public class ShopState extends BasicGameState implements InputListener {
 				
 				// Draw damage rating.
 				{
+					UnicodeFont regular = AssetManager.getManager().getFont("PressStart2P-Regular");
 					FontUtils.drawCenter(f, "Damage", (int)barX, (int)(barY - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
+					Pair<Integer> damageRange = w.getDamage();
 					
 					g.setColor(Color.black);
 					g.fillRect(barX, barY, barWidth, barHeight);
 					g.setColor(Color.white);
 					g.drawRect(barX, barY, barWidth, barHeight);
 					
-					int pips = ItemConstants.getDamageClass(w.getDamage()).getPipCount();
-					for(int p = 0; p < pips; p++) {
-						g.setColor(Color.red);
-						g.fillRect((barX + (p * 15.0f) + 5.0f), (barY + 5.0f), 10.0f, (barHeight - 10.0f));
-						g.setColor(new Color(0x550000));
-						g.drawRect((barX + (p * 15.0f) + 5.0f), (barY + 5.0f), 10.0f, (barHeight - 10.0f));
-					}
+					String text = String.format("%d - %d", damageRange.x, damageRange.y);
+					float textHeight = regular.getHeight(text);
+					
+					FontUtils.drawCenter(regular, text, (int)barX, (int)((barY + (barHeight / 2)) - (textHeight / 2)), (int)barWidth, Color.white);
 				}
 				
 				// Draw rate of fire rating.
@@ -583,8 +582,8 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP = new Inventory(SHOP_SIZE);
 		
 		// Add the default purchasable weapons to the shop inventory.
-		SHOP.addItem(new AssaultRifle());
-		SHOP.addItem(new Shotgun());
+		SHOP.addItem(new AK47());
+		SHOP.addItem(new Mossberg());
 		SHOP.addItem(new BowAndArrow());
 		SHOP.addItem(new Flamethrower());
 		SHOP.addItem(new GrenadeLauncher());

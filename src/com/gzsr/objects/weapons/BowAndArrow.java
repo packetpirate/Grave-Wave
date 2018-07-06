@@ -11,6 +11,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
@@ -21,7 +22,8 @@ public class BowAndArrow extends Weapon {
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 3;
-	private static final double DAMAGE = 150.0;
+	private static final int MIN_DAMAGE_COUNT = 3;
+	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.00075f;
 	private static final String ICON_NAME = "GZS_Bow";
@@ -37,6 +39,8 @@ public class BowAndArrow extends Weapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
+		
+		this.damage = new Dice(BowAndArrow.MIN_DAMAGE_COUNT, BowAndArrow.MIN_DAMAGE_SIDES);
 		
 		this.fireSound = assets.getSound(BowAndArrow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
@@ -99,8 +103,11 @@ public class BowAndArrow extends Weapon {
 		Particle particle = new Particle(BowAndArrow.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double damage = (BowAndArrow.DAMAGE + (BowAndArrow.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10))) * charge;
-		Projectile projectile = new Projectile(particle, damage);
+		
+		double dmg = damage.roll();
+		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
+		
+		Projectile projectile = new Projectile(particle, dmg, isCritical());
 		
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -130,8 +137,8 @@ public class BowAndArrow extends Weapon {
 	}
 	
 	@Override
-	public double getDamage() {
-		return BowAndArrow.DAMAGE;
+	public Pair<Integer> getDamage() {
+		return damage.getRange();
 	}
 	
 	@Override

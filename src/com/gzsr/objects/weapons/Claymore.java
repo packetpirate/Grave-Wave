@@ -27,7 +27,6 @@ public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);
 	private static final int SHRAPNEL_COUNT = 50;
 	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
-	private static final double SHRAPNEL_DAMAGE = 20.0;
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
 	
@@ -38,8 +37,8 @@ public class Claymore extends Projectile {
 	private boolean exploded;
 	private boolean shrapnelCreated;
 	
-	public Claymore(Particle p_) {
-		super(p_, 0.0);
+	public Claymore(Particle p_, double damage_) {
+		super(p_, damage_, false);
 		
 		this.explosion = AssetManager.getManager().getSound(Claymore.EXP_SOUND);
 		
@@ -87,8 +86,9 @@ public class Claymore extends Projectile {
 												 0.0f, new Pair<Float>(width, height), 
 												 lifespan, cTime);
 				
-				double damage = Claymore.SHRAPNEL_DAMAGE + (Claymore.SHRAPNEL_DAMAGE * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
-				Projectile projectile = new Projectile(particle, damage);
+				double dmg = (getDamage() + (getDamage() * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10)));
+				
+				Projectile projectile = new Projectile(particle, dmg, isCritical());
 				
 				shrapnel.add(projectile);
 				shrapnelCreated = true;
@@ -123,8 +123,8 @@ public class Claymore extends Projectile {
 		}
 	}
 	
-	public static double getTotalDamage() {
-		return (Claymore.SHRAPNEL_DAMAGE * Claymore.SHRAPNEL_COUNT);
+	public static int getShrapnelCount() {
+		return Claymore.SHRAPNEL_COUNT;
 	}
 	
 	@Override

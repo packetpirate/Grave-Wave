@@ -26,7 +26,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.LaserNode;
-import com.gzsr.objects.weapons.Pistol;
+import com.gzsr.objects.weapons.Beretta;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.InvulnerableEffect;
@@ -298,7 +298,7 @@ public class Player implements Entity {
 		weaponIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
-		inventory.addItem(new Pistol());
+		inventory.addItem(new Beretta());
 		inventory.getWeapons().get(weaponIndex).equip();
 		
 		attributes.reset();
@@ -449,11 +449,9 @@ public class Player implements Entity {
 						}
 						
 						// TODO: Change to include powerup crit chance modifiers.
-						boolean critical = (Globals.rand.nextFloat() <= attributes.getFloat("critChance"));
 						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 						double totalDamage = (p.getDamage() * damagePercentage);
-						if(critical) totalDamage *= attributes.getInt("critMult");
-						enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, critical);
+						enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 					}
 					
 					return true;

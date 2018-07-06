@@ -15,6 +15,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
@@ -27,7 +28,8 @@ public class BigRedButton extends Weapon {
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 0L;
-	private static final double DAMAGE = 250.0;
+	private static final int MIN_DAMAGE_COUNT = 10;
+	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final long EXP_DELAY = 500L;
@@ -48,6 +50,8 @@ public class BigRedButton extends Weapon {
 		lastExplosion = 0L;
 		
 		AssetManager assets = AssetManager.getManager();
+		
+		this.damage = new Dice(BigRedButton.MIN_DAMAGE_COUNT, BigRedButton.MIN_DAMAGE_SIDES);
 		
 		this.fireSound = assets.getSound(BigRedButton.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BigRedButton.RELOAD_SOUND);
@@ -81,8 +85,9 @@ public class BigRedButton extends Weapon {
 	@Override
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
-			double damage = BigRedButton.DAMAGE + (BigRedButton.DAMAGE * (player.getAttributes().getInt("damageUp") * 0.10));
-			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), damage, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS);
+			double dmg = damage.roll();
+			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
+			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
 		
@@ -132,8 +137,8 @@ public class BigRedButton extends Weapon {
 	}
 
 	@Override
-	public double getDamage() {
-		return BigRedButton.DAMAGE;
+	public Pair<Integer> getDamage() {
+		return damage.getRange();
 	}
 	
 	@Override

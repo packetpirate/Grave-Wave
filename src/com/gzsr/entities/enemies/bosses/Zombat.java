@@ -30,6 +30,7 @@ public class Zombat extends Boss {
 			.addItem(Powerups.Type.HEALTH, 1.0f)
 			.addItem(Powerups.Type.AMMO, 0.75f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.50f)
+			.addItem(Powerups.Type.CRIT_CHANCE, 0.25f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.50f);
 	
 	private boolean siphoningBlood;

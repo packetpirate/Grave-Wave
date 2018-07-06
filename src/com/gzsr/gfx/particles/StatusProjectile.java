@@ -23,8 +23,8 @@ public class StatusProjectile extends Projectile {
 		}
 	}
 	
-	public StatusProjectile(Particle p, double damage_, StatusEffect effect_) {
-		super(p, damage_);
+	public StatusProjectile(Particle p, double damage_, boolean critical_, StatusEffect effect_) {
+		super(p, damage_, critical_);
 		this.effect = effect_;
 	}
 }

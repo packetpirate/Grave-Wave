@@ -19,7 +19,7 @@ public class LaserNode extends Projectile {
 	private double durability;
 	
 	public LaserNode(Particle p) {
-		super(p, 0.0);
+		super(p, 0.0, false);
 		
 		this.other = null;
 		this.durability = LaserNode.DURABILITY_MAX;

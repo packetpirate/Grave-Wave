@@ -35,6 +35,7 @@ public class Upchuck extends Enemy {
 			.addItem(Powerups.Type.HEALTH, 0.20f)
 			.addItem(Powerups.Type.AMMO, 0.20f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
+			.addItem(Powerups.Type.CRIT_CHANCE, 0.10f)
 			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.10f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.15f)
 			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
@@ -119,7 +120,7 @@ public class Upchuck extends Enemy {
 				Particle particle = new Particle("GZS_AcidParticle2", color, position, velocity, angle,
 												 angularVel, new Pair<Float>(width, height), 
 												 lifespan, cTime);
-				Projectile projectile = new Projectile(particle, Upchuck.BILE_DAMAGE);
+				Projectile projectile = new Projectile(particle, Upchuck.BILE_DAMAGE, false);
 				bile.add(projectile);
 			}
 			lastBile = cTime;

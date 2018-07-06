@@ -102,8 +102,8 @@ public class LaserBarrier extends Weapon {
 	}
 	
 	@Override
-	public double getDamage() {
-		return 0.0;
+	public Pair<Integer> getDamage() {
+		return new Pair<Integer>(0, 0);
 	}
 	
 	@Override

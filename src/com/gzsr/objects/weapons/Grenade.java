@@ -22,7 +22,7 @@ public class Grenade extends Projectile {
 	private boolean exploded;
 	
 	public Grenade(Particle p_, Explosion exp_) {
-		super(p_, 0.0);
+		super(p_, 0.0, false);
 		this.explode = AssetManager.getManager().getSound("explosion2");
 		this.exp = exp_;
 		this.exploded = false;

@@ -21,6 +21,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.RotationLerp;
 import com.gzsr.states.GameState;
@@ -30,7 +31,8 @@ public class Turret extends Projectile {
 	private static final long TURRET_LIFESPAN = 60_000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
-	private static final double PROJECTILE_DAMAGE = 25.0;
+	private static final int MIN_DAMAGE_COUNT = 1;
+	private static final int MIN_DAMAGE_SIDES = 8;
 	private static final float FIRING_RANGE = 250.0f;
 	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
@@ -40,14 +42,18 @@ public class Turret extends Projectile {
 	private Shape collider;
 	private RotationLerp lerp;
 	private Enemy target;
+	
 	private double health;
 	private void takeDamage(double amnt) { health -= amnt; }
+	
+	private Dice dice;
+	
 	private List<Projectile> projectiles;
 	public List<Projectile> getProjectiles() { return projectiles; }
 	private long created, lastProjectile;
 
 	public Turret(Particle p) {
-		super(p, 0.0);
+		super(p, 0.0, false);
 		
 		this.fireSound = AssetManager.getManager().getSound(Turret.FIRE_SOUND);
 		this.collider = new Circle(position.x, position.y, 36.0f);
@@ -56,6 +62,7 @@ public class Turret extends Projectile {
 		this.target = null;
 		
 		this.health = Turret.HEALTH_MAX;
+		this.dice = new Dice(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES);
 		
 		this.projectiles = new ArrayList<Projectile>();
 		
@@ -155,16 +162,19 @@ public class Turret extends Projectile {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double damage = Turret.PROJECTILE_DAMAGE + (Turret.PROJECTILE_DAMAGE * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
-		Projectile projectile = new Projectile(particle, damage);
+		double dmg = dice.roll();
+		dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
+		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
+		
+		Projectile projectile = new Projectile(particle, dmg, critical);
 		
 		projectiles.add(projectile);
 		lastProjectile = cTime;
 		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
-	public static double getTotalDamage() {
-		return Turret.PROJECTILE_DAMAGE;
+	public static Pair<Integer> getTotalDamage() {
+		return new Dice(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES).getRange();
 	}
 	
 	@Override

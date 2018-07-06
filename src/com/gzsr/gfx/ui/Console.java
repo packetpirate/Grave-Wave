@@ -27,6 +27,7 @@ import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
+import com.gzsr.objects.items.CritChanceItem;
 import com.gzsr.objects.items.ExpMultiplierItem;
 import com.gzsr.objects.items.ExtraLife;
 import com.gzsr.objects.items.HealthKit;
@@ -172,6 +173,9 @@ public class Console implements Entity {
 						} else if(itemName.equals("life")) {
 							ExtraLife el = new ExtraLife(pos, cTime);
 							gs.addEntity(String.format("life%d", id), el);
+						} else if(itemName.equals("critchance")) {
+							CritChanceItem crit = new CritChanceItem(pos, cTime);
+							gs.addEntity(String.format("crit%d", id), crit);
 						} else if(itemName.equals("expmult")) {
 							ExpMultiplierItem exp = new ExpMultiplierItem(pos, cTime);
 							gs.addEntity(String.format("exp%d", id), exp);

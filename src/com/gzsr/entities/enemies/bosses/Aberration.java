@@ -37,6 +37,7 @@ public class Aberration extends Boss {
 			.addItem(Powerups.Type.HEALTH, 1.0f)
 			.addItem(Powerups.Type.AMMO, 1.0f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.60f)
+			.addItem(Powerups.Type.CRIT_CHANCE, 0.20f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.40f);
 	
 	private List<Projectile> bile;
@@ -102,7 +103,7 @@ public class Aberration extends Boss {
 				Particle particle = new Particle("GZS_AcidParticle2", color, position, velocity, angle,
 												 angularVel, new Pair<Float>(width, height), 
 												 lifespan, cTime);
-				Projectile projectile = new Projectile(particle, Aberration.BILE_DAMAGE);
+				Projectile projectile = new Projectile(particle, Aberration.BILE_DAMAGE, false);
 				bile.add(projectile);
 			}
 			lastBile = cTime;

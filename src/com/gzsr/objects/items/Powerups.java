@@ -12,6 +12,7 @@ public class Powerups {
 		HEALTH("health"),
 		AMMO("ammo"),
 		EXTRA_LIFE("life"),
+		CRIT_CHANCE("crit"),
 		EXP_MULTIPLIER("exp"),
 		INVULNERABILITY("invuln"),
 		NIGHT_VISION("nightvision"),
@@ -42,6 +43,9 @@ public class Powerups {
 						break;
 					case EXTRA_LIFE:
 						item = new ExtraLife(position, cTime);
+						break;
+					case CRIT_CHANCE:
+						item = new CritChanceItem(position, cTime);
 						break;
 					case EXP_MULTIPLIER:
 						item = new ExpMultiplierItem(position, cTime);

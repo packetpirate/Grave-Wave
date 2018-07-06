@@ -54,7 +54,7 @@ public class SentryWeapon extends Weapon {
 	}
 
 	@Override
-	public double getDamage() {
+	public Pair<Integer> getDamage() {
 		return Turret.getTotalDamage(); 
 	}
 	
