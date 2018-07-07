@@ -455,10 +455,9 @@ public class Player implements Entity {
 							sp.applyEffect(enemy, cTime);
 						}
 						
-						// TODO: Change to include powerup crit chance modifiers.
 						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 						double totalDamage = (p.getDamage() * damagePercentage);
-						enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
+						if(totalDamage > 0.0) enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 					}
 					
 					return true;

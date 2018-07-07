@@ -15,7 +15,6 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.TinyZumby;
 import com.gzsr.gfx.Animation;
-import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 import com.gzsr.status.StatusEffect;
@@ -33,6 +32,8 @@ public class Explosion implements Entity {
 	public void setPosition(Pair<Float> newPos) {
 		position.x = newPos.x;
 		position.y = newPos.y;
+		bounds.setCenterX(position.x);
+		bounds.setCenterY(position.y);
 	}
 	private Shape bounds;
 	public Shape getCollider() { return bounds; }
@@ -106,9 +107,8 @@ public class Explosion implements Entity {
 		if(!entitiesAffected.contains(e)) {
 			// If damage is taken, calculate damage based on distance from source.
 			if(e instanceof Player) {
-				float dist = Calculate.Distance(position, Player.getPlayer().getPosition());
 				if(Player.getPlayer().getCollider().intersects(getCollider())) {
-					Player.getPlayer().takeDamage(damage * (1.0f - (dist / radius)), cTime);
+					Player.getPlayer().takeDamage(damage, cTime);
 					if(status != null) Player.getPlayer().addStatus(status, status.getDuration());
 					entitiesAffected.add(Player.getPlayer());
 					return true;
@@ -117,9 +117,8 @@ public class Explosion implements Entity {
 				// TODO: Add support for adding status effect to an enemy.
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
-					float dist = Calculate.Distance(position, en.getPosition());
 					if(en.getCollider().intersects(getCollider())) {
-						en.takeDamage((damage * (1.0f - (dist / radius))), knockback, cTime, delta);
+						en.takeDamage(damage, knockback, cTime, delta);
 						entitiesAffected.add(en);
 						return true;
 					} else return false;
