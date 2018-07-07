@@ -48,6 +48,7 @@ public class Slider implements Entity {
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		
 	}
 
 	@Override
