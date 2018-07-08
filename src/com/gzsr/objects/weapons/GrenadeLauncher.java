@@ -22,8 +22,9 @@ public class GrenadeLauncher extends Weapon {
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
-	private static final int MIN_DAMAGE_COUNT = 10;
+	private static final int MIN_DAMAGE_COUNT = 5;
 	private static final int MIN_DAMAGE_SIDES = 10;
+	private static final int MIN_DAMAGE_MOD = 50;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
@@ -73,7 +74,9 @@ public class GrenadeLauncher extends Weapon {
 		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		double dmg = damage.roll();
+		
+		boolean critical = isCritical();
+		double dmg = damage.roll(GrenadeLauncher.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
 
@@ -89,7 +92,7 @@ public class GrenadeLauncher extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		return damage.getRange(GrenadeLauncher.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

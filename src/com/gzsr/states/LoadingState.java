@@ -115,6 +115,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Background6.png",
 			"images/GZS_Background02.png",
 			"images/GZS_DeathScreen.png",
+			"images/GZS_Joe-Portrait.png",
 			"images/GZS_Player.png",
 			"images/GZS_Crosshair.png",
 			// Item Images
@@ -169,12 +170,12 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_PoisonExplosion.png",
 			"images/GZS_BloodExplosion.png",
 			// Misc Images
+			"images/GZS_Backpack.png",
 			"images/GZS_SkillUpButton.png",
 			"images/GZS_SkillDownButton.png",
 			"images/GZS_BuyButton2.png",
 			"images/GZS_SellButton2.png",
-			"images/GZS_AmmoButton.png",
-			"images/GZS_Keyboard_Layout.png"
+			"images/GZS_AmmoButton.png"
 		};
 		
 		for(String asset : assetList) {

@@ -33,6 +33,7 @@ public class Turret extends Projectile {
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
 	private static final int MIN_DAMAGE_COUNT = 1;
 	private static final int MIN_DAMAGE_SIDES = 8;
+	private static final int MIN_DAMAGE_MOD = 4;
 	private static final float FIRING_RANGE = 250.0f;
 	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
@@ -162,9 +163,9 @@ public class Turret extends Projectile {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double dmg = dice.roll();
-		dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
+		double dmg = dice.roll(Turret.MIN_DAMAGE_MOD, critical);
+		dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 		
 		Projectile projectile = new Projectile(particle, dmg, critical);
 		
@@ -174,7 +175,7 @@ public class Turret extends Projectile {
 	}
 	
 	public static Pair<Integer> getTotalDamage() {
-		return new Dice(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES).getRange();
+		return Dice.getRange(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES, Turret.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

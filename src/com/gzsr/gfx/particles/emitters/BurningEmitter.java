@@ -1,24 +1,29 @@
-package com.gzsr.gfx.particles;
+package com.gzsr.gfx.particles.emitters;
 
 import org.newdawn.slick.Color;
 
 import com.gzsr.Globals;
+import com.gzsr.gfx.ColorGenerator;
+import com.gzsr.gfx.particles.Emitter;
+import com.gzsr.gfx.particles.Particle;
 import com.gzsr.misc.Pair;
 
 public class BurningEmitter extends Emitter {
 	private static final float VELOCITY = 0.2f;
-	private static final Pair<Float> SIZE = new Pair<Float>(4.0f, 4.0f);
+	private static final Pair<Float> SIZE = new Pair<Float>(8.0f, 8.0f);
 	
 	private float burnRadius;
 	public void setBurnRadius(float burnRadius_) { this.burnRadius = burnRadius_; }
 	
 	public BurningEmitter(Pair<Float> position_) {
-		super(position_, BurningEmitter.generateTemplate(), 50L);
+		super(position_, BurningEmitter.generateTemplate(), 25L);
 		this.burnRadius = 0.0f;
 	}
 	
 	private static Particle generateTemplate() {
-		return new Particle(new Color(0xAAFF9F2B), Pair.ZERO, VELOCITY, 0.0f, 0.0f, SIZE, 500L, 0L);
+		Color start = new Color(0xAAFFC700);
+		Color end = new Color(0xAABA1200);
+		return new Particle(new ColorGenerator(start, end), Pair.ZERO, VELOCITY, 0.0f, 0.0f, SIZE, 500L, 0L);
 	}
 	
 	@Override

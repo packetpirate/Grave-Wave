@@ -44,6 +44,7 @@ public class SentryWeapon extends Weapon {
 		Particle particle = new Particle(color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
+		
 		Turret turret = new Turret(particle);
 		projectiles.add(turret);
 		

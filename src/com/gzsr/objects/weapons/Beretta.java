@@ -18,13 +18,14 @@ import com.gzsr.status.Status;
 
 public class Beretta extends Weapon {
 	private static final int AMMO_PRICE = 100;
-	private static final long COOLDOWN = 250L;
+	private static final long COOLDOWN = 500L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
 	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 6;
+	private static final int MIN_DAMAGE_SIDES = 12;
+	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_Popgun";
 	private static final String FIRE_SOUND = "shoot4";
@@ -83,10 +84,11 @@ public class Beretta extends Weapon {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double dmg = damage.roll();
+		boolean critical = isCritical();
+		double dmg = damage.roll(Beretta.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
-		Projectile projectile = new Projectile(particle, dmg, isCritical());
+		Projectile projectile = new Projectile(particle, dmg, critical);
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
@@ -98,7 +100,7 @@ public class Beretta extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		return damage.getRange(Beretta.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

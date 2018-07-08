@@ -27,8 +27,8 @@ public class Aberration extends Boss {
 	private static final int SPAWN_COST = 25;
 	private static final int MIN_HEALTH_COUNT = 25;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 250;
-	private static final float SPEED = 0.10f;
+	private static final int MIN_HEALTH_MOD = 750;
+	private static final float SPEED = 0.15f;
 	private static final float DPS = 20.0f;
 	private static final float BILE_DAMAGE = 1.0f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 9);

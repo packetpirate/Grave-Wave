@@ -28,6 +28,7 @@ public class Mossberg extends Weapon {
 	private static final long RELOAD_TIME = 2_500L;
 	private static final int MIN_DAMAGE_COUNT = 1;
 	private static final int MIN_DAMAGE_SIDES = 6;
+	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 5.0f;
 	private static final String ICON_NAME = "GZS_Boomstick";
 	private static final String FIRE_SOUND = "shotgun1";
@@ -77,10 +78,11 @@ public class Mossberg extends Weapon {
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			
-			double dmg = damage.roll();
+			boolean critical = isCritical();
+			double dmg = damage.roll(Mossberg.MIN_DAMAGE_MOD, critical);
 			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 			
-			Projectile projectile = new Projectile(particle, dmg, isCritical());
+			Projectile projectile = new Projectile(particle, dmg, critical);
 			projectiles.add(projectile);
 		}
 		
@@ -93,7 +95,10 @@ public class Mossberg extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		Pair<Integer> range = damage.getRange(Mossberg.MIN_DAMAGE_MOD);
+		range.x *= Mossberg.SHOT_COUNT;
+		range.y *= Mossberg.SHOT_COUNT;
+		return range;
 	}
 	
 	@Override

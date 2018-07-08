@@ -93,7 +93,7 @@ public class EnemyController implements Entity {
 			Stitches st = new Stitches(spawnPos);
 			unborn.add(st);
 		} else if((wave % Zombat.appearsOnWave()) == 0) {
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < 3; i++) {
 				Pair<Float> spawnPos = getSpawnPosition();
 				Zombat zb = new Zombat(spawnPos);
 				unborn.add(zb);

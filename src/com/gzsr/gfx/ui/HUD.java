@@ -12,6 +12,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
@@ -211,10 +212,30 @@ public class HUD {
 			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(Player.getPlayer().getAttributes().getInt("money")));
 			float w = g.getFont().getWidth(money);
 			float h = g.getFont().getLineHeight();
-			float x = (Globals.WIDTH - w - 20.0f);
+			float x = ((Globals.WIDTH / 2) - (w / 2));
 			float y = (Globals.HEIGHT - h - 20.0f);
 			FontUtils.drawCenter(g.getFont(), money, (int)x, (int)y, (int)w, Color.white);
 		} // End Player Money Drawing
+		
+		{ // Draw Shop and Training Screen Icons
+			g.setColor(Color.white);
+			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+			
+			// Draw the character portrait on the far right.
+			float w1 = g.getFont().getWidth(Controls.Layout.TRAIN_SCREEN.getDisplay());
+			float h = g.getFont().getLineHeight();
+			g.drawString(Controls.Layout.TRAIN_SCREEN.getDisplay(), (Globals.WIDTH - w1 - 20.0f), (Globals.HEIGHT - h - 20.0f));
+			
+			Image character = AssetManager.getManager().getImage("GZS_Joe-Portrait");
+			character.draw((Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f)), (Globals.HEIGHT - ((character.getHeight() / 2) + 20.0f)), 0.5f);
+			
+			// Draw the backpack to the left of that.
+			float w2 = g.getFont().getWidth(Controls.Layout.SHOP_SCREEN.getDisplay());
+			g.drawString(Controls.Layout.SHOP_SCREEN.getDisplay(), (Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 40.0f)), (Globals.HEIGHT - h - 20.0f));
+			
+			Image backpack = AssetManager.getManager().getImage("GZS_Backpack");
+			backpack.draw((Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 30.0f) - ((backpack.getWidth() / 2) + 20.0f)), (Globals.HEIGHT - ((backpack.getHeight() / 2) + 20.0f)), 0.5f);
+		} // End drawing shop and training icons.
 		
 		// If Player.getPlayer() is respawning, draw the countdown.
 		if(Player.getPlayer().isRespawning()) {

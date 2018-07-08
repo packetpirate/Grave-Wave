@@ -26,6 +26,7 @@ public class AK47 extends Weapon {
 	private static final long RELOAD_TIME = 2_000L;
 	private static final int MIN_DAMAGE_COUNT = 1;
 	private static final int MIN_DAMAGE_SIDES = 10;
+	private static final int MIN_DAMAGE_MOD = 4;
 	private static final float KNOCKBACK = 1.0f;
 	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
 	private static final String ICON_NAME = "GZS_RTPS";
@@ -71,7 +72,8 @@ public class AK47 extends Weapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		
-		double dmg = damage.roll();
+		boolean critical = isCritical();
+		double dmg = damage.roll(AK47.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
@@ -79,7 +81,7 @@ public class AK47 extends Weapon {
 		Particle particle = new Particle(color, position, velocity, (theta + deviation),
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		Projectile projectile = new Projectile(particle, dmg, isCritical());
+		Projectile projectile = new Projectile(particle, dmg, critical);
 		
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -91,7 +93,7 @@ public class AK47 extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		return damage.getRange(AK47.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

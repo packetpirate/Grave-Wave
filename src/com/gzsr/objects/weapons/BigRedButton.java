@@ -28,8 +28,9 @@ public class BigRedButton extends Weapon {
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 0L;
-	private static final int MIN_DAMAGE_COUNT = 10;
+	private static final int MIN_DAMAGE_COUNT = 5;
 	private static final int MIN_DAMAGE_SIDES = 10;
+	private static final int MIN_DAMAGE_MOD = 50;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final long EXP_DELAY = 500L;
@@ -85,8 +86,12 @@ public class BigRedButton extends Weapon {
 	@Override
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
-			double dmg = damage.roll();
+			boolean critical = isCritical();
+			
+			double dmg = damage.roll(BigRedButton.MIN_DAMAGE_MOD, critical);
 			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
+			if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
+			
 			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS);
 			explosions.add(exp);
 		}
@@ -138,7 +143,7 @@ public class BigRedButton extends Weapon {
 
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		return damage.getRange(BigRedButton.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

@@ -26,6 +26,11 @@ public class Dice {
 		return new Pair<Integer>((count + modifier), high);
 	}
 	
+	public static Pair<Integer> getRange(int count, int sides, int modifier) {
+		int high = (count * sides) + modifier;
+		return new Pair<Integer>((count + modifier), high);
+	}
+	
 	public int roll() {
 		return roll(0);
 	}
@@ -39,6 +44,12 @@ public class Dice {
 	}
 	
 	public static int roll(int count, int sides, int modifier) {
+		return roll(count, sides, modifier, false);
+	}
+	
+	public static int roll(int count, int sides, int modifier, boolean critical) {
+		if(critical) return ((count * sides) + modifier);
+		
 		int total = 0;
 		
 		for(int i = 0; i < count; i++) {

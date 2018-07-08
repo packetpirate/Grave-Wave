@@ -11,7 +11,6 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
@@ -19,8 +18,6 @@ public class ClaymoreWeapon extends Weapon {
 	private static final int PRICE = 1_200;
 	private static final int AMMO_PRICE = 250;
 	private static final long COOLDOWN = 1_500L;
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 8;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 8;
@@ -36,8 +33,6 @@ public class ClaymoreWeapon extends Weapon {
 		
 		AssetManager assets = AssetManager.getManager();
 		
-		this.damage = new Dice(ClaymoreWeapon.MIN_DAMAGE_COUNT, ClaymoreWeapon.MIN_DAMAGE_SIDES);
-		
 		this.fireSound = assets.getSound(ClaymoreWeapon.FIRE_SOUND);
 		this.reloadSound = assets.getSound(ClaymoreWeapon.RELOAD_SOUND);
 	}
@@ -52,7 +47,7 @@ public class ClaymoreWeapon extends Weapon {
 		Particle particle = new Particle(ClaymoreWeapon.PARTICLE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		Claymore clay = new Claymore(particle, damage.roll());
+		Claymore clay = new Claymore(particle);
 		projectiles.add(clay);
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -63,8 +58,7 @@ public class ClaymoreWeapon extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		Pair<Integer> range = damage.getRange();
-		return new Pair<Integer>((range.x * Claymore.getShrapnelCount()), (range.y * Claymore.getShrapnelCount()));
+		return Claymore.getDamageRange();
 	}
 
 	@Override

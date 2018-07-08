@@ -12,6 +12,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.gfx.ColorGenerator;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -21,6 +22,9 @@ public class Particle implements Entity {
 	public Image getImage() { return AssetManager.getManager().getImage(image); }
 	protected Color color;
 	public Color getColor() { return color; }
+	protected ColorGenerator colorGenerator;
+	public ColorGenerator getColorGenerator() { return colorGenerator; }
+	
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -29,6 +33,7 @@ public class Particle implements Entity {
 	}
 	protected Shape bounds;
 	public Shape getCollider() { return bounds; }
+	
 	protected float velocity;
 	public float getVelocity() { return velocity; }
 	public void setVelocity(float velocity_) { velocity = velocity_; }
@@ -39,6 +44,7 @@ public class Particle implements Entity {
 	public float getAngularVelocity() { return angularVelocity; }
 	protected Pair<Float> size;
 	public Pair<Float> getSize() { return size; }
+	
 	protected long lifespan;
 	public long getLifespan() { return lifespan; }
 	public boolean isAlive(long cTime) {
@@ -48,6 +54,7 @@ public class Particle implements Entity {
 	protected long created;
 	public long getCreated() { return created; }
 	public void setCreated(long created_) { created = created_; }
+	
 	protected boolean collision;
 	public void collide() { collision = true; }
 	
@@ -74,10 +81,34 @@ public class Particle implements Entity {
 		resetBounds();
 	}
 	
+	public Particle(ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_, float theta_, 
+				float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
+		this(null, colorGenerator_, position_, velocity_, theta_, 
+			 angularVelocity_, size_, lifespan_, created_);
+	}
+	
+	public Particle(String image_, ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_,
+				float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
+				long created_) {
+		this.image = image_;
+		this.colorGenerator = colorGenerator_;
+		this.position = position_;
+		this.velocity = velocity_;
+		this.theta = theta_;
+		this.angularVelocity = angularVelocity_;
+		this.size = size_;
+		this.lifespan = lifespan_;
+		this.created = created_;
+		this.collision = false;
+		
+		resetBounds();
+	}
+	
 	public Particle(Particle p) {
 		// Copy constructor.
 		this.image = p.getImageName();
 		this.color = p.getColor();
+		this.colorGenerator = p.getColorGenerator();
 		this.position = new Pair<Float>(p.getPosition().x, p.getPosition().y);
 		this.velocity = p.getVelocity();
 		this.theta = p.getTheta();
@@ -115,7 +146,8 @@ public class Particle implements Entity {
 			float x = position.x - (size.x / 2);
 			float y = position.y - (size.y / 2);
 			
-			g.setColor(color);
+			if(colorGenerator == null) g.setColor(color);
+			else g.setColor(colorGenerator.generate());
 			g.fillRect(x, y, size.x, size.y);
 		}
 		

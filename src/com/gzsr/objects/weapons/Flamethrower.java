@@ -11,7 +11,6 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
@@ -26,8 +25,6 @@ public class Flamethrower extends Weapon {
 	private static final long RELOAD_TIME = 3_000L;
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
 	private static final String PROJECTILE_NAME = "GZS_FireParticle";
 	private static final String FIRE_SOUND = "flamethrower2";
@@ -37,8 +34,6 @@ public class Flamethrower extends Weapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Flamethrower.MIN_DAMAGE_COUNT, Flamethrower.MIN_DAMAGE_SIDES);
 		
 		this.fireSound = assets.getSound(Flamethrower.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Flamethrower.RELOAD_SOUND);
@@ -67,10 +62,7 @@ public class Flamethrower extends Weapon {
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			
-			double dmg = damage.roll();
-			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
-			
-			StatusProjectile projectile = new StatusProjectile(particle, dmg, isCritical(), new BurningEffect(cTime));
+			StatusProjectile projectile = new StatusProjectile(particle, 0.0, false, new BurningEffect(cTime));
 			projectiles.add(projectile);
 		}
 		
@@ -81,8 +73,7 @@ public class Flamethrower extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		Pair<Integer> range = damage.getRange();
-		return new Pair<Integer>((range.x * Flamethrower.EMBER_COUNT), (range.y * Flamethrower.EMBER_COUNT));
+		return BurningEffect.getDamageRange();
 	}
 	
 	@Override

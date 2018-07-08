@@ -20,6 +20,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -27,6 +28,9 @@ public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);
 	private static final int SHRAPNEL_COUNT = 50;
 	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
+	private static final int MIN_DAMAGE_COUNT = 2;
+	private static final int MIN_DAMAGE_SIDES = 8;
+	private static final int MIN_DAMAGE_MOD = 2;
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
 	
@@ -37,8 +41,8 @@ public class Claymore extends Projectile {
 	private boolean exploded;
 	private boolean shrapnelCreated;
 	
-	public Claymore(Particle p_, double damage_) {
-		super(p_, damage_, false);
+	public Claymore(Particle p_) {
+		super(p_, 0.0, false);
 		
 		this.explosion = AssetManager.getManager().getSound(Claymore.EXP_SOUND);
 		
@@ -86,9 +90,11 @@ public class Claymore extends Projectile {
 												 0.0f, new Pair<Float>(width, height), 
 												 lifespan, cTime);
 				
-				double dmg = (getDamage() + (getDamage() * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10)));
+				boolean critical = isCritical();
+				double dmg = Dice.roll(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD, critical);
+				dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 				
-				Projectile projectile = new Projectile(particle, dmg, isCritical());
+				Projectile projectile = new Projectile(particle, dmg, critical);
 				
 				shrapnel.add(projectile);
 				shrapnelCreated = true;
@@ -121,6 +127,13 @@ public class Claymore extends Projectile {
 			// Draw the shrapnel particles.
 			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(g, cTime));
 		}
+	}
+	
+	public static Pair<Integer> getDamageRange() {
+		Pair<Integer> range = Dice.getRange(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD);
+		range.x *= Claymore.SHRAPNEL_COUNT;
+		range.y *= Claymore.SHRAPNEL_COUNT;
+		return range;
 	}
 	
 	public static int getShrapnelCount() {

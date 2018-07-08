@@ -21,7 +21,7 @@ public class Zombat extends Boss {
 	private static final int SPAWN_COST = 12;
 	private static final int MIN_HEALTH_COUNT = 10;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 100;
+	private static final int MIN_HEALTH_MOD = 400;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
 	private static final float SIPHON_RATE = 0.15f;

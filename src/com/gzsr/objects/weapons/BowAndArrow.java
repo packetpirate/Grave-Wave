@@ -22,8 +22,9 @@ public class BowAndArrow extends Weapon {
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 3;
-	private static final int MIN_DAMAGE_COUNT = 3;
+	private static final int MIN_DAMAGE_COUNT = 2;
 	private static final int MIN_DAMAGE_SIDES = 10;
+	private static final int MIN_DAMAGE_MOD = 10;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.00075f;
 	private static final String ICON_NAME = "GZS_Bow";
@@ -104,10 +105,11 @@ public class BowAndArrow extends Weapon {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		double dmg = damage.roll();
+		boolean critical = isCritical();
+		double dmg = damage.roll(BowAndArrow.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
-		Projectile projectile = new Projectile(particle, dmg, isCritical());
+		Projectile projectile = new Projectile(particle, dmg, critical);
 		
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
@@ -138,7 +140,7 @@ public class BowAndArrow extends Weapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		return damage.getRange();
+		return damage.getRange(BowAndArrow.MIN_DAMAGE_MOD);
 	}
 	
 	@Override

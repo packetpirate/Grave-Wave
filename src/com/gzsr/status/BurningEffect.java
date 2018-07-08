@@ -6,29 +6,29 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.particles.BurningEmitter;
+import com.gzsr.gfx.particles.emitters.BurningEmitter;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class BurningEffect extends StatusEffect {
-	public static final double DPS_INC = 0.25;
-	public static final double MAX_DPS = 40.0;
+	private static final int MIN_DAMAGE_COUNT = 1;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final int MIN_DAMAGE_MOD = 2;
 	public static final long DURATION = 5000L;
-	public static final long DAMAGE_INTERVAL = 1000L;
+	public static final long DAMAGE_INTERVAL = 100L;
 	
 	private BurningEmitter emitter;
-	private double cDamage;
+	private Dice damage;
 	
-	private double cumulativeDamage;
 	private long lastDamage;
 	
 	public BurningEffect(long created_) {
 		super(Status.BURNING, DURATION, created_);
 		
 		this.emitter = new BurningEmitter(Pair.ZERO);
-		this.cDamage = 0.0;
+		this.damage = new Dice(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES);
 		
-		this.cumulativeDamage = 0.0;
 		this.lastDamage = 0L;
 	}
 	
@@ -64,17 +64,20 @@ public class BurningEffect extends StatusEffect {
 			if(e instanceof Enemy) {
 				Enemy enemy = (Enemy) e;
 				long elapsed = cTime - lastDamage;
-				double totalDamage = (cDamage + (cDamage * Player.getPlayer().getAttributes().getInt("damageUp") * 0.10)) / (1000L / Globals.STEP_TIME);
-				cumulativeDamage += totalDamage;
 				
 				if(elapsed >= DAMAGE_INTERVAL) {
-					enemy.takeDamage(cumulativeDamage, 0.0f, 0.0f, cTime, 0, false);
-					cumulativeDamage = 0.0;
+					boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
+					double dmg = damage.roll(BurningEffect.MIN_DAMAGE_MOD);
+					dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
+					if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
+					
+					enemy.takeDamage(dmg, 0.0f, 0.0f, cTime, 0, false);
 					lastDamage = cTime;
 				}
 			} else if(e instanceof Player) {
 				Player player = (Player) e;
-				player.takeDamage(cDamage / (1000L / Globals.STEP_TIME), cTime);
+				double dmg = damage.roll(BurningEffect.MIN_DAMAGE_MOD);
+				player.takeDamage(dmg, cTime);
 			}
 		}
 	}
@@ -84,12 +87,15 @@ public class BurningEffect extends StatusEffect {
 		if(emitter.isEmitting()) emitter.render(g, cTime);
 	}
 	
+	public static Pair<Integer> getDamageRange() {
+		return Dice.getRange(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES, BurningEffect.MIN_DAMAGE_MOD);
+	}
+	
 	@Override
 	public void refresh(long cTime) {
 		super.refresh(cTime);
 		
-		// Add the DPS increment to the current DPS until we hit our max (fire gets more intense).
-		if(cDamage <= (MAX_DPS - DPS_INC)) cDamage += DPS_INC;
+		
 	}
 
 	@Override
