@@ -20,9 +20,9 @@ import com.gzsr.status.StatusEffect;
 public class Gasbag extends Enemy {
 	public static final int FIRST_WAVE = 8;
 	private static final int SPAWN_COST = 5;
-	private static final int MIN_HEALTH_COUNT = 2;
+	private static final int MIN_HEALTH_COUNT = 3;
 	private static final int MIN_HEALTH_SIDES = 8;
-	private static final int MIN_HEALTH_MOD = 4;
+	private static final int MIN_HEALTH_MOD = 8;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 0.5f;
 	private static final float ATTACK_DIST = 100.0f;

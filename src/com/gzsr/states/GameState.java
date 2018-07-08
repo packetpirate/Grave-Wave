@@ -27,6 +27,7 @@ import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.gfx.ui.HUD;
 import com.gzsr.gfx.ui.MenuButton;
@@ -116,6 +117,12 @@ public class GameState extends BasicGameState implements InputListener {
 						if(item.isActive(time)) {
 							player.checkItem(item, time);
 						} else it.remove();
+					} else if(pair.getValue() instanceof Particle) {
+						Particle p = (Particle) pair.getValue();
+						if(!p.isActive(time)) {
+							p.onDestroy(this, time);
+							it.remove();
+						}
 					}
 				}
 				

@@ -203,11 +203,14 @@ public class Console implements Entity {
 						} else if(attributeName.equals("money")) {
 							int money = Integer.parseInt(tokens[2]);
 							Player.getPlayer().getAttributes().set("money", money);
-						} else if(attributeName.equals("experience")) {
-							int exp = Integer.parseInt(tokens[2]);
-							Player.getPlayer().addExperience(gs, exp, 0L);
 						} else {
 							pastCommands.add("  ERROR: Invalid attribute specified.");
+						}
+					} else if(command.equals("levelup") && (args == 1)) {
+						int levels = Integer.parseInt(tokens[1]);
+						for(int i = 0; i < levels; i++) {
+							int toLevel = Player.getPlayer().getAttributes().getInt("expToLevel");
+							Player.getPlayer().addExperience(gs, toLevel, pauseTime);
 						}
 					} else if(command.equals("explode") && (args == 4)) {
 						try {

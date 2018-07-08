@@ -19,9 +19,9 @@ import com.gzsr.status.StatusEffect;
 public class BigMama extends Enemy {
 	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 10;
-	private static final int MIN_HEALTH_COUNT = 3;
+	private static final int MIN_HEALTH_COUNT = 2;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 10;
+	private static final int MIN_HEALTH_MOD = 30;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 0.0f;
 	private static final long LIFESPAN = 10_000L;

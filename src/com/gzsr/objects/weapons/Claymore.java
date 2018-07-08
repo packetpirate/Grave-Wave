@@ -19,6 +19,7 @@ import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
@@ -70,7 +71,7 @@ public class Claymore extends Projectile {
 			while(it.hasNext()) {
 				Enemy e = it.next();
 				if(checkRange(e)) {
-					collide();
+					collide((GameState)gs, e, cTime);
 					exploded = true;
 					explosion.play(1.0f, AssetManager.getManager().getSoundVolume());
 				}
@@ -94,7 +95,7 @@ public class Claymore extends Projectile {
 				double dmg = Dice.roll(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD, critical);
 				dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 				
-				Projectile projectile = new Projectile(particle, dmg, critical);
+				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 				
 				shrapnel.add(projectile);
 				shrapnelCreated = true;

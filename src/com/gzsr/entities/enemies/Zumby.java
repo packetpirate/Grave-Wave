@@ -12,6 +12,7 @@ public class Zumby extends Enemy {
 	private static final int SPAWN_COST = 1;
 	private static final int MIN_HEALTH_COUNT = 2;
 	private static final int MIN_HEALTH_SIDES = 8;
+	private static final int MIN_HEALTH_MOD = 12;
 	private static final float SPEED = 0.10f;
 	private static final float DPS = 5.0f;
 	
@@ -21,7 +22,7 @@ public class Zumby extends Enemy {
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
-		this.health = Dice.roll(Zumby.MIN_HEALTH_COUNT, Zumby.MIN_HEALTH_SIDES, 0);
+		this.health = Dice.roll(Zumby.MIN_HEALTH_COUNT, Zumby.MIN_HEALTH_SIDES, Zumby.MIN_HEALTH_MOD);
 	}
 
 	@Override

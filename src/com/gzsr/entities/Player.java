@@ -393,11 +393,14 @@ public class Player implements Entity {
 			attributes.addTo("skillPoints", 1);
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
-				String key = String.format("vanishText%d", Globals.generateEntityID());
-				VanishingText vt = new VanishingText("Ding!", "PressStart2P-Regular_small", 
-													 new Pair<Float>(position.x, (position.y - 32.0f)), Color.white, 
-													 cTime, 2_000L);
-				GameState.addVanishingText(key, vt);
+				VanishingText ding = new VanishingText("Ding!", "PressStart2P-Regular_small", 
+													   new Pair<Float>(0.0f, -32.0f), Color.white, 
+													   cTime, 2_000L, true);
+				VanishingText reminder = new VanishingText(String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay()), 
+														   "PressStart2P-Regular_small", new Pair<Float>(0.0f, 32.0f), 
+														   Color.white, cTime, 2_000L, true);
+				GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), ding);
+				GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), reminder);
 			}
 			
 			{ // Random chance for the enemies to say "Gratz!".
@@ -436,7 +439,7 @@ public class Player implements Entity {
 	 * @param enemy The enemy to test against the projectiles.
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
-	public boolean checkProjectiles(Enemy enemy, long cTime, int delta) {
+	public boolean checkProjectiles(GameState gs, Enemy enemy, long cTime, int delta) {
 		for(Weapon w : getWeapons()) {
 			Iterator<Projectile> it = w.getProjectiles().iterator();
 			while(it.hasNext()) {
@@ -447,7 +450,7 @@ public class Player implements Entity {
 						node.damage(enemy.getDamage());
 						enemy.blockMovement();
 					} else {
-						p.collide();
+						p.collide(gs, enemy, cTime);
 						
 						// If this is a special projectile, apply its status effect to the target.
 						if(p instanceof StatusProjectile) {

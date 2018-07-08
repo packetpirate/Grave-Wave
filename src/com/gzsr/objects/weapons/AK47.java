@@ -12,6 +12,7 @@ import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
@@ -81,7 +82,7 @@ public class AK47 extends Weapon {
 		Particle particle = new Particle(color, position, velocity, (theta + deviation),
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		Projectile projectile = new Projectile(particle, dmg, critical);
+		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;

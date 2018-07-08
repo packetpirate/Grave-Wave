@@ -299,6 +299,11 @@ public class ShopState extends BasicGameState implements InputListener {
 					FontUtils.drawCenter(f, "Damage", (int)barX, (int)(barY - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
 					Pair<Integer> damageRange = w.getDamage();
 					
+					// Apply the player's current damage bonus to the damage range.
+					double damageBonus = (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10);
+					damageRange.x += (int)(damageRange.x * damageBonus);
+					damageRange.y += (int)(damageRange.y * damageBonus);
+					
 					g.setColor(Color.black);
 					g.fillRect(barX, barY, barWidth, barHeight);
 					g.setColor(Color.white);

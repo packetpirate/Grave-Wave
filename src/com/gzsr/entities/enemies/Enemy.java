@@ -33,6 +33,7 @@ public abstract class Enemy implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected float theta;
+	public float getTheta() { return theta; }
 	protected Vector2f velocity;
 	public Vector2f getVelocity() { return velocity; }
 	protected boolean moveBlocked;

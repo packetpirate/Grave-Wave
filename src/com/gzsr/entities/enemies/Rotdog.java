@@ -12,6 +12,7 @@ public class Rotdog extends Enemy {
 	private static final int SPAWN_COST = 2;
 	private static final int MIN_HEALTH_COUNT = 3;
 	private static final int MIN_HEALTH_SIDES = 4;
+	private static final int MIN_HEALTH_MOD = 8;
 	private static final float SPEED = 0.20f;
 	private static final float DPS = 8.0f;
 	
@@ -20,7 +21,7 @@ public class Rotdog extends Enemy {
 	
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);
-		this.health = Dice.roll(Rotdog.MIN_HEALTH_COUNT, Rotdog.MIN_HEALTH_SIDES, 0);
+		this.health = Dice.roll(Rotdog.MIN_HEALTH_COUNT, Rotdog.MIN_HEALTH_SIDES, Rotdog.MIN_HEALTH_MOD);
 	}
 
 	@Override

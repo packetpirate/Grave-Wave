@@ -47,16 +47,21 @@ public class Particle implements Entity {
 	
 	protected long lifespan;
 	public long getLifespan() { return lifespan; }
+	public boolean isActive(long cTime) { return (isAlive(cTime) || shouldDraw(cTime)); }
 	public boolean isAlive(long cTime) {
 		long elapsed = cTime - created;
 		return ((lifespan == -1L) || (!collision && (elapsed < lifespan)));
 	}
+	protected long drawTime; // The time to draw the particle for (can last longer than lifespan).
+	public boolean shouldDraw(long cTime) { return ((cTime - created) < drawTime); }
+	public long getDrawTime() { return drawTime; }
+	public void setDrawTime(long val_) { drawTime = val_; }
 	protected long created;
 	public long getCreated() { return created; }
 	public void setCreated(long created_) { created = created_; }
 	
 	protected boolean collision;
-	public void collide() { collision = true; }
+	public void collide(GameState gs, Entity e, long cTime) { collision = true; }
 	
 	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_, 
 					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
@@ -75,6 +80,7 @@ public class Particle implements Entity {
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		this.lifespan = lifespan_;
+		this.drawTime = lifespan_;
 		this.created = created_;
 		this.collision = false;
 		
@@ -98,6 +104,7 @@ public class Particle implements Entity {
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		this.lifespan = lifespan_;
+		this.drawTime = lifespan_;
 		this.created = created_;
 		this.collision = false;
 		
@@ -115,6 +122,7 @@ public class Particle implements Entity {
 		this.angularVelocity = p.getAngularVelocity();
 		this.size = new Pair<Float>(p.getSize().x, p.getSize().y);
 		this.lifespan = p.getLifespan();
+		this.drawTime = p.getDrawTime();
 		this.created = p.getCreated();
 		this.collision = false;
 		this.bounds = p.getCollider();
@@ -136,27 +144,29 @@ public class Particle implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-		
-		Image img = getImage();
-		if(img != null) {
-			g.drawImage(img, (position.x - (img.getWidth() / 2)), 
-							 (position.y - (img.getHeight() / 2)));
-		} else {
-			float x = position.x - (size.x / 2);
-			float y = position.y - (size.y / 2);
+		if(shouldDraw(cTime)) {
+			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
 			
-			if(colorGenerator == null) g.setColor(color);
-			else g.setColor(colorGenerator.generate());
-			g.fillRect(x, y, size.x, size.y);
+			Image img = getImage();
+			if(img != null) {
+				g.drawImage(img, (position.x - (img.getWidth() / 2)), 
+								 (position.y - (img.getHeight() / 2)));
+			} else {
+				float x = position.x - (size.x / 2);
+				float y = position.y - (size.y / 2);
+				
+				if(colorGenerator == null) g.setColor(color);
+				else g.setColor(colorGenerator.generate());
+				g.fillRect(x, y, size.x, size.y);
+			}
+			
+			if(Globals.SHOW_COLLIDERS) {
+				g.setColor(Color.red);
+				g.draw(bounds);
+			}
+			
+			g.resetTransform();
 		}
-		
-		if(Globals.SHOW_COLLIDERS) {
-			g.setColor(Color.red);
-			g.draw(bounds);
-		}
-		
-		g.resetTransform();
 	}
 	
 	public void resetBounds() {

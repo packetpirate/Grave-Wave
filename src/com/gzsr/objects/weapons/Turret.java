@@ -20,6 +20,7 @@ import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
@@ -167,7 +168,7 @@ public class Turret extends Projectile {
 		double dmg = dice.roll(Turret.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 		
-		Projectile projectile = new Projectile(particle, dmg, critical);
+		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
 		projectiles.add(projectile);
 		lastProjectile = cTime;

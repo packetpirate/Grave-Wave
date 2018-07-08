@@ -23,8 +23,9 @@ import com.gzsr.status.StatusEffect;
 public class Upchuck extends Enemy {
 	private static final int FIRST_WAVE = 5;
 	private static final int SPAWN_COST = 4;
-	private static final int MIN_HEALTH_COUNT = 2;
-	private static final int MIN_HEALTH_SIDES = 12;
+	private static final int MIN_HEALTH_COUNT = 4;
+	private static final int MIN_HEALTH_SIDES = 6;
+	private static final int MIN_HEALTH_MOD = 12;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
 	private static final float BILE_DAMAGE = 0.4f;
@@ -47,7 +48,7 @@ public class Upchuck extends Enemy {
 	
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
-		this.health = Dice.roll(Upchuck.MIN_HEALTH_COUNT, Upchuck.MIN_HEALTH_SIDES, 0);
+		this.health = Dice.roll(Upchuck.MIN_HEALTH_COUNT, Upchuck.MIN_HEALTH_SIDES, Upchuck.MIN_HEALTH_MOD);
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
 	}

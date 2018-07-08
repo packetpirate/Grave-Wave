@@ -12,6 +12,7 @@ import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
@@ -88,7 +89,7 @@ public class Beretta extends Weapon {
 		double dmg = damage.roll(Beretta.MIN_DAMAGE_MOD, critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
-		Projectile projectile = new Projectile(particle, dmg, critical);
+		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;

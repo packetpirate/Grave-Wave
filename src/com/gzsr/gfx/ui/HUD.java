@@ -233,8 +233,8 @@ public class HUD {
 			float w2 = g.getFont().getWidth(Controls.Layout.SHOP_SCREEN.getDisplay());
 			g.drawString(Controls.Layout.SHOP_SCREEN.getDisplay(), (Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 40.0f)), (Globals.HEIGHT - h - 20.0f));
 			
-			Image backpack = AssetManager.getManager().getImage("GZS_Backpack");
-			backpack.draw((Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 30.0f) - ((backpack.getWidth() / 2) + 20.0f)), (Globals.HEIGHT - ((backpack.getHeight() / 2) + 20.0f)), 0.5f);
+			Image cash = AssetManager.getManager().getImage("GZS_Cash");
+			cash.draw((Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 35.0f) - ((cash.getWidth() / 2) + 20.0f)), (Globals.HEIGHT - ((cash.getHeight() / 2) + 15.0f)), 0.5f);
 		} // End drawing shop and training icons.
 		
 		// If Player.getPlayer() is respawning, draw the countdown.
