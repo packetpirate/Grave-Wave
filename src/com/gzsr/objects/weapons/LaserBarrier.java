@@ -52,6 +52,16 @@ public class LaserBarrier extends Weapon {
 			g.drawOval((lastNode.getPosition().x - (LaserBarrier.BARRIER_RANGE / 2)), 
 					   (lastNode.getPosition().y - (LaserBarrier.BARRIER_RANGE / 2)), 
 					   LaserBarrier.BARRIER_RANGE, LaserBarrier.BARRIER_RANGE);
+			
+			float dist = Calculate.Distance(Player.getPlayer().getPosition(), lastNode.getPosition());
+			if(dist <= (BARRIER_RANGE / 2)) {
+				// Draw the barrier itself between the first node and the player.
+				g.setColor(LaserNode.BARRIER_COLOR);
+				g.setLineWidth(LaserNode.BARRIER_WIDTH);
+				g.drawLine(lastNode.getPosition().x, lastNode.getPosition().y, 
+						   Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y);
+				g.setLineWidth(1.0f);
+			}
 		}
 		
 		// Render all the nodes and the barrier between them.

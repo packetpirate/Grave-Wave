@@ -29,7 +29,7 @@ public class Beretta extends Weapon {
 	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_Popgun";
-	private static final String FIRE_SOUND = "shoot4";
+	private static final String FIRE_SOUND = "beretta_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	private Animation muzzleFlash;
@@ -128,7 +128,7 @@ public class Beretta extends Weapon {
 	
 	@Override
 	public String getName() {
-		return "Beretta";
+		return "Beretta M9";
 	}
 	
 	@Override

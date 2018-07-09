@@ -14,7 +14,7 @@ public enum ProjectileType {
 	GRENADE(new Color(0x4DAD1A), 0.25f, 16.0f, 16.0f, Grenade.LIFESPAN),
 	CLAYMORE(new Color(0x4D661A), 0.0f, 8.0f, 4.0f, 0L),
 	SHRAPNEL(new Color(0xF2F28C), 0.5f, 4.0f, 4.0f, 800L),
-	LASERNODE(new Color(0x313C4F), 0.0f, 8.0f, 8.0f, 0L),
+	LASERNODE(new Color(0x313C4F), 0.0f, 8.0f, 8.0f, -1L),
 	TURRET(new Color(0x7A221A), 0.0f, 16.0f, 16.0f, 0L),
 	
 	// Enemy projectiles.

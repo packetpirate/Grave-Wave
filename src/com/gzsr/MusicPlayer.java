@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 public class MusicPlayer {
 	private static final int SOUNDTRACK_LENGTH = 9;
 	
-	private float MUSIC_VOLUME = 0.5f;
+	private float MUSIC_VOLUME = 0.15f;
 	
 	private static MusicPlayer instance;
 	

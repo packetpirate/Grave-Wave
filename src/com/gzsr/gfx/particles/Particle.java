@@ -53,7 +53,7 @@ public class Particle implements Entity {
 		return ((lifespan == -1L) || (!collision && (elapsed < lifespan)));
 	}
 	protected long drawTime; // The time to draw the particle for (can last longer than lifespan).
-	public boolean shouldDraw(long cTime) { return ((cTime - created) < drawTime); }
+	public boolean shouldDraw(long cTime) { return ((lifespan == -1L) || ((cTime - created) < drawTime)); }
 	public long getDrawTime() { return drawTime; }
 	public void setDrawTime(long val_) { drawTime = val_; }
 	protected long created;

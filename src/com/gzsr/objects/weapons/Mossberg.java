@@ -32,7 +32,7 @@ public class Mossberg extends Weapon {
 	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 5.0f;
 	private static final String ICON_NAME = "GZS_Boomstick";
-	private static final String FIRE_SOUND = "shotgun1";
+	private static final String FIRE_SOUND = "mossberg_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	private Animation muzzleFlash;
@@ -126,7 +126,7 @@ public class Mossberg extends Weapon {
 
 	@Override
 	public String getName() {
-		return "Mossberg";
+		return "Mossberg 500";
 	}
 	
 	@Override

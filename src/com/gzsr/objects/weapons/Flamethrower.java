@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
@@ -26,8 +27,8 @@ public class Flamethrower extends Weapon {
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
-	private static final String PROJECTILE_NAME = "GZS_FireParticle";
-	private static final String FIRE_SOUND = "flamethrower2";
+	private static final String PROJECTILE_NAME = "GZS_FireParticle4";
+	private static final String FIRE_SOUND = "flamethrower3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	public Flamethrower() {
@@ -42,6 +43,7 @@ public class Flamethrower extends Weapon {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
+		if(!equipped || reloading || !Controls.getInstance().getMouse().isMouseDown()) fireSound.stop();
 	}
 	
 	@Override
@@ -68,7 +70,7 @@ public class Flamethrower extends Weapon {
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
-		//fireSound.play(1.0f, AssetManager.getManager().getSoundVolume()); TODO: Make a better sound for this.
+		if(!fireSound.playing()) fireSound.loop(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override

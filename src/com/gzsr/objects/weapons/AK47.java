@@ -31,7 +31,7 @@ public class AK47 extends Weapon {
 	private static final float KNOCKBACK = 1.0f;
 	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
 	private static final String ICON_NAME = "GZS_RTPS";
-	private static final String FIRE_SOUND = "shoot3";
+	private static final String FIRE_SOUND = "m4a1_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	private Animation muzzleFlash;

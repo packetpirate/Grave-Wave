@@ -3,7 +3,6 @@ package com.gzsr.gfx.particles.emitters;
 import org.newdawn.slick.Color;
 
 import com.gzsr.Globals;
-import com.gzsr.gfx.ColorGenerator;
 import com.gzsr.gfx.particles.Emitter;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.misc.Pair;
@@ -21,9 +20,7 @@ public class BurningEmitter extends Emitter {
 	}
 	
 	private static Particle generateTemplate() {
-		Color start = new Color(0xAAFFC700);
-		Color end = new Color(0xAABA1200);
-		return new Particle(new ColorGenerator(start, end), Pair.ZERO, VELOCITY, 0.0f, 0.0f, SIZE, 500L, 0L);
+		return new Particle("GZS_FireParticle4", new Color(0xAAFFC700), Pair.ZERO, VELOCITY, 0.0f, 0.0f, SIZE, 500L, 0L);
 	}
 	
 	@Override
