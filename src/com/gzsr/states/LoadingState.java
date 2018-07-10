@@ -123,6 +123,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Ammo.png",
 			// Status Images
 			"images/GZS_Invulnerability.png",
+			"images/GZS_Armor.png",
 			"images/GZS_NightVision.png",
 			"images/GZS_UnlimitedAmmo.png",
 			"images/GZS_SpeedUp.png",
@@ -165,7 +166,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_BigRedButton.png",
 			// Effect Images
 			"images/GZS_LightAlphaMap3.png",
-			"images/GZS_Flashlight3.png",
+			"images/GZS_Flashlight.png",
 			"images/GZS_Explosion.png",
 			"images/GZS_PoisonExplosion.png",
 			"images/GZS_BloodExplosion.png",
@@ -215,8 +216,11 @@ public class LoadingState extends BasicGameState {
 			"sounds/shotgun1.wav",
 			"sounds/flamethrower2.wav",
 			"sounds/flamethrower3.wav",
+			"sounds/out-of-ammo_click.wav",
 			"sounds/explosion2.wav",
 			"sounds/poison_cloud.wav",
+			"sounds/zombie_moan_06.wav",
+			"sounds/zombie_moan_09.wav",
 			"sounds/buy_ammo2.wav",
 			"sounds/powerup2.wav",
 			"sounds/point_buy.wav"

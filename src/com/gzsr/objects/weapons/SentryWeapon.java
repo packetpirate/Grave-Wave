@@ -102,12 +102,12 @@ public class SentryWeapon extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return SentryWeapon.START_CLIPS;
 	}
 	
 	@Override
-	protected int getMaxClips() { return SentryWeapon.MAX_CLIPS; }
+	public int getMaxClips() { return SentryWeapon.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

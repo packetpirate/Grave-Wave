@@ -32,12 +32,18 @@ public class Flashlight {
 	private Image lightMap;
 	private Image flashlight;
 	
+	private boolean enabled;
+	public boolean isEnabled() { return enabled; }
+	public void toggle() { enabled = !enabled; }
+	
 	public Flashlight() {
 		this.origin = new Pair<Float>(0.0f, 0.0f);
 		this.theta = 0.0f;
 		
 		this.lightMap = AssetManager.getManager().getImage("GZS_LightAlphaMap3");
-		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight3");
+		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight");
+		
+		this.enabled = true;
 	}
 	
 	public void update(Player player, long cTime) {
@@ -56,7 +62,7 @@ public class Flashlight {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
-		if(Player.getPlayer().isAlive()) {
+		if(isEnabled() && Player.getPlayer().isAlive()) {
 			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
 			if(flashlight != null) {
 				g.rotate(origin.x, origin.y, (float)Math.toDegrees(theta - (Math.PI / 2)));

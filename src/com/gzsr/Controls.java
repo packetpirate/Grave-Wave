@@ -17,6 +17,7 @@ public class Controls {
 		MOVE_LEFT(Input.KEY_A, "Move Left", "A"),
 		MOVE_RIGHT(Input.KEY_D, "Move Right", "D"),
 		RELOAD(Input.KEY_R, "Reload", "R"),
+		FLASHLIGHT(Input.KEY_F, "Flashlight", "F"),
 		NEXT_WAVE(Input.KEY_N, "Next Wave", "N"),
 		TRAIN_SCREEN(Input.KEY_T, "Train", "T"),
 		SHOP_SCREEN(Input.KEY_B, "Shop", "B"),
@@ -87,6 +88,24 @@ public class Controls {
 			for(int i = 0; i < values().length; i++) {
 				Layout key = values()[i];
 				key.setState(KeyState.NONE);
+			}
+		}
+		
+		public static String findDisplay(int key, char c) {
+			switch(key) {
+				case Input.KEY_SPACE: return "Space";
+				case Input.KEY_LCONTROL: return "Left Control";
+				case Input.KEY_RCONTROL: return "Right Control";
+				case Input.KEY_LSHIFT: return "Left Shift";
+				case Input.KEY_RSHIFT: return "Right Shift";
+				case Input.KEY_LALT: return "Left Alt";
+				case Input.KEY_RALT: return "Right Alt";
+				case Input.KEY_TAB: return "Tab";
+				case Input.KEY_CAPITAL: return "Caps Lock";
+				case Input.KEY_BACK: return "Backspace";
+				case Input.KEY_ENTER: return "Enter";
+				case Input.KEY_GRAVE: return "~";
+				default: return Character.toString(c);
 			}
 		}
 	}

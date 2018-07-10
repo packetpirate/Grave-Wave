@@ -11,18 +11,19 @@ public class TinyZumby extends Enemy {
 	private static final int SPAWN_COST = 0;
 	private static final int MIN_HEALTH_COUNT = 2;
 	private static final int MIN_HEALTH_SIDES = 4;
+	private static final int MIN_HEALTH_MOD = 2;
 	private static final float SPEED = 0.20f;
 	private static final float DPS = 2.0f;
 	
 	public static final LootTable LOOT = new LootTable()
-			.addItem(Powerups.Type.HEALTH, 0.05f)
-			.addItem(Powerups.Type.EXTRA_LIFE, 0.025f)
+			.addItem(Powerups.Type.HEALTH, 0.025f)
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.0125f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.025f)
-			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.0125f);
 	
 	public TinyZumby(Pair<Float> position) {
 		super(EnemyType.LIL_ZUMBY, position);
-		this.health = Dice.roll(TinyZumby.MIN_HEALTH_COUNT, TinyZumby.MIN_HEALTH_SIDES, 0);
+		this.health = Dice.roll(TinyZumby.MIN_HEALTH_COUNT, TinyZumby.MIN_HEALTH_SIDES, TinyZumby.MIN_HEALTH_MOD);
 	}
 
 	@Override

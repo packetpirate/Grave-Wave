@@ -112,10 +112,10 @@ public class Flamethrower extends Weapon {
 	public int getClipSize() { return Flamethrower.CLIP_SIZE; }
 
 	@Override
-	protected int getStartClips() { return Flamethrower.START_CLIPS; }
+	public int getStartClips() { return Flamethrower.START_CLIPS; }
 	
 	@Override
-	protected int getMaxClips() { return Flamethrower.MAX_CLIPS; }
+	public int getMaxClips() { return Flamethrower.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() { return Flamethrower.COOLDOWN; }

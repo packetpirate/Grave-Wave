@@ -44,8 +44,8 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 				
 				if((input == Controls.Layout.OPEN_CONSOLE) && !Globals.ENABLE_CONSOLE) continue; // dead code warning if constant set to true, will be false in releases
 				
-				float x = ((i / 10) >= 1) ? ((Globals.WIDTH / 2) + 172.0f) : ((Globals.WIDTH / 2) - 200.0f);
-				float y = (((i % 10) * ControlConfigButton.HEIGHT) + ((i % 10) * 5.0f) + 150.0f);
+				float x = ((i / 11) >= 1) ? ((Globals.WIDTH / 2) + 172.0f) : ((Globals.WIDTH / 2) - 200.0f);
+				float y = (((i % 11) * ControlConfigButton.HEIGHT) + ((i % 11) * 5.0f) + 150.0f);
 				Pair<Float> position = new Pair<Float>(x, y);
 				ControlConfigButton button = new ControlConfigButton(input, position);
 				

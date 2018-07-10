@@ -82,10 +82,7 @@ public abstract class Weapon implements Entity {
 		boolean ammoLeft = ammoInInventory > 0;
 		boolean cool = (cTime - lastFired) >= getCooldown();
 		
-		if(!clipNotEmpty) {
-			reload(cTime);
-			return false;
-		}
+		if(!clipNotEmpty) return false;
 		
 		return (Player.getPlayer().isAlive() && equipped && (clipNotEmpty || ammoLeft) && cool);
 	}
@@ -138,8 +135,8 @@ public abstract class Weapon implements Entity {
 	public abstract Image getInventoryIcon();
 	public abstract int getClipSize();
 	public int getClipAmmo() { return ammoInClip; }
-	protected abstract int getStartClips();
-	protected abstract int getMaxClips();
+	public abstract int getStartClips();
+	public abstract int getMaxClips();
 	public boolean clipsMaxedOut() {
 		int totalAmmo = ammoInClip + ammoInInventory;
 		int maxAmmo = getMaxClips() * getClipSize();
@@ -153,10 +150,7 @@ public abstract class Weapon implements Entity {
 			ammoInInventory += (noOverflow ? amnt : ((getClipSize() * getMaxClips()) - totalAmmo));
 		}
 	}
-	public void maxOutAmmo() {
-		ammoInClip = getClipSize();
-		ammoInInventory = (getMaxClips() - 1) * getClipSize();
-	}
+	public void maxOutAmmo() { ammoInInventory = (getMaxClips() * getClipSize()) - ammoInClip; }
 	public abstract long getCooldown();
 	public List<Projectile> getProjectiles() { return projectiles; }
 	public abstract ProjectileType getProjectile();

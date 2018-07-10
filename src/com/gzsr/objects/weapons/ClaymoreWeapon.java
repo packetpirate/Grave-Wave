@@ -99,12 +99,12 @@ public class ClaymoreWeapon extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return ClaymoreWeapon.START_CLIPS;
 	}
 	
 	@Override
-	protected int getMaxClips() { return ClaymoreWeapon.MAX_CLIPS; }
+	public int getMaxClips() { return ClaymoreWeapon.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

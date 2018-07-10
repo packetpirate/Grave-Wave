@@ -140,10 +140,10 @@ public class AK47 extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() { return AK47.START_CLIPS; }
+	public int getStartClips() { return AK47.START_CLIPS; }
 	
 	@Override
-	protected int getMaxClips() { return AK47.MAX_CLIPS; }
+	public int getMaxClips() { return AK47.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

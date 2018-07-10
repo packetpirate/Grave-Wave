@@ -2,6 +2,7 @@ package com.gzsr.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
@@ -77,10 +78,12 @@ public class ControlConfigButton extends Button {
 	}
 	
 	public void acceptKeyMapping(int key_, char c_) {
-		currentKey = key_;
-		currentDisplay = Character.toString(c_);
-		
-		cancel();
+		if(key_ != Input.KEY_ESCAPE) {
+			currentKey = key_;
+			currentDisplay = Controls.Layout.findDisplay(key_, c_);
+			
+			cancel();
+		}
 	}
 	
 	@Override

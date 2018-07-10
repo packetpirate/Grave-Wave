@@ -26,6 +26,7 @@ public class HUD {
 	private static final long WEAPONS_DISPLAY_TIME = 2000L;
 	
 	private static final Color POISON_HEALTH = new Color(0x009900);
+	private static final Color ARMOR_BAR = new Color(0x4286F4);
 	
 	private static final Pair<Float> HEALTH_ORIGIN = new Pair<Float>(10.0f, 10.0f);
 	private static final Pair<Float> WEAPONS_ORIGIN = new Pair<Float>(10.0f, (Globals.HEIGHT - 64.0f));
@@ -55,10 +56,11 @@ public class HUD {
 	
 	public void render(Graphics g, GameState gs, long cTime) {
 		AssetManager assets = AssetManager.getManager();
+		Player player = Player.getPlayer();
 		{ // Render the health bar.
-			float currentHealth = (float)Player.getPlayer().getAttributes().getDouble("health");
-			float maxHealth = (float)Player.getPlayer().getAttributes().getDouble("maxHealth");
-			float percentage = currentHealth / maxHealth;
+			double currentHealth = player.getAttributes().getDouble("health");
+			double maxHealth = player.getAttributes().getDouble("maxHealth");
+			double percentage = currentHealth / maxHealth;
 			
 			g.setColor(Color.black);
 			g.fillRect(HEALTH_ORIGIN.x, HEALTH_ORIGIN.y, 156.0f, 26.0f);
@@ -68,11 +70,23 @@ public class HUD {
 			g.setColor(Player.getPlayer().hasStatus(Status.POISON) ? HUD.POISON_HEALTH : Color.red);
 			g.fillRect((HEALTH_ORIGIN.x + 3.0f), 
 					   (HEALTH_ORIGIN.y + 3.0f), 
-					   (percentage * 150.0f), 20.0f);
+					   ((float)percentage * 150.0f), 20.0f);
+			
+			// Render the armor bar on top of the health bar.
+			double currentArmor = player.getAttributes().getDouble("armor");
+			double maxArmor = player.getAttributes().getDouble("maxArmor");
+			double armorPercentage = currentArmor / maxArmor;
+			
+			g.setColor(ARMOR_BAR);
+			g.fillRect((HEALTH_ORIGIN.x + 3.0f), 
+					   (HEALTH_ORIGIN.y + 3.0f), 
+					   ((float)armorPercentage * 150.0f), 20.0f);
+			
+			// Render the border around the health / armor bars.
 			g.setColor(Color.lightGray);
 			g.drawRect((HEALTH_ORIGIN.x + 3.0f), 
 					   (HEALTH_ORIGIN.y + 3.0f), 
-					   (percentage * 150.0f), 20.0f);
+					   ((float)Math.max(percentage, armorPercentage) * 150.0f), 20.0f);
 			
 			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 			String healthText = String.format("HP: %d / %d", (int)currentHealth, (int)maxHealth);

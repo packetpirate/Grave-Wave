@@ -39,9 +39,9 @@ public class Aberration extends Boss {
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
 			.addItem(Powerups.Type.AMMO, 1.0f)
-			.addItem(Powerups.Type.EXTRA_LIFE, 0.60f)
-			.addItem(Powerups.Type.CRIT_CHANCE, 0.20f)
-			.addItem(Powerups.Type.NIGHT_VISION, 0.40f);
+			.addItem(Powerups.Type.EXTRA_LIFE, 0.40f)
+			.addItem(Powerups.Type.CRIT_CHANCE, 0.10f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.20f);
 	
 	private List<Projectile> bile;
 	private long lastBile;

@@ -138,12 +138,12 @@ public class GrenadeLauncher extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return GrenadeLauncher.START_CLIPS;
 	}
 	
 	@Override
-	protected int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
+	public int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

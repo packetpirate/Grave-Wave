@@ -7,6 +7,7 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 
@@ -224,10 +225,11 @@ public class Player implements Entity {
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
+		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
 		if (Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && !cWeapon.isReloading(cTime)
 				&& (cWeapon.getClipAmmo() != cWeapon.getClipSize())) {
 			cWeapon.reload(cTime);
-		}
+		} 
 		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
 		// Check to see if the player is trying to change weapon by number.
@@ -244,9 +246,19 @@ public class Player implements Entity {
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
 		if(cWeapon != null) {
-			if((mouse.isMouseDown() || cWeapon.isChargedWeapon()) && cWeapon.canFire(cTime)) {
-				cWeapon.fire(this, new Pair<Float>(position.x, position.y), 
-							 theta, cTime);
+			if(mouse.isMouseDown() || cWeapon.isChargedWeapon()) {
+				if(cWeapon.isReloading(cTime) || (cWeapon.getClipAmmo() == 0)) {
+					long elapsed = cTime - attributes.getLong("lastClick");
+					if(elapsed >= 1_000L) {
+						Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
+						click.play(1.0f, AssetManager.getManager().getSoundVolume());
+						VanishingText text = new VanishingText("Out of Ammo!", "PressStart2P-Regular_small", new Pair<Float>(0.0f, -32.0f), 
+															   Color.white, cTime, 1_000L, true);
+						GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), text);
+						
+						attributes.set("lastClick", cTime);
+					}
+				} else if(cWeapon.canFire(cTime)) cWeapon.fire(this, new Pair<Float>(position.x, position.y), theta, cTime);
 			}
 		}
 		
@@ -315,6 +327,8 @@ public class Player implements Entity {
 		// Basic attributes.
 		attributes.set("health", 100.0);
 		attributes.set("maxHealth", 100.0);
+		attributes.set("armor", 0.0);
+		attributes.set("maxArmor", 100.0);
 		attributes.set("lives", 3);
 		attributes.set("maxLives", Player.MAX_LIVES);
 		attributes.set("money", 0);
@@ -339,6 +353,9 @@ public class Player implements Entity {
 		attributes.set("damMult", 1.0);
 		attributes.set("critMult", 2.0);
 		
+		// Misc Properties
+		attributes.set("lastClick", 0L);
+		
 		flashlight = new Flashlight();
 	}
 	
@@ -360,6 +377,9 @@ public class Player implements Entity {
 	 */
 	public double takeDamage(double amnt, long cTime) {
 		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
+			amnt = damageArmor(amnt); // First, deal damage to player's armor.
+			
+			// Deal leftover damage to health.
 			double currentHealth = attributes.getDouble("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
@@ -373,6 +393,31 @@ public class Player implements Entity {
 			
 			return amnt;
 		} else return -1.0; // Indicates no damage taken.
+	}
+	
+	/**
+	 * Adds armor value to the player.
+	 * @param amnt How much armor to add.
+	 */
+	public void addArmor(double amnt) {
+		double currentArmor = attributes.getDouble("armor");
+		double maxArmor = attributes.getDouble("maxArmor");
+		double adjusted = currentArmor + amnt;
+		double newArmor = (adjusted > maxArmor) ? maxArmor : adjusted;
+		attributes.set("armor", newArmor);
+	}
+	
+	/**
+	 * Damages the player's armor before dealing damage to health.
+	 * @param amnt How much damage should be mitigated by the armor.
+	 * @return How much damage is left to deal to health after dealing damage to armor.
+	 */
+	public double damageArmor(double amnt) {
+		double currentArmor = attributes.getDouble("armor");
+		double adjusted = currentArmor - amnt;
+		attributes.set("armor", ((adjusted > 0.0) ? adjusted : 0.0));
+		if(adjusted < 0.0) return Math.abs(adjusted);
+		return 0.0;
 	}
 	
 	public void addExperience(GameState gs, int amnt, long cTime) {

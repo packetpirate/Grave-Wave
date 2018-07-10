@@ -370,8 +370,11 @@ public class ShopState extends BasicGameState implements InputListener {
 				// Draw the "buy ammo" and "max ammo" buttons and labels.
 				if(item instanceof Weapon) {
 					{ // Draw ammo button.
-						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon)item).getAmmoPrice()));
-						FontUtils.drawCenter(g.getFont(), "Buy Ammo", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)), 
+						Weapon w = (Weapon) item;
+						boolean lessThanOne = ((w.getInventoryAmmo() == ((w.getMaxClips() - 1) * w.getClipSize())) && (w.getClipAmmo() < w.getClipSize()));
+						int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipSize() - w.getClipAmmo())) : w.getAmmoPrice());
+						String text = "$" + NumberFormat.getInstance(Locale.US).format(ammoPrice);
+						FontUtils.drawCenter(g.getFont(), "One Clip", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)), 
 											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)ammoButton.getSize().x.floatValue(), Color.white);
 						ammoButton.render(g, 0L);
@@ -383,7 +386,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							g.setColor(new Color(0xBB333333));
 							g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
 						}
-						FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
+						FontUtils.drawCenter(g.getFont(), text, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)), 
 											 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
 											 (int)ammoButton.getSize().x.floatValue(), 
 											 Color.black);
@@ -519,7 +522,9 @@ public class ShopState extends BasicGameState implements InputListener {
 					Weapon w = (Weapon)item;
 					
 					if(!w.clipsMaxedOut()) {
-						int cost = w.getAmmoPrice();
+						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
+						boolean lessThanOne = ((w.getInventoryAmmo() == ((w.getMaxClips() - 1) * w.getClipSize())) && (w.getClipAmmo() < w.getClipSize()));
+						int cost = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipSize() - w.getClipAmmo())) : w.getAmmoPrice());
 						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.

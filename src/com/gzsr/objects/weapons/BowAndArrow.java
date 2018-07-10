@@ -185,12 +185,12 @@ public class BowAndArrow extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return BowAndArrow.START_CLIPS;
 	}
 	
 	@Override
-	protected int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
+	public int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

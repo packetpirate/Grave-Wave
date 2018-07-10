@@ -189,12 +189,12 @@ public class BigRedButton extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return BigRedButton.START_CLIPS;
 	}
 
 	@Override
-	protected int getMaxClips() { return BigRedButton.MAX_CLIPS; }
+	public int getMaxClips() { return BigRedButton.MAX_CLIPS; }
 	
 	@Override
 	public long getCooldown() {

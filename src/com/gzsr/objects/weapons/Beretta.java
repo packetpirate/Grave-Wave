@@ -145,10 +145,10 @@ public class Beretta extends Weapon {
 	public int getClipSize() { return Beretta.CLIP_SIZE; }
 	
 	@Override
-	protected int getStartClips() { return Beretta.START_CLIPS; }
+	public int getStartClips() { return Beretta.START_CLIPS; }
 	
 	@Override
-	protected int getMaxClips() { return Beretta.MAX_CLIPS; }
+	public int getMaxClips() { return Beretta.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

@@ -145,10 +145,10 @@ public class Mossberg extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() { return Mossberg.START_CLIPS; }
+	public int getStartClips() { return Mossberg.START_CLIPS; }
 	
 	@Override
-	protected int getMaxClips() { return Mossberg.MAX_CLIPS; }
+	public int getMaxClips() { return Mossberg.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {

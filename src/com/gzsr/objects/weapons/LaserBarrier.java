@@ -159,12 +159,12 @@ public class LaserBarrier extends Weapon {
 	}
 
 	@Override
-	protected int getStartClips() {
+	public int getStartClips() {
 		return LaserBarrier.START_CLIPS;
 	}
 	
 	@Override
-	protected int getMaxClips() { return LaserBarrier.MAX_CLIPS; }
+	public int getMaxClips() { return LaserBarrier.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() {
