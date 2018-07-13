@@ -27,6 +27,11 @@ public class UnlimitedAmmoItem extends Item {
 	}
 
 	@Override
+	public int getCost() {
+		return 0;
+	}
+	
+	@Override
 	public String getName() {
 		return "Unlimited Ammo";
 	}

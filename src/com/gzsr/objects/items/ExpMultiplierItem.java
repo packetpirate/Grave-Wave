@@ -28,6 +28,11 @@ public class ExpMultiplierItem extends Item {
 	}
 	
 	@Override
+	public int getCost() {
+		return 0;
+	}
+	
+	@Override
 	public String getName() {
 		return "Experience Multiplier";
 	}

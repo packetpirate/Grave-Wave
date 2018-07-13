@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -86,6 +87,9 @@ public class Mossberg extends Weapon {
 			Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 			projectiles.add(projectile);
 		}
+		
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 100L, 20L, 15.0f);
+		else Camera.getCamera().refreshShake(cTime);
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;

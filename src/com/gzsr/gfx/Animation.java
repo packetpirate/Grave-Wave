@@ -174,12 +174,13 @@ public class Animation {
 		Image image = getImage().getSubImage((int)srcPos.x, (int)srcPos.y, srcSize.x, srcSize.y);
 		
 		if(image != null) {
-			g.rotate(pivot.x, pivot.y, (float)Math.toDegrees(theta + (float)(Math.PI / 2)));
+			float a = (float)Math.toDegrees(theta + (float)(Math.PI / 2));
+			g.rotate(pivot.x, pivot.y, a);
 			
 			if(drawFlash) image.drawFlash(tlx, tly);
 			else g.drawImage(image, tlx, tly);
 			
-			g.resetTransform();
+			g.rotate(pivot.x, pivot.y, -a);
 		}
 	}
 	
@@ -194,12 +195,6 @@ public class Animation {
 		float tly = position.y - (size.y / 2);
 		Image image = getImage().getSubImage((int)srcPos.x, (int)srcPos.y, srcSize.x, srcSize.y);
 		
-		if(image != null) {	
-			/*g.drawImage(image, 
-						tlx, tly, (tlx + size.x), (tly + size.y), 
-						srcPos.x, srcPos.y, (srcPos.x + srcSize.x), (srcPos.y + srcSize.y));*/
-			g.drawImage(image, tlx, tly);
-			g.resetTransform();
-		}
+		if(image != null) g.drawImage(image, tlx, tly);
 	}
 }

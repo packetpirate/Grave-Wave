@@ -16,7 +16,20 @@ public class NightVisionItem extends Item {
 		duration = NightVisionItem.DURATION;
 		pickup = AssetManager.getManager().getSound("powerup2");
 	}
-
+	
+	@Override
+	public void apply(Player player, long cTime) {
+		NightVisionEffect effect = new NightVisionEffect(NightVisionItem.DURATION, cTime);
+		player.addStatus(effect, cTime);
+		duration = 0L;
+		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
+	}
+	
+	@Override
+	public int getCost() {
+		return 0;
+	}
+	
 	@Override
 	public String getName() {
 		return "Night Vision";
@@ -26,13 +39,4 @@ public class NightVisionItem extends Item {
 	public String getDescription() {
 		return "Lets you see in the dark. Those damn undead aren't sneaking up on me!";
 	}
-
-	@Override
-	public void apply(Player player, long cTime) {
-		NightVisionEffect effect = new NightVisionEffect(NightVisionItem.DURATION, cTime);
-		player.addStatus(effect, cTime);
-		duration = 0L;
-		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
-	}
-	
 }

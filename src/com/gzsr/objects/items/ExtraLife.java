@@ -37,6 +37,11 @@ public class ExtraLife extends Item {
 	}
 	
 	@Override
+	public int getCost() {
+		return 0;
+	}
+	
+	@Override
 	public String getName() {
 		return "Extra Life";
 	}

@@ -165,7 +165,7 @@ public class Particle implements Entity {
 				g.draw(bounds);
 			}
 			
-			g.resetTransform();
+			g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
 		}
 	}
 	

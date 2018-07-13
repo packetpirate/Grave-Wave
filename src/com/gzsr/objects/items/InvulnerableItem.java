@@ -25,6 +25,11 @@ public class InvulnerableItem extends Item {
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
+	
+	@Override
+	public int getCost() {
+		return 0;
+	}
 
 	@Override
 	public String getName() {

@@ -222,6 +222,7 @@ public class LoadingState extends BasicGameState {
 			"sounds/zombie_moan_06.wav",
 			"sounds/zombie_moan_09.wav",
 			"sounds/buy_ammo2.wav",
+			"sounds/level-up.wav",
 			"sounds/powerup2.wav",
 			"sounds/point_buy.wav"
 		};

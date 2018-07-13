@@ -57,7 +57,7 @@ public class Flashlight {
 		
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		g.setColor((Player.getPlayer().hasStatus(Status.NIGHT_VISION)) ? NIGHT_VISION : SHADOW);
-		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+		g.fillRect(-Camera.MAX_OFFSET, -Camera.MAX_OFFSET, (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -65,9 +65,10 @@ public class Flashlight {
 		if(isEnabled() && Player.getPlayer().isAlive()) {
 			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
 			if(flashlight != null) {
-				g.rotate(origin.x, origin.y, (float)Math.toDegrees(theta - (Math.PI / 2)));
+				float a = (float)Math.toDegrees(theta - (Math.PI / 2));
+				g.rotate(origin.x, origin.y, a);
 				g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 96.0f));
-				g.resetTransform();
+				g.rotate(origin.x, origin.y, -a);
 			}
 		}
 		

@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.states.GameState;
@@ -52,6 +53,9 @@ public class Grenade extends Projectile {
 		gs.addEntity(String.format("explosion%d", id), exp);
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;
+		
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 20L, 15.0f);
+		else Camera.getCamera().refreshShake(cTime);
 	}
 	
 	@Override

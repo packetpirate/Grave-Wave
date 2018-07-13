@@ -13,6 +13,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
@@ -71,6 +72,9 @@ public class BigRedButton extends Weapon {
 			((GameState)gs).addEntity(String.format("explosion%d", id), exp);
 			AssetManager.getManager().getSound(BigRedButton.EXP_SOUND).play(1.0f, AssetManager.getManager().getSoundVolume());
 			lastExplosion = cTime;
+			
+			if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 20L, 15.0f);
+			else Camera.getCamera().refreshShake(cTime);
 		}
 	}
 	

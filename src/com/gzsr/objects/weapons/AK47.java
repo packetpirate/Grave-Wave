@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -88,6 +89,9 @@ public class AK47 extends Weapon {
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
 
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 50L, 5.0f);
+		else Camera.getCamera().refreshShake(cTime);
+		
 		muzzleFlash.restart(cTime);
 		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}

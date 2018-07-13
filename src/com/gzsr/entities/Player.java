@@ -289,7 +289,8 @@ public class Player implements Entity {
 							   image.getWidth(), image.getHeight());
 				}
 				
-				g.resetTransform();
+				g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
+				//g.resetTransform();
 			} else {
 				// Draw a shape to represent the missing player image.
 				g.setColor(Color.red);
@@ -465,7 +466,7 @@ public class Player implements Entity {
 				}
 			}
 			
-			// TODO: Add level up sound.
+			AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}
 	

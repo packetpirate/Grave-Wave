@@ -18,7 +18,7 @@ public abstract class Item implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected String iconName;
-	private Image getIcon() {
+	public Image getIcon() {
 		return AssetManager.getManager().getImage(iconName);
 	}
 	
@@ -81,4 +81,5 @@ public abstract class Item implements Entity {
 	}
 	
 	public abstract void apply(Player player, long cTime);
+	public abstract int getCost();
 }

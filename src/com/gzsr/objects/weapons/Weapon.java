@@ -51,7 +51,14 @@ public abstract class Weapon implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
-		if(!isReloading(cTime)) reloading = false;
+		if(reloading && !isReloading(cTime)) {
+			int takeFromInv = getClipSize() - ammoInClip;
+			int taken = Math.min(takeFromInv, ammoInInventory);
+			ammoInInventory -= taken;
+			ammoInClip += taken;
+			
+			reloading = false;
+		}
 		
 		// Update all projectiles.
 		if(!getProjectiles().isEmpty()) {
@@ -94,10 +101,10 @@ public abstract class Weapon implements Entity {
 			reloading = true;
 			reloadStart = cTime;
 			
-			int takeFromInv = getClipSize() - ammoInClip;
-			int taken = Math.min(takeFromInv, ammoInInventory);
-			ammoInInventory -= taken;
-			ammoInClip += taken;
+			//int takeFromInv = getClipSize() - ammoInClip;
+			//int taken = Math.min(takeFromInv, ammoInInventory);
+			//ammoInInventory -= taken;
+			//ammoInClip += taken;
 			
 			if(reloadSound != null) reloadSound.play();
 		}

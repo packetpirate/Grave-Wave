@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -94,6 +95,9 @@ public class Beretta extends Weapon {
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastFired = cTime;
 		release = false;
+		
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 100L, 20L, 10.0f);
+		else Camera.getCamera().refreshShake(cTime);
 		
 		muzzleFlash.restart(cTime);
 		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());

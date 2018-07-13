@@ -27,6 +27,7 @@ import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.Console;
 import com.gzsr.gfx.ui.HUD;
@@ -161,6 +162,7 @@ public class GameState extends BasicGameState implements InputListener {
 					if(!vt.isActive()) vit.remove(); 
 				}
 				
+				Camera.getCamera().update(time);
 				MusicPlayer.getInstance().update(false);
 				hud.update(player, time);
 			} else if(consoleOpen) {
@@ -177,11 +179,12 @@ public class GameState extends BasicGameState implements InputListener {
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		Player player = Player.getPlayer();
 		
-		g.resetTransform();
 		g.clear();
 		
 		Image background = assets.getImage("GZS_Background6");
 		g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
+		
+		Camera.getCamera().translate(g);
 		
 		player.render(g, time);
 
@@ -226,6 +229,8 @@ public class GameState extends BasicGameState implements InputListener {
 			exitYes.render(g, 0L);
 			exitNo.render(g, 0L);
 		} else if(consoleOpen) console.render(g, time);
+		
+		g.resetTransform();
 	}
 	
 	public void reset(GameContainer gc) throws SlickException{
@@ -245,6 +250,8 @@ public class GameState extends BasicGameState implements InputListener {
 		paused = false;
 		consoleOpen = false;
 		exitPrompt = false;
+		
+		Camera.getCamera().reset();
 		console = new Console(this, gc);
 		
 		hud = new HUD();

@@ -7,6 +7,7 @@ import com.gzsr.misc.Pair;
 public class Armor extends Item {
 	private static final String ICONNAME = "GZS_Armor";
 	private static final long DURATION = 10_000L;
+	private static final int COST = 1_000;
 	
 	private Type armorType;
 	
@@ -40,8 +41,13 @@ public class Armor extends Item {
 	}
 
 	@Override
+	public int getCost() {
+		return Armor.COST;
+	}
+	
+	@Override
 	public String getName() {
-		return "Armor";
+		return (((armorType == Type.REINFORCED) ? "Reinforced " : "") + "Leather Armor");
 	}
 
 	@Override
