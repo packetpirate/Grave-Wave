@@ -29,10 +29,10 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.ui.Console;
-import com.gzsr.gfx.ui.HUD;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.gfx.ui.hud.Console;
+import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
@@ -322,8 +322,8 @@ public class GameState extends BasicGameState implements InputListener {
 	public void mouseWheelMoved(int change) {
 		Player player = Player.getPlayer();
 		if(player.getWeapons().size() > 1) {
-			player.weaponRotate((change > 0)?1:-1);
-			hud.queueWeaponCycle();
+			player.weaponRotate((change > 0) ? 1 : -1);
+			hud.getWeaponDisplay().queueWeaponCycle();
 		}
 	}
 	

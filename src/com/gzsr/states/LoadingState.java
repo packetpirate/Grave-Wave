@@ -147,6 +147,7 @@ public class LoadingState extends BasicGameState {
 			// Projectile Images
 			"images/GZS_Arrow.png",
 			"images/GZS_FireParticle4.png",
+			"images/GZS_FireAnimation1.png",
 			"images/GZS_AcidParticle2.png",
 			"images/GZS_HandEggParticle.png",
 			"images/GZS_Claymore.png",
@@ -189,6 +190,9 @@ public class LoadingState extends BasicGameState {
 	private void loadAnimations() throws SlickException {
 		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
 		assets.addAnimation("GZS_MuzzleFlash", mf);
+		
+		Animation fire = new Animation("GZS_FireAnimation1", 16, 16, 8, 150L, 1200L, 1200L);
+		assets.addAnimation("GZS_FireAnimation1", fire);
 		
 		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_Explosion", exp);

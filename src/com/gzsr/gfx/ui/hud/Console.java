@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui;
+package com.gzsr.gfx.ui.hud;
 
 import java.awt.Font;
 import java.util.ArrayList;

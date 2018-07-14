@@ -1,6 +1,5 @@
 package com.gzsr.objects.weapons;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
@@ -9,6 +8,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
@@ -27,7 +27,7 @@ public class Flamethrower extends Weapon {
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
-	private static final String PROJECTILE_NAME = "GZS_FireParticle4";
+	//private static final String PROJECTILE_NAME = "GZS_FireParticle4";
 	private static final String FIRE_SOUND = "flamethrower3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -54,13 +54,15 @@ public class Flamethrower extends Weapon {
 	@Override
 	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Flamethrower.EMBER_COUNT; i++) {
-			Color color = getProjectile().getColor();
+			//Color color = getProjectile().getColor();
+			Animation fire = AssetManager.getManager().getAnimation("GZS_FireAnimation1");
+			
 			float velocity = getProjectile().getVelocity();
 			float width = getProjectile().getWidth();
 			float height = getProjectile().getHeight();
 			float devTheta = (theta + (Globals.rand.nextFloat() * Flamethrower.EMBER_SPREAD * (Globals.rand.nextBoolean()?1:-1)));
 			long lifespan = getProjectile().getLifespan();
-			Particle particle = new Particle(Flamethrower.PROJECTILE_NAME, color, position, velocity, devTheta,
+			Particle particle = new Particle(fire, position, velocity, devTheta,
 											 0.0f, new Pair<Float>(width, height), 
 											 lifespan, cTime);
 			

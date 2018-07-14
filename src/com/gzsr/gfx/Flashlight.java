@@ -12,7 +12,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class Flashlight {
-	private static Color SHADOW = new Color(0xCC000009);
+	private static Color SHADOW = new Color(0xBB000009);
 	private static final Color NIGHT_VISION = new Color(0x66004409);
 	
 	public static float getShadowOpacity() { return Flashlight.SHADOW.a; }

@@ -28,7 +28,7 @@ public class PoisonEffect extends StatusEffect {
 	public void update(Entity e, GameState gs, long cTime, int delta) {
 		if(e instanceof Player) {
 			Player player = (Player) e;
-			if(isActive(cTime)) player.takeDamage(damage, cTime);
+			if(isActive(cTime)) player.takeDamage(damage, cTime, true);
 		}
 	}
 	

@@ -377,8 +377,12 @@ public class Player implements Entity {
 	 * @param amnt The amount of damage to apply to the player's health.
 	 */
 	public double takeDamage(double amnt, long cTime) {
+		return takeDamage(amnt, cTime, false);
+	}
+	
+	public double takeDamage(double amnt, long cTime, boolean piercing) {
 		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
-			amnt = damageArmor(amnt); // First, deal damage to player's armor.
+			if(!piercing) amnt = damageArmor(amnt); // First, deal damage to player's armor.
 			
 			// Deal leftover damage to health.
 			double currentHealth = attributes.getDouble("health");

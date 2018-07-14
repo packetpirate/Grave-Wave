@@ -12,11 +12,14 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.ColorGenerator;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Particle implements Entity {
+	protected Animation animation;
+	public Animation getAnimation() { return animation; }
 	protected String image;
 	public String getImageName() { return image; }
 	public Image getImage() { return AssetManager.getManager().getImage(image); }
@@ -72,13 +75,16 @@ public class Particle implements Entity {
 	public Particle(String image_, Color color_, Pair<Float> position_, float velocity_,
 					float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
 					long created_) {
+		this.animation = null;
 		this.image = image_;
 		this.color = color_;
+		
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
+		
 		this.lifespan = lifespan_;
 		this.drawTime = lifespan_;
 		this.created = created_;
@@ -96,13 +102,37 @@ public class Particle implements Entity {
 	public Particle(String image_, ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_,
 				float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
 				long created_) {
+		this.animation = null;
 		this.image = image_;
 		this.colorGenerator = colorGenerator_;
+		
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
+		
+		this.lifespan = lifespan_;
+		this.drawTime = lifespan_;
+		this.created = created_;
+		this.collision = false;
+		
+		resetBounds();
+	}
+	
+	public Particle(Animation animation_, Pair<Float> position_, float velocity_, float theta_,
+					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
+		this.animation = animation_;
+		this.image = null;
+		this.color = null;
+		this.colorGenerator = null;
+		
+		this.position = position_;
+		this.velocity = velocity_;
+		this.theta = theta_;
+		this.angularVelocity = angularVelocity_;
+		this.size = size_;
+		
 		this.lifespan = lifespan_;
 		this.drawTime = lifespan_;
 		this.created = created_;
@@ -113,6 +143,7 @@ public class Particle implements Entity {
 	
 	public Particle(Particle p) {
 		// Copy constructor.
+		this.animation = ((p.getAnimation() != null) ? new Animation(p.getAnimation()) : null);
 		this.image = p.getImageName();
 		this.color = p.getColor();
 		this.colorGenerator = p.getColorGenerator();
@@ -135,6 +166,7 @@ public class Particle implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			if(animation != null) animation.update(cTime);
 			position.x += velocity * delta * (float)Math.cos(theta - (Math.PI / 2));
 			position.y += velocity * delta * (float)Math.sin(theta - (Math.PI / 2));
 			theta += angularVelocity;
@@ -148,7 +180,9 @@ public class Particle implements Entity {
 			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
 			
 			Image img = getImage();
-			if(img != null) {
+			if(animation != null) {
+				animation.render(g, position, theta);
+			} else if(img != null) {
 				g.drawImage(img, (position.x - (img.getWidth() / 2)), 
 								 (position.y - (img.getHeight() / 2)));
 			} else {
