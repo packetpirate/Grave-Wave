@@ -3,12 +3,15 @@ package com.gzsr.gfx;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
 import com.gzsr.misc.Pair;
 
 public class Camera {
+	private static final long VIGNETTE_DURATION = 500L;
+	public static final Color VIGNETTE_COLOR = new Color(0x22880000);
 	public static final float MAX_OFFSET = 20.0f;
 	
 	private enum Direction {
@@ -47,7 +50,11 @@ public class Camera {
 	public float getShakeMagnitude() { return magnitude; }
 	public void setShakeMagnitude(float magnitude_) { this.magnitude = magnitude_; }
 	
+	private boolean vignette;
+	public boolean displayVignette() { return vignette; }
+	
 	private long shakeStart, shakeDuration, shakeInterval, lastShake;
+	private long lastVignette;
 	
 	private Direction lastDirection;
 	
@@ -58,10 +65,13 @@ public class Camera {
 		shaking = false;
 		magnitude = 0.0f;
 		
+		vignette = false;
+		
 		shakeStart = 0L;
 		shakeDuration = 0L;
 		shakeInterval = 0L;
 		lastShake = 0L;
+		lastVignette = 0L;
 		lastDirection = Direction.NONE;
 	}
 	
@@ -100,6 +110,11 @@ public class Camera {
 				
 				lastShake = cTime;
 			}
+		}
+		
+		if(vignette) {
+			long elapsed = (cTime - lastVignette);
+			if(elapsed >= VIGNETTE_DURATION) vignette = false;
 		}
 	}
 	
@@ -158,11 +173,18 @@ public class Camera {
 		offset.y = 0.0f;
 		
 		shaking = false;
+		vignette = false;
 		
 		shakeStart = 0L;
 		shakeDuration = 0L;
 		shakeInterval = 0L;
 		lastShake = 0L;
+		lastVignette = 0L;
 		lastDirection = Direction.NONE;
+	}
+	
+	public void damage(long cTime) {
+		vignette = true;
+		lastVignette = cTime;
 	}
 }

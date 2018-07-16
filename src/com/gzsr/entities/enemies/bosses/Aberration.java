@@ -120,10 +120,10 @@ public class Aberration extends Boss {
 	
 	@Override
 	public void render(Graphics g, long cTime) {
-		// Only render the Aberration until it dies.
-		if(!dead()) animation.render(g, position, theta, shouldDrawFlash(cTime));
 		// Even if Aberration is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
+		// Only render the Aberration until it dies.
+		if(!dead()) animation.render(g, position, theta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {

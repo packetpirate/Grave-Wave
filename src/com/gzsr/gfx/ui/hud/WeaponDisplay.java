@@ -13,6 +13,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.status.Status;
@@ -141,5 +142,10 @@ public class WeaponDisplay implements Entity {
 	@Override
 	public String getDescription() {
 		return "Weapon Display";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

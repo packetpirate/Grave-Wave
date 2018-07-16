@@ -20,8 +20,8 @@ public class BloodGenerator {
 		private static final int PARTICLE_COUNT = 30;
 		private static final float MIN_VELOCITY = 0.25f;
 		private static final float MAX_VELOCITY = 0.5f;
-		private static final float MIN_SIZE = 4.0f;
-		private static final float MAX_SIZE = 6.0f;
+		private static final float MIN_SIZE = 2.0f;
+		private static final float MAX_SIZE = 4.0f;
 		private static final long MIN_LIFESPAN = 50L;
 		private static final long MAX_LIFESPAN = 100L;
 		private static final float ANGLE_DEV = (float)(Math.PI / 9.0f);

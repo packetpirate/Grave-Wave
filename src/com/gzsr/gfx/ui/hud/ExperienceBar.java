@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class ExperienceBar implements Entity {
@@ -66,5 +67,10 @@ public class ExperienceBar implements Entity {
 	@Override
 	public String getDescription() {
 		return "Experience Bar";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

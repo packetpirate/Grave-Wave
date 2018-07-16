@@ -104,7 +104,6 @@ public class GameState extends BasicGameState implements InputListener {
 				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
 				
 				Player player = Player.getPlayer();
-				player.update(this, time, Globals.STEP_TIME);
 				
 				Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 				while(it.hasNext()) {
@@ -135,7 +134,7 @@ public class GameState extends BasicGameState implements InputListener {
 					Globals.gameOver = true;
 					game.enterState(GameOverState.ID, 
 									new FadeOutTransition(Color.black, 250), 
-									new FadeInTransition(Color.black, 250));
+									new FadeInTransition(Color.black, 100));
 				}
 				
 				if(player.isAlive()) {
@@ -144,13 +143,13 @@ public class GameState extends BasicGameState implements InputListener {
 						controls.resetAll();
 						game.enterState(TrainState.ID,
 										new FadeOutTransition(Color.black, 250),
-										new FadeInTransition(Color.black, 250));
+										new FadeInTransition(Color.black, 100));
 					} else if(controls.isPressed(Controls.Layout.SHOP_SCREEN)) {
 						// Open the weapon shopping screen.
 						controls.resetAll();
 						game.enterState(ShopState.ID,
 										new FadeOutTransition(Color.black, 250),
-										new FadeInTransition(Color.black, 250));
+										new FadeInTransition(Color.black, 100));
 					}
 				}
 				
@@ -177,8 +176,6 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-		Player player = Player.getPlayer();
-		
 		g.clear();
 		
 		Image background = assets.getImage("GZS_Background6");
@@ -186,15 +183,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		Camera.getCamera().translate(g);
 		
-		player.render(g, time);
-
-		Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-			pair.getValue().render(g, time);
-		}
-		
-		player.getFlashlight().render(g, time);
+		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 		
 		Iterator<Entry<String, VanishingText>> vit = messages.entrySet().iterator();
 		while(vit.hasNext()) {
@@ -203,6 +192,11 @@ public class GameState extends BasicGameState implements InputListener {
 		}
 		
 		hud.render(g, this, time);
+		
+		if(Camera.getCamera().displayVignette()) {
+			g.setColor(Camera.VIGNETTE_COLOR);
+			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+		}
 		
 		if(paused) {
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
@@ -243,6 +237,7 @@ public class GameState extends BasicGameState implements InputListener {
 		Player.getPlayer().reset();
 		entities.clear();
 		entities.put("enemyController", new EnemyController());
+		entities.put("player", Player.getPlayer());
 		
 		messages.clear();
 		

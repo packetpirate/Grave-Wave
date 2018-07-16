@@ -68,6 +68,19 @@ public class Controls {
 			this.state = KeyState.NONE;
 		}
 		
+		// To be used if game migrates to polled input.
+		/*
+		public void handle(boolean down) {
+			if(state == KeyState.PRESSED) {
+				if(!down) state = KeyState.RELEASED;
+			} else if(state == KeyState.RELEASED) {
+				if(down) state = KeyState.PRESSED;
+				else state = KeyState.NONE;
+			} else {
+				if(down) state = KeyState.PRESSED;
+			}
+		}*/
+		
 		public static Layout identify(int key) {
 			for(int i = 0; i < values().length; i++) {
 				Layout control = values()[i];
@@ -121,6 +134,16 @@ public class Controls {
 		if(instance == null) instance = new Controls();
 		return instance;
 	}
+	
+	// To be used if the game migrates to polled input.
+	/*
+	public void poll(GameContainer gc) {
+		Input in = gc.getInput();
+		Layout [] keys = Layout.values();
+		for(Layout key : keys) {
+			key.handle(in.isKeyDown(key.getKey()));
+		}
+	}*/
 	
 	public void press(int key) {
 		Layout control = Layout.identify(key);

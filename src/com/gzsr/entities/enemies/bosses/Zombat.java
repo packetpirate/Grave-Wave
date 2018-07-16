@@ -80,8 +80,6 @@ public class Zombat extends Boss {
 	
 	@Override
 	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
-		
 		// Render the blood stream being siphoned from the player.
 		if(siphoningBlood) {
 			float x = position.x + ((float)Math.cos(theta) * 5.0f);
@@ -91,6 +89,8 @@ public class Zombat extends Boss {
 			g.drawLine(x, y, Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y);
 			g.setLineWidth(1.0f);
 		}
+		
+		super.render(g, cTime);
 	}
 	
 	@Override

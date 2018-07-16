@@ -4,6 +4,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public abstract class Button implements Entity {
@@ -52,5 +53,10 @@ public abstract class Button implements Entity {
 	@Override
 	public String getDescription() {
 		return "Button";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

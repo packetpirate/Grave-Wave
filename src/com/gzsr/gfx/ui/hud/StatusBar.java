@@ -10,6 +10,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.StatusEffect;
 
@@ -58,5 +59,10 @@ public class StatusBar implements Entity {
 	@Override
 	public String getDescription() {
 		return "Status Bar";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

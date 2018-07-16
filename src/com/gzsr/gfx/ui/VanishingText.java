@@ -8,6 +8,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class VanishingText implements Entity {
@@ -114,5 +115,10 @@ public class VanishingText implements Entity {
 	@Override
 	public String getDescription() {
 		return "Text displayed on the screen.";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.TEXT.val();
 	}
 }

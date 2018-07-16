@@ -13,6 +13,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.bosses.Aberration;
 import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -233,5 +234,10 @@ public class EnemyController implements Entity {
 	@Override
 	public String getDescription() {
 		return "Enemy Controller";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.ENEMIES.val();
 	}
 }

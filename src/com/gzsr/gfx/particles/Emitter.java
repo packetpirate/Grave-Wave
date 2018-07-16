@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class Emitter implements Entity {
@@ -103,5 +104,10 @@ public class Emitter implements Entity {
 	@Override
 	public String getDescription() {
 		return "Emits particles of a specified type.";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

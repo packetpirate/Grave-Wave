@@ -12,6 +12,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -161,4 +162,9 @@ public abstract class Weapon implements Entity {
 	public abstract long getCooldown();
 	public List<Projectile> getProjectiles() { return projectiles; }
 	public abstract ProjectileType getProjectile();
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
+	}
 }

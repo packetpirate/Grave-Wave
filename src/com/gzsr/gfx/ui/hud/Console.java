@@ -25,6 +25,7 @@ import com.gzsr.entities.enemies.Zumby;
 import com.gzsr.entities.enemies.bosses.Aberration;
 import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.AmmoCrate;
 import com.gzsr.objects.items.Armor;
@@ -343,5 +344,10 @@ public class Console implements Entity {
 	@Override
 	public String getDescription() {
 		return "Console";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.HUD.val();
 	}
 }

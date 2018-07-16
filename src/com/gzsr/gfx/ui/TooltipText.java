@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 
@@ -71,5 +72,10 @@ public class TooltipText implements Entity {
 	@Override
 	public String getDescription() {
 		return "Tooltip Text";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

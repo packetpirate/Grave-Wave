@@ -11,6 +11,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
@@ -97,5 +98,10 @@ public class HealthBar implements Entity {
 	@Override
 	public String getDescription() {
 		return "Health Bar";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

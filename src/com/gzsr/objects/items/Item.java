@@ -8,6 +8,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public abstract class Item implements Entity {
@@ -82,4 +83,9 @@ public abstract class Item implements Entity {
 	
 	public abstract void apply(Player player, long cTime);
 	public abstract int getCost();
+	
+	@Override
+	public int getLayer() {
+		return Layers.ITEMS.val();
+	}
 }

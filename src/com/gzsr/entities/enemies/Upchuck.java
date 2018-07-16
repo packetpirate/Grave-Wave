@@ -99,9 +99,10 @@ public class Upchuck extends Enemy {
 	public void render(Graphics g, long cTime) {
 		// Only render the Upchuck until it dies.
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
-		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
+		
+		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {

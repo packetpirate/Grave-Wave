@@ -17,7 +17,9 @@ import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Flashlight;
+import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.gfx.ui.VanishingText;
@@ -290,12 +292,13 @@ public class Player implements Entity {
 				}
 				
 				g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
-				//g.resetTransform();
 			} else {
 				// Draw a shape to represent the missing player image.
 				g.setColor(Color.red);
 				g.fillOval((position.x - 20), (position.y - 20), 40, 40);
 			}
+			
+			flashlight.render(g, cTime);
 		}
 	}
 	
@@ -393,6 +396,9 @@ public class Player implements Entity {
 			if((cTime - lastGrunt) >= GRUNT_TIMER) {
 				int grunt = Globals.rand.nextInt(4) + 1;
 				AssetManager.getManager().getSound(String.format("grunt%d", grunt)).play();
+				Camera.getCamera().shake(cTime, 500L, 100L, 4.0f);
+				Camera.getCamera().damage(cTime);
+				
 				lastGrunt = cTime;
 			}
 			
@@ -543,5 +549,10 @@ public class Player implements Entity {
 	@Override
 	public String getDescription() {
 		return "Player";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.PLAYER.val();
 	}
 }

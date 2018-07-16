@@ -14,6 +14,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.ui.DamageText;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
@@ -306,4 +307,9 @@ public abstract class Enemy implements Entity {
 	public abstract double getDamage();
 	public abstract float getSpeed();
 	public abstract LootTable getLootTable();
+	
+	@Override
+	public int getLayer() {
+		return Layers.ENEMIES.val();
+	}
 }

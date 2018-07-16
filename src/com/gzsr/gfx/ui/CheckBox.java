@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class CheckBox implements Entity {
@@ -87,5 +88,10 @@ public class CheckBox implements Entity {
 	@Override
 	public String getDescription() {
 		return "Used to represent a boolean property.";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

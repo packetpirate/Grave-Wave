@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class Slider implements Entity {
@@ -118,5 +119,10 @@ public class Slider implements Entity {
 	@Override
 	public String getDescription() {
 		return "A sliding value that allows the user to adjust a property.";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }

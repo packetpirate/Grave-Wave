@@ -27,7 +27,7 @@ public class BowAndArrow extends Weapon {
 	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final int MIN_DAMAGE_MOD = 10;
 	private static final float KNOCKBACK = 5.0f;
-	private static final float CHARGE_RATE = 0.00075f;
+	private static final float CHARGE_RATE = 0.0015f;
 	private static final String ICON_NAME = "GZS_Bow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
 	private static final String FIRE_SOUND = "shoot4"; // TODO: Change this to a more appropriate sound.

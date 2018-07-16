@@ -15,6 +15,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.TinyZumby;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 import com.gzsr.status.StatusEffect;
@@ -137,5 +138,10 @@ public class Explosion implements Entity {
 	@Override
 	public String getDescription() {
 		return "Explosion";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.PARTICLES.val();
 	}
 }

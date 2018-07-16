@@ -14,6 +14,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.ColorGenerator;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
@@ -223,5 +224,10 @@ public class Particle implements Entity {
 	@Override
 	public String getDescription() {
 		return "Particle";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.PARTICLES.val();
 	}
 }

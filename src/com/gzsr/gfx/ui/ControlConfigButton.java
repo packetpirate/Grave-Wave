@@ -8,6 +8,7 @@ import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
+import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class ControlConfigButton extends Button {
@@ -105,5 +106,10 @@ public class ControlConfigButton extends Button {
 	@Override
 	public String getDescription() {
 		return "Control Config Button";
+	}
+	
+	@Override
+	public int getLayer() {
+		return Layers.NONE.val();
 	}
 }
