@@ -39,6 +39,7 @@ public class EnemyController implements Entity {
 	public List<Enemy> getUnbornEnemies() { return unborn; }
 	public void addUnborn(Enemy e) { unborn.add(e); }
 	private List<Enemy> addImmediately;
+	public List<Enemy> getImmediateEnemies() { return addImmediately; }
 	public void addNextUpdate(Enemy e) { addImmediately.add(e); }
 	private List<Enemy> alive;
 	public List<Enemy> getAliveEnemies() { return alive; }

@@ -296,10 +296,10 @@ public class Player implements Entity {
 				// Draw a shape to represent the missing player image.
 				g.setColor(Color.red);
 				g.fillOval((position.x - 20), (position.y - 20), 40, 40);
-			}
-			
-			flashlight.render(g, cTime);
+			}	
 		}
+		
+		flashlight.render(g, cTime);
 	}
 	
 	/**

@@ -43,6 +43,8 @@ public class GameState extends BasicGameState implements InputListener {
 	private static final float PROMPT_WIDTH = 350.0f;
 	private static final float PROMPT_HEIGHT = 100.0f;
 	
+	private static final Color PAUSE_OVERLAY = new Color(0x331F006F);
+	
 	private AssetManager assets;
 	private long time, accu, consoleTimer;
 	public long getTime() { return time; }
@@ -79,98 +81,100 @@ public class GameState extends BasicGameState implements InputListener {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		accu = Math.min((accu + delta), (Globals.STEP_TIME * Globals.MAX_STEPS));
-		
-		while(accu >= Globals.STEP_TIME) {
-			if(exitPrompt) {
-				MouseInfo mouse = Controls.getInstance().getMouse();
-				
-				if(exitYes.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-					exitYes.mouseEnter();
-					if(mouse.isMouseDown()) {
-						reset(gc);
-						game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
-					}
-				} else exitYes.mouseExit();
-				
-				if(exitNo.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-					exitNo.mouseEnter();
-					if(mouse.isMouseDown()) {
-						mouse.setMouseDown(false);
-						exitPrompt = false;
-					}
-				} else exitNo.mouseExit();
-			} else if(!paused && !consoleOpen) {
-				time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
-				
-				Player player = Player.getPlayer();
-				
-				Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-				while(it.hasNext()) {
-					Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
-					pair.getValue().update(this, time, Globals.STEP_TIME);
-					if(pair.getValue() instanceof EnemyController) {
-						EnemyController ec = (EnemyController)pair.getValue();
-						ec.updateEnemies(this, player, time, Globals.STEP_TIME);
-					} else if(pair.getValue() instanceof Item) {
-						Item item = (Item) pair.getValue();
-						if(item.isActive(time)) {
-							player.checkItem(item, time);
-						} else it.remove();
-					} else if(pair.getValue() instanceof Particle) {
-						Particle p = (Particle) pair.getValue();
-						if(!p.isActive(time)) {
-							p.onDestroy(this, time);
-							it.remove();
+		if(gc.hasFocus()) {
+			accu = Math.min((accu + delta), (Globals.STEP_TIME * Globals.MAX_STEPS));
+			
+			while(accu >= Globals.STEP_TIME) {
+				if(exitPrompt) {
+					MouseInfo mouse = Controls.getInstance().getMouse();
+					
+					if(exitYes.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+						exitYes.mouseEnter();
+						if(mouse.isMouseDown()) {
+							reset(gc);
+							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
+						}
+					} else exitYes.mouseExit();
+					
+					if(exitNo.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+						exitNo.mouseEnter();
+						if(mouse.isMouseDown()) {
+							mouse.setMouseDown(false);
+							exitPrompt = false;
+						}
+					} else exitNo.mouseExit();
+				} else if(!paused && !consoleOpen) {
+					time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
+					
+					Player player = Player.getPlayer();
+					
+					Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
+					while(it.hasNext()) {
+						Map.Entry<String, Entity> pair = (Map.Entry<String, Entity>) it.next();
+						pair.getValue().update(this, time, Globals.STEP_TIME);
+						if(pair.getValue() instanceof EnemyController) {
+							EnemyController ec = (EnemyController)pair.getValue();
+							ec.updateEnemies(this, player, time, Globals.STEP_TIME);
+						} else if(pair.getValue() instanceof Item) {
+							Item item = (Item) pair.getValue();
+							if(item.isActive(time)) {
+								player.checkItem(item, time);
+							} else it.remove();
+						} else if(pair.getValue() instanceof Particle) {
+							Particle p = (Particle) pair.getValue();
+							if(!p.isActive(time)) {
+								p.onDestroy(this, time);
+								it.remove();
+							}
 						}
 					}
-				}
-				
-				Controls controls = Controls.getInstance();
-				
-				if(!player.isAlive() && (player.getAttributes().getInt("lives") <= 0)) {
-					// If the player has died, transition state.
-					controls.resetAll();
-					Globals.gameOver = true;
-					game.enterState(GameOverState.ID, 
-									new FadeOutTransition(Color.black, 250), 
-									new FadeInTransition(Color.black, 100));
-				}
-				
-				if(player.isAlive()) {
-					if(controls.isPressed(Controls.Layout.TRAIN_SCREEN)) {
-						// Open the training screen.
+					
+					Controls controls = Controls.getInstance();
+					
+					if(!player.isAlive() && (player.getAttributes().getInt("lives") <= 0)) {
+						// If the player has died, transition state.
 						controls.resetAll();
-						game.enterState(TrainState.ID,
-										new FadeOutTransition(Color.black, 250),
-										new FadeInTransition(Color.black, 100));
-					} else if(controls.isPressed(Controls.Layout.SHOP_SCREEN)) {
-						// Open the weapon shopping screen.
-						controls.resetAll();
-						game.enterState(ShopState.ID,
-										new FadeOutTransition(Color.black, 250),
+						Globals.gameOver = true;
+						game.enterState(GameOverState.ID, 
+										new FadeOutTransition(Color.black, 250), 
 										new FadeInTransition(Color.black, 100));
 					}
+					
+					if(player.isAlive()) {
+						if(controls.isPressed(Controls.Layout.TRAIN_SCREEN)) {
+							// Open the training screen.
+							controls.resetAll();
+							game.enterState(TrainState.ID,
+											new FadeOutTransition(Color.black, 250),
+											new FadeInTransition(Color.black, 100));
+						} else if(controls.isPressed(Controls.Layout.SHOP_SCREEN)) {
+							// Open the weapon shopping screen.
+							controls.resetAll();
+							game.enterState(ShopState.ID,
+											new FadeOutTransition(Color.black, 250),
+											new FadeInTransition(Color.black, 100));
+						}
+					}
+					
+					Iterator<Entry<String, VanishingText>> vit = messages.entrySet().iterator();
+					while(vit.hasNext()) {
+						// Draw all vanishing texts to the screen.
+						VanishingText vt = ((Map.Entry<String, VanishingText>) vit.next()).getValue();
+						vt.update(this, time, delta);
+						if(!vt.isActive()) vit.remove(); 
+					}
+					
+					Camera.getCamera().update(time);
+					MusicPlayer.getInstance().update(false);
+					hud.update(player, time);
+				} else if(consoleOpen) {
+					consoleTimer += (long)delta;
+					console.update(this, consoleTimer, Globals.STEP_TIME);
 				}
 				
-				Iterator<Entry<String, VanishingText>> vit = messages.entrySet().iterator();
-				while(vit.hasNext()) {
-					// Draw all vanishing texts to the screen.
-					VanishingText vt = ((Map.Entry<String, VanishingText>) vit.next()).getValue();
-					vt.update(this, time, delta);
-					if(!vt.isActive()) vit.remove(); 
-				}
-				
-				Camera.getCamera().update(time);
-				MusicPlayer.getInstance().update(false);
-				hud.update(player, time);
-			} else if(consoleOpen) {
-				consoleTimer += (long)delta;
-				console.update(this, consoleTimer, Globals.STEP_TIME);
+				Controls.Layout.clearReleased();
+				accu -= Globals.STEP_TIME;
 			}
-			
-			Controls.Layout.clearReleased();
-			accu -= Globals.STEP_TIME;
 		}
 	}
 	
@@ -199,6 +203,8 @@ public class GameState extends BasicGameState implements InputListener {
 		}
 		
 		if(paused) {
+			g.setColor(PAUSE_OVERLAY);
+			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 			g.setColor(Color.white);
 			int w = g.getFont().getWidth("Paused");

@@ -257,6 +257,14 @@ public class Console implements Entity {
 								System.err.println("Error with console command: /" + command);
 							}
 						}
+					} else if(command.equals("ec") && (args == 0)) {
+						// Print information about remaining enemies in each enemy controller list.
+						int unborn = ec.getUnbornEnemies().size();
+						int alive = ec.getAliveEnemies().size();
+						int immediate = ec.getImmediateEnemies().size();
+						
+						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive, immediate);
+						pastCommands.add(str);
 					} else {
 						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}

@@ -28,7 +28,7 @@ public class BigRedButton extends Weapon {
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 2;
-	private static final long RELOAD_TIME = 0L;
+	private static final long RELOAD_TIME = 10_000L;
 	private static final int MIN_DAMAGE_COUNT = 5;
 	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final int MIN_DAMAGE_MOD = 50;
@@ -62,7 +62,7 @@ public class BigRedButton extends Weapon {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
-		if(!isReloading(cTime)) reloading = false;
+		super.update(gs, cTime, delta);
 		
 		long elapsed = cTime - lastExplosion;
 		if(!explosions.isEmpty() && (elapsed >= BigRedButton.EXP_DELAY)) {
