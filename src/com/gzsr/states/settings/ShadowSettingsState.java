@@ -16,6 +16,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
@@ -53,7 +54,7 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 		flashlight.setOrigin(playerPos.x, playerPos.y);
 		flashlight.setTheta((float)(Math.PI / 2));
 		
-		opacitySlider = new Slider("Shadow Layer Opacity", new Pair<Float>(((Globals.WIDTH / 2) - 256.0f), (Globals.HEIGHT - 400.0f)), 512.0f, opacityOperation);
+		opacitySlider = new Slider("shadowLevel", "Shadow Layer Opacity", new Pair<Float>(((Globals.WIDTH / 2) - 256.0f), (Globals.HEIGHT - 400.0f)), 512.0f, opacityOperation);
 		opacitySlider.setSliderBounds(new Pair<Float>(0.60f, 0.90f));
 		opacitySlider.setDefaultVal(Flashlight.getShadowOpacity());
 		opacitySlider.setSliderVal(Flashlight.getShadowOpacity());
@@ -77,6 +78,7 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 			applyButton.mouseEnter();
 			if(mouse.isMouseDown()) {
 				opacitySlider.apply(true);
+				ConfigManager.getInstance().save();
 				game.enterState(DisplaySettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();

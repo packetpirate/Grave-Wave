@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
@@ -15,7 +16,10 @@ public class Flashlight {
 	private static Color SHADOW = new Color(0xBB000009);
 	private static final Color NIGHT_VISION = new Color(0x66004409);
 	
-	public static float getShadowOpacity() { return Flashlight.SHADOW.a; }
+	public static float getShadowOpacity() {
+		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) return Flashlight.SHADOW.a;
+		else return ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"); 
+	}
 	public static void setShadowOpacity(float val_) { Flashlight.SHADOW.a = val_; }
 	
 	private Pair<Float> origin;

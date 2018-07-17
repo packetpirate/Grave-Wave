@@ -5,8 +5,7 @@ import org.newdawn.slick.SlickException;
 
 public class MusicPlayer {
 	private static final int SOUNDTRACK_LENGTH = 9;
-	
-	private float MUSIC_VOLUME = 0.15f;
+	private static final float DEFAULT_MUSIC_VOLUME = 0.15f;
 	
 	private static MusicPlayer instance;
 	
@@ -28,7 +27,7 @@ public class MusicPlayer {
 	public void update(boolean menu) throws SlickException {
 		if((nowPlaying != null) && !nowPlaying.playing() && autoplay) {
 			if(!menu) nextSong();
-			else nowPlaying.play(1.0f, MUSIC_VOLUME); // If we're on the main menu, we effectively want to "loop" the song.
+			else nowPlaying.play(1.0f, getMusicVolume()); // If we're on the main menu, we effectively want to "loop" the song.
 		}
 	}
 	
@@ -61,19 +60,20 @@ public class MusicPlayer {
 		Music song = new Music(String.format("music/%s.ogg", songName), true);
 		if(song != null) {
 			nowPlaying = song;
-			nowPlaying.play(1.0f, MUSIC_VOLUME);
+			nowPlaying.play(1.0f, getMusicVolume());
 		}
 	}
 	
 	public float getMusicVolume() {
-		return MUSIC_VOLUME;
+		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("musicVolume")) return DEFAULT_MUSIC_VOLUME;
+		else return ConfigManager.getInstance().getAttributes().getFloat("musicVolume");
 	}
 	
 	public void setMusicVolume(float val_) {
-		if(val_ < 0.0f) MUSIC_VOLUME = 0.0f;
-		else if(val_ > 1.0f) MUSIC_VOLUME = 1.0f;
-		else MUSIC_VOLUME = val_;
+		if(val_ < 0.0f) val_ = 0.0f;
+		else if(val_ > 1.0f) val_ = 1.0f;
 		
-		if(nowPlaying != null) nowPlaying.setVolume(MUSIC_VOLUME);
+		ConfigManager.getInstance().getAttributes().set("musicVolume", val_);
+		if(nowPlaying != null) nowPlaying.setVolume(val_);
 	}
 }

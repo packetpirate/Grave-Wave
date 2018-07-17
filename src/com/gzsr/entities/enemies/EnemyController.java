@@ -15,7 +15,9 @@ import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.items.Armor;
 import com.gzsr.states.GameState;
+import com.gzsr.states.ShopState;
 
 public class EnemyController implements Entity {
 	private static final int SPAWN_POOL_START = 5;
@@ -113,6 +115,10 @@ public class EnemyController implements Entity {
 				spawnEnemy(spawnPos);
 			}
 		}
+		
+		// Shop updates? Determine if certain items should be added at this point?
+		float armorChance = Globals.rand.nextFloat(); // All we really need for now.
+		if(armorChance <= Armor.SHOP_SPAWN_CHANCE) ShopState.getShop().addItem(new Armor(Armor.Type.randomType(), Pair.ZERO, 0L));
 		
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 	}

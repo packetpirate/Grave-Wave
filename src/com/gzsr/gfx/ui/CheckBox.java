@@ -8,6 +8,7 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
@@ -15,6 +16,7 @@ import com.gzsr.misc.Pair;
 public class CheckBox implements Entity {
 	public static final float SIZE = 40.0f;
 	
+	private String property;
 	private String label;
 	private Pair<Float> position;
 	
@@ -31,7 +33,8 @@ public class CheckBox implements Entity {
 	
 	private Consumer<Boolean> operation;
 	
-	public CheckBox(String label_, Pair<Float> position_, boolean checked_, Consumer<Boolean> operation_) {
+	public CheckBox(String property_, String label_, Pair<Float> position_, boolean checked_, Consumer<Boolean> operation_) {
+		this.property = property_;
 		this.label = label_;
 		this.position = position_;
 		
@@ -69,6 +72,8 @@ public class CheckBox implements Entity {
 			checked = defaultVal;
 			operation.accept(defaultVal);
 		}
+		
+		ConfigManager.getInstance().getAttributes().set(property, checked);
 	}
 	
 	public boolean contains(float x, float y) {

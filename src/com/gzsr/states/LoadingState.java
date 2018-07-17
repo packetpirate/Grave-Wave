@@ -10,8 +10,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
+import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Flashlight;
 import com.gzsr.states.settings.AudioSettingsState;
 import com.gzsr.states.settings.ControlSettingsState;
 import com.gzsr.states.settings.DisplaySettingsState;
@@ -40,6 +43,10 @@ public class LoadingState extends BasicGameState {
 			loadAnimations(); // has to be loaded after images
 			loadSounds();
 			
+			ConfigManager.getInstance().init();
+			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
+			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
+			Controls.getInstance().loadControls();
 			AssetManager.finishLoad();
 		}
 	}

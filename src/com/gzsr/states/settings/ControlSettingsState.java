@@ -15,6 +15,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
@@ -42,12 +43,12 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 			for(int i = 0; i < Controls.Layout.values().length; i++) { 
 				Controls.Layout input = Controls.Layout.values()[i];
 				
-				if((input == Controls.Layout.OPEN_CONSOLE) && !Globals.ENABLE_CONSOLE) continue; // dead code warning if constant set to true, will be false in releases
+				if((input == Controls.Layout.OPEN_CONSOLE) && !Globals.ENABLE_CONSOLE) continue; // ignore the dead code warning
 				
 				float x = ((i / 11) >= 1) ? ((Globals.WIDTH / 2) + 172.0f) : ((Globals.WIDTH / 2) - 200.0f);
 				float y = (((i % 11) * ControlConfigButton.HEIGHT) + ((i % 11) * 5.0f) + 150.0f);
 				Pair<Float> position = new Pair<Float>(x, y);
-				ControlConfigButton button = new ControlConfigButton(input, position);
+				ControlConfigButton button = new ControlConfigButton(("ctrl" + input.getName().replaceAll(" ", "")), input, position);
 				
 				button.setLabel(input.getName());
 				
@@ -76,6 +77,7 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 			applyButton.mouseEnter();
 			if(mouse.isMouseDown()) {
 				configs.stream().forEach(button -> button.apply(true));
+				ConfigManager.getInstance().save();
 				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();

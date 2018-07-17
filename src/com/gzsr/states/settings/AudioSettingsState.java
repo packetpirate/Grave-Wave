@@ -14,6 +14,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
@@ -34,12 +35,12 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		musicVolumeSlider = new Slider("Music Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 300.0f), 300.0f, musicVolumeOperation);
+		musicVolumeSlider = new Slider("musicVolume", "Music Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 300.0f), 300.0f, musicVolumeOperation);
 		musicVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
 		musicVolumeSlider.setDefaultVal(MusicPlayer.getInstance().getMusicVolume());
 		musicVolumeSlider.setSliderVal(MusicPlayer.getInstance().getMusicVolume());
 		
-		soundVolumeSlider = new Slider("Sound FX Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 400.0f), 300.0f, soundVolumeOperation);
+		soundVolumeSlider = new Slider("soundVolume", "Sound FX Volume", new Pair<Float>((float)((Globals.WIDTH / 2) - 150.0f), 400.0f), 300.0f, soundVolumeOperation);
 		soundVolumeSlider.setSliderBounds(new Pair<Float>(0.0f, 1.0f));
 		soundVolumeSlider.setDefaultVal(AssetManager.getManager().getSoundVolume());
 		soundVolumeSlider.setSliderVal(AssetManager.getManager().getSoundVolume());
@@ -63,6 +64,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 			applyButton.mouseEnter();
 			if(mouse.isMouseDown()) {
 				musicVolumeSlider.apply(true);
+				ConfigManager.getInstance().save();
 				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();

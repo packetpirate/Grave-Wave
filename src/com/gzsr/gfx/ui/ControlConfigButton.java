@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
@@ -19,6 +20,8 @@ public class ControlConfigButton extends Button {
 	private int currentKey;
 	private String currentDisplay;
 	
+	private String property;
+	public String getProperty() { return property; }
 	private String label;
 	public String getLabel() { return label; }
 	public void setLabel(String label_) { this.label = label_; }
@@ -27,9 +30,10 @@ public class ControlConfigButton extends Button {
 	public boolean isAwaitingInput() { return awaitingInput; }
 	public void cancel() { awaitingInput = false; }
 	
-	public ControlConfigButton(Controls.Layout keyMapping_, Pair<Float> position_) {
+	public ControlConfigButton(String property_, Controls.Layout keyMapping_, Pair<Float> position_) {
 		super();
 		
+		this.property = property_;
 		this.text = keyMapping_.getDisplay();
 		
 		setPosition(position_);
@@ -76,6 +80,7 @@ public class ControlConfigButton extends Button {
 		}
 		
 		text = currentDisplay;
+		ConfigManager.getInstance().getAttributes().set(property, currentKey);
 	}
 	
 	public void acceptKeyMapping(int key_, char c_) {

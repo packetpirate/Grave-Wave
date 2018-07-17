@@ -1,6 +1,7 @@
 package com.gzsr.objects.items;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
 
@@ -8,6 +9,7 @@ public class Armor extends Item {
 	private static final String ICONNAME = "GZS_Armor";
 	private static final long DURATION = 10_000L;
 	private static final int COST = 1_000;
+	public static final float SHOP_SPAWN_CHANCE = 0.2f;
 	
 	private Type armorType;
 	
@@ -20,6 +22,11 @@ public class Armor extends Item {
 		
 		Type(double amnt_) {
 			this.amnt = amnt_;
+		}
+		
+		public static Type randomType() {
+			Type [] types = values();
+			return types[Globals.rand.nextInt(types.length)];
 		}
 	}
 	

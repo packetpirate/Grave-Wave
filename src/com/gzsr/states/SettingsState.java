@@ -1,5 +1,6 @@
 package com.gzsr.states;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -97,6 +98,7 @@ public class SettingsState extends BasicGameState implements InputListener {
 		controlSettings.render(g, 0L);
 		backButton.render(g, 0L);
 		
+		g.setColor(Color.white);
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));
 		float vWidth = g.getFont().getWidth(Globals.VERSION);
 		g.drawString(Globals.VERSION, (Globals.WIDTH - vWidth - 20.0f), 20.0f);

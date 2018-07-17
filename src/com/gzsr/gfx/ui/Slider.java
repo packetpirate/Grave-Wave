@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Layers;
@@ -14,6 +15,9 @@ import com.gzsr.misc.Pair;
 
 public class Slider implements Entity {
 	private static final float HEIGHT = 20.0f;
+	
+	private String property;
+	public String getProperty() { return property; }
 	
 	private String label;
 	public String getLabel() { return label; }
@@ -34,7 +38,8 @@ public class Slider implements Entity {
 	
 	private Consumer<Float> operation;
 	
-	public Slider(String label_, Pair<Float> position_, float width_, Consumer<Float> operation_) {
+	public Slider(String property_, String label_, Pair<Float> position_, float width_, Consumer<Float> operation_) {
+		this.property = property_;
 		this.label = label_;
 		
 		this.position = position_;
@@ -83,6 +88,8 @@ public class Slider implements Entity {
 			sliderVal = defaultVal;
 			operation.accept(defaultVal); // Revert to old value.
 		}
+		
+		ConfigManager.getInstance().getAttributes().set(property, sliderVal);
 	}
 	
 	public boolean contains(float x, float y) {

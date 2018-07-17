@@ -19,14 +19,19 @@ public class AssetManager {
 	private static int ASSETS_LOADED = 0;
 	private static boolean LOADING_COMPLETE = false;
 	
+	private static final float DEFAULT_SOUND_VOLUME = 1.0f;
+	
 	private static AssetManager instance = null;
 	
-	private float SOUND_VOLUME = 1.0f;
-	public float getSoundVolume() { return SOUND_VOLUME; }
+	public float getSoundVolume() {
+		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("soundVolume")) return DEFAULT_SOUND_VOLUME;
+		else return ConfigManager.getInstance().getAttributes().getFloat("soundVolume"); 
+	}
 	public void setSoundVolume(float val_) {
-		if(val_ < 0.0f) SOUND_VOLUME = 0.0f;
-		else if(val_ > 1.0f) SOUND_VOLUME = 1.0f;
-		else SOUND_VOLUME = val_;
+		if(val_ < 0.0f) val_ = 0.0f;
+		else if(val_ > 1.0f) val_ = 1.0f;
+		
+		ConfigManager.getInstance().getAttributes().set("soundVolume", val_);
 	}
 	
 	private Map<String, Image> images = null;

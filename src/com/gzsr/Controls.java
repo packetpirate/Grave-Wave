@@ -105,6 +105,7 @@ public class Controls {
 		}
 		
 		public static String findDisplay(int key, char c) {
+			/*
 			switch(key) {
 				case Input.KEY_SPACE: return "Space";
 				case Input.KEY_LCONTROL: return "Left Control";
@@ -119,7 +120,8 @@ public class Controls {
 				case Input.KEY_ENTER: return "Enter";
 				case Input.KEY_GRAVE: return "~";
 				default: return Character.toString(c);
-			}
+			}*/
+			return Input.getKeyName(key);
 		}
 	}
 	
@@ -169,6 +171,19 @@ public class Controls {
 	
 	public boolean isReleased(Layout key) {
 		return key.getState().equals(KeyState.RELEASED);
+	}
+	
+	public void loadControls() {
+		ConfigManager config = ConfigManager.getInstance();
+		Layout [] controls = Layout.values();
+		for(Layout control : controls) {
+			String property = String.format("ctrl%s", control.getName().replaceAll(" ", ""));
+			if(config.getAttributes().getMap().containsKey(property)) {
+				int val = config.getAttributes().getInt(property);
+				control.setKey(val);
+				control.setDisplay(Input.getKeyName(val));
+			}
+		}
 	}
 	
 	public void resetAll() {

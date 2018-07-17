@@ -14,6 +14,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
+import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
@@ -33,7 +34,7 @@ public class GameSettingsState extends BasicGameState implements InputListener {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		fullscreenCheckbox = new CheckBox("Fullscreen", new Pair<Float>((Globals.WIDTH - (CheckBox.SIZE + 70.0f)), (Globals.HEIGHT - 270.0f)), Globals.app.isFullscreen(), fullscreenOperation);
+		fullscreenCheckbox = new CheckBox("fullscreen", "Fullscreen", new Pair<Float>((Globals.WIDTH - (CheckBox.SIZE + 70.0f)), (Globals.HEIGHT - 270.0f)), Globals.app.isFullscreen(), fullscreenOperation);
 		
 		applyButton = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Apply");
 		backButton = new MenuButton(new Pair<Float>((Globals.WIDTH - 200.0f), (Globals.HEIGHT - 80.0f)), "Back");
@@ -54,6 +55,7 @@ public class GameSettingsState extends BasicGameState implements InputListener {
 			applyButton.mouseEnter();
 			if(mouse.isMouseDown()) {
 				fullscreenCheckbox.apply(true);
+				ConfigManager.getInstance().save();
 				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();

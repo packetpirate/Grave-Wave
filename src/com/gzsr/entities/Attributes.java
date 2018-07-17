@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Attributes {
 	private Map<String, Object> attributes;
+	public Map<String, Object> getMap() { return attributes; }
 	public void reset() { attributes.clear(); }
 	
 	public Attributes() {
@@ -35,10 +36,17 @@ public class Attributes {
 		else return 0;
 	}
 	
+	public boolean getBoolean(String key_) {
+		Object obj = attributes.get(key_);
+		if(obj != null) return ((Boolean)obj).booleanValue();
+		else return false;
+	}
+	
 	public void set(String key_, int val_) { attributes.put(key_, val_); }
 	public void set(String key_, float val_) { attributes.put(key_, val_); }
 	public void set(String key_, double val_) { attributes.put(key_, val_); }
 	public void set(String key_, long val_) { attributes.put(key_, val_); }
+	public void set(String key_, boolean val_) { attributes.put(key_, val_); }
 	
 	public void addTo(String key_, int val_) {
 		Object obj = attributes.get(key_);

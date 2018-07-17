@@ -527,7 +527,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					if(playerMoney >= item.getCost()) {
 						player.getAttributes().set("money", (playerMoney - item.getCost()));
 						item.apply(player, 0L);
-						// TODO: Add sound for buying items.
+						SHOP.dropItem(item.getName());
 					}
 				}
 				// TODO: Add cases for other item types.
