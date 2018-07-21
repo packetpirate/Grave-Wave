@@ -1,8 +1,13 @@
 package com.gzsr.objects.items;
 
+import org.newdawn.slick.Color;
+
 import com.gzsr.AssetManager;
+import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.status.SpeedEffect;
 import com.gzsr.status.Status;
 
@@ -25,6 +30,11 @@ public class SpeedItem extends Item {
 		player.getAttributes().set("spdMult", SpeedEffect.EFFECT);
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
+		
+		VanishingText vt = new VanishingText("Speed Up!", "PressStart2P-Regular_small", 
+											 new Pair<Float>(0.0f, -32.0f), Color.white, 
+											 cTime, 2_000L, true);
+		GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), vt);
 	}
 	
 	@Override

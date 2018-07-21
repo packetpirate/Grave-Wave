@@ -1,9 +1,13 @@
 package com.gzsr.objects.items;
 
+import org.newdawn.slick.Color;
+
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.VanishingText;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class HealthKit extends Item {
 	private static final String ICON_NAME = "GZS_Health";
@@ -26,6 +30,12 @@ public class HealthKit extends Item {
 		player.clearHarmful();
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
+		
+		String message = String.format("+%d Health!", (int)amnt);
+		VanishingText vt = new VanishingText(message, "PressStart2P-Regular_small", 
+											 new Pair<Float>(0.0f, -32.0f), Color.white, 
+											 cTime, 2_000L, true);
+		GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), vt);
 	}
 	
 	@Override
