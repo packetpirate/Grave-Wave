@@ -30,7 +30,7 @@ import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.MenuButton;
-import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.gfx.ui.hud.Console;
 import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.misc.MouseInfo;
@@ -55,9 +55,6 @@ public class GameState extends BasicGameState implements InputListener {
 	private ConcurrentHashMap<String, Entity> entities;
 	public Entity getEntity(String key) { return entities.get(key); }
 	public void addEntity(String key, Entity e) { entities.put(key, e); }
-	
-	private static ConcurrentHashMap<String, VanishingText> messages = new ConcurrentHashMap<String, VanishingText>();
-	public static void addVanishingText(String key, VanishingText vt) { messages.put(key, vt); }
 	
 	private boolean gameStarted, paused, consoleOpen, exitPrompt;
 	public boolean isConsoleOpen() { return consoleOpen; }
@@ -155,14 +152,8 @@ public class GameState extends BasicGameState implements InputListener {
 											new FadeInTransition(Color.black, 100));
 						}
 					}
-					
-					Iterator<Entry<String, VanishingText>> vit = messages.entrySet().iterator();
-					while(vit.hasNext()) {
-						// Draw all vanishing texts to the screen.
-						VanishingText vt = ((Map.Entry<String, VanishingText>) vit.next()).getValue();
-						vt.update(this, time, delta);
-						if(!vt.isActive()) vit.remove(); 
-					}
+
+					StatusMessages.getInstance().update(this, time, delta);
 					
 					Camera.getCamera().update(time);
 					MusicPlayer.getInstance().update(false);
@@ -189,11 +180,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 		
-		Iterator<Entry<String, VanishingText>> vit = messages.entrySet().iterator();
-		while(vit.hasNext()) {
-			VanishingText vt = ((Map.Entry<String, VanishingText>) vit.next()).getValue();
-			if(vt.isActive()) vt.render(g, time);
-		}
+		StatusMessages.getInstance().render(g, time);
 		
 		hud.render(g, this, time);
 		
@@ -245,7 +232,7 @@ public class GameState extends BasicGameState implements InputListener {
 		entities.put("enemyController", new EnemyController());
 		entities.put("player", Player.getPlayer());
 		
-		messages.clear();
+		StatusMessages.getInstance().clear();
 		
 		gameStarted = false;
 		paused = false;

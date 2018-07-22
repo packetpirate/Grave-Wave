@@ -31,16 +31,17 @@ import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
-import com.gzsr.objects.weapons.AK47;
-import com.gzsr.objects.weapons.BigRedButton;
-import com.gzsr.objects.weapons.BowAndArrow;
-import com.gzsr.objects.weapons.ClaymoreWeapon;
-import com.gzsr.objects.weapons.Flamethrower;
-import com.gzsr.objects.weapons.GrenadeLauncher;
-import com.gzsr.objects.weapons.LaserBarrier;
-import com.gzsr.objects.weapons.Mossberg;
-import com.gzsr.objects.weapons.SentryWeapon;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.ranged.AK47;
+import com.gzsr.objects.weapons.ranged.BigRedButton;
+import com.gzsr.objects.weapons.ranged.BowAndArrow;
+import com.gzsr.objects.weapons.ranged.ClaymoreWeapon;
+import com.gzsr.objects.weapons.ranged.Flamethrower;
+import com.gzsr.objects.weapons.ranged.GrenadeLauncher;
+import com.gzsr.objects.weapons.ranged.LaserBarrier;
+import com.gzsr.objects.weapons.ranged.Mossberg;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
+import com.gzsr.objects.weapons.ranged.SentryWeapon;
 
 public class ShopState extends BasicGameState implements InputListener {
 	public static final int ID = 2;
@@ -205,10 +206,13 @@ public class ShopState extends BasicGameState implements InputListener {
 						
 						img.draw(ix, iy, 1.5f);
 						
-						// Draw the weapon's current ammo below.
-						String ammoText = String.format("%d / %d", w.getClipAmmo(), w.getInventoryAmmo());
-						float ty = (y + ITEM_BOX_SIZE - g.getFont().getLineHeight() - 5.0f);
-						FontUtils.drawCenter(g.getFont(), ammoText, (int)x, (int)ty, (int)ITEM_BOX_SIZE, Color.white);
+						if(w instanceof RangedWeapon) {
+							// Draw the weapon's current ammo below.
+							RangedWeapon rw = (RangedWeapon) w;
+							String ammoText = String.format("%d / %d", rw.getClipAmmo(), rw.getInventoryAmmo());
+							float ty = (y + ITEM_BOX_SIZE - g.getFont().getLineHeight() - 5.0f);
+							FontUtils.drawCenter(g.getFont(), ammoText, (int)x, (int)ty, (int)ITEM_BOX_SIZE, Color.white);
+						}
 					}
 					// TODO: Add cases for other item types.
 				}
@@ -343,7 +347,8 @@ public class ShopState extends BasicGameState implements InputListener {
 				}
 				
 				// Draw reload time rating.
-				{
+				if(w instanceof RangedWeapon) {
+					RangedWeapon rw = (RangedWeapon) w;
 					float y = (barY + ((f.getLineHeight() + barHeight + 15.0f) * 2.0f));
 					FontUtils.drawCenter(f, "Reload Time", (int)barX, (int)(y - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
 					
@@ -352,7 +357,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					g.setColor(Color.white);
 					g.drawRect(barX, y, barWidth, barHeight);
 					
-					int pips = ItemConstants.getReloadTimeClass(w.getReloadTime()).getPipCount();
+					int pips = ItemConstants.getReloadTimeClass(rw.getReloadTime()).getPipCount();
 					for(int p = 0; p < pips; p++) {
 						g.setColor(Color.red);
 						g.fillRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
@@ -382,9 +387,9 @@ public class ShopState extends BasicGameState implements InputListener {
 									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
 				
 				// Draw the "buy ammo" and "max ammo" buttons and labels.
-				if(selection instanceof Weapon) {
+				if(selection instanceof RangedWeapon) {
+					RangedWeapon w = (RangedWeapon) selection;
 					{ // Draw ammo button.
-						Weapon w = (Weapon) selection;
 						boolean lessThanOne = ((w.getInventoryAmmo() == ((w.getMaxClips() - 1) * w.getClipSize())) && (w.getClipAmmo() < w.getClipSize()));
 						int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipSize() - w.getClipAmmo())) : w.getAmmoPrice());
 						String text = "$" + NumberFormat.getInstance(Locale.US).format(ammoPrice);
@@ -392,7 +397,7 @@ public class ShopState extends BasicGameState implements InputListener {
 											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)ammoButton.getSize().x.floatValue(), Color.white);
 						ammoButton.render(g, 0L);
-						if(((Weapon) selection).clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < ((Weapon) selection).getAmmoPrice())) {
+						if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
 							float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
@@ -406,12 +411,12 @@ public class ShopState extends BasicGameState implements InputListener {
 											 Color.black);
 					} // End draw ammo button.
 					{ // Draw max ammo button.
-						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(((Weapon) selection).getMaxAmmoPrice()));
+						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(w.getMaxAmmoPrice()));
 						FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)), 
 											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
 						maxAmmoButton.render(g, 0L);
-						if(((Weapon) selection).clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < ((Weapon) selection).getMaxAmmoPrice())) {
+						if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getMaxAmmoPrice())) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
 							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
@@ -517,7 +522,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					if(playerMoney >= w.getPrice()) {
 						player.getAttributes().set("money", (playerMoney - w.getPrice()));
 						player.getInventory().addItem(w);
-						player.resetCurrentWeapon();
+						player.equip(w);
 						SHOP.dropItem(w.getName());
 						assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 					}
@@ -544,8 +549,8 @@ public class ShopState extends BasicGameState implements InputListener {
 				// TODO: Add cases for other item types.
 			} else if(ammoButton.inBounds(x, y) && selectedInInventory) {
 				// Buy ammo for the currently selected weapon.
-				if(selection instanceof Weapon) {
-					Weapon w = (Weapon) selection;
+				if(selection instanceof RangedWeapon) {
+					RangedWeapon w = (RangedWeapon) selection;
 					
 					if(!w.clipsMaxedOut()) {
 						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
@@ -562,8 +567,8 @@ public class ShopState extends BasicGameState implements InputListener {
 				}
 			} else if(maxAmmoButton.inBounds(x, y) && selectedInInventory) {
 				// Buy max ammo for the currently selected weapon.
-				if(selection instanceof Weapon) {
-					Weapon w = (Weapon) selection;
+				if(selection instanceof RangedWeapon) {
+					RangedWeapon w = (RangedWeapon) selection;
 					
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getMaxAmmoPrice();

@@ -22,15 +22,16 @@ import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.StatusProjectile;
-import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
-import com.gzsr.objects.weapons.Beretta;
-import com.gzsr.objects.weapons.LaserNode;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.ranged.Beretta;
+import com.gzsr.objects.weapons.ranged.LaserNode;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
@@ -93,7 +94,7 @@ public class Player implements Entity {
 		else return null;
 	}
 	public void resetCurrentWeapon() {
-		getWeapons().stream().forEach(w -> w.weaponChanged());
+		getWeapons().stream().forEach(w -> w.unequip());
 		weaponIndex = 0;
 		if(!inventory.getWeapons().isEmpty()) getCurrentWeapon().equip();
 	}
@@ -101,16 +102,26 @@ public class Player implements Entity {
 		if(!getWeapons().isEmpty()) {
 			if((wi >= 0) && (wi < getWeapons().size())) {
 				// If the player actually has the weapon bound to the key that was pressed...
-				getCurrentWeapon().weaponChanged();
+				getCurrentWeapon().unequip();
 				weaponIndex = wi;
 				getCurrentWeapon().equip();
+			}
+		}
+	}
+	public void equip(Weapon w) {
+		getCurrentWeapon().unequip();
+		w.equip();
+		for(int i = 0; i < getWeapons().size(); i++) {
+			if(getWeapons().get(i) == w) {
+				weaponIndex = i;
+				break;
 			}
 		}
 	}
 	public void weaponRotate(int direction) {
 		int wc = getWeapons().size();
 		if(wc > 0) {
-			getCurrentWeapon().weaponChanged(); // Notify the current weapon that we're switching.
+			getCurrentWeapon().unequip(); // Notify the current weapon that we're switching.
 			// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 			int i = Math.floorMod((weaponIndex + direction), wc);
 			weaponIndex = i;
@@ -228,10 +239,10 @@ public class Player implements Entity {
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
 		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
-		if (Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && !cWeapon.isReloading(cTime)
-				&& (cWeapon.getClipAmmo() != cWeapon.getClipSize())) {
-			cWeapon.reload(cTime);
-		} 
+		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && (cWeapon instanceof RangedWeapon)) {
+			RangedWeapon rw = (RangedWeapon) cWeapon;
+			if(!rw.isReloading(cTime) && (rw.getClipAmmo() != rw.getClipSize())) rw.reload(cTime);
+		}
 		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
 		// Check to see if the player is trying to change weapon by number.
@@ -249,18 +260,18 @@ public class Player implements Entity {
 		
 		if(cWeapon != null) {
 			if(mouse.isMouseDown() || cWeapon.isChargedWeapon()) {
-				if(cWeapon.isReloading(cTime) || (cWeapon.getClipAmmo() == 0)) {
+				if((cWeapon instanceof RangedWeapon) && ((RangedWeapon)cWeapon).isReloading(cTime) || (((RangedWeapon)cWeapon).getClipAmmo() == 0)) {
 					long elapsed = cTime - attributes.getLong("lastClick");
 					if(elapsed >= 1_000L) {
 						Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
 						click.play(1.0f, AssetManager.getManager().getSoundVolume());
-						VanishingText text = new VanishingText("Out of Ammo!", "PressStart2P-Regular_small", new Pair<Float>(0.0f, -32.0f), 
-															   Color.white, cTime, 1_000L, true);
-						GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), text);
+						
+						String message = "Out of Ammo!";
+						StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
 						
 						attributes.set("lastClick", cTime);
 					}
-				} else if(cWeapon.canFire(cTime)) cWeapon.fire(this, new Pair<Float>(position.x, position.y), theta, cTime);
+				} else if(cWeapon.canUse(cTime)) cWeapon.use(this, new Pair<Float>(position.x, position.y), theta, cTime);
 			}
 		}
 		
@@ -449,14 +460,9 @@ public class Player implements Entity {
 			attributes.addTo("skillPoints", 1);
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
-				VanishingText ding = new VanishingText("Ding!", "PressStart2P-Regular_small", 
-													   new Pair<Float>(0.0f, -32.0f), Color.white, 
-													   cTime, 2_000L, true);
-				VanishingText reminder = new VanishingText(String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay()), 
-														   "PressStart2P-Regular_small", new Pair<Float>(0.0f, 32.0f), 
-														   Color.white, cTime, 2_000L, true);
-				GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), ding);
-				GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), reminder);
+				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay());
+				StatusMessages.getInstance().addMessage("Ding!", this, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
+				StatusMessages.getInstance().addMessage(reminder, this, new Pair<Float>(0.0f, 32.0f), cTime, 2_000L);
 			}
 			
 			{ // Random chance for the enemies to say "Gratz!".
@@ -466,11 +472,7 @@ public class Player implements Entity {
 					while(it.hasNext()) {
 						Enemy e = it.next();
 						if(e.isAlive(cTime)) {
-							String key = String.format("vanishText%d", Globals.generateEntityID());
-							VanishingText vt = new VanishingText("Gratz!", "PressStart2P-Regular_small", 
-																 new Pair<Float>(e.getPosition().x, (e.getPosition().y - 32.0f)), Color.white, 
-																 cTime, 2_000L);
-							GameState.addVanishingText(key, vt);
+							StatusMessages.getInstance().addMessage("Gratz!", e, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
 						}
 					}
 				}
@@ -497,29 +499,32 @@ public class Player implements Entity {
 	 */
 	public boolean checkProjectiles(GameState gs, Enemy enemy, long cTime, int delta) {
 		for(Weapon w : getWeapons()) {
-			Iterator<Projectile> it = w.getProjectiles().iterator();
-			while(it.hasNext()) {
-				Projectile p = it.next();
-				if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
-					if(p instanceof LaserNode) {
-						LaserNode node = (LaserNode) p;
-						node.damage(enemy.getDamage());
-						enemy.blockMovement();
-					} else {
-						p.collide(gs, enemy, cTime);
-						
-						// If this is a special projectile, apply its status effect to the target.
-						if(p instanceof StatusProjectile) {
-							StatusProjectile sp = (StatusProjectile) p;
-							sp.applyEffect(enemy, cTime);
+			if(w instanceof RangedWeapon) {
+				RangedWeapon rw = (RangedWeapon) w;
+				Iterator<Projectile> it = rw.getProjectiles().iterator();
+				while(it.hasNext()) {
+					Projectile p = it.next();
+					if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
+						if(p instanceof LaserNode) {
+							LaserNode node = (LaserNode) p;
+							node.damage(enemy.getDamage());
+							enemy.blockMovement();
+						} else {
+							p.collide(gs, enemy, cTime);
+							
+							// If this is a special projectile, apply its status effect to the target.
+							if(p instanceof StatusProjectile) {
+								StatusProjectile sp = (StatusProjectile) p;
+								sp.applyEffect(enemy, cTime);
+							}
+							
+							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
+							double totalDamage = (p.getDamage() * damagePercentage);
+							if(totalDamage > 0.0) enemy.takeDamage(totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 						}
 						
-						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-						double totalDamage = (p.getDamage() * damagePercentage);
-						if(totalDamage > 0.0) enemy.takeDamage(totalDamage, w.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
+						return true;
 					}
-					
-					return true;
 				}
 			}
 		}

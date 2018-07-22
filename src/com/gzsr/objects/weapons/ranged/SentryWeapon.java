@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
 
-public class SentryWeapon extends Weapon {
+public class SentryWeapon extends RangedWeapon {
 	private static final int PRICE = 4_000;
 	private static final int AMMO_PRICE = 2_000;
 	private static final long COOLDOWN = 0L;
@@ -30,12 +30,12 @@ public class SentryWeapon extends Weapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		this.fireSound = assets.getSound(SentryWeapon.FIRE_SOUND);
+		this.useSound = assets.getSound(SentryWeapon.FIRE_SOUND);
 		this.reloadSound = assets.getSound(SentryWeapon.RELOAD_SOUND);
 	}
 
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -49,20 +49,16 @@ public class SentryWeapon extends Weapon {
 		projectiles.add(turret);
 		
 		ammoInClip--;
-		lastFired = cTime;
+		lastUsed = cTime;
 		
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override
-	public Pair<Integer> getDamage() {
-		return Turret.getTotalDamage(); 
-	}
+	public Pair<Integer> getDamage() { return Turret.getTotalDamage(); }
 	
 	@Override
-	public float getKnockback() {
-		return SentryWeapon.KNOCKBACK;
-	}
+	public float getKnockback() { return SentryWeapon.KNOCKBACK; }
 	
 	@Override
 	public boolean isReloading(long cTime) {
@@ -71,48 +67,31 @@ public class SentryWeapon extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return SentryWeapon.RELOAD_TIME;
-	}
+	public long getReloadTime() { return SentryWeapon.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)SentryWeapon.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(SentryWeapon.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
 	
 	@Override
-	public String getName() {
-		return "Sentry Gun";
-	}
-	
-	@Override
-	public String getDescription() {
-		return "Feeling overwhelmed and need some automated assistance? Unleash a second, robotic apocalypse on the undead horde.";
-	}
+	public int getClipSize() { return SentryWeapon.CLIP_SIZE; }
 
 	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(SentryWeapon.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return SentryWeapon.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return SentryWeapon.START_CLIPS;
-	}
+	public int getStartClips() { return SentryWeapon.START_CLIPS; }
 	
 	@Override
 	public int getMaxClips() { return SentryWeapon.MAX_CLIPS; }
 
 	@Override
-	public long getCooldown() {
-		return SentryWeapon.COOLDOWN;
-	}
+	public long getCooldown() { return SentryWeapon.COOLDOWN; }
 	
 	@Override
 	public List<Projectile> getProjectiles() {
@@ -128,17 +107,21 @@ public class SentryWeapon extends Weapon {
 	}
 
 	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.TURRET;
-	}
+	public ProjectileType getProjectile() { return ProjectileType.TURRET; }
 
 	@Override
-	public int getPrice() {
-		return SentryWeapon.PRICE;
-	}
+	public int getPrice() { return SentryWeapon.PRICE; }
 
 	@Override
-	public int getAmmoPrice() {
-		return SentryWeapon.AMMO_PRICE;
+	public int getAmmoPrice() { return SentryWeapon.AMMO_PRICE; }
+
+	@Override
+	public String getName() {
+		return "Sentry Gun";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "Feeling overwhelmed and need some automated assistance? Unleash a second, robotic apocalypse on the undead horde.";
 	}
 }

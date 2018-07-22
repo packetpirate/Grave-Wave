@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -12,9 +12,11 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.Explosion.Type;
 import com.gzsr.status.Status;
 
-public class GrenadeLauncher extends Weapon {
+public class GrenadeLauncher extends RangedWeapon {
 	private static final int PRICE = 6_000;
 	private static final int AMMO_PRICE = 1_500;
 	private static final long COOLDOWN = 1_000L;
@@ -43,7 +45,7 @@ public class GrenadeLauncher extends Weapon {
 		this.damage = new Dice(GrenadeLauncher.MIN_DAMAGE_COUNT, GrenadeLauncher.MIN_DAMAGE_SIDES);
 		
 		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
-		this.fireSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
+		this.useSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
 		this.reloadSound = assets.getSound(GrenadeLauncher.RELOAD_SOUND);
 	}
 	
@@ -65,7 +67,7 @@ public class GrenadeLauncher extends Weapon {
 	}
 
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -84,21 +86,17 @@ public class GrenadeLauncher extends Weapon {
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
+		lastUsed = cTime;
 		
 		muzzleFlash.restart(cTime);
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() {
-		return damage.getRange(GrenadeLauncher.MIN_DAMAGE_MOD);
-	}
+	public Pair<Integer> getDamage() { return damage.getRange(GrenadeLauncher.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public float getKnockback() {
-		return GrenadeLauncher.KNOCKBACK;
-	}
+	public float getKnockback() { return GrenadeLauncher.KNOCKBACK; }
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -107,16 +105,41 @@ public class GrenadeLauncher extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return GrenadeLauncher.RELOAD_TIME;
-	}
+	public long getReloadTime() { return GrenadeLauncher.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)GrenadeLauncher.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(GrenadeLauncher.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
 	
+	@Override
+	public int getClipSize() { return GrenadeLauncher.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return GrenadeLauncher.START_CLIPS; }
+	
+	@Override
+	public int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
+
+	@Override
+	public long getCooldown() { return GrenadeLauncher.COOLDOWN; }
+
+	@Override
+	public ProjectileType getProjectile() { return ProjectileType.GRENADE; }
+
+	@Override
+	public int getPrice() { return GrenadeLauncher.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return GrenadeLauncher.AMMO_PRICE; }
+
 	@Override
 	public String getName() {
 		return "Grenade Launcher";
@@ -125,43 +148,5 @@ public class GrenadeLauncher extends Weapon {
 	@Override
 	public String getDescription() {
 		return "A tube-barreled weapon with a revolving chamber full of grenades so you can rain concussive blasts of fire upon the undead horde.";
-	}
-
-	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(GrenadeLauncher.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return GrenadeLauncher.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return GrenadeLauncher.START_CLIPS;
-	}
-	
-	@Override
-	public int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
-
-	@Override
-	public long getCooldown() {
-		return GrenadeLauncher.COOLDOWN;
-	}
-
-	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.GRENADE;
-	}
-
-	@Override
-	public int getPrice() {
-		return GrenadeLauncher.PRICE;
-	}
-	
-	@Override
-	public int getAmmoPrice() {
-		return GrenadeLauncher.AMMO_PRICE;
 	}
 }

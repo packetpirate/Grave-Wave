@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import java.util.Iterator;
 
@@ -15,7 +15,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
-public class LaserBarrier extends Weapon {
+public class LaserBarrier extends RangedWeapon {
 	private static final int PRICE = 1_500;
 	private static final int AMMO_PRICE = 750;
 	private static final long COOLDOWN = 1_000L;
@@ -36,7 +36,7 @@ public class LaserBarrier extends Weapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		this.fireSound = assets.getSound(LaserBarrier.FIRE_SOUND);
+		this.useSound = assets.getSound(LaserBarrier.FIRE_SOUND);
 		this.reloadSound = assets.getSound(LaserBarrier.RELOAD_SOUND);
 		
 		this.lastNode = null;
@@ -73,7 +73,7 @@ public class LaserBarrier extends Weapon {
 	}
 
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -99,27 +99,23 @@ public class LaserBarrier extends Weapon {
 		}
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
+		lastUsed = cTime;
 		
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
-	public boolean canFire(long cTime) {
+	public boolean canUse(long cTime) {
 		boolean notUnpaired = (lastNode == null);
 		boolean inRange = notUnpaired ? true : ((Calculate.Distance(Player.getPlayer().getPosition(), lastNode.getPosition())) <= (LaserBarrier.BARRIER_RANGE / 2));
-		return super.canFire(cTime) && (notUnpaired || inRange);
+		return super.canUse(cTime) && (notUnpaired || inRange);
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() {
-		return new Pair<Integer>(0, 0);
-	}
+	public Pair<Integer> getDamage() { return new Pair<Integer>(0, 0); }
 	
 	@Override
-	public float getKnockback() {
-		return 0.0f;
-	}
+	public float getKnockback() { return 0.0f; }
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -128,16 +124,41 @@ public class LaserBarrier extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return LaserBarrier.RELOAD_TIME;
-	}
+	public long getReloadTime() { return LaserBarrier.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)LaserBarrier.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(LaserBarrier.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
 	
+	@Override
+	public int getClipSize() { return LaserBarrier.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return LaserBarrier.START_CLIPS; }
+	
+	@Override
+	public int getMaxClips() { return LaserBarrier.MAX_CLIPS; }
+
+	@Override
+	public long getCooldown() { return LaserBarrier.COOLDOWN; }
+
+	@Override
+	public ProjectileType getProjectile() { return ProjectileType.LASERNODE; }
+
+	@Override
+	public int getPrice() { return LaserBarrier.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return LaserBarrier.AMMO_PRICE; }
+
 	@Override
 	public String getName() {
 		return "Laser Barrier";
@@ -146,43 +167,5 @@ public class LaserBarrier extends Weapon {
 	@Override
 	public String getDescription() {
 		return "For those who need a break from fighting zombies to recuperate. Stops the enemies in their tracks.";
-	}
-
-	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(LaserBarrier.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return LaserBarrier.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return LaserBarrier.START_CLIPS;
-	}
-	
-	@Override
-	public int getMaxClips() { return LaserBarrier.MAX_CLIPS; }
-
-	@Override
-	public long getCooldown() {
-		return LaserBarrier.COOLDOWN;
-	}
-
-	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.LASERNODE;
-	}
-
-	@Override
-	public int getPrice() {
-		return LaserBarrier.PRICE;
-	}
-	
-	@Override
-	public int getAmmoPrice() {
-		return LaserBarrier.AMMO_PRICE;
 	}
 }

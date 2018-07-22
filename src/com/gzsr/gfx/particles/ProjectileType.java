@@ -2,7 +2,7 @@ package com.gzsr.gfx.particles;
 
 import org.newdawn.slick.Color;
 
-import com.gzsr.objects.weapons.Grenade;
+import com.gzsr.objects.weapons.ranged.Grenade;
 
 public enum ProjectileType {
 	// Player projectiles.

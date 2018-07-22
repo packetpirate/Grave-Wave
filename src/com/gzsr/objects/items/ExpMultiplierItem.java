@@ -1,13 +1,9 @@
 package com.gzsr.objects.items;
 
-import org.newdawn.slick.Color;
-
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 import com.gzsr.status.ExpMultiplierEffect;
 import com.gzsr.status.Status;
 
@@ -31,10 +27,8 @@ public class ExpMultiplierItem extends Item {
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		
-		VanishingText vt = new VanishingText("2x Experience!", "PressStart2P-Regular_small", 
-											 new Pair<Float>(0.0f, -32.0f), Color.white, 
-											 cTime, 2_000L, true);
-		GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), vt);
+		String message = "2x Experience!";
+		StatusMessages.getInstance().addMessage(message, player, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
 	}
 	
 	@Override

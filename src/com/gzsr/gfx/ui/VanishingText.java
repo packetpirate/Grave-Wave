@@ -8,6 +8,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
@@ -15,7 +16,9 @@ public class VanishingText implements Entity {
 	protected String text;
 	protected String font;
 	protected Pair<Float> position;
+	public Pair<Float> getPosition() { return position; }
 	protected Pair<Float> offset;
+	public Pair<Float> getOffset() { return offset; }
 	protected Color color;
 	
 	protected long creationTime;
@@ -24,7 +27,8 @@ public class VanishingText implements Entity {
 	protected boolean active;
 	public boolean isActive() { return active; }
 	
-	private boolean followPlayer;
+	private Entity tether;
+	public Entity getTether() { return tether; }
 	
 	/**
 	 * Draws a floating piece of text on the screen.
@@ -47,7 +51,7 @@ public class VanishingText implements Entity {
 		this.creationTime = creationTime_;
 		this.duration = duration_;
 		this.active = true;
-		this.followPlayer = false;
+		this.tether = null;
 	}
 	
 	/**
@@ -60,12 +64,21 @@ public class VanishingText implements Entity {
 	 * @param duration_ How long the text should be displayed on the screen.
 	 * @param followPlayer_ Whether or not to follow the player. If not, text still created relative to player position, but does not follow.
 	 */
-	public VanishingText(String text_, String font_, Pair<Float> offset_, Color color_, long creationTime_, long duration_, boolean followPlayer_) {
+	public VanishingText(String text_, String font_, Entity tether_, Pair<Float> offset_, Color color_, long creationTime_, long duration_) {
 		this.text = text_;
 		this.font = font_;
 		
-		Player player = Player.getPlayer();
-		this.position = new Pair<Float>((player.getPosition().x + offset_.x), (player.getPosition().y + offset_.y));
+		this.position = new Pair<Float>(offset_.x, offset_.y);
+		if(tether_ instanceof Player) {
+			Player player = (Player) tether_;
+			this.position.x += player.getPosition().x;
+			this.position.y += player.getPosition().y;
+		} else if(tether_ instanceof Enemy) {
+			Enemy enemy = (Enemy) tether_;
+			this.position.x += enemy.getPosition().x;
+			this.position.y += enemy.getPosition().y;
+		}
+		
 		this.offset = offset_;
 		
 		this.color = new Color(color_);
@@ -73,7 +86,7 @@ public class VanishingText implements Entity {
 		this.creationTime = creationTime_;
 		this.duration = duration_;
 		this.active = true;
-		this.followPlayer = followPlayer_;
+		this.tether = tether_;
 	}
 
 	@Override
@@ -81,10 +94,19 @@ public class VanishingText implements Entity {
 		long elapsed = (cTime - creationTime);
 		if(elapsed > duration) active = false;
 		
-		if(active && followPlayer && (offset != null)) {
-			Player player = Player.getPlayer();
-			position.x = player.getPosition().x + offset.x;
-			position.y = player.getPosition().y + offset.y;
+		if(isActive() && (tether != null) && (offset != null)) {
+			position.x = offset.x;
+			position.y = offset.y;
+			
+			if(tether instanceof Player) {
+				Player player = (Player) tether;
+				position.x += player.getPosition().x;
+				position.y += player.getPosition().y;
+			} else if(tether instanceof Enemy) {
+				Enemy enemy = (Enemy) tether;
+				position.x += enemy.getPosition().x;
+				position.y += enemy.getPosition().y;
+			}
 		}
 	}
 

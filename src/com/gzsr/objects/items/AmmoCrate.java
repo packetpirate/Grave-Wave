@@ -1,16 +1,15 @@
 package com.gzsr.objects.items;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.newdawn.slick.Color;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.ui.VanishingText;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
-import com.gzsr.states.GameState;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public class AmmoCrate extends Item {
 	private static final String ICONNAME = "GZS_Ammo";
@@ -27,17 +26,21 @@ public class AmmoCrate extends Item {
 	@Override
 	public void apply(Player player, long cTime) {
 		List<Weapon> active = player.getWeapons();
+		List<RangedWeapon> ranged = new ArrayList<RangedWeapon>();
+		for(Weapon w : active) {
+			if(w instanceof RangedWeapon) ranged.add((RangedWeapon) w);
+		}
+		
 		int weapon = Globals.rand.nextInt(active.size());
-		Weapon w = active.get(weapon);
+		RangedWeapon w = ranged.get(weapon);
+		
 		w.addInventoryAmmo(w.getClipSize());
+		
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		
 		String message = String.format("+%d %s Ammo!", w.getClipSize(), w.getName());
-		VanishingText vt = new VanishingText(message, "PressStart2P-Regular_small", 
-											 new Pair<Float>(0.0f, -32.0f), Color.white, 
-											 cTime, 2_000L, true);
-		GameState.addVanishingText(String.format("vanishText%d", Globals.generateEntityID()), vt);
+		StatusMessages.getInstance().addMessage(message, player, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
 	}
 	
 	@Override

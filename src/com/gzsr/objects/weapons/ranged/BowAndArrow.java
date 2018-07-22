@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -16,7 +16,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
-public class BowAndArrow extends Weapon {
+public class BowAndArrow extends RangedWeapon {
 	private static final int PRICE = 2_000;
 	private static final int AMMO_PRICE = 400;
 	private static final long COOLDOWN = 1_000L;
@@ -44,7 +44,7 @@ public class BowAndArrow extends Weapon {
 		
 		this.damage = new Dice(BowAndArrow.MIN_DAMAGE_COUNT, BowAndArrow.MIN_DAMAGE_SIDES);
 		
-		this.fireSound = assets.getSound(BowAndArrow.FIRE_SOUND);
+		this.useSound = assets.getSound(BowAndArrow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
 		
 		release = false;
@@ -96,7 +96,7 @@ public class BowAndArrow extends Weapon {
 	}
 	
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -117,52 +117,62 @@ public class BowAndArrow extends Weapon {
 		
 		release = false;
 		charge = 0.0f;
-		lastFired = cTime;
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		lastUsed = cTime;
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
-	public boolean canFire(long cTime) {
-		return super.canFire(cTime) && release;
-	}
+	public boolean canUse(long cTime) { return super.canUse(cTime) && release; }
 	
 	@Override
-	public void weaponChanged() {
-		super.weaponChanged();
+	public void unequip() {
+		super.unequip();
 		// Prevents arrow from firing after we've switching weapons.
 		charging = false;
 		charge = 0.0f;
 	}
 	
 	@Override
-	public boolean isChargedWeapon() {
-		return true;
-	}
+	public Pair<Integer> getDamage() { return damage.getRange(BowAndArrow.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public Pair<Integer> getDamage() {
-		return damage.getRange(BowAndArrow.MIN_DAMAGE_MOD);
-	}
-	
-	@Override
-	public float getKnockback() {
-		return BowAndArrow.KNOCKBACK;
-	}
+	public float getKnockback() { return BowAndArrow.KNOCKBACK; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		return false;
-	}
+	public boolean isReloading(long cTime) { return false; }
 	
 	@Override
-	public long getReloadTime() {
-		return 0L;
-	}
+	public long getReloadTime() { return 0L; }
 
 	@Override
-	public double getReloadTime(long cTime) {
-		return 0.0;
-	}
+	public double getReloadTime(long cTime) { return 0.0; }
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BowAndArrow.ICON_NAME); }
+	
+	@Override
+	public boolean isChargedWeapon() { return true; }
+
+	@Override
+	public int getClipSize() { return BowAndArrow.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return BowAndArrow.START_CLIPS; }
+	
+	@Override
+	public int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
+
+	@Override
+	public long getCooldown() { return BowAndArrow.COOLDOWN; }
+
+	@Override
+	public ProjectileType getProjectile() { return ProjectileType.ARROW; }
+
+	@Override
+	public int getPrice() { return BowAndArrow.PRICE; }
+
+	@Override
+	public int getAmmoPrice() { return BowAndArrow.AMMO_PRICE; }
 	
 	@Override
 	public String getName() {
@@ -172,43 +182,5 @@ public class BowAndArrow extends Weapon {
 	@Override
 	public String getDescription() {
 		return "A primitive weapon that takes a little bit of time to fire, but is well worth the wait.";
-	}
-
-	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(BowAndArrow.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return BowAndArrow.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return BowAndArrow.START_CLIPS;
-	}
-	
-	@Override
-	public int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
-
-	@Override
-	public long getCooldown() {
-		return BowAndArrow.COOLDOWN;
-	}
-
-	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.ARROW;
-	}
-
-	@Override
-	public int getPrice() {
-		return BowAndArrow.PRICE;
-	}
-
-	@Override
-	public int getAmmoPrice() {
-		return BowAndArrow.AMMO_PRICE;
 	}
 }

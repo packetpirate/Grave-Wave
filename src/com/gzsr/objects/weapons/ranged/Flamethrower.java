@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,7 +16,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
 
-public class Flamethrower extends Weapon {
+public class Flamethrower extends RangedWeapon {
 	private static final int PRICE = 3_000;
 	private static final int AMMO_PRICE = 1_000; 
 	private static final long COOLDOWN = 25L;
@@ -27,7 +27,6 @@ public class Flamethrower extends Weapon {
 	private static final int EMBER_COUNT = 5;
 	private static final float EMBER_SPREAD = (float)(Math.PI / 18);
 	private static final String ICON_NAME = "GZS_Flammenwerfer";
-	//private static final String PROJECTILE_NAME = "GZS_FireParticle4";
 	private static final String FIRE_SOUND = "flamethrower3";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
@@ -36,14 +35,14 @@ public class Flamethrower extends Weapon {
 		
 		AssetManager assets = AssetManager.getManager();
 		
-		this.fireSound = assets.getSound(Flamethrower.FIRE_SOUND);
+		this.useSound = assets.getSound(Flamethrower.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Flamethrower.RELOAD_SOUND);
 	}
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
-		if(!equipped || reloading || !Controls.getInstance().getMouse().isMouseDown()) fireSound.stop();
+		if(!equipped || reloading || !Controls.getInstance().getMouse().isMouseDown()) useSound.stop();
 	}
 	
 	@Override
@@ -52,7 +51,7 @@ public class Flamethrower extends Weapon {
 	}
 	
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Flamethrower.EMBER_COUNT; i++) {
 			//Color color = getProjectile().getColor();
 			Animation fire = AssetManager.getManager().getAnimation("GZS_FireAnimation1");
@@ -71,19 +70,15 @@ public class Flamethrower extends Weapon {
 		}
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
-		if(!fireSound.playing()) fireSound.loop(1.0f, AssetManager.getManager().getSoundVolume());
+		lastUsed = cTime;
+		if(!useSound.playing()) useSound.loop(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() {
-		return BurningEffect.getDamageRange();
-	}
+	public Pair<Integer> getDamage() { return BurningEffect.getDamageRange(); }
 	
 	@Override
-	public float getKnockback() {
-		return 0.0f;
-	}
+	public float getKnockback() { return 0.0f; }
 	
 	@Override
 	public boolean isReloading(long cTime) {
@@ -92,9 +87,7 @@ public class Flamethrower extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return Flamethrower.RELOAD_TIME;
-	}
+	public long getReloadTime() { return Flamethrower.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
@@ -103,13 +96,11 @@ public class Flamethrower extends Weapon {
 	}
 	
 	@Override
-	public String getName() {
-		return "Flamethrower";
-	}
-	
-	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Flamethrower.ICON_NAME); }
 
+	@Override
+	public boolean isChargedWeapon() { return false; }
+	
 	@Override
 	public int getClipSize() { return Flamethrower.CLIP_SIZE; }
 
@@ -126,13 +117,14 @@ public class Flamethrower extends Weapon {
 	public ProjectileType getProjectile() { return ProjectileType.FLAMETHROWER; }
 
 	@Override
-	public int getPrice() {
-		return Flamethrower.PRICE;
-	}
+	public int getPrice() { return Flamethrower.PRICE; }
 	
 	@Override
-	public int getAmmoPrice() {
-		return Flamethrower.AMMO_PRICE;
+	public int getAmmoPrice() { return Flamethrower.AMMO_PRICE; }
+	
+	@Override
+	public String getName() {
+		return "Flamethrower";
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

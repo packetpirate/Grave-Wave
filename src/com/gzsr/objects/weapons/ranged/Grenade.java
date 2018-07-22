@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import java.util.Iterator;
 
@@ -12,6 +12,7 @@ import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
+import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 
 public class Grenade extends Projectile {

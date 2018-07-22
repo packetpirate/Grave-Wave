@@ -16,6 +16,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.ui.DamageText;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
@@ -124,7 +125,7 @@ public abstract class Enemy implements Entity {
 	
 	protected void postDamageTexts() {
 		if(!damageTexts.isEmpty()) {
-			damageTexts.stream().forEach(dt -> GameState.addVanishingText(String.format("dt%d", Globals.generateEntityID()), dt));
+			damageTexts.stream().forEach(dt -> StatusMessages.getInstance().addMessage(dt));
 			damageTexts.clear();
 		}
 	}

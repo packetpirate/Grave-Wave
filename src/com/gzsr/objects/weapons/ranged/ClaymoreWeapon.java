@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
-public class ClaymoreWeapon extends Weapon {
+public class ClaymoreWeapon extends RangedWeapon {
 	private static final int PRICE = 1_200;
 	private static final int AMMO_PRICE = 250;
 	private static final long COOLDOWN = 1_500L;
@@ -33,12 +33,12 @@ public class ClaymoreWeapon extends Weapon {
 		
 		AssetManager assets = AssetManager.getManager();
 		
-		this.fireSound = assets.getSound(ClaymoreWeapon.FIRE_SOUND);
+		this.useSound = assets.getSound(ClaymoreWeapon.FIRE_SOUND);
 		this.reloadSound = assets.getSound(ClaymoreWeapon.RELOAD_SOUND);
 	}
 
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
@@ -51,16 +51,17 @@ public class ClaymoreWeapon extends Weapon {
 		projectiles.add(clay);
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
+		lastUsed = cTime;
 		
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() {
-		return Claymore.getDamageRange();
-	}
+	public Pair<Integer> getDamage() { return Claymore.getDamageRange(); }
 
+	@Override
+	public float getKnockback() { return ClaymoreWeapon.KNOCKBACK; }
+	
 	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
@@ -68,53 +69,31 @@ public class ClaymoreWeapon extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return ClaymoreWeapon.RELOAD_TIME;
-	}
+	public long getReloadTime() { return ClaymoreWeapon.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)ClaymoreWeapon.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ClaymoreWeapon.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
 	
 	@Override
-	public String getName() {
-		return "Claymore";
-	}
-	
-	@Override
-	public String getDescription() {
-		return "A stationary motion-activated explosive that sends shrapnel hurtling through the air to rip your enemies to shreds.";
-	}
+	public int getClipSize() { return ClaymoreWeapon.CLIP_SIZE; }
 
 	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(ClaymoreWeapon.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return ClaymoreWeapon.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return ClaymoreWeapon.START_CLIPS;
-	}
+	public int getStartClips() { return ClaymoreWeapon.START_CLIPS; }
 	
 	@Override
 	public int getMaxClips() { return ClaymoreWeapon.MAX_CLIPS; }
 
 	@Override
-	public long getCooldown() {
-		return ClaymoreWeapon.COOLDOWN;
-	}
-	
-	@Override
-	public float getKnockback() {
-		return ClaymoreWeapon.KNOCKBACK;
-	}
+	public long getCooldown() { return ClaymoreWeapon.COOLDOWN; }
 	
 	@Override
 	public List<Projectile> getProjectiles() {
@@ -130,17 +109,21 @@ public class ClaymoreWeapon extends Weapon {
 	}
 
 	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.CLAYMORE;
-	}
+	public ProjectileType getProjectile() { return ProjectileType.CLAYMORE; }
 
 	@Override
-	public int getPrice() {
-		return ClaymoreWeapon.PRICE;
+	public int getPrice() { return ClaymoreWeapon.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return ClaymoreWeapon.AMMO_PRICE; }
+
+	@Override
+	public String getName() {
+		return "Claymore";
 	}
 	
 	@Override
-	public int getAmmoPrice() {
-		return ClaymoreWeapon.AMMO_PRICE;
+	public String getDescription() {
+		return "A stationary motion-activated explosive that sends shrapnel hurtling through the air to rip your enemies to shreds.";
 	}
 }

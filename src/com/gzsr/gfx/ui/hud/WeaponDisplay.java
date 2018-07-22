@@ -16,6 +16,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.status.Status;
 
 public class WeaponDisplay implements Entity {
@@ -50,6 +51,7 @@ public class WeaponDisplay implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		Player player = Player.getPlayer();
+		Weapon w = player.getCurrentWeapon();
 		boolean touchingPlayer = intersects(player);
 		
 		if(displayWeapons(cTime)) {
@@ -59,8 +61,8 @@ public class WeaponDisplay implements Entity {
 			float startY = position.y;
 			
 			for(int i = 0; i < Math.min(3, player.getWeapons().size()); i++) {
-				Weapon w = weapons.get(Math.floorMod((wi + (i + 1)), weapons.size()));
-				Image icon = w.getInventoryIcon();
+				Weapon cWeapon = weapons.get(Math.floorMod((wi + (i + 1)), weapons.size()));
+				Image icon = cWeapon.getInventoryIcon();
 				float cy = (startY - (i * 54.0f));
 				float scale = (48.0f / (float)icon.getWidth());
 				
@@ -88,16 +90,17 @@ public class WeaponDisplay implements Entity {
 		changeColor(g, Color.black, touchingPlayer);
 		g.drawRect((position.x + 3.0f), (position.y + 3.0f), 48.0f, 48.0f);
 		
-		if(!player.getWeapons().isEmpty()) {
-			Weapon w = player.getCurrentWeapon();
+		if(!player.getWeapons().isEmpty() && (w instanceof RangedWeapon)) {
+			RangedWeapon rw = (RangedWeapon) w;
+			
 			Image icon = w.getInventoryIcon();
 			float scale = (48.0f / (float)icon.getWidth());
 			//g.drawImage(icon, (position.x + 3.0f), (position.y + 3.0f));
 			icon.draw((position.x + 3.0f), (position.y + 3.0f), scale);
 			
 			// Render the reloading bar, if the Player.getPlayer() is reloading.
-			if(w.isReloading(cTime)) {
-				float percentage = 1.0f - (float)w.getReloadTime(cTime);
+			if(rw.isReloading(cTime)) {
+				float percentage = 1.0f - (float)rw.getReloadTime(cTime);
 				float height = percentage * 48.0f;
 				float y = (position.y + 3.0f + (48.0f - height));
 				
@@ -106,18 +109,20 @@ public class WeaponDisplay implements Entity {
 			}
 		}
 		
-		if(player.hasStatus(Status.UNLIMITED_AMMO)) {
-			Image unlimitedAmmo = AssetManager.getManager().getImage("GZS_UnlimitedAmmo");
-			float x = position.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
-			float y = position.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
-			g.drawImage(unlimitedAmmo, x, y);
-		} else {
-			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
-			Weapon w = player.getCurrentWeapon();
-			String ammoText = String.format("%d / %d",
-					((w != null) ? w.getClipAmmo() : 0),
-					((w != null) ? w.getInventoryAmmo() : 0));
-			FontUtils.drawCenter(f, ammoText, (int)(position.x + 54.0f), (int)(position.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
+		if(w instanceof RangedWeapon) {
+			RangedWeapon rw = (RangedWeapon) w;
+			if(player.hasStatus(Status.UNLIMITED_AMMO)) {
+				Image unlimitedAmmo = AssetManager.getManager().getImage("GZS_UnlimitedAmmo");
+				float x = position.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
+				float y = position.y + 27.0f - (unlimitedAmmo.getHeight() / 2);
+				g.drawImage(unlimitedAmmo, x, y);
+			} else {
+				UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
+				String ammoText = String.format("%d / %d",
+						((rw != null) ? rw.getClipAmmo() : 0),
+						((rw != null) ? rw.getInventoryAmmo() : 0));
+				FontUtils.drawCenter(f, ammoText, (int)(position.x + 54.0f), (int)(position.y + ((54.0f - f.getLineHeight()) / 2)), 93, Color.black);
+			}
 		}
 	}
 

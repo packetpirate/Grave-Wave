@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -18,7 +18,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
-public class Mossberg extends Weapon {
+public class Mossberg extends RangedWeapon {
 	private static final int PRICE = 1_200;
 	private static final int AMMO_PRICE = 250;
 	private static final long COOLDOWN = 1_200L;
@@ -46,7 +46,7 @@ public class Mossberg extends Weapon {
 		this.damage = new Dice(Mossberg.MIN_DAMAGE_COUNT, Mossberg.MIN_DAMAGE_SIDES);
 		
 		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
-		this.fireSound = assets.getSound(Mossberg.FIRE_SOUND);
+		this.useSound = assets.getSound(Mossberg.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Mossberg.RELOAD_SOUND);
 	}
 	
@@ -68,7 +68,7 @@ public class Mossberg extends Weapon {
 	}
 
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Mossberg.SHOT_COUNT; i++) {
 			Color color = getProjectile().getColor();
 			float velocity = getProjectile().getVelocity();
@@ -92,10 +92,10 @@ public class Mossberg extends Weapon {
 		else Camera.getCamera().refreshShake(cTime);
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
+		lastUsed = cTime;
 		
 		muzzleFlash.restart(cTime);
-		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	@Override
@@ -107,9 +107,7 @@ public class Mossberg extends Weapon {
 	}
 	
 	@Override
-	public float getKnockback() {
-		return Mossberg.KNOCKBACK;
-	}
+	public float getKnockback() { return Mossberg.KNOCKBACK; }
 
 	@Override
 	public boolean isReloading(long cTime) {
@@ -118,15 +116,40 @@ public class Mossberg extends Weapon {
 	}
 
 	@Override
-	public long getReloadTime() {
-		return Mossberg.RELOAD_TIME;
-	}
+	public long getReloadTime() { return Mossberg.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)Mossberg.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Mossberg.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
+	
+	@Override
+	public int getClipSize() { return Mossberg.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return Mossberg.START_CLIPS; }
+	
+	@Override
+	public int getMaxClips() { return Mossberg.MAX_CLIPS; }
+
+	@Override
+	public long getCooldown() { return Mossberg.COOLDOWN; }
+	
+	@Override
+	public ProjectileType getProjectile() { return ProjectileType.SHOTGUN; }
+
+	@Override
+	public int getPrice() { return Mossberg.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return Mossberg.AMMO_PRICE; }
 
 	@Override
 	public String getName() {
@@ -136,41 +159,5 @@ public class Mossberg extends Weapon {
 	@Override
 	public String getDescription() {
 		return "It was meant for hunting turkeys, but... well... it'll have to do.";
-	}
-	
-	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(Mossberg.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return Mossberg.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() { return Mossberg.START_CLIPS; }
-	
-	@Override
-	public int getMaxClips() { return Mossberg.MAX_CLIPS; }
-
-	@Override
-	public long getCooldown() {
-		return Mossberg.COOLDOWN;
-	}
-	
-	@Override
-	public ProjectileType getProjectile() {
-		return ProjectileType.SHOTGUN;
-	}
-
-	@Override
-	public int getPrice() {
-		return Mossberg.PRICE;
-	}
-	
-	@Override
-	public int getAmmoPrice() {
-		return Mossberg.AMMO_PRICE;
 	}
 }

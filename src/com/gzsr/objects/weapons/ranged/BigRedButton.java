@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons;
+package com.gzsr.objects.weapons.ranged;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,10 +18,12 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.Explosion.Type;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
-public class BigRedButton extends Weapon {
+public class BigRedButton extends RangedWeapon {
 	private static final int PRICE = 10_000;
 	private static final int AMMO_PRICE = 8_000;
 	private static final long COOLDOWN = 15_000L;
@@ -55,7 +57,7 @@ public class BigRedButton extends Weapon {
 		
 		this.damage = new Dice(BigRedButton.MIN_DAMAGE_COUNT, BigRedButton.MIN_DAMAGE_SIDES);
 		
-		this.fireSound = assets.getSound(BigRedButton.FIRE_SOUND);
+		this.useSound = assets.getSound(BigRedButton.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BigRedButton.RELOAD_SOUND);
 	}
 	
@@ -88,7 +90,7 @@ public class BigRedButton extends Weapon {
 	}
 	
 	@Override
-	public void fire(Player player, Pair<Float> position, float theta, long cTime) {
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			boolean critical = isCritical();
 			
@@ -101,8 +103,8 @@ public class BigRedButton extends Weapon {
 		}
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
-		lastFired = cTime;
-		fireSound.play();
+		lastUsed = cTime;
+		useSound.play();
 	}
 	
 	private Pair<Float> getExplosionLocation(GameState gs, Player player, Pair<Float> position) {
@@ -146,14 +148,10 @@ public class BigRedButton extends Weapon {
 	}
 
 	@Override
-	public Pair<Integer> getDamage() {
-		return damage.getRange(BigRedButton.MIN_DAMAGE_MOD);
-	}
+	public Pair<Integer> getDamage() { return damage.getRange(BigRedButton.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public float getKnockback() {
-		return 0.0f;
-	}
+	public float getKnockback() { return 0.0f; }
 	
 	@Override
 	public boolean isReloading(long cTime) {
@@ -162,15 +160,40 @@ public class BigRedButton extends Weapon {
 	}
 	
 	@Override
-	public long getReloadTime() {
-		return BigRedButton.RELOAD_TIME;
-	}
+	public long getReloadTime() { return BigRedButton.RELOAD_TIME; }
 
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
 		return ((double)elapsed / (double)BigRedButton.RELOAD_TIME);
 	}
+
+	@Override
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BigRedButton.ICON_NAME); }
+
+	@Override
+	public boolean isChargedWeapon() { return false; }
+	
+	@Override
+	public int getClipSize() { return BigRedButton.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return BigRedButton.START_CLIPS; }
+
+	@Override
+	public int getMaxClips() { return BigRedButton.MAX_CLIPS; }
+	
+	@Override
+	public long getCooldown() { return BigRedButton.COOLDOWN; }
+
+	@Override
+	public ProjectileType getProjectile() { return null; }
+
+	@Override
+	public int getPrice() { return BigRedButton.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return BigRedButton.AMMO_PRICE; }
 
 	@Override
 	public String getName() {
@@ -180,44 +203,5 @@ public class BigRedButton extends Weapon {
 	@Override
 	public String getDescription() {
 		return "A mysterious featureless box with a large red button on it... I wonder what it does?";
-	}
-	
-	@Override
-	public Image getInventoryIcon() {
-		return AssetManager.getManager().getImage(BigRedButton.ICON_NAME);
-	}
-
-	@Override
-	public int getClipSize() {
-		return BigRedButton.CLIP_SIZE;
-	}
-
-	@Override
-	public int getStartClips() {
-		return BigRedButton.START_CLIPS;
-	}
-
-	@Override
-	public int getMaxClips() { return BigRedButton.MAX_CLIPS; }
-	
-	@Override
-	public long getCooldown() {
-		return BigRedButton.COOLDOWN;
-	}
-
-	@Override
-	public ProjectileType getProjectile() {
-		return null;
-	}
-
-	@Override
-	public int getPrice() {
-		return BigRedButton.PRICE;
-	}
-
-	
-	@Override
-	public int getAmmoPrice() {
-		return BigRedButton.AMMO_PRICE;
 	}
 }
