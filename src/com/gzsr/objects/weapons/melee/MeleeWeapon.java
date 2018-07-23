@@ -20,6 +20,8 @@ public abstract class MeleeWeapon extends Weapon {
 	protected boolean attacking;
 	public boolean isAttacking() { return attacking; }
 	protected boolean multihit;
+	protected boolean currentCritical;
+	public boolean isCurrentCritical() { return currentCritical; }
 	protected float attackTheta;
 	public float getAttackTheta() { return attackTheta; }
 	protected long lastAttack;
@@ -32,6 +34,8 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		attacking = false;
 		multihit = false;
+		currentCritical = false;
+		
 		attackTheta = 0.0f;
 		lastAttack = 0L;
 	}
@@ -77,6 +81,8 @@ public abstract class MeleeWeapon extends Weapon {
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		attacking = true;
+		currentCritical = isCritical();
+		
 		attackTheta = theta;
 		lastAttack = cTime;
 		
@@ -99,13 +105,14 @@ public abstract class MeleeWeapon extends Weapon {
 		attackArea = null;
 		
 		attacking = false;
+		
 		attackTheta = 0.0f;
 		lastAttack = 0L;
 	}
 	
 	public boolean hit(Shape collider, long cTime) {
 		boolean isHit = collider.intersects(getHitBox(cTime)); 
-		if(isHit) stopAttack();
+		if(isHit && !multihit) stopAttack();
 		
 		return isHit;
 	}

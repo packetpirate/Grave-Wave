@@ -173,10 +173,11 @@ public class GameState extends BasicGameState implements InputListener {
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		g.clear();
 		
-		Image background = assets.getImage("GZS_Background6");
-		g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
-		
 		Camera.getCamera().translate(g);
+		
+		Image background = assets.getImage("GZS_Background6");
+		g.drawImage(background, -Camera.MAX_OFFSET, -Camera.MAX_OFFSET, (Globals.WIDTH + Camera.MAX_OFFSET), (Globals.HEIGHT + Camera.MAX_OFFSET), 
+					0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 		

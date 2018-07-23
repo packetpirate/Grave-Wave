@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.util.FontUtils;
 
+import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -20,6 +23,9 @@ import com.gzsr.states.GameState;
 import com.gzsr.states.ShopState;
 
 public class EnemyController implements Entity {
+	private static final float BOSS_HEALTH_WIDTH = 300.0f;
+	private static final float BOSS_HEALTH_HEIGHT = 26.0f;
+	private static final Pair<Float> BOSS_HEALTH_ORIGIN = new Pair<Float>(((Globals.WIDTH / 2) - (BOSS_HEALTH_WIDTH / 2)), 20.0f);
 	private static final int SPAWN_POOL_START = 5;
 	private static final long DEFAULT_SPAWN = 2_000L;
 	private static final long MIN_SPAWN_RATE = 500L;
@@ -52,6 +58,11 @@ public class EnemyController implements Entity {
 	
 	private int wave;
 	public int getWave() { return wave; }
+	
+	private boolean bossWave;
+	private String bossTitle;
+	private double bossWaveHealth;
+	
 	private long lastWave;
 	private boolean breakTime;
 	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
@@ -73,6 +84,11 @@ public class EnemyController implements Entity {
 		lastEnemy = 0L;
 		
 		wave = 0;
+		
+		bossWave = false;
+		bossTitle = "";
+		bossWaveHealth = 0.0;
+		
 		lastWave = 0L;
 		breakTime = false;
 		
@@ -85,6 +101,11 @@ public class EnemyController implements Entity {
 	 */
 	public void restart(long startTime) {
 		wave++;
+		
+		bossWave = false;
+		bossTitle = "";
+		bossWaveHealth = 0.0;
+		
 		unborn.clear();
 		addImmediately.clear();
 		alive.clear();
@@ -96,16 +117,29 @@ public class EnemyController implements Entity {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Stitches st = new Stitches(spawnPos);
 			unborn.add(st);
+			
+			bossWave = true;
+			bossTitle = "Stitches";
+			bossWaveHealth = st.getHealth();
 		} else if((wave % Zombat.appearsOnWave()) == 0) {
 			for(int i = 0; i < 3; i++) {
 				Pair<Float> spawnPos = getSpawnPosition();
 				Zombat zb = new Zombat(spawnPos);
 				unborn.add(zb);
+				
+				bossWaveHealth += zb.getHealth();
 			}
+			
+			bossWave = true;
+			bossTitle = "Zombats";
 		} else if((wave % Aberration.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Aberration ab = new Aberration(spawnPos);
 			unborn.add(ab);
+			
+			bossWave = true;
+			bossTitle = "Aberration";
+			bossWaveHealth = ab.getHealth();
 		} else {
 			// Determine number of zombies based on wave number.
 			spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
@@ -229,6 +263,34 @@ public class EnemyController implements Entity {
 			while(it.hasNext()) {
 				Enemy e = it.next();
 				e.render(g, cTime);
+			}
+			
+			if(bossWave) {
+				g.setColor(Color.black);
+				g.fillRect(BOSS_HEALTH_ORIGIN.x, BOSS_HEALTH_ORIGIN.y, BOSS_HEALTH_WIDTH, BOSS_HEALTH_HEIGHT);
+				g.setColor(Color.white);
+				g.drawRect(BOSS_HEALTH_ORIGIN.x, BOSS_HEALTH_ORIGIN.y, BOSS_HEALTH_WIDTH, BOSS_HEALTH_HEIGHT);
+				
+				float healthLeft = 0.0f;
+				for(Enemy e : unborn) healthLeft += (float)e.getHealth();
+				for(Enemy e : alive) if(e.isAlive(cTime)) healthLeft += (float)e.getHealth();
+				
+				float percentage = (healthLeft / (float)bossWaveHealth);
+				if(percentage < 0.0f) percentage = 0.0f;
+				else if(percentage > 1.0f) percentage = 1.0f;
+				
+				g.setColor(Color.red);
+				g.fillRect((BOSS_HEALTH_ORIGIN.x + 2.0f), (BOSS_HEALTH_ORIGIN.y + 2.0f), 
+						   ((BOSS_HEALTH_WIDTH - 4.0f) * percentage), (BOSS_HEALTH_HEIGHT - 4.0f));
+				g.setColor(Color.white);
+				g.drawRect((BOSS_HEALTH_ORIGIN.x + 2.0f), (BOSS_HEALTH_ORIGIN.y + 2.0f), 
+						   ((BOSS_HEALTH_WIDTH - 4.0f) * percentage), (BOSS_HEALTH_HEIGHT - 4.0f));
+				
+				g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+				FontUtils.drawCenter(g.getFont(), bossTitle, 
+									 (int)BOSS_HEALTH_ORIGIN.x.floatValue(), 
+									 (int)(BOSS_HEALTH_ORIGIN.y + BOSS_HEALTH_HEIGHT + 10.0f), 
+									 (int)BOSS_HEALTH_WIDTH, Color.white);
 			}
 		}
 	}

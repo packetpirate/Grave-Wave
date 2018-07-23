@@ -31,7 +31,7 @@ public class AmmoCrate extends Item {
 			if(w instanceof RangedWeapon) ranged.add((RangedWeapon) w);
 		}
 		
-		int weapon = Globals.rand.nextInt(active.size());
+		int weapon = Globals.rand.nextInt(ranged.size());
 		RangedWeapon w = ranged.get(weapon);
 		
 		w.addInventoryAmmo(w.getClipSize());

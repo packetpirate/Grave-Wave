@@ -551,7 +551,7 @@ public class Player implements Entity {
 				if(mw.isAttacking() && mw.hit(enemy.getCollider(), cTime)) {
 					float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 					double totalDamage = (mw.rollDamage() * damagePercentage);
-					if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCritical());
+					if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
 				}
 			}
 		}

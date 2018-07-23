@@ -42,6 +42,7 @@ public abstract class Enemy implements Entity {
 	public void blockMovement() { moveBlocked = true; }
 	
 	protected double health;
+	public double getHealth() { return health; }
 	protected int cash;
 	public int getCashValue() { return cash; }
 	protected int experience;

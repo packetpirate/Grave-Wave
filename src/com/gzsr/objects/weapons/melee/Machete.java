@@ -12,9 +12,9 @@ public class Machete extends MeleeWeapon {
 	private static final long ATTACK_TIME = 400L;
 	private static final long COOLDOWN = 500L;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 10;
+	private static final int MIN_DAMAGE_COUNT = 4;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final int MIN_DAMAGE_MOD = 2;
 	private static final String ICON_NAME = "GZS_Machete";
 	
 	public Machete() {
@@ -27,7 +27,7 @@ public class Machete extends MeleeWeapon {
 	}
 	
 	@Override
-	public int rollDamage() { return damage.roll(MIN_DAMAGE_MOD); }
+	public int rollDamage() { return damage.roll(MIN_DAMAGE_MOD, isCurrentCritical()); }
 	
 	@Override
 	public float getDistance() { return Machete.HIT_AREA_OFFSET; }
