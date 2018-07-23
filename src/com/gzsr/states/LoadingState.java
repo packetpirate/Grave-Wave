@@ -172,6 +172,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_LaserWire.png",
 			"images/GZS_Turret.png",
 			"images/GZS_BigRedButton.png",
+			// Melee Weapons
+			"images/GZS_Machete.png",
 			// Effect Images
 			"images/GZS_LightAlphaMap3.png",
 			"images/GZS_Flashlight.png",

@@ -1,30 +1,153 @@
 package com.gzsr.objects.weapons.melee;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.Globals;
+import com.gzsr.entities.Player;
+import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 
 public abstract class MeleeWeapon extends Weapon {
+	protected Image img;
+	protected Shape attackArea;
+	
+	protected boolean attacking;
+	public boolean isAttacking() { return attacking; }
+	protected boolean multihit;
+	protected float attackTheta;
+	public float getAttackTheta() { return attackTheta; }
+	protected long lastAttack;
+	
 	public MeleeWeapon() {
+		super();
 		
+		img = null;
+		attackArea = null;
+		
+		attacking = false;
+		multihit = false;
+		attackTheta = 0.0f;
+		lastAttack = 0L;
 	}
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		
+		if(attacking) {
+			long elapsed = (cTime - lastAttack);
+			
+			// Check to see if we're already attacking, and if so, the attack time has elapsed.
+			if(elapsed > getAttackTime()) stopAttack();
+		}
 	}
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		if(attacking && (img != null)) {
+			if(Globals.SHOW_COLLIDERS) {
+				g.setColor(Color.red);
+				g.draw(attackArea);
+				
+				Shape hitBox = getHitBox(cTime);
+				g.fill(hitBox);
+			}
+			
+			Pair<Float> player = Player.getPlayer().getPosition();
+			float offset = getDistance();
+			float theta = getCurrentTheta(cTime);
+			
+			// Used to show line indicating where melee weapon should be pointing during swing/stab/whatever.
+			//g.setColor(Color.red);
+			//g.drawLine(player.x.floatValue(), player.y.floatValue(), (player.x + ((float)Math.cos(theta) * offset)), (player.y + ((float)Math.sin(theta) * offset)));
+			
+			float x = (player.x + ((float)Math.cos(theta) * offset));
+			float y = (player.y + ((float)Math.sin(theta) * offset));
+			
+			g.rotate(x, y, (float)Math.toDegrees(theta + (float)Math.PI));
+			img.draw(x, y);
+			g.rotate(x, y, (float)Math.toDegrees(-(theta + (float)Math.PI)));
+		}
+	}
+	
+	@Override
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
+		attacking = true;
+		attackTheta = theta;
+		lastAttack = cTime;
 		
+		attackArea = transformHitbox(position, theta, getHitAreaSize().x);
+		
+		if(useSound != null) useSound.play(); 
 	}
 
 	@Override
 	public boolean canUse(long cTime) {
-		// TODO: Generalize melee weapon canUse method.
-		return false;
+		long elapsed = (cTime - lastAttack);
+		
+		// Check to see if we're already attacking, and if so, the attack time has elapsed.
+		if(attacking && (elapsed > getAttackTime())) stopAttack();
+		
+		return !attacking;
 	}
+	
+	protected void stopAttack() {
+		attackArea = null;
+		
+		attacking = false;
+		attackTheta = 0.0f;
+		lastAttack = 0L;
+	}
+	
+	public boolean hit(Shape collider, long cTime) {
+		boolean isHit = collider.intersects(getHitBox(cTime)); 
+		if(isHit) stopAttack();
+		
+		return isHit;
+	}
+	
+	public abstract int rollDamage();
+	
+	// Gets the width of the collision rectangle that can hit.
+	protected float getAttackTimeRatio(long cTime) {
+		long elapsed = (cTime - lastAttack);
+		return ((float)elapsed / (float)getAttackTime()); 
+	}
+	
+	protected float getCurrentTheta(long cTime) {
+		float tOff = getThetaOffset();
+		return ((attackTheta - tOff) + (getAttackTimeRatio(cTime) * (tOff * 2)) + (float)(Math.PI / 2));
+	}
+	
+	public Shape getHitBox(long cTime) {
+		Player player = Player.getPlayer();
+		
+		float atr = getAttackTimeRatio(cTime);
+		Pair<Float> hitAreaSize = getHitAreaSize();
+		Shape hitbox = transformHitbox(player.getPosition(), attackTheta, (hitAreaSize.x * atr));
+		
+		return hitbox;
+	}
+	
+	protected Shape transformHitbox(Pair<Float> position, float theta, float width) {
+		Pair<Float> hitAreaSize = getHitAreaSize();
+		float cx = (position.x + ((float)Math.cos(theta + (Math.PI / 2)) * getDistance()));
+		float cy = (position.y + ((float)Math.sin(theta + (Math.PI / 2)) * getDistance()));
+		
+		Shape rect = new Rectangle((cx - (hitAreaSize.x / 2)), (cy - (hitAreaSize.y / 2)), width, hitAreaSize.y);
+		rect = rect.transform(Transform.createRotateTransform(theta, cx, cy));
+		
+		return rect;
+	}
+	
+	public abstract float getDistance();
+	public abstract Pair<Float> getHitAreaSize();
+	public abstract float getThetaOffset();
+	public abstract long getAttackTime();
 
 	@Override
 	public String getName() {

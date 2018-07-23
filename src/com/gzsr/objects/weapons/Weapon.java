@@ -30,7 +30,7 @@ public abstract class Weapon implements Entity {
 	public abstract void use(Player player, Pair<Float> position, float theta, long cTime);
 	public abstract boolean canUse(long cTime);
 	
-	protected boolean isCritical() {
+	public boolean isCritical() {
 		float roll = Globals.rand.nextFloat();
 		float chance = Player.getPlayer().getAttributes().getFloat("critChance");
 		return (roll <= chance); 

@@ -29,6 +29,8 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.melee.Machete;
+import com.gzsr.objects.weapons.melee.MeleeWeapon;
 import com.gzsr.objects.weapons.ranged.Beretta;
 import com.gzsr.objects.weapons.ranged.LaserNode;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
@@ -232,12 +234,21 @@ public class Player implements Entity {
 			}
 		}
 		
+		boolean canMove = true;
 		Weapon cWeapon = getCurrentWeapon();
-		float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
-		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
-		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
-		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
-		if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
+		if((cWeapon != null) && (cWeapon instanceof MeleeWeapon)) {
+			MeleeWeapon mw = (MeleeWeapon) cWeapon;
+			canMove = !mw.isAttacking(); // Can't move if melee attacking.
+		}
+		
+		if(canMove) {
+			float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
+		}
+		
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
 		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && (cWeapon instanceof RangedWeapon)) {
 			RangedWeapon rw = (RangedWeapon) cWeapon;
@@ -260,18 +271,24 @@ public class Player implements Entity {
 		
 		if(cWeapon != null) {
 			if(mouse.isMouseDown() || cWeapon.isChargedWeapon()) {
-				if((cWeapon instanceof RangedWeapon) && ((RangedWeapon)cWeapon).isReloading(cTime) || (((RangedWeapon)cWeapon).getClipAmmo() == 0)) {
-					long elapsed = cTime - attributes.getLong("lastClick");
-					if(elapsed >= 1_000L) {
-						Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
-						click.play(1.0f, AssetManager.getManager().getSoundVolume());
-						
-						String message = "Out of Ammo!";
-						StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
-						
-						attributes.set("lastClick", cTime);
-					}
-				} else if(cWeapon.canUse(cTime)) cWeapon.use(this, new Pair<Float>(position.x, position.y), theta, cTime);
+				boolean canUse = false;
+				if(cWeapon instanceof RangedWeapon) {
+					RangedWeapon rw = (RangedWeapon) cWeapon;
+					if(rw.isReloading(cTime) || (rw.getClipAmmo() == 0)) {
+						long elapsed = cTime - attributes.getLong("lastClick");
+						if(elapsed >= 1_000L) {
+							Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
+							click.play(1.0f, AssetManager.getManager().getSoundVolume());
+							
+							String message = "Out of Ammo!";
+							StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
+							
+							attributes.set("lastClick", cTime);
+						}
+					} else canUse = cWeapon.canUse(cTime);
+				} else canUse = cWeapon.canUse(cTime);
+				
+				if(canUse) cWeapon.use(this, new Pair<Float>(position.x, position.y), theta, cTime);
 			}
 		}
 		
@@ -279,8 +296,10 @@ public class Player implements Entity {
 		getWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
-		theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
-		flashlight.update(this, cTime);
+		if(canMove) {
+			theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
+			flashlight.update(this, cTime);
+		}
 	}
 
 	@Override
@@ -333,6 +352,7 @@ public class Player implements Entity {
 		weaponIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
+		inventory.addItem(new Machete());
 		inventory.addItem(new Beretta());
 		inventory.getWeapons().get(weaponIndex).equip();
 		
@@ -497,7 +517,7 @@ public class Player implements Entity {
 	 * @param enemy The enemy to test against the projectiles.
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
-	public boolean checkProjectiles(GameState gs, Enemy enemy, long cTime, int delta) {
+	public boolean checkWeapons(GameState gs, Enemy enemy, long cTime, int delta) {
 		for(Weapon w : getWeapons()) {
 			if(w instanceof RangedWeapon) {
 				RangedWeapon rw = (RangedWeapon) w;
@@ -525,6 +545,13 @@ public class Player implements Entity {
 						
 						return true;
 					}
+				}
+			} else if(w instanceof MeleeWeapon) {
+				MeleeWeapon mw = (MeleeWeapon) w;
+				if(mw.isAttacking() && mw.hit(enemy.getCollider(), cTime)) {
+					float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
+					double totalDamage = (mw.rollDamage() * damagePercentage);
+					if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCritical());
 				}
 			}
 		}
