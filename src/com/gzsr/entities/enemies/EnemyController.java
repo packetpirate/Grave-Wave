@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -23,9 +20,6 @@ import com.gzsr.states.GameState;
 import com.gzsr.states.ShopState;
 
 public class EnemyController implements Entity {
-	private static final float BOSS_HEALTH_WIDTH = 300.0f;
-	private static final float BOSS_HEALTH_HEIGHT = 26.0f;
-	private static final Pair<Float> BOSS_HEALTH_ORIGIN = new Pair<Float>(((Globals.WIDTH / 2) - (BOSS_HEALTH_WIDTH / 2)), 20.0f);
 	private static final int SPAWN_POOL_START = 5;
 	private static final long DEFAULT_SPAWN = 2_000L;
 	private static final long MIN_SPAWN_RATE = 500L;
@@ -40,6 +34,12 @@ public class EnemyController implements Entity {
 		add(EnemyType.GASBAG);
 		add(EnemyType.BIG_MAMA);
 	}};
+	
+	private static EnemyController instance;
+	public static EnemyController getInstance() {
+		if(instance == null) instance = new EnemyController();
+		return instance;
+	}
 	
 	private List<Enemy> unborn;
 	public List<Enemy> getUnbornEnemies() { return unborn; }
@@ -60,8 +60,11 @@ public class EnemyController implements Entity {
 	public int getWave() { return wave; }
 	
 	private boolean bossWave;
+	public boolean isBossWave() { return bossWave; }
 	private String bossTitle;
+	public String getBossTitle() { return bossTitle; }
 	private double bossWaveHealth;
+	public double getBossWaveHealth() { return bossWaveHealth; }
 	
 	private long lastWave;
 	private boolean breakTime;
@@ -73,7 +76,7 @@ public class EnemyController implements Entity {
 		return (int)((EnemyController.WAVE_BREAK_TIME / 1000) - (elapsed / 1000));
 	}
 	
-	public EnemyController() {
+	private EnemyController() {
 		unborn = new ArrayList<Enemy>();
 		addImmediately = new ArrayList<Enemy>();
 		alive = new ArrayList<Enemy>();
@@ -263,34 +266,6 @@ public class EnemyController implements Entity {
 			while(it.hasNext()) {
 				Enemy e = it.next();
 				e.render(g, cTime);
-			}
-			
-			if(bossWave) {
-				g.setColor(Color.black);
-				g.fillRect(BOSS_HEALTH_ORIGIN.x, BOSS_HEALTH_ORIGIN.y, BOSS_HEALTH_WIDTH, BOSS_HEALTH_HEIGHT);
-				g.setColor(Color.white);
-				g.drawRect(BOSS_HEALTH_ORIGIN.x, BOSS_HEALTH_ORIGIN.y, BOSS_HEALTH_WIDTH, BOSS_HEALTH_HEIGHT);
-				
-				float healthLeft = 0.0f;
-				for(Enemy e : unborn) healthLeft += (float)e.getHealth();
-				for(Enemy e : alive) if(e.isAlive(cTime)) healthLeft += (float)e.getHealth();
-				
-				float percentage = (healthLeft / (float)bossWaveHealth);
-				if(percentage < 0.0f) percentage = 0.0f;
-				else if(percentage > 1.0f) percentage = 1.0f;
-				
-				g.setColor(Color.red);
-				g.fillRect((BOSS_HEALTH_ORIGIN.x + 2.0f), (BOSS_HEALTH_ORIGIN.y + 2.0f), 
-						   ((BOSS_HEALTH_WIDTH - 4.0f) * percentage), (BOSS_HEALTH_HEIGHT - 4.0f));
-				g.setColor(Color.white);
-				g.drawRect((BOSS_HEALTH_ORIGIN.x + 2.0f), (BOSS_HEALTH_ORIGIN.y + 2.0f), 
-						   ((BOSS_HEALTH_WIDTH - 4.0f) * percentage), (BOSS_HEALTH_HEIGHT - 4.0f));
-				
-				g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-				FontUtils.drawCenter(g.getFont(), bossTitle, 
-									 (int)BOSS_HEALTH_ORIGIN.x.floatValue(), 
-									 (int)(BOSS_HEALTH_ORIGIN.y + BOSS_HEALTH_HEIGHT + 10.0f), 
-									 (int)BOSS_HEALTH_WIDTH, Color.white);
 			}
 		}
 	}

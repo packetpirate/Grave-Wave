@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -43,12 +44,12 @@ public class DisplaySettingsState extends BasicGameState implements InputListene
 		
 		if(shadowSettings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			shadowSettings.mouseEnter();
-			if(mouse.isMouseDown()) game.enterState(ShadowSettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+			if(mouse.isLeftDown()) game.enterState(ShadowSettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 		} else shadowSettings.mouseExit();
 		
 		if(backButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			backButton.mouseEnter();
-			if(mouse.isMouseDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+			if(mouse.isLeftDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 		} else backButton.mouseExit();
 		
 		MusicPlayer.getInstance().update(true);
@@ -79,12 +80,12 @@ public class DisplaySettingsState extends BasicGameState implements InputListene
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 
 	@Override

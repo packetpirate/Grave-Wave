@@ -5,7 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gzsr.entities.Entity;
-import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.melee.MeleeWeapon;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public class Inventory {
 	private List<Entity> items;
@@ -26,12 +27,24 @@ public class Inventory {
 					 .count() > 0);
 	}
 	
-	public List<Weapon> getWeapons() {
-		List<Weapon> weapons = new ArrayList<Weapon>();
+	public List<RangedWeapon> getRangedWeapons() {
+		List<RangedWeapon> weapons = new ArrayList<RangedWeapon>();
 		
 		for(Entity e : items) {
-			if(e instanceof Weapon) {
-				weapons.add((Weapon)e);
+			if(e instanceof RangedWeapon) {
+				weapons.add((RangedWeapon)e);
+			}
+		}
+		
+		return weapons;
+	}
+	
+	public List<MeleeWeapon> getMeleeWeapons() {
+		List<MeleeWeapon> weapons = new ArrayList<MeleeWeapon>();
+		
+		for(Entity e : items) {
+			if(e instanceof MeleeWeapon) {
+				weapons.add((MeleeWeapon)e);
 			}
 		}
 		

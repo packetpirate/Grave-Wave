@@ -66,7 +66,7 @@ public class BigMama extends Enemy {
 			boolean dead = health <= 0;
 			if(nearPlayer() || timesUp || dead) {
 				// Big Mama self-detonates.
-				EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
+				EnemyController ec = EnemyController.getInstance();
 				
 				// Spawn zumbies around the Big Mama's explosion area.
 				for(int i = 0; i < BigMama.ZUMBY_COUNT; i++) {

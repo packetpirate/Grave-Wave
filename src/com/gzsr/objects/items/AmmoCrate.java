@@ -1,6 +1,5 @@
 package com.gzsr.objects.items;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.gzsr.AssetManager;
@@ -8,7 +7,6 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public class AmmoCrate extends Item {
@@ -25,14 +23,10 @@ public class AmmoCrate extends Item {
 
 	@Override
 	public void apply(Player player, long cTime) {
-		List<Weapon> active = player.getWeapons();
-		List<RangedWeapon> ranged = new ArrayList<RangedWeapon>();
-		for(Weapon w : active) {
-			if(w instanceof RangedWeapon) ranged.add((RangedWeapon) w);
-		}
+		List<RangedWeapon> weapons = player.getRangedWeapons();
 		
-		int weapon = Globals.rand.nextInt(ranged.size());
-		RangedWeapon w = ranged.get(weapon);
+		int weapon = Globals.rand.nextInt(weapons.size());
+		RangedWeapon w = weapons.get(weapon);
 		
 		w.addInventoryAmmo(w.getClipSize());
 		

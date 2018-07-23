@@ -65,7 +65,7 @@ public class Claymore extends Projectile {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!exploded) {
-			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
+			EnemyController ec = EnemyController.getInstance();
 			
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {

@@ -188,6 +188,7 @@ public class Controls {
 	
 	public void resetAll() {
 		Layout.reset();
-		mouse.setMouseDown(false);
+		mouse.setLeftDown(false);
+		mouse.setRightDown(false);
 	}
 }

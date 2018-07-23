@@ -7,6 +7,7 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
@@ -197,7 +198,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 		
 		// Check all skill buttons to see if they've been clicked.
 		Iterator<SkillButton> it = skillButtons.iterator();
@@ -212,7 +213,7 @@ public class TrainState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 	
 	@Override

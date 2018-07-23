@@ -3,6 +3,7 @@ package com.gzsr.states;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
@@ -44,7 +45,7 @@ public class GameOverState extends BasicGameState implements InputListener {
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		if(menuButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			menuButton.mouseEnter();
-			if(mouse.isMouseDown()) {
+			if(mouse.isLeftDown()) {
 				Controls.getInstance().resetAll();
 				game.enterState(MenuState.ID);
 			}
@@ -52,7 +53,7 @@ public class GameOverState extends BasicGameState implements InputListener {
 		
 		if(exitButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exitButton.mouseEnter();
-			if(mouse.isMouseDown()) gc.exit();
+			if(mouse.isLeftDown()) gc.exit();
 		} else exitButton.mouseExit();
 	}
 	
@@ -81,12 +82,12 @@ public class GameOverState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 
 	@Override

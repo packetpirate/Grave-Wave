@@ -109,7 +109,7 @@ public class BigRedButton extends RangedWeapon {
 	
 	private Pair<Float> getExplosionLocation(GameState gs, Player player, Pair<Float> position) {
 		int highCount = 0;
-		List<Enemy> enemies = ((EnemyController)gs.getEntity("enemyController")).getAliveEnemies();
+		List<Enemy> enemies = EnemyController.getInstance().getAliveEnemies();
 		if(enemies.isEmpty()) return getRandomLocation(player, position);
 		
 		Enemy e = enemies.get(0);

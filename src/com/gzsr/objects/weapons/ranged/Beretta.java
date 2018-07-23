@@ -55,7 +55,7 @@ public class Beretta extends RangedWeapon {
 		super.update(gs, cTime, delta);
 		
 		// If mouse released, release fire lock.
-		if(!release && !Controls.getInstance().getMouse().isMouseDown()) release = true;
+		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
 		
 		// Update muzzle flash animation.
 		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);

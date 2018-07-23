@@ -63,7 +63,7 @@ public class BowAndArrow extends RangedWeapon {
 				if(charge > 1.0f) charge = 1.0f;
 			}
 			
-			if(Controls.getInstance().getMouse().isMouseDown()) {
+			if(Controls.getInstance().getMouse().isLeftDown()) {
 				// If the mouse is down and we're not charging, start charging.
 				if(!charging) charging = true;
 			} else {

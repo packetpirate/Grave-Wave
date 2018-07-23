@@ -51,6 +51,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	private Console console;
 	private HUD hud;
+	public HUD getHUD() { return hud; }
 	
 	private ConcurrentHashMap<String, Entity> entities;
 	public Entity getEntity(String key) { return entities.get(key); }
@@ -87,7 +88,7 @@ public class GameState extends BasicGameState implements InputListener {
 					
 					if(exitYes.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 						exitYes.mouseEnter();
-						if(mouse.isMouseDown()) {
+						if(mouse.isLeftDown()) {
 							reset(gc);
 							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
 						}
@@ -95,8 +96,8 @@ public class GameState extends BasicGameState implements InputListener {
 					
 					if(exitNo.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 						exitNo.mouseEnter();
-						if(mouse.isMouseDown()) {
-							mouse.setMouseDown(false);
+						if(mouse.isLeftDown()) {
+							mouse.setLeftDown(false);
 							exitPrompt = false;
 						}
 					} else exitNo.mouseExit();
@@ -230,7 +231,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		Player.getPlayer().reset();
 		entities.clear();
-		entities.put("enemyController", new EnemyController());
+		entities.put("enemyController", EnemyController.getInstance());
 		entities.put("player", Player.getPlayer());
 		
 		StatusMessages.getInstance().clear();
@@ -256,12 +257,14 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		if(consoleOpen) console.mousePressed(this, button, x, y);
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
+		else if(button == Input.MOUSE_RIGHT_BUTTON) Controls.getInstance().getMouse().setRightDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
+		else if(button == Input.MOUSE_RIGHT_BUTTON) Controls.getInstance().getMouse().setRightDown(false);
 	}
 	
 	@Override
@@ -280,7 +283,7 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		EnemyController ec = (EnemyController) getEntity("enemyController");
+		EnemyController ec = EnemyController.getInstance();
 		
 		if(key == Input.KEY_ESCAPE) {
 			if(!exitPrompt) exitPrompt = true;
@@ -310,7 +313,7 @@ public class GameState extends BasicGameState implements InputListener {
 	@Override
 	public void mouseWheelMoved(int change) {
 		Player player = Player.getPlayer();
-		if(player.getWeapons().size() > 1) {
+		if(player.getRangedWeapons().size() > 1) {
 			player.weaponRotate((change > 0) ? 1 : -1);
 			hud.getWeaponDisplay().queueWeaponCycle();
 		}

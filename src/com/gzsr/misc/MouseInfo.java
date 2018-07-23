@@ -2,7 +2,7 @@ package com.gzsr.misc;
 
 public class MouseInfo {
 	private Pair<Float> lmp;
-	private boolean md;
+	private boolean lmd, rmd;
 	
 	public Pair<Float> getPosition() { return lmp; }
 	public void setPosition(float x, float y) {
@@ -10,11 +10,15 @@ public class MouseInfo {
 		this.lmp.y = y;
 	}
 	
-	public boolean isMouseDown() { return md; }
-	public void setMouseDown(boolean md_) { this.md = md_; }
+	public boolean isLeftDown() { return lmd; }
+	public void setLeftDown(boolean lmd_) { this.lmd = lmd_; }
+	
+	public boolean isRightDown() { return rmd; }
+	public void setRightDown(boolean rmd_) { this.rmd = rmd_; }
 	
 	public MouseInfo() {
 		lmp = new Pair<Float>(0.0f, 0.0f);
-		md = false;
+		lmd = false;
+		rmd = false;
 	}
 }

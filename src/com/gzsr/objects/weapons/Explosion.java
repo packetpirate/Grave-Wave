@@ -84,7 +84,7 @@ public class Explosion implements Entity {
 			checkCollision(Player.getPlayer(), cTime, delta);
 			
 			// Check for collisions with enemies.
-			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
+			EnemyController ec = EnemyController.getInstance();
 			ec.getAliveEnemies().stream().forEach(e -> checkCollision(e, cTime, delta));
 		}
 	}

@@ -83,7 +83,7 @@ public class Turret extends Projectile {
 			// Acquire a target only if we're not currently firing on one..
 			if(target == null) {
 				float targetDist = Float.MAX_VALUE;
-				EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
+				EnemyController ec = EnemyController.getInstance();
 				Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 				while(it.hasNext()) {
 					Enemy e = it.next();

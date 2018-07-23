@@ -33,6 +33,7 @@ public class HealthBar implements Entity {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		
 	}
 
 	@Override

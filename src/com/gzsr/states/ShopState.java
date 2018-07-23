@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
@@ -506,7 +507,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 		
 		// Check to see if the buy/sell buttons were clicked.
 		if(selected != null) {
@@ -542,7 +543,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					int sellValue = (int)(w.getPrice() * SELL_BACK_VALUE);
 					player.getAttributes().set("money", (Player.getPlayer().getAttributes().getInt("money") + sellValue));
 					player.getInventory().dropItem(w.getName());
-					player.resetCurrentWeapon();
+					player.resetCurrentRanged();
 					SHOP.addItem(w);
 					assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 				}
@@ -590,7 +591,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 	
 	@Override

@@ -135,7 +135,7 @@ public class Console implements Entity {
 					int args = tokens.length - 1;
 					pastCommands.add(String.format("> %s", currentCommand));
 					
-					EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+					EnemyController ec = EnemyController.getInstance();
 					
 					if(command.equals("help") && (args == 0)) {
 						pastCommands.add("  HELP: Here are some commands and example usage.");
@@ -281,7 +281,7 @@ public class Console implements Entity {
 	}
 	
 	private void spawnEnemy(GameState gs, String entityType, Pair<Float> position) {
-		EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+		EnemyController ec = EnemyController.getInstance();
 		
 		if(!ec.isRestarting()) {
 			if(entityType.equals("zumby")) {

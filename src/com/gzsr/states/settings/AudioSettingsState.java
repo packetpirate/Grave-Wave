@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -62,7 +63,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 		
 		if(applyButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			applyButton.mouseEnter();
-			if(mouse.isMouseDown()) {
+			if(mouse.isLeftDown()) {
 				musicVolumeSlider.apply(true);
 				ConfigManager.getInstance().save();
 				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
@@ -71,7 +72,7 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 		
 		if(backButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			backButton.mouseEnter();
-			if(mouse.isMouseDown()) {
+			if(mouse.isLeftDown()) {
 				musicVolumeSlider.apply(false);
 				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 			}
@@ -112,12 +113,12 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 	
 	private static Consumer<Float> musicVolumeOperation = new Consumer<Float>() {

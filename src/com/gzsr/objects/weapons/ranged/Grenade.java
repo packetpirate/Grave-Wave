@@ -39,7 +39,7 @@ public class Grenade extends Projectile {
 			bounds.setLocation((position.x - (size.x / 2)), (position.y - (size.y / 2)));
 			
 			// Check to see if the grenade has collided with an enemy. If so, explode.
-			EnemyController ec = (EnemyController)((GameState)gs).getEntity("enemyController");
+			EnemyController ec = EnemyController.getInstance();
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();

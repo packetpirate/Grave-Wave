@@ -88,46 +88,81 @@ public class Player implements Entity {
 	
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
-	public List<Weapon> getWeapons() { return inventory.getWeapons(); }
-	private int weaponIndex;
-	public int getWeaponIndex() { return weaponIndex; }
-	public Weapon getCurrentWeapon() { 
-		if(!getWeapons().isEmpty()) return getWeapons().get(weaponIndex);
+	public List<RangedWeapon> getRangedWeapons() { return inventory.getRangedWeapons(); }
+	public List<MeleeWeapon> getMeleeWeapons() { return inventory.getMeleeWeapons(); }
+	private int rangedIndex;
+	public int getRangedIndex() { return rangedIndex; }
+	private int meleeIndex;
+	public int getMeleeIndex() { return meleeIndex; }
+	public RangedWeapon getCurrentRanged() {
+		List<RangedWeapon> weapons = getRangedWeapons();
+		if(!weapons.isEmpty()) return weapons.get(rangedIndex);
 		else return null;
 	}
-	public void resetCurrentWeapon() {
-		getWeapons().stream().forEach(w -> w.unequip());
-		weaponIndex = 0;
-		if(!inventory.getWeapons().isEmpty()) getCurrentWeapon().equip();
+	public MeleeWeapon getCurrentMelee() {
+		List<MeleeWeapon> weapons = getMeleeWeapons();
+		if(!weapons.isEmpty()) return weapons.get(meleeIndex);
+		else return null;
 	}
-	public void setCurrentWeapon(int wi) {
-		if(!getWeapons().isEmpty()) {
-			if((wi >= 0) && (wi < getWeapons().size())) {
+	public void resetCurrentRanged() {
+		List<RangedWeapon> weapons = getRangedWeapons();
+		weapons.stream().forEach(w -> w.unequip());
+		rangedIndex = 0;
+		if(!weapons.isEmpty()) weapons.get(rangedIndex).equip();
+	}
+	public void setCurrentRanged(int wi) {
+		List<RangedWeapon> weapons = getRangedWeapons();
+		if(!weapons.isEmpty()) {
+			if((wi >= 0) && (wi < weapons.size())) {
 				// If the player actually has the weapon bound to the key that was pressed...
-				getCurrentWeapon().unequip();
-				weaponIndex = wi;
-				getCurrentWeapon().equip();
+				getCurrentRanged().unequip();
+				rangedIndex = wi;
+				getCurrentRanged().equip();
+			}
+		}
+	}
+	public void setCurrentMelee(int wi) {
+		List<MeleeWeapon> weapons = getMeleeWeapons();
+		if(!weapons.isEmpty()) {
+			if((wi > 0) && (wi < weapons.size())) {
+				getCurrentMelee().unequip();
+				meleeIndex = wi;
+				getCurrentMelee().equip();
 			}
 		}
 	}
 	public void equip(Weapon w) {
-		getCurrentWeapon().unequip();
 		w.equip();
-		for(int i = 0; i < getWeapons().size(); i++) {
-			if(getWeapons().get(i) == w) {
-				weaponIndex = i;
-				break;
+		
+		if(w instanceof RangedWeapon) {
+			List<RangedWeapon> weapons = getRangedWeapons();
+			getCurrentRanged().unequip();
+			for(int i = 0; i < weapons.size(); i++) {
+				if(weapons.get(i) == w) {
+					rangedIndex = i;
+					break;
+				}
+			}
+		} else if(w instanceof MeleeWeapon) {
+			List<MeleeWeapon> weapons = getMeleeWeapons();
+			getCurrentMelee().unequip();
+			for(int i = 0; i < weapons.size(); i++) {
+				if(weapons.get(i) == w) {
+					meleeIndex = i;
+					break;
+				}
 			}
 		}
 	}
 	public void weaponRotate(int direction) {
-		int wc = getWeapons().size();
+		int wc = getRangedWeapons().size();
 		if(wc > 0) {
-			getCurrentWeapon().unequip(); // Notify the current weapon that we're switching.
+			Weapon currentWeapon = getCurrentRanged();
+			currentWeapon.unequip(); // Notify the current weapon that we're switching.
 			// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
-			int i = Math.floorMod((weaponIndex + direction), wc);
-			weaponIndex = i;
-			getCurrentWeapon().equip(); // Notify new weapon that it is equipped.
+			int i = Math.floorMod((rangedIndex + direction), wc);
+			rangedIndex = i;
+			currentWeapon.equip(); // Notify new weapon that it is equipped.
 		}
 	}
 	
@@ -235,7 +270,7 @@ public class Player implements Entity {
 		}
 		
 		boolean canMove = true;
-		Weapon cWeapon = getCurrentWeapon();
+		Weapon cWeapon = getCurrentRanged();
 		if((cWeapon != null) && (cWeapon instanceof MeleeWeapon)) {
 			MeleeWeapon mw = (MeleeWeapon) cWeapon;
 			canMove = !mw.isAttacking(); // Can't move if melee attacking.
@@ -262,7 +297,7 @@ public class Player implements Entity {
 										Controls.Layout.WEAPON_9, Controls.Layout.WEAPON_10 };
 		for(int i = 0; i < 10; i++) {
 			if(Controls.getInstance().isPressed(keys[i])) {
-				setCurrentWeapon(i);
+				setCurrentRanged(i);
 				break; // To avoid conflicts when holding multiple numerical keys.
 			}
 		}
@@ -270,7 +305,7 @@ public class Player implements Entity {
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
 		if(cWeapon != null) {
-			if(mouse.isMouseDown() || cWeapon.isChargedWeapon()) {
+			if(mouse.isLeftDown() || cWeapon.isChargedWeapon()) {
 				boolean canUse = false;
 				if(cWeapon instanceof RangedWeapon) {
 					RangedWeapon rw = (RangedWeapon) cWeapon;
@@ -285,15 +320,19 @@ public class Player implements Entity {
 							
 							attributes.set("lastClick", cTime);
 						}
-					} else canUse = cWeapon.canUse(cTime);
-				} else canUse = cWeapon.canUse(cTime);
+					} else canUse = rw.canUse(cTime);
+				}
 				
-				if(canUse) cWeapon.use(this, new Pair<Float>(position.x, position.y), theta, cTime);
+				if(canUse) cWeapon.use(this, new Pair<Float>(position), theta, cTime);
+			} else if(mouse.isRightDown()) {
+				MeleeWeapon mw = getCurrentMelee();
+				if(mw.canUse(cTime)) mw.use(this, new Pair<Float>(position), theta, cTime);
 			}
 		}
 		
 		// Update all the player's active weapons.
-		getWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
+		getRangedWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
+		getMeleeWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		
 		// Calculate the player's rotation based on mouse position.
 		if(canMove) {
@@ -305,7 +344,8 @@ public class Player implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Render all the player's active weapons.
-		getWeapons().stream().forEach(w -> w.render(g, cTime));
+		getRangedWeapons().stream().forEach(w -> w.render(g, cTime));
+		getMeleeWeapons().stream().forEach(w -> w.render(g, cTime));
 		
 		if(isAlive()) {
 			Image image = getImage();
@@ -349,12 +389,12 @@ public class Player implements Entity {
 		
 		lastGrunt = 0L;
 		
-		weaponIndex = 0;
+		rangedIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
 		inventory.addItem(new Machete());
 		inventory.addItem(new Beretta());
-		inventory.getWeapons().get(weaponIndex).equip();
+		inventory.getRangedWeapons().get(rangedIndex).equip();
 		
 		attributes.reset();
 		statusEffects.clear();
@@ -488,7 +528,7 @@ public class Player implements Entity {
 			{ // Random chance for the enemies to say "Gratz!".
 				float chance = Globals.rand.nextFloat();
 				if(chance <= 0.02f) {
-					Iterator<Enemy> it = ((EnemyController)gs.getEntity("enemyController")).getAliveEnemies().iterator();
+					Iterator<Enemy> it = EnemyController.getInstance().getAliveEnemies().iterator();
 					while(it.hasNext()) {
 						Enemy e = it.next();
 						if(e.isAlive(cTime)) {
@@ -518,41 +558,39 @@ public class Player implements Entity {
 	 * @return Boolean value representing whether or not there was a collision.
 	 */
 	public boolean checkWeapons(GameState gs, Enemy enemy, long cTime, int delta) {
-		for(Weapon w : getWeapons()) {
-			if(w instanceof RangedWeapon) {
-				RangedWeapon rw = (RangedWeapon) w;
-				Iterator<Projectile> it = rw.getProjectiles().iterator();
-				while(it.hasNext()) {
-					Projectile p = it.next();
-					if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
-						if(p instanceof LaserNode) {
-							LaserNode node = (LaserNode) p;
-							node.damage(enemy.getDamage());
-							enemy.blockMovement();
-						} else {
-							p.collide(gs, enemy, cTime);
-							
-							// If this is a special projectile, apply its status effect to the target.
-							if(p instanceof StatusProjectile) {
-								StatusProjectile sp = (StatusProjectile) p;
-								sp.applyEffect(enemy, cTime);
-							}
-							
-							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-							double totalDamage = (p.getDamage() * damagePercentage);
-							if(totalDamage > 0.0) enemy.takeDamage(totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
+		for(RangedWeapon rw : getRangedWeapons()) {
+			Iterator<Projectile> it = rw.getProjectiles().iterator();
+			while(it.hasNext()) {
+				Projectile p = it.next();
+				if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
+					if(p instanceof LaserNode) {
+						LaserNode node = (LaserNode) p;
+						node.damage(enemy.getDamage());
+						enemy.blockMovement();
+					} else {
+						p.collide(gs, enemy, cTime);
+						
+						// If this is a special projectile, apply its status effect to the target.
+						if(p instanceof StatusProjectile) {
+							StatusProjectile sp = (StatusProjectile) p;
+							sp.applyEffect(enemy, cTime);
 						}
 						
-						return true;
+						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
+						double totalDamage = (p.getDamage() * damagePercentage);
+						if(totalDamage > 0.0) enemy.takeDamage(totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 					}
+					
+					return true;
 				}
-			} else if(w instanceof MeleeWeapon) {
-				MeleeWeapon mw = (MeleeWeapon) w;
-				if(mw.isAttacking() && mw.hit(enemy.getCollider(), cTime)) {
-					float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-					double totalDamage = (mw.rollDamage() * damagePercentage);
-					if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
-				}
+			}
+		}
+		
+		for(MeleeWeapon mw : getMeleeWeapons()) {
+			if(mw.isAttacking() && mw.hit(enemy.getCollider(), cTime)) {
+				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
+				double totalDamage = (mw.rollDamage() * damagePercentage);
+				if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
 			}
 		}
 		

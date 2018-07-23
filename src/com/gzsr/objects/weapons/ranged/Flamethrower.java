@@ -42,7 +42,7 @@ public class Flamethrower extends RangedWeapon {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
-		if(!equipped || reloading || !Controls.getInstance().getMouse().isMouseDown()) useSound.stop();
+		if(!equipped || reloading || !Controls.getInstance().getMouse().isLeftDown()) useSound.stop();
 	}
 	
 	@Override

@@ -137,7 +137,7 @@ public abstract class Enemy implements Entity {
 	
 	public abstract void move(GameState gs, int delta);
 	protected void avoidObstacles(GameState gs, int delta) {
-		EnemyController ec = (EnemyController)gs.getEntity("enemyController");
+		EnemyController ec = EnemyController.getInstance();
 		List<Enemy> allies = ec.getAliveEnemies();
 		
 		if(!allies.isEmpty()) {

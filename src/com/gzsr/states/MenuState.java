@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -53,7 +54,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		
 		if(gameStart.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			gameStart.mouseEnter();
-			if(mouse.isMouseDown()) {
+			if(mouse.isLeftDown()) {
 				Globals.resetEntityNum();
 				Controls.getInstance().resetAll();
 				game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
@@ -62,7 +63,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		
 		if(settings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			settings.mouseEnter();
-			if(mouse.isMouseDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+			if(mouse.isLeftDown()) game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
 		} else settings.mouseExit();
 		
 		if(credits.inBounds(mouse.getPosition().x, mouse.getPosition().y)) credits.mouseEnter();
@@ -70,7 +71,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		
 		if(exit.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exit.mouseEnter();
-			if(mouse.isMouseDown()) gc.exit();
+			if(mouse.isLeftDown()) gc.exit();
 		} else exit.mouseExit();
 		
 		MusicPlayer.getInstance().update(true);
@@ -103,12 +104,12 @@ public class MenuState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(true);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
 	}
 	
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == 0) Controls.getInstance().getMouse().setMouseDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
 	}
 	
 	@Override
