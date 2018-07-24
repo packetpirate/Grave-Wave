@@ -36,6 +36,7 @@ public abstract class Weapon implements Entity {
 		return (roll <= chance); 
 	}
 
+	public boolean isEquipped() { return equipped; }
 	public void equip() { equipped = true; }
 	public void unequip() { equipped = false; }
 	public abstract boolean isChargedWeapon();

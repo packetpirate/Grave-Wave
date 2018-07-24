@@ -33,6 +33,7 @@ import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.melee.MeleeWeapon;
 import com.gzsr.objects.weapons.ranged.AK47;
 import com.gzsr.objects.weapons.ranged.BigRedButton;
 import com.gzsr.objects.weapons.ranged.BowAndArrow;
@@ -83,6 +84,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	private TransactionButton sellButton;
 	private TransactionButton ammoButton;
 	private TransactionButton maxAmmoButton;
+	private TransactionButton equipButton;
 	
 	private int inventorySize;
 	private boolean exit;
@@ -107,6 +109,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		buyButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) - 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.BUY);
 		sellButton = new TransactionButton(new Pair<Float>((float)((Globals.WIDTH / 2) + 113.0f), (ITEM_PORTRAIT.y + 64.0f)), TransactionButton.Type.SELL);
+		equipButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), (Globals.HEIGHT - 174.0f)), TransactionButton.Type.EQUIP);
 		ammoButton = new TransactionButton(new Pair<Float>((float)(Globals.WIDTH / 2), ((Globals.HEIGHT / 2) - 30.0f)), TransactionButton.Type.AMMO);
 		{ // Adjust ammo button position.
 			float x = ammoButton.getPosition().x;
@@ -205,7 +208,8 @@ public class ShopState extends BasicGameState implements InputListener {
 						float ix = (x + (img.getWidth() / 4));
 						float iy = (y + (img.getHeight() / 4) - 5.0f);
 						
-						img.draw(ix, iy, 1.5f);
+						if(w instanceof MeleeWeapon) img.draw(x, y, 2.0f);
+						else img.draw(ix, iy, 1.5f);
 						
 						if(w instanceof RangedWeapon) {
 							// Draw the weapon's current ammo below.
@@ -365,6 +369,25 @@ public class ShopState extends BasicGameState implements InputListener {
 						g.setColor(new Color(0x550000));
 						g.drawRect((barX + (p * 15.0f) + 5.0f), (y + 5.0f), 10.0f, (barHeight - 10.0f));
 					}
+				} else if(w instanceof MeleeWeapon) {
+					MeleeWeapon mw = (MeleeWeapon) w;
+					
+					// Draw the equip button. If it's already equipped, disable it.
+					equipButton.render(g, 0L);
+					if(mw.isEquipped()) {
+						float x = equipButton.getPosition().x - (equipButton.getSize().x / 2);
+						float y = equipButton.getPosition().y - (equipButton.getSize().y / 2);
+						
+						g.setColor(new Color(0xBB333333));
+						g.fillRect(x, y, equipButton.getSize().x, equipButton.getSize().y);
+					}
+					
+					g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+					FontUtils.drawCenter(g.getFont(), "Equip", 
+										 (int)(equipButton.getPosition().x.floatValue() - (equipButton.getSize().x.floatValue() / 2)), 
+							 			 (int)(equipButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
+							 			 (int)equipButton.getSize().x.floatValue(), 
+							 			 Color.black);
 				}
 			} else if(selection instanceof Item) {
 				Item item = (Item) selection;
@@ -548,20 +571,25 @@ public class ShopState extends BasicGameState implements InputListener {
 					assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 				}
 				// TODO: Add cases for other item types.
+			} else if(equipButton.inBounds(x, y) && selectedInInventory) {
+				if(selection instanceof MeleeWeapon) {
+					MeleeWeapon mw = (MeleeWeapon) selection;
+					if(!mw.isEquipped()) player.equip(mw);
+				}
 			} else if(ammoButton.inBounds(x, y) && selectedInInventory) {
 				// Buy ammo for the currently selected weapon.
 				if(selection instanceof RangedWeapon) {
-					RangedWeapon w = (RangedWeapon) selection;
+					RangedWeapon rw = (RangedWeapon) selection;
 					
-					if(!w.clipsMaxedOut()) {
+					if(!rw.clipsMaxedOut()) {
 						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
-						boolean lessThanOne = ((w.getInventoryAmmo() == ((w.getMaxClips() - 1) * w.getClipSize())) && (w.getClipAmmo() < w.getClipSize()));
-						int cost = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipSize() - w.getClipAmmo())) : w.getAmmoPrice());
+						boolean lessThanOne = ((rw.getInventoryAmmo() == ((rw.getMaxClips() - 1) * rw.getClipSize())) && (rw.getClipAmmo() < rw.getClipSize()));
+						int cost = (lessThanOne ? ((rw.getAmmoPrice() / rw.getClipSize()) * (rw.getClipSize() - rw.getClipAmmo())) : rw.getAmmoPrice());
 						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
 							player.getAttributes().set("money", moneyAfterPurchase);
-							w.addInventoryAmmo(w.getClipSize());
+							rw.addInventoryAmmo(rw.getClipSize());
 							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
 					}

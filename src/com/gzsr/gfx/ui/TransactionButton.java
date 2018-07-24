@@ -8,7 +8,7 @@ import com.gzsr.misc.Pair;
 
 public class TransactionButton extends Button {
 	public static enum Type {
-		BUY, SELL, AMMO
+		BUY, SELL, AMMO, EQUIP
 	}
 	
 	private Type type;
@@ -26,6 +26,9 @@ public class TransactionButton extends Button {
 				image = "GZS_SellButton2";
 				break;
 			case AMMO:
+				image = "GZS_AmmoButton";
+				break;
+			case EQUIP:
 				image = "GZS_AmmoButton";
 				break;
 			default:

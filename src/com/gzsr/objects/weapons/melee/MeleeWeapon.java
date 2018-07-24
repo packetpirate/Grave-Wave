@@ -1,5 +1,8 @@
 package com.gzsr.objects.weapons.melee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -10,6 +13,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 
@@ -20,6 +24,8 @@ public abstract class MeleeWeapon extends Weapon {
 	protected boolean attacking;
 	public boolean isAttacking() { return attacking; }
 	protected boolean multihit;
+	protected List<Enemy> enemiesHit;
+	
 	protected boolean currentCritical;
 	public boolean isCurrentCritical() { return currentCritical; }
 	protected float attackTheta;
@@ -34,10 +40,12 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		attacking = false;
 		multihit = false;
+		enemiesHit = new ArrayList<Enemy>();
+		
 		currentCritical = false;
 		
 		attackTheta = 0.0f;
-		lastAttack = 0L;
+		lastAttack = -(getAttackTime() + getCooldown());
 	}
 	
 	@Override
@@ -62,7 +70,7 @@ public abstract class MeleeWeapon extends Weapon {
 			}
 			
 			Pair<Float> player = Player.getPlayer().getPosition();
-			float offset = getDistance();
+			float offset = getImageDistance();
 			float theta = getCurrentTheta(cTime);
 			
 			// Used to show line indicating where melee weapon should be pointing during swing/stab/whatever.
@@ -81,6 +89,7 @@ public abstract class MeleeWeapon extends Weapon {
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		attacking = true;
+		enemiesHit.clear();
 		currentCritical = isCritical();
 		
 		attackTheta = theta;
@@ -97,22 +106,32 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		// Check to see if we're already attacking, and if so, the attack time has elapsed.
 		if(attacking && (elapsed > getAttackTime())) stopAttack();
+		boolean cooledDown = (elapsed > (getAttackTime() + getCooldown()));
 		
-		return !attacking;
+		return (!attacking && cooledDown);
 	}
 	
 	protected void stopAttack() {
 		attackArea = null;
 		
 		attacking = false;
+		enemiesHit.clear();
 		
 		attackTheta = 0.0f;
-		lastAttack = 0L;
 	}
 	
-	public boolean hit(Shape collider, long cTime) {
-		boolean isHit = collider.intersects(getHitBox(cTime)); 
-		if(isHit && !multihit) stopAttack();
+	public boolean hit(Enemy enemy, long cTime) {
+		if(multihit) {
+			for(Enemy e : enemiesHit) {
+				if(enemy.equals(e)) return false;
+			}
+		}
+		
+		boolean isHit = enemy.getCollider().intersects(getHitBox(cTime));
+		if(isHit) {
+			if(!multihit) stopAttack();
+			else enemiesHit.add(enemy);
+		}
 		
 		return isHit;
 	}
@@ -152,6 +171,7 @@ public abstract class MeleeWeapon extends Weapon {
 	}
 	
 	public abstract float getDistance();
+	public abstract float getImageDistance();
 	public abstract Pair<Float> getHitAreaSize();
 	public abstract float getThetaOffset();
 	public abstract long getAttackTime();
