@@ -77,9 +77,6 @@ public class SentryWeapon extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(SentryWeapon.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return SentryWeapon.CLIP_SIZE; }

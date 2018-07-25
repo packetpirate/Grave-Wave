@@ -14,7 +14,7 @@ public class BurningEmitter extends Emitter {
 	public void setBurnRadius(float burnRadius_) { this.burnRadius = burnRadius_; }
 	
 	public BurningEmitter(Pair<Float> position_) {
-		super(position_, BurningEmitter.generateTemplate(), 25L);
+		super(position_, BurningEmitter.generateTemplate(), -1L, 25L, 0L);
 		this.burnRadius = 0.0f;
 	}
 	

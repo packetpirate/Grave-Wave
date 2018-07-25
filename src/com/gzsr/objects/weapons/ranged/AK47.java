@@ -119,9 +119,6 @@ public class AK47 extends RangedWeapon {
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(AK47.ICON_NAME); }
-	
-	@Override
-	public boolean isChargedWeapon() { return false; }
 
 	@Override
 	public int getClipSize() { return AK47.CLIP_SIZE; }

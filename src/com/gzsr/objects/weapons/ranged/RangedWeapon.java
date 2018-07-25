@@ -79,12 +79,11 @@ public abstract class RangedWeapon extends Weapon {
 	public boolean canUse(long cTime) {
 		if(reloading) return false;
 		boolean clipNotEmpty = ammoInClip > 0;
-		boolean ammoLeft = ammoInInventory > 0;
 		boolean cool = (cTime - lastUsed) >= getCooldown();
 		
 		if(!clipNotEmpty) return false;
 		
-		return (Player.getPlayer().isAlive() && equipped && (clipNotEmpty || ammoLeft) && cool);
+		return (Player.getPlayer().isAlive() && equipped && cool);
 	}
 	
 	public void reload(long cTime) {

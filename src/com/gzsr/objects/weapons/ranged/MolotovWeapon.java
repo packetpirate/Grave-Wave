@@ -9,47 +9,33 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
 
-public class BowAndArrow extends RangedWeapon {
-	private static final int PRICE = 2_000;
-	private static final int AMMO_PRICE = 400;
-	private static final long COOLDOWN = 1_000L;
-	private static final int CLIP_SIZE = 30;
-	private static final int START_CLIPS = 1;
-	private static final int MAX_CLIPS = 3;
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 10;
-	private static final float KNOCKBACK = 5.0f;
+public class MolotovWeapon extends RangedWeapon {
+	private static final int PRICE = 4_000;
+	private static final int AMMO_PRICE = 1_000;
+	private static final long COOLDOWN = 0L;
+	private static final int CLIP_SIZE = 1;
+	private static final int START_CLIPS = 4;
+	private static final int MAX_CLIPS = 8;
 	private static final float CHARGE_RATE = 0.0015f;
-	private static final String ICON_NAME = "GZS_Bow";
-	private static final String PROJECTILE_NAME = "GZS_Arrow";
-	private static final String FIRE_SOUND = "shoot4"; // TODO: Change this to a more appropriate sound.
-	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
+	private static final long RELOAD_TIME = 1_000L;
+	private static final String ICON_NAME = "GZS_Molotov_Icon";
+	private static final String PROJECTILE_NAME = "GZS_Molotov";
+	private static final String FIRE_SOUND = "throw2";
 	
 	private boolean release;
 	private boolean charging;
 	private float charge;
 	
-	public BowAndArrow() {
+	public MolotovWeapon() {
 		super();
 		
-		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(BowAndArrow.MIN_DAMAGE_COUNT, BowAndArrow.MIN_DAMAGE_SIDES);
-		
-		this.useSound = assets.getSound(BowAndArrow.FIRE_SOUND);
-		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
-		
-		release = false;
-		charging = false;
-		charge = 0.0f;
+		this.useSound = AssetManager.getManager().getSound(MolotovWeapon.FIRE_SOUND);
 	}
 	
 	@Override
@@ -59,7 +45,7 @@ public class BowAndArrow extends RangedWeapon {
 		if(equipped) {
 			if(charging) {
 				// If we're charging, increase charge up to max of 1.0f.
-				charge += BowAndArrow.CHARGE_RATE * delta;
+				charge += MolotovWeapon.CHARGE_RATE * delta;
 				if(charge > 1.0f) charge = 1.0f;
 			}
 			
@@ -104,23 +90,19 @@ public class BowAndArrow extends RangedWeapon {
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
-		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(BowAndArrow.PROJECTILE_NAME, color, position, velocity, theta,
+		long lifespan = (long)(getProjectile().getLifespan() * charge);
+		Particle particle = new Particle(MolotovWeapon.PROJECTILE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		boolean critical = isCritical();
-		double dmg = damage.roll(BowAndArrow.MIN_DAMAGE_MOD, critical);
-		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
-		
-		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
-		
-		projectiles.add(projectile);
+		Molotov molotov = new Molotov(particle);
+		projectiles.add(molotov);
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		
 		release = false;
 		charge = 0.0f;
 		lastUsed = cTime;
+		
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
@@ -130,29 +112,47 @@ public class BowAndArrow extends RangedWeapon {
 	@Override
 	public void unequip() {
 		super.unequip();
-		// Prevents arrow from firing after we've switched weapons.
+		// Prevents molotov from being thrown after we've switched weapons.
 		charging = false;
 		charge = 0.0f;
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(BowAndArrow.MIN_DAMAGE_MOD); }
-	
-	@Override
-	public float getKnockback() { return BowAndArrow.KNOCKBACK; }
+	public boolean isReloading(long cTime) {
+		long elapsed = cTime - reloadStart;
+		return ((elapsed < MolotovWeapon.RELOAD_TIME) && reloading);
+	}
 
 	@Override
-	public boolean isReloading(long cTime) { return false; }
-	
-	@Override
-	public long getReloadTime() { return 0L; }
+	public double getReloadTime(long cTime) {
+		long elapsed = cTime - reloadStart;
+		return ((double)elapsed / (double)MolotovWeapon.RELOAD_TIME);
+	}
 
 	@Override
-	public double getReloadTime(long cTime) { return 0.0; }
+	public long getReloadTime() { return MolotovWeapon.RELOAD_TIME; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BowAndArrow.ICON_NAME); }
+	public long getCooldown() { return MolotovWeapon.COOLDOWN; }
 	
+	@Override
+	public int getClipSize() { return MolotovWeapon.CLIP_SIZE; }
+
+	@Override
+	public int getStartClips() { return MolotovWeapon.START_CLIPS; }
+
+	@Override
+	public int getMaxClips() { return MolotovWeapon.MAX_CLIPS; }
+
+	@Override
+	public int getPrice() { return MolotovWeapon.PRICE; }
+	
+	@Override
+	public int getAmmoPrice() { return MolotovWeapon.AMMO_PRICE; }
+
+	@Override
+	public ProjectileType getProjectile() { return ProjectileType.MOLOTOV; }
+
 	@Override
 	public boolean isChargedWeapon() { return true; }
 	
@@ -160,33 +160,21 @@ public class BowAndArrow extends RangedWeapon {
 	public boolean isCharging() { return charging; }
 
 	@Override
-	public int getClipSize() { return BowAndArrow.CLIP_SIZE; }
+	public Pair<Integer> getDamage() { return Dice.getRange(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES, BurningEffect.MIN_DAMAGE_MOD); }
 
 	@Override
-	public int getStartClips() { return BowAndArrow.START_CLIPS; }
-	
-	@Override
-	public int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
+	public float getKnockback() { return 0.0f; }
 
 	@Override
-	public long getCooldown() { return BowAndArrow.COOLDOWN; }
-
-	@Override
-	public ProjectileType getProjectile() { return ProjectileType.ARROW; }
-
-	@Override
-	public int getPrice() { return BowAndArrow.PRICE; }
-
-	@Override
-	public int getAmmoPrice() { return BowAndArrow.AMMO_PRICE; }
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(MolotovWeapon.ICON_NAME); }
 	
 	@Override
 	public String getName() {
-		return "Bow & Arrow";
+		return "Molotov Cocktail";
 	}
 	
 	@Override
 	public String getDescription() {
-		return "A primitive weapon that takes a little bit of time to fire, but is well worth the wait.";
+		return "Start an undead barbecue with these flaming bottles of gas!";
 	}
 }

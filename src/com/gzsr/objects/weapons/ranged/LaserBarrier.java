@@ -134,9 +134,6 @@ public class LaserBarrier extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(LaserBarrier.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return LaserBarrier.CLIP_SIZE; }

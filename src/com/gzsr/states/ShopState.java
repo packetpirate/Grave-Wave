@@ -41,6 +41,7 @@ import com.gzsr.objects.weapons.ranged.ClaymoreWeapon;
 import com.gzsr.objects.weapons.ranged.Flamethrower;
 import com.gzsr.objects.weapons.ranged.GrenadeLauncher;
 import com.gzsr.objects.weapons.ranged.LaserBarrier;
+import com.gzsr.objects.weapons.ranged.MolotovWeapon;
 import com.gzsr.objects.weapons.ranged.Mossberg;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.objects.weapons.ranged.SentryWeapon;
@@ -656,6 +657,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP.addItem(new Mossberg());
 		SHOP.addItem(new BowAndArrow());
 		SHOP.addItem(new Flamethrower());
+		SHOP.addItem(new MolotovWeapon());
 		SHOP.addItem(new GrenadeLauncher());
 		SHOP.addItem(new ClaymoreWeapon());
 		SHOP.addItem(new LaserBarrier());

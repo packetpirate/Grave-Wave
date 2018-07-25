@@ -12,9 +12,9 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class BurningEffect extends StatusEffect {
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 2;
+	public static final int MIN_DAMAGE_COUNT = 1;
+	public static final int MIN_DAMAGE_SIDES = 4;
+	public static final int MIN_DAMAGE_MOD = 2;
 	public static final long DURATION = 5000L;
 	public static final long DAMAGE_INTERVAL = 100L;
 	

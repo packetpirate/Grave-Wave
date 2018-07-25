@@ -115,9 +115,6 @@ public class GrenadeLauncher extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(GrenadeLauncher.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return GrenadeLauncher.CLIP_SIZE; }

@@ -44,6 +44,9 @@ public class Particle implements Entity {
 	protected float theta;
 	public float getTheta() { return theta; }
 	public void setTheta(float theta_) { theta = theta_; }
+	protected float rotation;
+	public float getRotation() { return rotation; }
+	public void setRotation(float rotation_) { rotation = rotation_; }
 	protected float angularVelocity;
 	public float getAngularVelocity() { return angularVelocity; }
 	protected Pair<Float> size;
@@ -83,6 +86,7 @@ public class Particle implements Entity {
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
+		this.rotation = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		
@@ -110,6 +114,7 @@ public class Particle implements Entity {
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
+		this.rotation = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		
@@ -131,6 +136,7 @@ public class Particle implements Entity {
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
+		this.rotation = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		
@@ -151,6 +157,7 @@ public class Particle implements Entity {
 		this.position = new Pair<Float>(p.getPosition().x, p.getPosition().y);
 		this.velocity = p.getVelocity();
 		this.theta = p.getTheta();
+		this.rotation = p.getRotation();
 		this.angularVelocity = p.getAngularVelocity();
 		this.size = new Pair<Float>(p.getSize().x, p.getSize().y);
 		this.lifespan = p.getLifespan();
@@ -178,11 +185,11 @@ public class Particle implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		if(shouldDraw(cTime)) {
-			g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
+			g.rotate(position.x, position.y, (float)Math.toDegrees(rotation));
 			
 			Image img = getImage();
 			if(animation != null) {
-				animation.render(g, position, theta);
+				animation.render(g, position, rotation);
 			} else if(img != null) {
 				g.drawImage(img, (position.x - (img.getWidth() / 2)), 
 								 (position.y - (img.getHeight() / 2)));
@@ -200,7 +207,7 @@ public class Particle implements Entity {
 				g.draw(bounds);
 			}
 			
-			g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
+			g.rotate(position.x, position.y, -(float)Math.toDegrees(rotation));
 		}
 	}
 	

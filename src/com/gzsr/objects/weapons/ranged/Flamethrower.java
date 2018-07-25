@@ -97,9 +97,6 @@ public class Flamethrower extends RangedWeapon {
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Flamethrower.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return Flamethrower.CLIP_SIZE; }

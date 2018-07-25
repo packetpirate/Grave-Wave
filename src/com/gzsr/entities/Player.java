@@ -270,11 +270,10 @@ public class Player implements Entity {
 		}
 		
 		boolean canMove = true;
-		Weapon cWeapon = getCurrentMelee();
-		if((cWeapon != null) && (cWeapon instanceof MeleeWeapon)) {
-			MeleeWeapon mw = (MeleeWeapon) cWeapon;
-			canMove = !mw.isAttacking(); // Can't move if melee attacking.
-		}
+		MeleeWeapon cMeleeWeapon = getCurrentMelee();
+		RangedWeapon cRangedWeapon = getCurrentRanged();
+		
+		if(cMeleeWeapon != null) canMove = !cMeleeWeapon.isAttacking(); // Can't move if melee attacking.
 		
 		if(canMove) {
 			float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
@@ -285,9 +284,8 @@ public class Player implements Entity {
 		}
 		
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
-		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cWeapon != null) && (cWeapon instanceof RangedWeapon)) {
-			RangedWeapon rw = (RangedWeapon) cWeapon;
-			if(!rw.isReloading(cTime) && (rw.getClipAmmo() != rw.getClipSize())) rw.reload(cTime);
+		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
+			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipSize())) cRangedWeapon.reload(cTime);
 		}
 		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
 		
@@ -304,26 +302,22 @@ public class Player implements Entity {
 		
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
-		if(cWeapon != null) {
-			if(mouse.isLeftDown() || cWeapon.isChargedWeapon()) {
-				boolean canUse = false;
-				if(cWeapon instanceof RangedWeapon) {
-					RangedWeapon rw = (RangedWeapon) cWeapon;
-					if(rw.isReloading(cTime) || (rw.getClipAmmo() == 0)) {
-						long elapsed = cTime - attributes.getLong("lastClick");
-						if(elapsed >= 1_000L) {
-							Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
-							click.play(1.0f, AssetManager.getManager().getSoundVolume());
-							
-							String message = "Out of Ammo!";
-							StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
-							
-							attributes.set("lastClick", cTime);
-						}
-					} else canUse = rw.canUse(cTime);
-				}
-				
-				if(canUse) cWeapon.use(this, new Pair<Float>(position), theta, cTime);
+		if(cRangedWeapon != null) {
+			if(mouse.isLeftDown()) {
+				boolean empty = (cRangedWeapon.getClipAmmo() == 0);
+				boolean canUse = !cRangedWeapon.isChargedWeapon() && cRangedWeapon.canUse(cTime);
+				if(empty) {
+					long elapsed = cTime - attributes.getLong("lastClick");
+					if(elapsed >= 1_000L) {
+						Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
+						click.play(1.0f, AssetManager.getManager().getSoundVolume());
+						
+						String message = "Out of Ammo!";
+						StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
+						
+						attributes.set("lastClick", cTime);
+					}
+				} else if(canUse) cRangedWeapon.use(this, new Pair<Float>(position), theta, cTime);
 			} else if(mouse.isRightDown()) {
 				MeleeWeapon mw = getCurrentMelee();
 				if(mw.canUse(cTime)) mw.use(this, new Pair<Float>(position), theta, cTime);

@@ -126,9 +126,6 @@ public class Mossberg extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Mossberg.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return Mossberg.CLIP_SIZE; }

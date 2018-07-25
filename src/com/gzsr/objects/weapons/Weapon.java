@@ -39,7 +39,8 @@ public abstract class Weapon implements Entity {
 	public boolean isEquipped() { return equipped; }
 	public void equip() { equipped = true; }
 	public void unequip() { equipped = false; }
-	public abstract boolean isChargedWeapon();
+	public boolean isChargedWeapon() { return false; };
+	public boolean isCharging() { return false; }
 	
 	public abstract int getPrice();
 	public abstract Pair<Integer> getDamage();

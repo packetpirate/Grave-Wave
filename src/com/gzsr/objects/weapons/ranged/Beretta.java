@@ -126,9 +126,6 @@ public class Beretta extends RangedWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Beretta.ICON_NAME); }
 	
 	@Override
-	public boolean isChargedWeapon() { return false; }
-	
-	@Override
 	public int getClipSize() { return Beretta.CLIP_SIZE; }
 	
 	@Override

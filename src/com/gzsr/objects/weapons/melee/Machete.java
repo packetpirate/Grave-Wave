@@ -49,9 +49,6 @@ public class Machete extends MeleeWeapon {
 	public long getCooldown() { return Machete.COOLDOWN; }
 
 	@Override
-	public boolean isChargedWeapon() { return false; }
-
-	@Override
 	public int getPrice() { return 0; }
 
 	@Override

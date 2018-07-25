@@ -13,29 +13,34 @@ import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
 public class Emitter implements Entity {
-	private List<Particle> particles;
-	private Pair<Float> position;
+	protected List<Particle> particles;
+	protected Pair<Float> position;
 	public void setPosition(Pair<Float> position_) { this.position = position_; }
-	private Particle template;
+	protected Particle template;
 	
-	private boolean emitting;
+	protected boolean emitting;
 	public boolean isEmitting() { return emitting; }
 	public void enable(long cTime) { emitting = true; }
 	public void disable() { emitting = false; }
 	
-	private long lastEmission;
-	private long interval;
+	protected long lifespan;
+	protected long created;
+	protected long lastEmission;
+	protected long interval;
 	public boolean canEmit(long cTime) {
 		long elapsed = cTime - lastEmission;
 		return (elapsed >= interval);
 	}
 	
-	public Emitter(Pair<Float> position_, Particle template_, long interval_) {
+	public Emitter(Pair<Float> position_, Particle template_, long lifespan_, long interval_, long cTime) {
 		this.particles = new ArrayList<Particle>();
 		this.position = position_;
 		this.template = template_;
 		
 		this.emitting = false;
+		
+		this.lifespan = lifespan_;
+		this.created = cTime;
 		this.lastEmission = 0L;
 		this.interval = interval_;
 	}
@@ -61,6 +66,12 @@ public class Emitter implements Entity {
 			Particle p = it.next();
 			if(p.isAlive(cTime)) p.render(g, cTime);
 		}
+	}
+	
+	public boolean isAlive(long cTime) {
+		if(lifespan == -1L) return true;
+		long elapsed = (cTime - created);
+		return (elapsed < lifespan);
 	}
 	
 	public void emit(long cTime) {

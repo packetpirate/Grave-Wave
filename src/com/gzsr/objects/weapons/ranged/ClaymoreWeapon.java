@@ -79,9 +79,6 @@ public class ClaymoreWeapon extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ClaymoreWeapon.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return ClaymoreWeapon.CLIP_SIZE; }

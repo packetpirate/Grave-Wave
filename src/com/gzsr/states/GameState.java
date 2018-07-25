@@ -28,6 +28,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
+import com.gzsr.gfx.particles.Emitter;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.StatusMessages;
@@ -124,6 +125,9 @@ public class GameState extends BasicGameState implements InputListener {
 								p.onDestroy(this, time);
 								it.remove();
 							}
+						} else if(pair.getValue() instanceof Emitter) {
+							Emitter e = (Emitter) pair.getValue();
+							if(!e.isAlive(time)) it.remove();
 						}
 					}
 					

@@ -170,9 +170,6 @@ public class BigRedButton extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BigRedButton.ICON_NAME); }
-
-	@Override
-	public boolean isChargedWeapon() { return false; }
 	
 	@Override
 	public int getClipSize() { return BigRedButton.CLIP_SIZE; }
