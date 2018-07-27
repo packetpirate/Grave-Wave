@@ -36,6 +36,7 @@ import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.BastardSword;
 import com.gzsr.objects.weapons.melee.MeleeWeapon;
 import com.gzsr.objects.weapons.ranged.AK47;
+import com.gzsr.objects.weapons.ranged.AWP;
 import com.gzsr.objects.weapons.ranged.BigRedButton;
 import com.gzsr.objects.weapons.ranged.BowAndArrow;
 import com.gzsr.objects.weapons.ranged.ClaymoreWeapon;
@@ -662,6 +663,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP.addItem(new AK47());
 		SHOP.addItem(new Mossberg());
 		SHOP.addItem(new Remington());
+		SHOP.addItem(new AWP());
 		SHOP.addItem(new BowAndArrow());
 		SHOP.addItem(new Crossbow());
 		SHOP.addItem(new Flamethrower());

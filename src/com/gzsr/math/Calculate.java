@@ -30,6 +30,13 @@ public class Calculate {
 		return (float)Math.sqrt((xD * xD) + (yD * yD));
 	}
 	
+	public static Pair<Float> rotateAboutPoint(Pair<Float> pivot, Pair<Float> point, float theta) {
+		float x = (pivot.x + ((point.x - pivot.x) * (float)Math.cos(theta)) - ((point.y - pivot.y) * (float)Math.sin(theta)));
+		float y = (pivot.y + ((point.x - pivot.x) * (float)Math.sin(theta)) + ((point.y - pivot.y) * (float)Math.cos(theta)));
+		
+		return new Pair<Float>(x, y);
+	}
+	
 	/**
 	 * Draws the given text using the given font to the graphics context and wraps
 	 * the text according to the specified max width.

@@ -169,6 +169,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Bow.png",
 			"images/GZS_Crossbow.png",
 			"images/GZS_Remington.png",
+			"images/GZS_AWP.png",
 			"images/GZS_Flammenwerfer.png",
 			"images/GZS_HandEgg.png",
 			"images/GZS_ClaymoreWeapon.png",
