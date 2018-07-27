@@ -10,18 +10,20 @@ public class Machete extends MeleeWeapon {
 	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 64.0f);
 	private static final float HIT_AREA_OFFSET = -32.0f;
 	private static final float IMAGE_DISTANCE = -8.0f;
-	private static final long ATTACK_TIME = 400L;
+	private static final long ATTACK_TIME = 200L;
 	private static final long COOLDOWN = 500L;
+	private static final float KNOCKBACK = 5.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final int MIN_DAMAGE_COUNT = 4;
 	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final int MIN_DAMAGE_MOD = 2;
 	private static final String ICON_NAME = "GZS_Machete_Icon";
+	private static final String WEAPON_IMAGE = "GZS_Machete";
 	
 	public Machete() {
 		super();
 		
-		img = AssetManager.getManager().getImage("GZS_Machete");
+		img = AssetManager.getManager().getImage(Machete.WEAPON_IMAGE);
 		useSound = AssetManager.getManager().getSound("throw2");
 		
 		damage = new Dice(MIN_DAMAGE_COUNT, MIN_DAMAGE_SIDES);
@@ -55,7 +57,7 @@ public class Machete extends MeleeWeapon {
 	public Pair<Integer> getDamage() { return damage.getRange(MIN_DAMAGE_MOD); }
 
 	@Override
-	public float getKnockback() { return 5.0f; }
+	public float getKnockback() { return Machete.KNOCKBACK; }
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }

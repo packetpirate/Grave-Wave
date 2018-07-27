@@ -30,7 +30,7 @@ public class BowAndArrow extends RangedWeapon {
 	private static final float CHARGE_RATE = 0.0015f;
 	private static final String ICON_NAME = "GZS_Bow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
-	private static final String FIRE_SOUND = "shoot4"; // TODO: Change this to a more appropriate sound.
+	private static final String FIRE_SOUND = "bow_fire"; // TODO: Change this to a more appropriate sound.
 	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
 	
 	private boolean release;
@@ -111,7 +111,6 @@ public class BowAndArrow extends RangedWeapon {
 		
 		boolean critical = isCritical();
 		double dmg = damage.roll(BowAndArrow.MIN_DAMAGE_MOD, critical);
-		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		

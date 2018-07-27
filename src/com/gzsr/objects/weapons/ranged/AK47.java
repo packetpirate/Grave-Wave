@@ -76,7 +76,6 @@ public class AK47 extends RangedWeapon {
 		
 		boolean critical = isCritical();
 		double dmg = damage.roll(AK47.MIN_DAMAGE_MOD, critical);
-		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		

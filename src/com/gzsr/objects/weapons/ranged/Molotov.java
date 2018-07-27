@@ -46,7 +46,10 @@ public class Molotov extends Projectile {
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
-				if(e.getCollider().intersects(getCollider())) explode((GameState)gs, cTime);
+				if(e.getCollider().intersects(getCollider())) {
+					System.out.println("Enemy collision with molotov!");
+					explode((GameState)gs, cTime);
+				}
 			}
 		}
 	}
@@ -68,7 +71,10 @@ public class Molotov extends Projectile {
 	
 	@Override
 	public void onDestroy(GameState gs, long cTime) {
-		if(!exploded) explode(gs, cTime);
+		if(!exploded) {
+			System.out.println("Molotov exploded due to timeout!");
+			explode(gs, cTime);
+		}
 	}
 	
 	@Override

@@ -33,17 +33,20 @@ import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.melee.BastardSword;
 import com.gzsr.objects.weapons.melee.MeleeWeapon;
 import com.gzsr.objects.weapons.ranged.AK47;
 import com.gzsr.objects.weapons.ranged.BigRedButton;
 import com.gzsr.objects.weapons.ranged.BowAndArrow;
 import com.gzsr.objects.weapons.ranged.ClaymoreWeapon;
+import com.gzsr.objects.weapons.ranged.Crossbow;
 import com.gzsr.objects.weapons.ranged.Flamethrower;
 import com.gzsr.objects.weapons.ranged.GrenadeLauncher;
 import com.gzsr.objects.weapons.ranged.LaserBarrier;
 import com.gzsr.objects.weapons.ranged.MolotovWeapon;
 import com.gzsr.objects.weapons.ranged.Mossberg;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
+import com.gzsr.objects.weapons.ranged.Remington;
 import com.gzsr.objects.weapons.ranged.SentryWeapon;
 
 public class ShopState extends BasicGameState implements InputListener {
@@ -653,9 +656,12 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP = new Inventory(SHOP_SIZE);
 		
 		// Add the default purchasable weapons to the shop inventory.
+		SHOP.addItem(new BastardSword());
 		SHOP.addItem(new AK47());
 		SHOP.addItem(new Mossberg());
+		SHOP.addItem(new Remington());
 		SHOP.addItem(new BowAndArrow());
+		SHOP.addItem(new Crossbow());
 		SHOP.addItem(new Flamethrower());
 		SHOP.addItem(new MolotovWeapon());
 		SHOP.addItem(new GrenadeLauncher());

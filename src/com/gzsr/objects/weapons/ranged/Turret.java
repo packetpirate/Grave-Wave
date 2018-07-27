@@ -25,7 +25,6 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.RotationLerp;
-import com.gzsr.states.GameState;
 
 public class Turret extends Projectile {
 	private static final double HEALTH_MAX = 2_00.0;
@@ -166,7 +165,6 @@ public class Turret extends Projectile {
 		
 		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
 		double dmg = dice.roll(Turret.MIN_DAMAGE_MOD, critical);
-		dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		

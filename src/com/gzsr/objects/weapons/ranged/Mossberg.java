@@ -82,7 +82,6 @@ public class Mossberg extends RangedWeapon {
 			
 			boolean critical = isCritical();
 			double dmg = damage.roll(Mossberg.MIN_DAMAGE_MOD, critical);
-			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 			
 			Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 			projectiles.add(projectile);

@@ -13,7 +13,6 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
-import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.particles.Particle;
@@ -93,13 +92,13 @@ public class Claymore extends Projectile {
 				
 				boolean critical = isCritical();
 				double dmg = Dice.roll(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD, critical);
-				dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 				
 				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 				
-				shrapnel.add(projectile);
-				shrapnelCreated = true;
+				shrapnel.add(projectile);	
 			}
+			
+			shrapnelCreated = true;
 		}
 		
 		// Update the shrapnel particles.
