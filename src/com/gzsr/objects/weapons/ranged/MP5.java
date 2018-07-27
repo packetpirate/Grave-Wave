@@ -18,35 +18,35 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
-public class AK47 extends RangedWeapon {
-	private static final int PRICE = 2_500;
-	private static final int AMMO_PRICE = 400;
-	private static final long COOLDOWN = 100L;
-	private static final int CLIP_SIZE = 30;
+public class MP5 extends RangedWeapon {
+	private static final int PRICE = 1_000;
+	private static final int AMMO_PRICE = 250;
+	private static final long COOLDOWN = 75L;
+	private static final int CLIP_SIZE = 40;
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 10;
-	private static final long RELOAD_TIME = 2_000L;
+	private static final long RELOAD_TIME = 1_500L;
 	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 4;
+	private static final int MIN_DAMAGE_SIDES = 8;
+	private static final int MIN_DAMAGE_MOD = 2;
 	private static final float KNOCKBACK = 1.0f;
 	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
-	private static final String ICON_NAME = "GZS_RTPS";
+	private static final String ICON_NAME = "GZS_Mp5";
 	private static final String FIRE_SOUND = "m4a1_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	private Animation muzzleFlash;
 	
-	public AK47() {
+	public MP5() {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
 		
-		this.damage = new Dice(AK47.MIN_DAMAGE_COUNT, AK47.MIN_DAMAGE_SIDES);
+		this.damage = new Dice(MP5.MIN_DAMAGE_COUNT, MP5.MIN_DAMAGE_SIDES);
 		
 		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
-		this.useSound = assets.getSound(AK47.FIRE_SOUND);
-		this.reloadSound = assets.getSound(AK47.RELOAD_SOUND);
+		this.useSound = assets.getSound(MP5.FIRE_SOUND);
+		this.reloadSound = assets.getSound(MP5.RELOAD_SOUND);
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class AK47 extends RangedWeapon {
 		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
 		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
 	}
-
+	
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
@@ -75,20 +75,21 @@ public class AK47 extends RangedWeapon {
 		long lifespan = getProjectile().getLifespan();
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(AK47.MIN_DAMAGE_MOD, critical);
+		double dmg = damage.roll(MP5.MIN_DAMAGE_MOD, critical);
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		
 		Particle particle = new Particle(color, position, velocity, (theta + deviation),
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
+		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		
 		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
 		lastUsed = cTime;
 
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 50L, 5.0f);
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 150L, 50L, 5.0f);
 		else Camera.getCamera().refreshShake(cTime);
 		
 		muzzleFlash.restart(cTime);
@@ -96,57 +97,57 @@ public class AK47 extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(AK47.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return damage.getRange(MP5.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public float getKnockback() { return AK47.KNOCKBACK; }
+	public float getKnockback() { return MP5.KNOCKBACK; }
 
 	@Override
 	public boolean isReloading(long cTime) {
 		long elapsed = cTime - reloadStart;
-		return ((elapsed < AK47.RELOAD_TIME) && reloading);
+		return ((elapsed < MP5.RELOAD_TIME) && reloading);
 	}
 
 	@Override
-	public long getReloadTime() { return AK47.RELOAD_TIME; }
+	public long getReloadTime() { return MP5.RELOAD_TIME; }
 	
 	@Override
 	public double getReloadTime(long cTime) {
 		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)AK47.RELOAD_TIME);
+		return ((double)elapsed / (double)MP5.RELOAD_TIME);
 	}
 	
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(AK47.ICON_NAME); }
+	public Image getInventoryIcon() { return AssetManager.getManager().getImage(MP5.ICON_NAME); }
 
 	@Override
-	public int getClipSize() { return AK47.CLIP_SIZE; }
+	public int getClipSize() { return MP5.CLIP_SIZE; }
 
 	@Override
-	public int getStartClips() { return AK47.START_CLIPS; }
+	public int getStartClips() { return MP5.START_CLIPS; }
 	
 	@Override
-	public int getMaxClips() { return AK47.MAX_CLIPS; }
+	public int getMaxClips() { return MP5.MAX_CLIPS; }
 
 	@Override
-	public long getCooldown() { return AK47.COOLDOWN; }
+	public long getCooldown() { return MP5.COOLDOWN; }
 	
 	@Override
-	public ProjectileType getProjectile() { return ProjectileType.ASSAULT; }
+	public ProjectileType getProjectile() { return ProjectileType.SMG; }
 
 	@Override
-	public int getPrice() { return AK47.PRICE; }
+	public int getPrice() { return MP5.PRICE; }
 	
 	@Override
-	public int getAmmoPrice() { return AK47.AMMO_PRICE; }
+	public int getAmmoPrice() { return MP5.AMMO_PRICE; }
 
 	@Override
 	public String getName() {
-		return "AK47";
+		return "MP5";
 	}
 	
 	@Override
 	public String getDescription() {
-		return "One of the world's most popular assault rifles... or at least it used to be, I guess.";
+		return "A standard military issue MP5.";
 	}
 }

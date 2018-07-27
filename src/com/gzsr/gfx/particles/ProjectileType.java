@@ -5,6 +5,7 @@ import org.newdawn.slick.Color;
 public enum ProjectileType {
 	// Player projectiles.
 	HANDGUN(new Color(0xF2F28C), 2.0f, 3.0f, 10.0f, 1_500L),
+	SMG(new Color(0xF2F28C), 2.5f, 3.0f, 10.0f, 1_500L),
 	ASSAULT(new Color(0xF2F2BF), 2.5f, 3.0f, 12.0f, 2_500L),
 	SHOTGUN(new Color(0xF2F28C), 1.0f, 4.0f, 4.0f, 800L),
 	RIFLE(new Color(0xF2F2BC), 3.0f, 3.0f, 12.0f, 3_000L),

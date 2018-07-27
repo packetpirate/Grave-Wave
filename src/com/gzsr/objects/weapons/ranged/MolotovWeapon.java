@@ -16,8 +16,8 @@ import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
 
 public class MolotovWeapon extends RangedWeapon {
-	private static final int PRICE = 4_000;
-	private static final int AMMO_PRICE = 1_000;
+	private static final int PRICE = 2_000;
+	private static final int AMMO_PRICE = 500;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;

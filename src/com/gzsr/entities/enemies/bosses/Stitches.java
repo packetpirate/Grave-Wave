@@ -21,9 +21,9 @@ import com.gzsr.status.StatusEffect;
 public class Stitches extends Boss {
 	private static final int FIRST_WAVE = 25;
 	private static final int SPAWN_COST = 40;
-	private static final int MIN_HEALTH_COUNT = 25;
+	private static final int MIN_HEALTH_COUNT = 100;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 1250;
+	private static final int MIN_HEALTH_MOD = 2_000;
 	private static final float SPEED = 0.15f;
 	private static final float DPS = 20.0f;
 	private static final float ATTACK_DIST = 300.0f;

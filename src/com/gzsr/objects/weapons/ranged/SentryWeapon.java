@@ -14,8 +14,8 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
 
 public class SentryWeapon extends RangedWeapon {
-	private static final int PRICE = 4_000;
-	private static final int AMMO_PRICE = 2_000;
+	private static final int PRICE = 10_000;
+	private static final int AMMO_PRICE = 5_000;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 1;

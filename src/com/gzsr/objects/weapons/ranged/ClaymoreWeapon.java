@@ -15,8 +15,8 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
 
 public class ClaymoreWeapon extends RangedWeapon {
-	private static final int PRICE = 1_200;
-	private static final int AMMO_PRICE = 250;
+	private static final int PRICE = 4_000;
+	private static final int AMMO_PRICE = 1_000;
 	private static final long COOLDOWN = 1_500L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 4;

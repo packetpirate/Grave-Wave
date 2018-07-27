@@ -17,7 +17,7 @@ import com.gzsr.objects.weapons.Explosion.Type;
 import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends RangedWeapon {
-	private static final int PRICE = 6_000;
+	private static final int PRICE = 7_500;
 	private static final int AMMO_PRICE = 1_500;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 8;

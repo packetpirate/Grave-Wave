@@ -17,7 +17,7 @@ import com.gzsr.status.BurningEffect;
 import com.gzsr.status.Status;
 
 public class Flamethrower extends RangedWeapon {
-	private static final int PRICE = 3_000;
+	private static final int PRICE = 7_500;
 	private static final int AMMO_PRICE = 1_000; 
 	private static final long COOLDOWN = 25L;
 	private static final int CLIP_SIZE = 100;

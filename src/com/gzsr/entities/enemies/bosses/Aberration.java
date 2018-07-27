@@ -25,9 +25,9 @@ import com.gzsr.status.StatusEffect;
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 25;
-	private static final int MIN_HEALTH_COUNT = 25;
+	private static final int MIN_HEALTH_COUNT = 50;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 750;
+	private static final int MIN_HEALTH_MOD = 1_500;
 	private static final float SPEED = 0.15f;
 	private static final float DPS = 20.0f;
 	private static final float BILE_DAMAGE = 1.0f;
