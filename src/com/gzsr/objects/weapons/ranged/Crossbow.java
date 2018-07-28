@@ -108,4 +108,14 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Crossbow.ICON_NAME); }
+	
+	@Override
+	public String getName() {
+		return "Crossbow";
+	}
+	
+	@Override
+	public String getDescription() {
+		return "It may not be the most efficient weapon when you're being swarmed, but it can do some serious damage.";
+	}
 }

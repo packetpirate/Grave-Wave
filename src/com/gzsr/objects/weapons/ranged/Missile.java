@@ -9,6 +9,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -16,15 +17,15 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 
-public class Grenade extends Projectile {
-	public static final float SPEED = ProjectileType.GRENADE.getVelocity();
-	public static final long LIFESPAN = ProjectileType.GRENADE.getLifespan();
+public class Missile extends Projectile {
+	public static final float SPEED = ProjectileType.MISSILE.getVelocity();
+	public static final long LIFESPAN = ProjectileType.MISSILE.getLifespan();
 	
 	private Sound explode;
 	private Explosion exp;
 	private boolean exploded;
 	
-	public Grenade(Particle p_, Explosion exp_) {
+	public Missile(Particle p_, Explosion exp_) {
 		super(p_, 0.0, false);
 		
 		this.explode = AssetManager.getManager().getSound("explosion2");
@@ -47,6 +48,9 @@ public class Grenade extends Projectile {
 				Enemy e = it.next();
 				if(e.getCollider().intersects(getCollider())) explode((GameState)gs, cTime);
 			}
+			
+			Animation anim = getAnimation();
+			if(anim != null) anim.update(cTime);
 		}
 	}
 	
@@ -59,7 +63,7 @@ public class Grenade extends Projectile {
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;
 		
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 20L, 15.0f);
+		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 50L, 20.0f);
 		else Camera.getCamera().refreshShake(cTime);
 	}
 	

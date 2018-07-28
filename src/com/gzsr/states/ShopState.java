@@ -49,7 +49,9 @@ import com.gzsr.objects.weapons.ranged.MolotovWeapon;
 import com.gzsr.objects.weapons.ranged.Mossberg;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.objects.weapons.ranged.Remington;
+import com.gzsr.objects.weapons.ranged.SAWRevolver;
 import com.gzsr.objects.weapons.ranged.SentryWeapon;
+import com.gzsr.objects.weapons.ranged.Stinger;
 
 public class ShopState extends BasicGameState implements InputListener {
 	public static final int ID = 2;
@@ -659,6 +661,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		// Add the default purchasable weapons to the shop inventory.
 		SHOP.addItem(new BastardSword());
+		SHOP.addItem(new SAWRevolver());
 		SHOP.addItem(new MP5());
 		SHOP.addItem(new AK47());
 		SHOP.addItem(new Mossberg());
@@ -669,6 +672,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP.addItem(new Flamethrower());
 		SHOP.addItem(new MolotovWeapon());
 		SHOP.addItem(new GrenadeLauncher());
+		SHOP.addItem(new Stinger());
 		SHOP.addItem(new ClaymoreWeapon());
 		SHOP.addItem(new LaserBarrier());
 		SHOP.addItem(new SentryWeapon());

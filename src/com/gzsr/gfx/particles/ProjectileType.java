@@ -13,6 +13,7 @@ public enum ProjectileType {
 	BOLT(new Color(0xA58138), 2.5f, 30.0f, 4.0f, 2_500L),
 	FLAMETHROWER(new Color(0xEDA642), 0.25f, 4.0f, 4.0f, 1_200L),
 	GRENADE(new Color(0x4DAD1A), 0.4f, 16.0f, 16.0f, 1_000L),
+	MISSILE(new Color(0x4DAD1A), 1.5f, 64.0f, 16.0f, 4_000L),
 	MOLOTOV(new Color(0x8F563B), 0.25f, 16.0f, 16.0f, 1_000L), // Lifespan set manually according to throw strength.
 	CLAYMORE(new Color(0x4D661A), 0.0f, 8.0f, 4.0f, 0L),
 	SHRAPNEL(new Color(0xF2F28C), 0.5f, 4.0f, 4.0f, 800L),

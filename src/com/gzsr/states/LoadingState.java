@@ -163,6 +163,7 @@ public class LoadingState extends BasicGameState {
 			// Weapon Images
 			"images/GZS_MuzzleFlash.png",
 			"images/GZS_Popgun.png",
+			"images/GZS_SmithAndWesson.png",
 			"images/GZS_Mp5.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png",
@@ -173,6 +174,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Flammenwerfer.png",
 			"images/GZS_HandEgg.png",
 			"images/GZS_ClaymoreWeapon.png",
+			"images/GZS_Stinger.png",
+			"images/GZS_Stinger_Missile.png",
 			"images/GZS_LaserWire.png",
 			"images/GZS_Turret.png",
 			"images/GZS_BigRedButton.png",
@@ -212,6 +215,9 @@ public class LoadingState extends BasicGameState {
 		Animation fire = new Animation("GZS_FireAnimation1", 16, 16, 8, 150L, 1200L, 1200L);
 		assets.addAnimation("GZS_FireAnimation1", fire);
 		
+		Animation missile = new Animation("GZS_Stinger_Missile", 16, 64, 5, 50L, 250L, 250L);
+		assets.addAnimation("GZS_Stinger_Missile", missile);
+		
 		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_Explosion", exp);
 		
@@ -232,6 +238,7 @@ public class LoadingState extends BasicGameState {
 			"sounds/shoot3.wav",
 			"sounds/bow_fire.wav",
 			"sounds/beretta_shot_01.wav",
+			"sounds/revolver_shot_01.wav",
 			"sounds/m4a1_shot_01.wav",
 			"sounds/mossberg_shot_01.wav",
 			"sounds/sniper_shot.wav",
@@ -240,6 +247,7 @@ public class LoadingState extends BasicGameState {
 			"sounds/shotgun1.wav",
 			"sounds/flamethrower2.wav",
 			"sounds/flamethrower3.wav",
+			"sounds/missile.wav",
 			"sounds/out-of-ammo_click.wav",
 			"sounds/explosion2.wav",
 			"sounds/poison_cloud.wav",

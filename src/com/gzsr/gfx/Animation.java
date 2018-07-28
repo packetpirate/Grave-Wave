@@ -195,6 +195,9 @@ public class Animation {
 		float tly = position.y - (size.y / 2);
 		Image image = getImage().getSubImage((int)srcPos.x, (int)srcPos.y, srcSize.x, srcSize.y);
 		
-		if(image != null) g.drawImage(image, tlx, tly);
+		if(image != null) {
+			float scale = (size.x / image.getWidth());
+			image.draw(tlx, tly, scale);
+		}
 	}
 }

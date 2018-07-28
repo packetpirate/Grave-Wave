@@ -136,7 +136,7 @@ public class Particle implements Entity {
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
-		this.rotation = theta_;
+		this.rotation = (theta_ - (float)(Math.PI / 2)); // Need to subtract 90 degrees because render call doesn't rotate when rendering an animation.
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
 		
@@ -185,14 +185,17 @@ public class Particle implements Entity {
 	@Override
 	public void render(Graphics g, long cTime) {
 		if(shouldDraw(cTime)) {
-			g.rotate(position.x, position.y, (float)Math.toDegrees(rotation));
+			float a = (float)Math.toDegrees(rotation);
+			
 			
 			Image img = getImage();
 			if(animation != null) {
 				animation.render(g, position, rotation);
 			} else if(img != null) {
+				g.rotate(position.x, position.y, a);
 				g.drawImage(img, (position.x - (img.getWidth() / 2)), 
 								 (position.y - (img.getHeight() / 2)));
+				g.rotate(position.x, position.y, -a);
 			} else {
 				float x = position.x - (size.x / 2);
 				float y = position.y - (size.y / 2);
@@ -203,11 +206,11 @@ public class Particle implements Entity {
 			}
 			
 			if(Globals.SHOW_COLLIDERS) {
+				g.rotate(position.x, position.y, a);
 				g.setColor(Color.red);
 				g.draw(bounds);
+				g.rotate(position.x, position.y, -a);
 			}
-			
-			g.rotate(position.x, position.y, -(float)Math.toDegrees(rotation));
 		}
 	}
 	
