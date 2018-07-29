@@ -73,16 +73,13 @@ public abstract class MeleeWeapon extends Weapon {
 			float offset = getImageDistance();
 			float theta = getCurrentTheta(cTime);
 			
-			// Used to show line indicating where melee weapon should be pointing during swing/stab/whatever.
-			//g.setColor(Color.red);
-			//g.drawLine(player.x.floatValue(), player.y.floatValue(), (player.x + ((float)Math.cos(theta) * offset)), (player.y + ((float)Math.sin(theta) * offset)));
-			
+			float rot = (theta + (float)Math.PI);
 			float x = (player.x + ((float)Math.cos(theta) * offset));
 			float y = (player.y + ((float)Math.sin(theta) * offset));
 			
-			g.rotate(x, y, (float)Math.toDegrees(theta + (float)Math.PI));
+			g.rotate(x, y, (float)Math.toDegrees(rot));
 			img.draw(x, y);
-			g.rotate(x, y, (float)Math.toDegrees(-(theta + (float)Math.PI)));
+			g.rotate(x, y, (float)Math.toDegrees(-rot));
 		}
 	}
 	

@@ -197,12 +197,16 @@ public class Particle implements Entity {
 								 (position.y - (img.getHeight() / 2)));
 				g.rotate(position.x, position.y, -a);
 			} else {
+				g.rotate(position.x, position.y, a);
+				
 				float x = position.x - (size.x / 2);
 				float y = position.y - (size.y / 2);
 				
 				if(colorGenerator == null) g.setColor(color);
 				else g.setColor(colorGenerator.generate());
 				g.fillRect(x, y, size.x, size.y);
+				
+				g.rotate(position.x, position.y, -a);
 			}
 			
 			if(Globals.SHOW_COLLIDERS) {

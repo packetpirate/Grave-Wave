@@ -162,7 +162,9 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_TurretPieces.png",
 			// Weapon Images
 			"images/GZS_MuzzleFlash.png",
-			"images/GZS_Popgun.png",
+			"images/GZS_NailGun.png",
+			"images/GZS_Nail.png",
+			"images/GZS_Beretta.png",
 			"images/GZS_SmithAndWesson.png",
 			"images/GZS_Mp5.png",
 			"images/GZS_RTPS.png",
@@ -237,6 +239,7 @@ public class LoadingState extends BasicGameState {
 			"sounds/shoot4.wav",
 			"sounds/shoot3.wav",
 			"sounds/bow_fire.wav",
+			"sounds/nailgun.wav",
 			"sounds/beretta_shot_01.wav",
 			"sounds/revolver_shot_01.wav",
 			"sounds/m4a1_shot_01.wav",

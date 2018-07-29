@@ -70,16 +70,18 @@ public class AWP extends RangedWeapon {
 		
 		Player player = Player.getPlayer();
 		Pair<Float> mp = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y - 28.0f));
+		float theta = (player.getRotation() - (float)(Math.PI / 2));
 		
 		// Render a laser sight.
-		float theta = (player.getRotation() - (float)(Math.PI / 2));
-		Pair<Float> muzzlePos = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y));
-		Pair<Float> laserPos = Calculate.rotateAboutPoint(player.getPosition(), muzzlePos, theta);
-		float x2 = (laserPos.x + ((float)Math.cos(theta) * AWP.LASER_SIGHT_RANGE));
-		float y2 = (laserPos.y + ((float)Math.sin(theta) * AWP.LASER_SIGHT_RANGE));
-		
-		g.setColor(Color.red);
-		g.drawLine(laserPos.x, laserPos.y, x2, y2);
+		if(equipped) {
+			Pair<Float> muzzlePos = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y));
+			Pair<Float> laserPos = Calculate.rotateAboutPoint(player.getPosition(), muzzlePos, theta);
+			float x2 = (laserPos.x + ((float)Math.cos(theta) * AWP.LASER_SIGHT_RANGE));
+			float y2 = (laserPos.y + ((float)Math.sin(theta) * AWP.LASER_SIGHT_RANGE));
+			
+			g.setColor(Color.red);
+			g.drawLine(laserPos.x, laserPos.y, x2, y2);
+		}
 		
 		// Render muzzle flash.
 		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), theta);
