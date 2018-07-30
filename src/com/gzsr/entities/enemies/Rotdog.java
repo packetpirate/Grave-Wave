@@ -13,8 +13,11 @@ public class Rotdog extends Enemy {
 	private static final int MIN_HEALTH_COUNT = 3;
 	private static final int MIN_HEALTH_SIDES = 4;
 	private static final int MIN_HEALTH_MOD = 8;
+	private static final int MIN_DAMAGE_COUNT = 1;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final int MIN_DAMAGE_MOD = 2;
+	private static final long ATTACK_DELAY = 1_000L;
 	private static final float SPEED = 0.20f;
-	private static final float DPS = 8.0f;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.10f)
@@ -23,7 +26,9 @@ public class Rotdog extends Enemy {
 	
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);
+		
 		this.health = Dice.roll(Rotdog.MIN_HEALTH_COUNT, Rotdog.MIN_HEALTH_SIDES, Rotdog.MIN_HEALTH_MOD);
+		this.damage = new Dice(Rotdog.MIN_DAMAGE_COUNT, Rotdog.MIN_DAMAGE_SIDES);
 	}
 
 	@Override
@@ -56,22 +61,17 @@ public class Rotdog extends Enemy {
 	}
 	
 	@Override
-	public double getDamage() {
-		return Rotdog.DPS;
-	}
+	public double getDamage() { return damage.roll(Rotdog.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public float getSpeed() {
-		return Rotdog.SPEED;
-	}
+	public long getAttackDelay() { return Rotdog.ATTACK_DELAY; }
 	
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	@Override
+	public float getSpeed() { return Rotdog.SPEED; }
 	
-	public static int getSpawnCost() {
-		return Rotdog.SPAWN_COST;
-	}
+	public static int appearsOnWave() { return FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return Rotdog.SPAWN_COST; }
 
 	@Override
 	public String getName() {
@@ -84,7 +84,5 @@ public class Rotdog extends Enemy {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Rotdog.LOOT;
-	}
+	public LootTable getLootTable() { return Rotdog.LOOT; }
 }

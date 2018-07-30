@@ -140,7 +140,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_CriticalChance.png",
 			"images/GZS_PoisonIcon.png",
 			// Enemy Images
-			"images/GZS_Zumby2.png",
+			"images/GZS_Zumby3.png",
 			"images/GZS_Rotdog2.png",
 			"images/GZS_Upchuck2.png",
 			"images/GZS_Gasbag2.png",
@@ -188,6 +188,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Machete_Icon.png",
 			"images/GZS_Bastard_Sword.png",
 			"images/GZS_Bastard_Sword_Icon.png",
+			"images/GZS_Lollipop.png",
+			"images/GZS_Lollipop_Icon.png",
 			// Effect Images
 			"images/GZS_LightAlphaMap3.png",
 			"images/GZS_Flashlight.png",
@@ -259,7 +261,8 @@ public class LoadingState extends BasicGameState {
 			"sounds/buy_ammo2.wav",
 			"sounds/level-up.wav",
 			"sounds/powerup2.wav",
-			"sounds/point_buy.wav"
+			"sounds/point_buy.wav",
+			"sounds/party_horn.wav"
 		};
 		
 		for(String asset : assetList) {

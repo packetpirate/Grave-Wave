@@ -34,6 +34,7 @@ import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.BastardSword;
+import com.gzsr.objects.weapons.melee.Lollipop;
 import com.gzsr.objects.weapons.melee.MeleeWeapon;
 import com.gzsr.objects.weapons.ranged.AK47;
 import com.gzsr.objects.weapons.ranged.AWP;
@@ -662,6 +663,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		
 		// Add the default purchasable weapons to the shop inventory.
 		SHOP.addItem(new BastardSword());
+		SHOP.addItem(new Lollipop());
 		SHOP.addItem(new NailGun());
 		SHOP.addItem(new SAWRevolver());
 		SHOP.addItem(new MP5());

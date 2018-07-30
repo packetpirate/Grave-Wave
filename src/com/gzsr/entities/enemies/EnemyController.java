@@ -241,13 +241,6 @@ public class EnemyController implements Entity {
 					player.getAttributes().addTo("money", enemy.getCashValue());
 					it.remove();
 				}
-				
-				// Check if the player is touching the enemy.
-				if(enemy.isAlive(cTime) && 
-				   player.touchingEnemy(enemy)) {
-					double damage = enemy.getDamage() / (1_000L / Globals.STEP_TIME);
-					player.takeDamage(damage, cTime);
-				}
 			}
 		}
 		

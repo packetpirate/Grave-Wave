@@ -2,6 +2,7 @@ package com.gzsr.objects.weapons.melee;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -12,10 +13,13 @@ import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
+import com.gzsr.gfx.particles.Particle;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.states.GameState;
 
 public abstract class MeleeWeapon extends Weapon {
 	protected Image img;
@@ -32,6 +36,8 @@ public abstract class MeleeWeapon extends Weapon {
 	public float getAttackTheta() { return attackTheta; }
 	protected long lastAttack;
 	
+	protected BiFunction<Entity, Long, List<Particle>> bloodGenerator;
+	
 	public MeleeWeapon() {
 		super();
 		
@@ -46,6 +52,8 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		attackTheta = 0.0f;
 		lastAttack = -(getAttackTime() + getCooldown());
+		
+		bloodGenerator = null;
 	}
 	
 	@Override
@@ -117,7 +125,7 @@ public abstract class MeleeWeapon extends Weapon {
 		attackTheta = 0.0f;
 	}
 	
-	public boolean hit(Enemy enemy, long cTime) {
+	public boolean hit(GameState gs, Enemy enemy, long cTime) {
 		if(multihit) {
 			for(Enemy e : enemiesHit) {
 				if(enemy.equals(e)) return false;
@@ -128,6 +136,11 @@ public abstract class MeleeWeapon extends Weapon {
 		if(isHit) {
 			if(!multihit) stopAttack();
 			else enemiesHit.add(enemy);
+			
+			if(bloodGenerator != null) {
+				List<Particle> particles = bloodGenerator.apply(enemy, cTime);
+				particles.stream().forEach(p -> gs.addEntity(String.format("blood%d", Globals.generateEntityID()),  p));
+			}
 		}
 		
 		return isHit;

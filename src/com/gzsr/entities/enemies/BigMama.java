@@ -105,7 +105,7 @@ public class BigMama extends Enemy {
 				}
 				
 				updateFlash(cTime);
-				animation.update(cTime);
+				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			}
 		}
@@ -152,6 +152,9 @@ public class BigMama extends Enemy {
 	public double getDamage() {
 		return BigMama.DPS;
 	}
+	
+	@Override
+	public long getAttackDelay() { return 0L; }
 	
 	@Override
 	public float getSpeed() {

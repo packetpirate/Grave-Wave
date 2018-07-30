@@ -384,6 +384,7 @@ public class Player implements Entity {
 		lastGrunt = 0L;
 		
 		rangedIndex = 0;
+		meleeIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 		
 		Machete machete = new Machete();
@@ -586,7 +587,7 @@ public class Player implements Entity {
 		}
 		
 		for(MeleeWeapon mw : getMeleeWeapons()) {
-			if(mw.isAttacking() && mw.hit(enemy, cTime)) {
+			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
 				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 				double totalDamage = (mw.rollDamage() * damagePercentage);
 				if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());

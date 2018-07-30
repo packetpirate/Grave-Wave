@@ -28,13 +28,16 @@ public class Aberration extends Boss {
 	private static final int MIN_HEALTH_COUNT = 50;
 	private static final int MIN_HEALTH_SIDES = 10;
 	private static final int MIN_HEALTH_MOD = 1_500;
+	private static final int MIN_DAMAGE_COUNT = 4;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final int MIN_DAMAGE_MOD = 4;
 	private static final float SPEED = 0.15f;
-	private static final float DPS = 20.0f;
 	private static final float BILE_DAMAGE = 1.0f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 9);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
+	private static final long ATTACK_DELAY = 1_500L;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
@@ -48,7 +51,9 @@ public class Aberration extends Boss {
 	
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
+		
 		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
+		this.damage = new Dice(Aberration.MIN_DAMAGE_COUNT, Aberration.MIN_DAMAGE_SIDES);
 		
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
@@ -72,7 +77,7 @@ public class Aberration extends Boss {
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
-				animation.update(cTime);
+				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
@@ -123,7 +128,7 @@ public class Aberration extends Boss {
 		// Even if Aberration is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		// Only render the Aberration until it dies.
-		if(!dead()) animation.render(g, position, theta, shouldDrawFlash(cTime));
+		if(!dead()) animation.getCurrentAnimation().render(g, position, theta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
@@ -190,22 +195,17 @@ public class Aberration extends Boss {
 	}
 
 	@Override
-	public double getDamage() {
-		return Aberration.DPS;
-	}
+	public double getDamage() { return damage.roll(Aberration.MIN_DAMAGE_MOD); }
 	
 	@Override
-	public float getSpeed() {
-		return Aberration.SPEED;
-	}
-
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	public long getAttackDelay() { return Aberration.ATTACK_DELAY; }
 	
-	public static int getSpawnCost() {
-		return Aberration.SPAWN_COST;
-	}
+	@Override
+	public float getSpeed() { return Aberration.SPEED; }
+
+	public static int appearsOnWave() { return FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return Aberration.SPAWN_COST; }
 	
 	@Override
 	public String getName() {
@@ -218,7 +218,5 @@ public class Aberration extends Boss {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Aberration.LOOT;
-	}
+	public LootTable getLootTable() { return Aberration.LOOT; }
 }

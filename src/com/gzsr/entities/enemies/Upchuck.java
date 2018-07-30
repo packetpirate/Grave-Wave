@@ -71,7 +71,7 @@ public class Upchuck extends Enemy {
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
-				animation.update(cTime);
+				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
@@ -102,7 +102,7 @@ public class Upchuck extends Enemy {
 		// Even if Upchuck is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		
-		if(!dead()) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
+		if(!dead()) animation.getCurrentAnimation().render(g, position, pTheta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
@@ -160,9 +160,7 @@ public class Upchuck extends Enemy {
 	}
 	
 	@Override
-	public float getCohesionDistance() {
-		return 0.0f;
-	}
+	public float getCohesionDistance() { return 0.0f; }
 	
 	@Override
 	public float getSeparationDistance() {
@@ -170,22 +168,17 @@ public class Upchuck extends Enemy {
 	}
 
 	@Override
-	public double getDamage() {
-		return Upchuck.DPS;
-	}
+	public double getDamage() { return Upchuck.DPS; }
 	
 	@Override
-	public float getSpeed() {
-		return Upchuck.SPEED;
-	}
+	public long getAttackDelay() { return 0L; }
 	
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	@Override
+	public float getSpeed() { return Upchuck.SPEED; }
 	
-	public static int getSpawnCost() {
-		return Upchuck.SPAWN_COST;
-	}
+	public static int appearsOnWave() { return FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return Upchuck.SPAWN_COST; }
 
 	@Override
 	public String getName() {
@@ -198,7 +191,5 @@ public class Upchuck extends Enemy {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Upchuck.LOOT;
-	}
+	public LootTable getLootTable() { return Upchuck.LOOT; }
 }

@@ -13,8 +13,10 @@ public class Zumby extends Enemy {
 	private static final int MIN_HEALTH_COUNT = 2;
 	private static final int MIN_HEALTH_SIDES = 8;
 	private static final int MIN_HEALTH_MOD = 12;
+	private static final int MIN_DAMAGE_COUNT = 1;
+	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final float SPEED = 0.10f;
-	private static final float DPS = 5.0f;
+	private static final long ATTACK_DELAY = 1_000L;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.05f)
@@ -22,7 +24,10 @@ public class Zumby extends Enemy {
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
+		
 		this.health = Dice.roll(Zumby.MIN_HEALTH_COUNT, Zumby.MIN_HEALTH_SIDES, Zumby.MIN_HEALTH_MOD);
+		this.damage = new Dice(Zumby.MIN_DAMAGE_COUNT, Zumby.MIN_DAMAGE_SIDES);
+		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
 	@Override
@@ -55,22 +60,14 @@ public class Zumby extends Enemy {
 	}
 	
 	@Override
-	public double getDamage() {
-		return Zumby.DPS;
-	}
+	public long getAttackDelay() { return Zumby.ATTACK_DELAY; }
 	
 	@Override
-	public float getSpeed() {
-		return Zumby.SPEED;
-	}
+	public float getSpeed() { return Zumby.SPEED; }
 	
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	public static int appearsOnWave() { return FIRST_WAVE; }
 	
-	public static int getSpawnCost() {
-		return Zumby.SPAWN_COST;
-	}
+	public static int getSpawnCost() { return Zumby.SPAWN_COST; }
 
 	@Override
 	public String getName() {
@@ -83,7 +80,5 @@ public class Zumby extends Enemy {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Zumby.LOOT;
-	}
+	public LootTable getLootTable() { return Zumby.LOOT; }
 }

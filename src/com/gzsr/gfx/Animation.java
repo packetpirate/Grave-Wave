@@ -63,6 +63,22 @@ public class Animation {
 		this.started = false;
 	}
 	
+	public Animation(String imageName_, int layer_, int fw_, int fh_, int frames_,
+					 long delay_, long lifespan_, long created_) {
+		this.imageName = imageName_;
+		
+		this.srcPos = new Pair<Integer>(0, (layer_ * fh_));
+		this.srcSize = new Pair<Integer>(fw_, fh_);
+		
+		this.frames = frames_;
+		this.current = 0;
+		this.delay = delay_;
+		this.lastUpdate = 0L;
+		this.lifespan = lifespan_;
+		this.created = created_;
+		this.started = false;
+	}
+	
 	/**
 	 * Copy constructor. Used by AssetManager to retrieve copies of an animation to be used by individual entities.
 	 * @param copy The animation to make a copy of.

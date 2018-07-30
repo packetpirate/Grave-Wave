@@ -12,8 +12,9 @@ public class TinyZumby extends Enemy {
 	private static final int MIN_HEALTH_COUNT = 2;
 	private static final int MIN_HEALTH_SIDES = 4;
 	private static final int MIN_HEALTH_MOD = 2;
+	private static final int DAMAGE = 1;
 	private static final float SPEED = 0.20f;
-	private static final float DPS = 2.0f;
+	private static final long ATTACK_DELAY = 500L;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.025f)
@@ -23,6 +24,7 @@ public class TinyZumby extends Enemy {
 	
 	public TinyZumby(Pair<Float> position) {
 		super(EnemyType.LIL_ZUMBY, position);
+		
 		this.health = Dice.roll(TinyZumby.MIN_HEALTH_COUNT, TinyZumby.MIN_HEALTH_SIDES, TinyZumby.MIN_HEALTH_MOD);
 	}
 
@@ -56,18 +58,15 @@ public class TinyZumby extends Enemy {
 	}
 	
 	@Override
-	public double getDamage() {
-		return TinyZumby.DPS;
-	}
+	public double getDamage() { return TinyZumby.DAMAGE; }
 	
 	@Override
-	public float getSpeed() {
-		return TinyZumby.SPEED;
-	}
+	public long getAttackDelay() { return TinyZumby.ATTACK_DELAY; }
 	
-	public static int getSpawnCost() {
-		return TinyZumby.SPAWN_COST;
-	}
+	@Override
+	public float getSpeed() { return TinyZumby.SPEED; }
+	
+	public static int getSpawnCost() { return TinyZumby.SPAWN_COST; }
 
 	@Override
 	public String getName() {
@@ -80,7 +79,5 @@ public class TinyZumby extends Enemy {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return TinyZumby.LOOT;
-	}
+	public LootTable getLootTable() { return TinyZumby.LOOT; }
 }

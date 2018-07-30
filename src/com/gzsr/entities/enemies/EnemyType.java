@@ -9,7 +9,7 @@ import com.gzsr.misc.Pair;
 
 public enum EnemyType {
 	// Enemies
-	ZUMBY("GZS_Zumby2", 48, 48, 4, 200, 30, 50, 25),
+	ZUMBY("GZS_Zumby3", 48, 48, 4, 200, 30, 50, 25),
 	CHUCK("GZS_Upchuck2", 64, 64, 4, 400, 100, 140, 100),
 	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 100, 140, 100),
 	ROTDOG("GZS_Rotdog2", 48, 48, 4, 150, 40, 60, 50),
@@ -35,6 +35,10 @@ public enum EnemyType {
 	
 	private int experience;
 	public int getExperience() { return experience; }
+	
+	public Animation createLayerAnimation(int layer, int count, long delay, long lifespan, long created) {
+		return new Animation(animationName, layer, frameWidth, frameHeight, frameCount, frameDelay, lifespan, created);
+	}
 	
 	EnemyType(String animationName_, int frameWidth_, int frameHeight_, int frameCount_, long frameDelay_, int cashMin_, int cashMax_, int experience_) {
 		this.animationName = animationName_;

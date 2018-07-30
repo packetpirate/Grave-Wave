@@ -66,7 +66,7 @@ public class Gasbag extends Enemy {
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			if(!nearPlayer()) {
-				animation.update(cTime);
+				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else explode((GameState)gs, cTime);
 		}
@@ -120,22 +120,17 @@ public class Gasbag extends Enemy {
 	}
 
 	@Override
-	public double getDamage() {
-		return Gasbag.DPS;
-	}
+	public double getDamage() { return Gasbag.DPS; }
 	
 	@Override
-	public float getSpeed() {
-		return Gasbag.SPEED;
-	}
-
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	public long getAttackDelay() { return 0L; }
 	
-	public static int getSpawnCost() {
-		return Gasbag.SPAWN_COST;
-	}
+	@Override
+	public float getSpeed() { return Gasbag.SPEED; }
+
+	public static int appearsOnWave() { return FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return Gasbag.SPAWN_COST; }
 	
 	@Override
 	public String getName() {
@@ -148,7 +143,5 @@ public class Gasbag extends Enemy {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Gasbag.LOOT;
-	}
+	public LootTable getLootTable() { return Gasbag.LOOT; }
 }

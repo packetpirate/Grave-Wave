@@ -22,6 +22,10 @@ public class Zombat extends Boss {
 	private static final int MIN_HEALTH_COUNT = 20;
 	private static final int MIN_HEALTH_SIDES = 10;
 	private static final int MIN_HEALTH_MOD = 800;
+	private static final int MIN_DAMAGE_COUNT = 2;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final int MIN_DAMAGE_MOD = 4;
+	private static final long ATTACK_DELAY = 1_000L;
 	private static final float SPEED = 0.2f;
 	private static final float DPS = 10.0f;
 	private static final float SIPHON_RATE = 0.15f;
@@ -40,7 +44,9 @@ public class Zombat extends Boss {
 	
 	public Zombat(Pair<Float> position_) {
 		super(EnemyType.ZOMBAT_SWARM, position_);
+		
 		this.health = Dice.roll(Zombat.MIN_HEALTH_COUNT, Zombat.MIN_HEALTH_SIDES, Zombat.MIN_HEALTH_MOD);
+		this.damage = new Dice(Zombat.MIN_DAMAGE_COUNT, Zombat.MIN_DAMAGE_SIDES);
 		
 		siphoningBlood = false;
 	}
@@ -63,7 +69,7 @@ public class Zombat extends Boss {
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			
-			animation.update(cTime);
+			animation.getCurrentAnimation().update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
@@ -147,9 +153,10 @@ public class Zombat extends Boss {
 	}
 
 	@Override
-	public double getDamage() {
-		return Zombat.DPS;
-	}
+	public double getDamage() { return damage.roll(Zombat.MIN_DAMAGE_MOD); }
+	
+	@Override
+	public long getAttackDelay() { return Zombat.ATTACK_DELAY; }
 	
 	@Override
 	public float getSpeed() {

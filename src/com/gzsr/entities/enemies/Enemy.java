@@ -14,10 +14,12 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.AnimationState;
 import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.ui.DamageText;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.math.Calculate;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
 import com.gzsr.objects.items.Powerups;
@@ -28,9 +30,8 @@ import com.gzsr.status.StatusEffect;
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;
 	
-	// TODO: Add support for enemies having status effects.
 	protected EnemyType type;
-	protected Animation animation;
+	protected AnimationState animation;
 	protected Shape bounds;
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -40,13 +41,19 @@ public abstract class Enemy implements Entity {
 	public Vector2f getVelocity() { return velocity; }
 	protected boolean moveBlocked;
 	public void blockMovement() { moveBlocked = true; }
+	protected boolean attacking;
+	protected long lastAttack;
+	public abstract long getAttackDelay();
 	
 	protected double health;
 	public double getHealth() { return health; }
+	protected Dice damage;
+	public double getDamage() { return damage.roll(); }
 	protected int cash;
 	public int getCashValue() { return cash; }
 	protected int experience;
 	public int getExpValue() { return experience; }
+	
 	protected List<StatusEffect> statusEffects;
 	protected boolean deathHandled;
 	
@@ -70,17 +77,25 @@ public abstract class Enemy implements Entity {
 	
 	public Enemy(EnemyType type_, Pair<Float> position_) {
 		this.type = type_;
-		this.animation = type.getAnimation();
+		
+		Animation move = type.getAnimation();
+		this.animation = new AnimationState();
+		this.animation.addState("move", move);
+		this.animation.setCurrent("move");
+		
 		this.position = position_;
 		
-		float w = animation.getSrcSize().x;
-		float h = animation.getSrcSize().y;
+		float w = move.getSrcSize().x;
+		float h = move.getSrcSize().y;
 		this.bounds = new Rectangle((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 		
 		this.moveBlocked = false;
+		this.attacking = false;
+		this.lastAttack = 0L;
 		this.theta = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 		this.health = 0.0;
+		this.damage = new Dice(1, 1);
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
 		this.statusEffects = new ArrayList<StatusEffect>();
@@ -102,6 +117,8 @@ public abstract class Enemy implements Entity {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		Player player = Player.getPlayer();
+		
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
@@ -117,8 +134,27 @@ public abstract class Enemy implements Entity {
 			}
 			
 			updateFlash(cTime);
-			animation.update(cTime);
-			if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+			animation.getCurrentAnimation().update(cTime);
+			if(player.isAlive()) {
+				if(touchingPlayer()) {
+					if(!attacking) {
+						long elapsed = (cTime - lastAttack);
+						if(elapsed >= getAttackDelay()) {
+							double dmg = getDamage();
+							player.takeDamage(dmg, cTime);
+							lastAttack = cTime;
+							attacking = true;
+							animation.setCurrent("attack"); // has no effect if this enemy has no attack animation
+						}
+					}
+				} else move((GameState)gs, delta);
+			}
+		}
+		
+		long elapsed = (cTime - lastAttack);
+		if(attacking && (elapsed >= 800L)) {
+			attacking = false;
+			animation.setCurrent("move");
 		}
 		
 		postDamageTexts();
@@ -221,7 +257,7 @@ public abstract class Enemy implements Entity {
 	public void render(Graphics g, long cTime) {
 		// All enemies should render their animation.
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
-		if(isAlive(cTime)) animation.render(g, position, pTheta, shouldDrawFlash(cTime));
+		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, pTheta, shouldDrawFlash(cTime));
 		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
 		
 		if(Globals.SHOW_COLLIDERS) {
@@ -306,7 +342,6 @@ public abstract class Enemy implements Entity {
 		deathHandled = true;
 	}
 	
-	public abstract double getDamage();
 	public abstract float getSpeed();
 	public abstract LootTable getLootTable();
 	

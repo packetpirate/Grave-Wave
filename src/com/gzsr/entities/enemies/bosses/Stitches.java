@@ -24,8 +24,10 @@ public class Stitches extends Boss {
 	private static final int MIN_HEALTH_COUNT = 100;
 	private static final int MIN_HEALTH_SIDES = 10;
 	private static final int MIN_HEALTH_MOD = 2_000;
+	private static final int MIN_DAMAGE_COUNT = 10;
+	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final long ATTACK_DELAY = 2_000L;
 	private static final float SPEED = 0.15f;
-	private static final float DPS = 20.0f;
 	private static final float ATTACK_DIST = 300.0f;
 	private static final float RELEASE_DIST = 100.0f;
 	private static final float HOOK_DAMAGE = 0.3f;
@@ -45,7 +47,9 @@ public class Stitches extends Boss {
 	
 	public Stitches(Pair<Float> position_) {
 		super(EnemyType.STITCHES, position_);
+		
 		this.health = Dice.roll(Stitches.MIN_HEALTH_COUNT, Stitches.MIN_HEALTH_SIDES, Stitches.MIN_HEALTH_MOD);
+		this.damage = new Dice(Stitches.MIN_DAMAGE_COUNT, Stitches.MIN_DAMAGE_SIDES);
 		
 		hook = null;
 		hooked = false;
@@ -108,7 +112,7 @@ public class Stitches extends Boss {
 					Player.getPlayer().takeDamage(Stitches.HOOK_DAMAGE, cTime);
 				}
 			} else if(!hooked && (hook == null)) {
-				animation.update(cTime);
+				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			}
 		} else {
@@ -187,22 +191,14 @@ public class Stitches extends Boss {
 	}
 	
 	@Override
-	public double getDamage() {
-		return Stitches.DPS;
-	}
+	public long getAttackDelay() { return Stitches.ATTACK_DELAY; }
 	
 	@Override
-	public float getSpeed() {
-		return Stitches.SPEED;
-	}
+	public float getSpeed() { return Stitches.SPEED; }
 	
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
+	public static int appearsOnWave() { return FIRST_WAVE; }
 
-	public static int getSpawnCost() {
-		return Stitches.SPAWN_COST;
-	}
+	public static int getSpawnCost() { return Stitches.SPAWN_COST; }
 	
 	@Override
 	public String getName() {
@@ -215,7 +211,5 @@ public class Stitches extends Boss {
 	}
 	
 	@Override
-	public LootTable getLootTable() {
-		return Stitches.LOOT;
-	}
+	public LootTable getLootTable() { return Stitches.LOOT; }
 }
