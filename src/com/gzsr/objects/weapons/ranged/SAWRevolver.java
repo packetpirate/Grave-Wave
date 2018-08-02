@@ -150,6 +150,9 @@ public class SAWRevolver extends RangedWeapon {
 	public int getAmmoPrice() { return SAWRevolver.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 3; }
+	
+	@Override
 	public String getName() {
 		return "Smith & Wesson Model 500";
 	}

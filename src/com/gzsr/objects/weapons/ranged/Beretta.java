@@ -148,6 +148,9 @@ public class Beretta extends RangedWeapon {
 	public int getAmmoPrice() { return Beretta.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 1; }
+	
+	@Override
 	public String getName() {
 		return "Beretta M9";
 	}

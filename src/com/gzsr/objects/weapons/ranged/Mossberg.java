@@ -148,6 +148,9 @@ public class Mossberg extends RangedWeapon {
 	public int getAmmoPrice() { return Mossberg.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 5; }
+	
+	@Override
 	public String getName() {
 		return "Mossberg 500";
 	}

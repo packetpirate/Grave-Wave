@@ -19,7 +19,6 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.objects.weapons.Explosion.Type;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
@@ -192,6 +191,9 @@ public class BigRedButton extends RangedWeapon {
 	@Override
 	public int getAmmoPrice() { return BigRedButton.AMMO_PRICE; }
 
+	@Override
+	public int getLevelRequirement() { return 18; }
+	
 	@Override
 	public String getName() {
 		return "Big Red Button";

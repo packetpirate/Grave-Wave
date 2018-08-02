@@ -166,6 +166,9 @@ public class AWP extends RangedWeapon {
 	public int getAmmoPrice() { return AWP.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 15; }
+	
+	@Override
 	public String getName() {
 		return "AWP";
 	}

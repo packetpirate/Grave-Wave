@@ -120,6 +120,9 @@ public class Flamethrower extends RangedWeapon {
 	public int getAmmoPrice() { return Flamethrower.AMMO_PRICE; }
 	
 	@Override
+	public int getLevelRequirement() { return 12; }
+	
+	@Override
 	public String getName() {
 		return "Flamethrower";
 	}

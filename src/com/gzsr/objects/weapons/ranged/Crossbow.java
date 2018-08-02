@@ -110,6 +110,9 @@ public class Crossbow extends RangedWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Crossbow.ICON_NAME); }
 	
 	@Override
+	public int getLevelRequirement() { return 10; }
+	
+	@Override
 	public String getName() {
 		return "Crossbow";
 	}

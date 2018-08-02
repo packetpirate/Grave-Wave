@@ -27,8 +27,6 @@ public class Zombat extends Boss {
 	private static final int MIN_DAMAGE_MOD = 4;
 	private static final long ATTACK_DELAY = 1_000L;
 	private static final float SPEED = 0.2f;
-	private static final float DPS = 10.0f;
-	private static final float SIPHON_RATE = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
 	
 	private static final Color BLOOD_COLOR = new Color(0xAA0000);
@@ -75,9 +73,13 @@ public class Zombat extends Boss {
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else siphoningBlood = Player.getPlayer().isAlive(); // Only start siphoning if player is alive, obviously...
 			
-			if(Player.getPlayer().isAlive() && siphoningBlood) {
-				double damageTaken = Player.getPlayer().takeDamage(SIPHON_RATE, cTime);
-				if(damageTaken > 0.0) health += SIPHON_RATE;
+			long elapsed = (cTime - lastAttack);
+			if(Player.getPlayer().isAlive() && siphoningBlood && (elapsed >= Zombat.ATTACK_DELAY)) {
+				double dmg = damage.roll(Zombat.MIN_DAMAGE_MOD);
+				double damageTaken = Player.getPlayer().takeDamage(dmg, cTime);
+				if(damageTaken > 0.0) health += damageTaken;
+				
+				lastAttack = cTime;
 			}
 		}
 		

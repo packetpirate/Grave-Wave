@@ -142,6 +142,9 @@ public class MP5 extends RangedWeapon {
 	public int getAmmoPrice() { return MP5.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 3; }
+	
+	@Override
 	public String getName() {
 		return "MP5";
 	}

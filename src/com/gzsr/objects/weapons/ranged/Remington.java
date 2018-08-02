@@ -150,6 +150,9 @@ public class Remington extends RangedWeapon {
 	public int getAmmoPrice() { return Remington.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 8; }
+	
+	@Override
 	public String getName() {
 		return "Remington 783";
 	}

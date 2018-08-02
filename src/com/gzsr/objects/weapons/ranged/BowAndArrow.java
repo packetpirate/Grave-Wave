@@ -180,6 +180,9 @@ public class BowAndArrow extends RangedWeapon {
 	public int getAmmoPrice() { return BowAndArrow.AMMO_PRICE; }
 	
 	@Override
+	public int getLevelRequirement() { return 5; }
+	
+	@Override
 	public String getName() {
 		return "Bow & Arrow";
 	}

@@ -29,6 +29,7 @@ public class Rotdog extends Enemy {
 		
 		this.health = Dice.roll(Rotdog.MIN_HEALTH_COUNT, Rotdog.MIN_HEALTH_SIDES, Rotdog.MIN_HEALTH_MOD);
 		this.damage = new Dice(Rotdog.MIN_DAMAGE_COUNT, Rotdog.MIN_DAMAGE_SIDES);
+		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
 	@Override

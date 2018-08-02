@@ -133,6 +133,9 @@ public class NailGun extends RangedWeapon {
 	public int getAmmoPrice() { return NailGun.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 1; }
+	
+	@Override
 	public String getName() {
 		return "Nail Gun";
 	}

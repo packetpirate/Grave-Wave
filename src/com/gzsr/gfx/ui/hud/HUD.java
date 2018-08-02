@@ -55,15 +55,19 @@ public class HUD {
 		
 		{ // Begin Wave Counter rendering.
 			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular");
+			UnicodeFont fs = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 			
 			if(ec.isRestarting()) {
 				// Render the countdown to the next wave.
 				int time = ec.timeToNextWave(cTime);
-				String text = String.format("Next Wave: %d", time);
-				int w = f.getWidth(text);
+				String text = String.format("Wave %d in %ds...", ec.getWave(), time);
+				String subtext = "Press N to Skip Countdown";
+				int w1 = f.getWidth(text);
+				int w2 = fs.getWidth(subtext);
 				
 				g.setColor(Color.white);
-				FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
+				FontUtils.drawCenter(f, text, (Globals.WIDTH - w1 - 20), 20, w1);
+				FontUtils.drawCenter(fs, subtext, (Globals.WIDTH - w2 - 20), (f.getLineHeight() + 30), w2);
 			} else {
 				// Render the wave counter.
 				String text = String.format("Wave: %d", ec.getWave());

@@ -138,6 +138,9 @@ public class Stinger extends RangedWeapon {
 	public int getAmmoPrice() { return Stinger.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 15; }
+	
+	@Override
 	public String getName() {
 		return "Stinger FIM-92";
 	}

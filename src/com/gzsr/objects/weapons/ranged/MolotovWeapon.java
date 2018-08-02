@@ -169,6 +169,9 @@ public class MolotovWeapon extends RangedWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(MolotovWeapon.ICON_NAME); }
 	
 	@Override
+	public int getLevelRequirement() { return 8; }
+	
+	@Override
 	public String getName() {
 		return "Molotov Cocktail";
 	}

@@ -63,6 +63,9 @@ public class Machete extends MeleeWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
 	
 	@Override
+	public int getLevelRequirement() { return 1; }
+	
+	@Override
 	public String getName() {
 		return "Machete";
 	}

@@ -29,31 +29,12 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
-import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
-import com.gzsr.objects.weapons.melee.BastardSword;
-import com.gzsr.objects.weapons.melee.Lollipop;
 import com.gzsr.objects.weapons.melee.MeleeWeapon;
-import com.gzsr.objects.weapons.ranged.AK47;
-import com.gzsr.objects.weapons.ranged.AWP;
-import com.gzsr.objects.weapons.ranged.BigRedButton;
-import com.gzsr.objects.weapons.ranged.BowAndArrow;
-import com.gzsr.objects.weapons.ranged.ClaymoreWeapon;
-import com.gzsr.objects.weapons.ranged.Crossbow;
-import com.gzsr.objects.weapons.ranged.Flamethrower;
-import com.gzsr.objects.weapons.ranged.GrenadeLauncher;
-import com.gzsr.objects.weapons.ranged.LaserBarrier;
-import com.gzsr.objects.weapons.ranged.MP5;
-import com.gzsr.objects.weapons.ranged.MolotovWeapon;
-import com.gzsr.objects.weapons.ranged.Mossberg;
 import com.gzsr.objects.weapons.ranged.NailGun;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
-import com.gzsr.objects.weapons.ranged.Remington;
-import com.gzsr.objects.weapons.ranged.SAWRevolver;
-import com.gzsr.objects.weapons.ranged.SentryWeapon;
-import com.gzsr.objects.weapons.ranged.Stinger;
 
 public class ShopState extends BasicGameState implements InputListener {
 	public static final int ID = 2;
@@ -662,26 +643,26 @@ public class ShopState extends BasicGameState implements InputListener {
 		SHOP = new Inventory(SHOP_SIZE);
 		
 		// Add the default purchasable weapons to the shop inventory.
-		SHOP.addItem(new BastardSword());
-		SHOP.addItem(new Lollipop());
+		//SHOP.addItem(new BastardSword());
+		//SHOP.addItem(new Lollipop());
 		SHOP.addItem(new NailGun());
-		SHOP.addItem(new SAWRevolver());
-		SHOP.addItem(new MP5());
-		SHOP.addItem(new AK47());
-		SHOP.addItem(new Mossberg());
-		SHOP.addItem(new Remington());
-		SHOP.addItem(new AWP());
-		SHOP.addItem(new BowAndArrow());
-		SHOP.addItem(new Crossbow());
-		SHOP.addItem(new Flamethrower());
-		SHOP.addItem(new MolotovWeapon());
-		SHOP.addItem(new GrenadeLauncher());
-		SHOP.addItem(new Stinger());
-		SHOP.addItem(new ClaymoreWeapon());
-		SHOP.addItem(new LaserBarrier());
-		SHOP.addItem(new SentryWeapon());
-		SHOP.addItem(new BigRedButton());
-		SHOP.addItem(new Armor(Armor.Type.NORMAL, Pair.ZERO, 0L));
+		//SHOP.addItem(new SAWRevolver());
+		//SHOP.addItem(new MP5());
+		//SHOP.addItem(new AK47());
+		//SHOP.addItem(new Mossberg());
+		//SHOP.addItem(new Remington());
+		//SHOP.addItem(new AWP());
+		//SHOP.addItem(new BowAndArrow());
+		//SHOP.addItem(new Crossbow());
+		//SHOP.addItem(new Flamethrower());
+		//SHOP.addItem(new MolotovWeapon());
+		//SHOP.addItem(new GrenadeLauncher());
+		//SHOP.addItem(new Stinger());
+		//SHOP.addItem(new ClaymoreWeapon());
+		//SHOP.addItem(new LaserBarrier());
+		//SHOP.addItem(new SentryWeapon());
+		//SHOP.addItem(new BigRedButton());
+		//SHOP.addItem(new Armor(Armor.Type.NORMAL, Pair.ZERO, 0L));
 	}
 	
 	@Override

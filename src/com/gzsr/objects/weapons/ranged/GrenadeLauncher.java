@@ -13,7 +13,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.objects.weapons.Explosion.Type;
 import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends RangedWeapon {
@@ -137,6 +136,9 @@ public class GrenadeLauncher extends RangedWeapon {
 	@Override
 	public int getAmmoPrice() { return GrenadeLauncher.AMMO_PRICE; }
 
+	@Override
+	public int getLevelRequirement() { return 12; }
+	
 	@Override
 	public String getName() {
 		return "Grenade Launcher";

@@ -113,6 +113,9 @@ public class SentryWeapon extends RangedWeapon {
 	public int getAmmoPrice() { return SentryWeapon.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 15; }
+	
+	@Override
 	public String getName() {
 		return "Sentry Gun";
 	}

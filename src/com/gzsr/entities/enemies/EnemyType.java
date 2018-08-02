@@ -12,7 +12,7 @@ public enum EnemyType {
 	ZUMBY("GZS_Zumby3", 48, 48, 4, 200, 30, 50, 25),
 	CHUCK("GZS_Upchuck2", 64, 64, 4, 400, 100, 140, 100),
 	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 100, 140, 100),
-	ROTDOG("GZS_Rotdog2", 48, 48, 4, 150, 40, 60, 50),
+	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150, 40, 60, 50),
 	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400, 300, 500, 500),
 	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 5, 15, 10),
 	

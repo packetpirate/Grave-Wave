@@ -98,6 +98,9 @@ public class Lollipop extends MeleeWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
 	
 	@Override
+	public int getLevelRequirement() { return 18; }
+	
+	@Override
 	public String getName() {
 		return "Lollipop";
 	}

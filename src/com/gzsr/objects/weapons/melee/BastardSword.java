@@ -65,6 +65,9 @@ public class BastardSword extends MeleeWeapon {
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
 	
 	@Override
+	public int getLevelRequirement() { return 10; }
+	
+	@Override
 	public String getName() {
 		return "Bastard Sword";
 	}

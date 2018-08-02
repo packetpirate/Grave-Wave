@@ -141,6 +141,9 @@ public class AK47 extends RangedWeapon {
 	public int getAmmoPrice() { return AK47.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 8; }
+	
+	@Override
 	public String getName() {
 		return "AK47";
 	}

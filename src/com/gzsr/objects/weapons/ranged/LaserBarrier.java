@@ -157,6 +157,9 @@ public class LaserBarrier extends RangedWeapon {
 	public int getAmmoPrice() { return LaserBarrier.AMMO_PRICE; }
 
 	@Override
+	public int getLevelRequirement() { return 10; }
+	
+	@Override
 	public String getName() {
 		return "Laser Barrier";
 	}

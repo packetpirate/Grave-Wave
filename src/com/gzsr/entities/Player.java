@@ -14,6 +14,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
+import com.gzsr.controllers.ShopController;
 import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -35,6 +36,7 @@ import com.gzsr.objects.weapons.ranged.Beretta;
 import com.gzsr.objects.weapons.ranged.LaserNode;
 import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.states.GameState;
+import com.gzsr.states.ShopState;
 import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
@@ -538,6 +540,7 @@ public class Player implements Entity {
 				}
 			}
 			
+			ShopController.getInstance().release(ShopState.getShop()); // Add new weapons to the shop!
 			AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}

@@ -47,7 +47,9 @@ public abstract class Weapon implements Entity {
 	
 	public abstract float getKnockback();
 	public abstract Image getInventoryIcon();
-	public abstract long getCooldown();	
+	public abstract long getCooldown();
+	
+	public abstract int getLevelRequirement();
 	
 	@Override
 	public int getLayer() {
