@@ -146,6 +146,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Gasbag2.png",
 			"images/GZS_BigMama2.png",
 			"images/GZS_TinyZumby.png",
+			"images/GZS_Starfright.png",
 			// Boss Images
 			"images/GZS_Aberration2.png",
 			"images/GZS_Zombat.png",
@@ -262,7 +263,8 @@ public class LoadingState extends BasicGameState {
 			"sounds/level-up.wav",
 			"sounds/powerup2.wav",
 			"sounds/point_buy.wav",
-			"sounds/party_horn.wav"
+			"sounds/party_horn.wav",
+			"sounds/ears_ringing.wav"
 		};
 		
 		for(String asset : assetList) {

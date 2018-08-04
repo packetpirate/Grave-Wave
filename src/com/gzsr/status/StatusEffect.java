@@ -10,6 +10,10 @@ import com.gzsr.states.GameState;
 public abstract class StatusEffect {
 	protected Status status;
 	public Status getStatus() { return status; }
+	
+	protected boolean drawn;
+	public boolean isDrawn() { return drawn; }
+	
 	public Image getIcon() { 
 		return AssetManager.getManager()
 						   .getImage(status.getIconName());
@@ -17,14 +21,17 @@ public abstract class StatusEffect {
 	
 	protected long duration;
 	public long getDuration() { return duration; }
+	
 	protected long created;
 	public boolean isActive(long cTime) {
 		long elapsed = cTime - created;
 		return (elapsed <= duration);
 	}
+	
 	public void refresh(long cTime) {
 		this.created = cTime;
 	}
+	
 	public float getPercentageTimeLeft(long cTime) {
 		long elapsed = cTime - created;
 		return (1.0f - ((float)elapsed / (float)duration));
@@ -34,6 +41,8 @@ public abstract class StatusEffect {
 		this.status = status_;
 		this.duration = duration_;
 		this.created = created_;
+		
+		this.drawn = true;
 	}
 	
 	public abstract void onApply(Entity e, long cTime);

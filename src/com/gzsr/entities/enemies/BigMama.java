@@ -149,38 +149,28 @@ public class BigMama extends Enemy {
 	}
 
 	@Override
-	public double getDamage() {
-		return BigMama.DPS;
-	}
+	public double getDamage() { return BigMama.DPS; }
 	
 	@Override
 	public long getAttackDelay() { return 0L; }
 	
 	@Override
-	public float getSpeed() {
-		return BigMama.SPEED;
+	public float getSpeed() { return BigMama.SPEED; }
+	
+	public static int appearsOnWave() { return BigMama.FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return BigMama.SPAWN_COST; }
+
+	@Override
+	public String getName() { 
+		return "Big Mama"; 
 	}
 	
-	public static int appearsOnWave() {
-		return FIRST_WAVE;
-	}
-	
-	public static int getSpawnCost() { 
-		return BigMama.SPAWN_COST; 
+	@Override
+	public String getDescription() { 
+		return "Big Mama"; 
 	}
 
 	@Override
-	public String getName() {
-		return "Big Mama";
-	}
-	
-	@Override
-	public String getDescription() {
-		return "Big Mama";
-	}
-
-	@Override
-	public LootTable getLootTable() {
-		return BigMama.LOOT;
-	}
+	public LootTable getLootTable() { return BigMama.LOOT; }
 }

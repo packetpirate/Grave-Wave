@@ -70,7 +70,7 @@ public class Rotdog extends Enemy {
 	@Override
 	public float getSpeed() { return Rotdog.SPEED; }
 	
-	public static int appearsOnWave() { return FIRST_WAVE; }
+	public static int appearsOnWave() { return Rotdog.FIRST_WAVE; }
 	
 	public static int getSpawnCost() { return Rotdog.SPAWN_COST; }
 

@@ -176,7 +176,7 @@ public class Upchuck extends Enemy {
 	@Override
 	public float getSpeed() { return Upchuck.SPEED; }
 	
-	public static int appearsOnWave() { return FIRST_WAVE; }
+	public static int appearsOnWave() { return Upchuck.FIRST_WAVE; }
 	
 	public static int getSpawnCost() { return Upchuck.SPAWN_COST; }
 

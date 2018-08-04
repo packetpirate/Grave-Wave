@@ -37,13 +37,15 @@ public class StatusBar implements Entity {
 		List<StatusEffect> statusEffects = Player.getPlayer().getStatuses();
 		for(StatusEffect status : statusEffects) {
 			// Render each individual status underneath the health and experience bars.
-			Image img = status.getIcon();
-			float percentageTimeLeft = status.getPercentageTimeLeft(cTime);
-			if(touchingPlayer) percentageTimeLeft *= HUD.FADE.a;
-			
-			g.drawImage(img, (position.x + xPlus), position.y, 
-						new Color(1.0f, 1.0f, 1.0f, percentageTimeLeft));
-			xPlus += img.getWidth() + 5.0f;
+			if(status.isDrawn()) {
+				Image img = status.getIcon();
+				float percentageTimeLeft = status.getPercentageTimeLeft(cTime);
+				if(touchingPlayer) percentageTimeLeft *= HUD.FADE.a;
+				
+				g.drawImage(img, (position.x + xPlus), position.y, 
+							new Color(1.0f, 1.0f, 1.0f, percentageTimeLeft));
+				xPlus += img.getWidth() + 5.0f;
+			}
 		}
 	}
 	

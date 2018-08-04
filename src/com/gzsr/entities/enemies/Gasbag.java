@@ -128,7 +128,7 @@ public class Gasbag extends Enemy {
 	@Override
 	public float getSpeed() { return Gasbag.SPEED; }
 
-	public static int appearsOnWave() { return FIRST_WAVE; }
+	public static int appearsOnWave() { return Gasbag.FIRST_WAVE; }
 	
 	public static int getSpawnCost() { return Gasbag.SPAWN_COST; }
 	

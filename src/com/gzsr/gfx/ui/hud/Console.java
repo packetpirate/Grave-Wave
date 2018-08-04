@@ -20,6 +20,7 @@ import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
+import com.gzsr.entities.enemies.Starfright;
 import com.gzsr.entities.enemies.Upchuck;
 import com.gzsr.entities.enemies.Zumby;
 import com.gzsr.entities.enemies.bosses.Aberration;
@@ -299,6 +300,9 @@ public class Console implements Entity {
 			} else if(entityType.equals("bigmama")) {
 				BigMama bm = new BigMama(position);
 				ec.addAlive(bm);
+			} else if(entityType.equals("starfright")) {
+				Starfright sf = new Starfright(position);
+				ec.addAlive(sf);
 			} else if(entityType.equals("aberration")) {
 				Aberration ab = new Aberration(position);
 				ec.addAlive(ab);
