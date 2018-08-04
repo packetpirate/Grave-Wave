@@ -13,6 +13,27 @@ public class MusicPlayer {
 	private int currentSong; // To keep track of current soundtrack song.
 	private Music nowPlaying;
 	
+	private boolean deafened;
+	public boolean isMusicDeafened() { return deafened; }
+	public void deafen(boolean val) { 
+		deafened = val;
+		
+		if(deafened) setDeafenedVolume(0.0f);
+		
+		if((nowPlaying != null) && nowPlaying.playing()) {
+			if(deafened) nowPlaying.setVolume(0.0f);
+			else nowPlaying.setVolume(getMusicVolume());
+		}
+	}
+	
+	private float deafenedVolume;
+	public float getDeafenedVolume() { return deafenedVolume; }
+	public void setDeafenedVolume(float vol) {
+		if(vol < 0.0f) vol = 0.0f;
+		else if(vol > 1.0f) vol = 1.0f;
+		deafenedVolume = vol;
+	}
+	
 	public static MusicPlayer getInstance() {
 		if(instance == null) instance = new MusicPlayer();
 		return instance;
@@ -22,6 +43,9 @@ public class MusicPlayer {
 		autoplay = true;
 		currentSong = 0;
 		nowPlaying = null;
+		
+		deafened = false;
+		deafenedVolume = 0.0f;
 	}
 	
 	public void update(boolean menu) throws SlickException {
@@ -65,7 +89,8 @@ public class MusicPlayer {
 	}
 	
 	public float getMusicVolume() {
-		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("musicVolume")) return DEFAULT_MUSIC_VOLUME;
+		if(deafened) return deafenedVolume;
+		else if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("musicVolume")) return DEFAULT_MUSIC_VOLUME;
 		else return ConfigManager.getInstance().getAttributes().getFloat("musicVolume");
 	}
 	

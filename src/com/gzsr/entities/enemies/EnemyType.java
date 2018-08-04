@@ -14,6 +14,7 @@ public enum EnemyType {
 	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 100, 140, 100),
 	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150, 40, 60, 50),
 	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400, 300, 500, 500),
+	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200, 400, 600, 750),
 	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 5, 15, 10),
 	
 	// Bosses

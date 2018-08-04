@@ -23,8 +23,26 @@ public class AssetManager {
 	
 	private static AssetManager instance = null;
 	
+	private boolean deafened;
+	public boolean isSoundDeafened() { return deafened; }
+	public void deafen(boolean val) { 
+		deafened = val;
+		
+		if(deafened) setDeafenedVolume(0.0f);
+	}
+	
+	private float deafenedVolume;
+	public float getDeafenedVolume() { return deafenedVolume; }
+	public void setDeafenedVolume(float vol) {
+		if(vol < 0.0f) vol = 0.0f;
+		else if(vol > 1.0f) vol = 1.0f;
+		
+		deafenedVolume = vol; 
+	}
+	
 	public float getSoundVolume() {
-		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("soundVolume")) return DEFAULT_SOUND_VOLUME;
+		if(deafened) return deafenedVolume;
+		else if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("soundVolume")) return DEFAULT_SOUND_VOLUME;
 		else return ConfigManager.getInstance().getAttributes().getFloat("soundVolume"); 
 	}
 	public void setSoundVolume(float val_) {
@@ -44,6 +62,9 @@ public class AssetManager {
 		animations = new HashMap<String, Animation>();
 		sounds = new HashMap<String, Sound>();
 		fonts = new HashMap<String, UnicodeFont>();
+		
+		deafened = false;
+		deafenedVolume = 0.0f;
 	}
 	
 	public static int assetsToLoad() {

@@ -4,6 +4,9 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 
 import com.gzsr.AssetManager;
 import com.gzsr.ConfigManager;
@@ -36,6 +39,9 @@ public class Flashlight {
 	private Image lightMap;
 	private Image flashlight;
 	
+	private Rectangle oCollider; // Original collider.
+	private Shape tCollider; // Transformed collider.
+	
 	private boolean enabled;
 	public boolean isEnabled() { return enabled; }
 	public void toggle() { enabled = !enabled; }
@@ -46,6 +52,8 @@ public class Flashlight {
 		
 		this.lightMap = AssetManager.getManager().getImage("GZS_LightAlphaMap3");
 		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight");
+		this.oCollider = new Rectangle(18.0f, -192.0f, flashlight.getWidth(), (flashlight.getHeight() * 2));
+		this.tCollider = new Rectangle(18.0f, -192.0f, flashlight.getWidth(), (flashlight.getHeight() * 2));
 		
 		this.enabled = true;
 	}
@@ -54,6 +62,10 @@ public class Flashlight {
 		origin.x = player.getPosition().x;
 		origin.y = player.getPosition().y;
 		theta = player.getRotation();
+		
+		oCollider.setX(origin.x + 18.0f);
+		oCollider.setY(origin.y - 192.0f);
+		tCollider = oCollider.transform(Transform.createRotateTransform((theta - (float)(Math.PI / 2)), origin.x, origin.y));
 	}
 
 	public void render(Graphics g, long cTime) {
@@ -73,10 +85,17 @@ public class Flashlight {
 				g.rotate(origin.x, origin.y, a);
 				g.drawImage(flashlight, (origin.x + 18.0f), (origin.y - 96.0f));
 				g.rotate(origin.x, origin.y, -a);
+				
+				if(Globals.SHOW_COLLIDERS) {
+					g.setColor(Color.red);
+					g.draw(tCollider);
+				}
 			}
 		}
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		g.setDrawMode(Graphics.MODE_NORMAL);
 	}
+	
+	public boolean inView(Shape other) { return (tCollider.intersects(other) || tCollider.contains(other)); }
 }

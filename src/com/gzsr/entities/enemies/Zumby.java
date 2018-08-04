@@ -65,7 +65,7 @@ public class Zumby extends Enemy {
 	@Override
 	public float getSpeed() { return Zumby.SPEED; }
 	
-	public static int appearsOnWave() { return FIRST_WAVE; }
+	public static int appearsOnWave() { return Zumby.FIRST_WAVE; }
 	
 	public static int getSpawnCost() { return Zumby.SPAWN_COST; }
 

@@ -14,8 +14,8 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
-import com.gzsr.controllers.ShopController;
 import com.gzsr.Globals;
+import com.gzsr.controllers.ShopController;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
@@ -170,6 +170,14 @@ public class Player implements Entity {
 	
 	private List<StatusEffect> statusEffects;
 	public List<StatusEffect> getStatuses() { return statusEffects; }
+	public StatusEffect getStatus(Status status) {
+		for(StatusEffect se : statusEffects) {
+			Status s = se.getStatus();
+			if(s.equals(status)) return se;
+		}
+		
+		return null;
+	}
 	public void addStatus(StatusEffect effect, long cTime) {
 		// First check to see if the player already has this status.
 		for(StatusEffect se : statusEffects) {
@@ -182,6 +190,7 @@ public class Player implements Entity {
 		}
 		
 		// The player does not have this effect. Add it.
+		effect.onApply(this, cTime);
 		statusEffects.add(effect);
 	}
 	public boolean hasStatus(Status status) {

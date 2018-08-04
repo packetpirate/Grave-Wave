@@ -16,7 +16,6 @@ public class Globals {
 	public static final int MAX_STEPS = 4;
 	
 	public static final boolean SHOW_COLLIDERS = false; // Disabled in player releases.
-	public static final boolean SHOW_ENEMY_HEALTH = true;
 	public static final boolean ENABLE_CONSOLE = true; // TODO: Disable for player releases.
 	
 	public static int WIDTH = 1024;

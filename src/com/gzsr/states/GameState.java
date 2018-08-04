@@ -37,6 +37,8 @@ import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
+import com.gzsr.status.Status;
+import com.gzsr.status.StatusEffect;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
@@ -91,6 +93,7 @@ public class GameState extends BasicGameState implements InputListener {
 						exitYes.mouseEnter();
 						if(mouse.isLeftDown()) {
 							reset(gc);
+							EnemyController.getInstance().reset();
 							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
 						}
 					} else exitYes.mouseExit();
@@ -190,7 +193,14 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		hud.render(g, this, time);
 		
-		if(Camera.getCamera().displayVignette()) {
+		StatusEffect flash = Player.getPlayer().getStatus(Status.FLASHBANG);
+		if(flash != null) {
+			// If the player has been blinded, draw a white flash over everything.
+			float p = flash.getPercentageTimeLeft(time);
+			Color color = new Color(1.0f, 1.0f, 1.0f, p);
+			g.setColor(color);
+			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+		} else if(Camera.getCamera().displayVignette()) {
 			g.setColor(Camera.VIGNETTE_COLOR);
 			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		}
@@ -233,10 +243,14 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		Controls.getInstance().resetAll();
 		
-		Player.getPlayer().reset();
+		Player player = Player.getPlayer();
+		EnemyController ec = EnemyController.getInstance();
+		
+		player.reset();
+		
 		entities.clear();
-		entities.put("enemyController", EnemyController.getInstance());
-		entities.put("player", Player.getPlayer());
+		entities.put("enemyController", ec);
+		entities.put("player", player);
 		
 		StatusMessages.getInstance().clear();
 		

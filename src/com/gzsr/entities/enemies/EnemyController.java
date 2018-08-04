@@ -202,6 +202,10 @@ public class EnemyController implements Entity {
 		spawnPool -= EnemyType.spawnCost(toSpawn);
 		unborn.add(EnemyType.createInstance(toSpawn, position));
 	}
+	
+	public void reset() {
+		instance = new EnemyController();
+	}
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
