@@ -27,7 +27,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final int MIN_DAMAGE_MOD = 50;
 	private static final float KNOCKBACK = 10.0f;
-	private static final float EXP_RADIUS = 150.0f;
+	private static final float EXP_RADIUS = 64.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
 	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
 	private static final String EXP_NAME = "GZS_Explosion";

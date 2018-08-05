@@ -17,7 +17,6 @@ import com.gzsr.entities.enemies.TinyZumby;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 import com.gzsr.status.StatusEffect;
 
 public class Explosion implements Entity {
@@ -55,9 +54,7 @@ public class Explosion implements Entity {
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
 		
-		float w = anim.getSrcSize().x;
-		float h = anim.getSrcSize().y;
-		this.bounds = new Rectangle((position.x - (w / 2)), (position.y - (h / 2)), w, h);
+		this.bounds = new Rectangle((position.x - radius_), (position.y - radius_), (radius_ * 2), (radius_ * 2));
 		
 		this.status = status_;
 		this.damage = damage_;
@@ -91,8 +88,8 @@ public class Explosion implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		if(started) {
-			if((anim != null) && anim.isActive(cTime)) anim.render(g, position, new Pair<Float>(radius, radius));
+		if(started && (anim != null) && anim.isActive(cTime)) {
+			anim.render(g, position, new Pair<Float>((radius * 2), (radius * 2)));
 		}
 	}
 	

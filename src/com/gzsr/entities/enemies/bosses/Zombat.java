@@ -19,9 +19,9 @@ import com.gzsr.status.StatusEffect;
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
 	private static final int SPAWN_COST = 12;
-	private static final int MIN_HEALTH_COUNT = 20;
+	private static final int MIN_HEALTH_COUNT = 30;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 800;
+	private static final int MIN_HEALTH_MOD = 1_200;
 	private static final int MIN_DAMAGE_COUNT = 2;
 	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final int MIN_DAMAGE_MOD = 4;

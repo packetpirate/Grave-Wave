@@ -17,6 +17,7 @@ import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.BigMama;
+import com.gzsr.entities.enemies.ElSalvo;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
@@ -303,6 +304,9 @@ public class Console implements Entity {
 			} else if(entityType.equals("starfright")) {
 				Starfright sf = new Starfright(position);
 				ec.addAlive(sf);
+			} else if(entityType.equals("elsalvo")) {
+				ElSalvo es = new ElSalvo(position);
+				ec.addAlive(es);
 			} else if(entityType.equals("aberration")) {
 				Aberration ab = new Aberration(position);
 				ec.addAlive(ab);

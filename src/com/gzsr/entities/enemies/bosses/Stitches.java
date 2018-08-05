@@ -23,7 +23,7 @@ public class Stitches extends Boss {
 	private static final int SPAWN_COST = 40;
 	private static final int MIN_HEALTH_COUNT = 100;
 	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 2_000;
+	private static final int MIN_HEALTH_MOD = 4_000;
 	private static final int MIN_DAMAGE_COUNT = 10;
 	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final long ATTACK_DELAY = 2_000L;

@@ -26,7 +26,7 @@ public class Stinger extends RangedWeapon {
 	private static final int MIN_DAMAGE_SIDES = 10;
 	private static final int MIN_DAMAGE_MOD = 250;
 	private static final float KNOCKBACK = 20.0f;
-	private static final float EXP_RADIUS = 256.0f;
+	private static final float EXP_RADIUS = 128.0f;
 	private static final String ICON_NAME = "GZS_Stinger";
 	private static final String ANIMATION_NAME = "GZS_Stinger_Missile";
 	private static final String EXP_NAME = "GZS_Explosion";

@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
@@ -13,24 +14,20 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
-import com.gzsr.status.DeafenedEffect;
-import com.gzsr.status.FlashbangEffect;
 import com.gzsr.status.StatusEffect;
 
-public class Starfright extends Enemy {
-	private static final int FIRST_WAVE = 25;
-	private static final int SPAWN_COST = 10;
-	private static final int MIN_HEALTH_COUNT = 10;
-	private static final int MIN_HEALTH_SIDES = 6;
-	private static final int MIN_HEALTH_MOD = 40;
-	private static final int MIN_FLASH_COUNT = 10;
-	private static final int MIN_FLASH_SIDES = 4;
-	private static final int MIN_FLASH_MOD = 40;
-	private static final float SPEED = 0.30f;
+public class ElSalvo extends Enemy {
+	public static final int FIRST_WAVE = 35;
+	private static final int SPAWN_COST = 5;
+	private static final int MIN_HEALTH_COUNT = 5;
+	private static final int MIN_HEALTH_SIDES = 10;
+	private static final int MIN_HEALTH_MOD = 50;
+	private static final float SPEED = 0.2f;
 	private static final float ATTACK_DIST = 100.0f;
-	private static final float EFFECTIVE_FLASH_DIST = 200.0f;
-	private static final long FLASHBANG_DURATION = 5_000L;
+	private static final double EXPLODE_DAMAGE = 250.0f;
+	private static final float EXPLODE_RADIUS = 256.0f;
 	private static final long EXPLOSION_DELAY = 500L;
 	private static final long FLASH_DURATION = 100L;
 	private static final long FLASH_LENGTH = 50L;
@@ -39,20 +36,25 @@ public class Starfright extends Enemy {
 			.addItem(Powerups.Type.HEALTH, 0.25f)
 			.addItem(Powerups.Type.AMMO, 0.25f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
-			.addItem(Powerups.Type.CRIT_CHANCE, 0.15f)
-			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.15f)
-			.addItem(Powerups.Type.NIGHT_VISION, 0.25f);
+			.addItem(Powerups.Type.CRIT_CHANCE, 0.10f)
+			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.10f)
+			.addItem(Powerups.Type.NIGHT_VISION, 0.025f)
+			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	
-	private boolean exploding, flashing;
+	private Sound explode;
+	
+	private boolean exploding, flashing, exploded;
 	private long flashStart;
 	private long lastFlash;
 	
-	public Starfright(Pair<Float> position_) {
-		super(EnemyType.STARFRIGHT, position_);
-		this.health = Dice.roll(Starfright.MIN_HEALTH_COUNT, Starfright.MIN_HEALTH_SIDES, Starfright.MIN_HEALTH_MOD);
+	public ElSalvo(Pair<Float> position_) {
+		super(EnemyType.ELSALVO, position_);
+		this.health = Dice.roll(ElSalvo.MIN_HEALTH_COUNT, ElSalvo.MIN_HEALTH_SIDES, ElSalvo.MIN_HEALTH_MOD);
+		this.explode = AssetManager.getManager().getSound("explosion2");
 		
 		exploding = false;
 		flashing = false;
+		exploded = false;
 		flashStart = 0L;
 		lastFlash = 0L;
 	}
@@ -62,14 +64,15 @@ public class Starfright extends Enemy {
 		if(exploding) {
 			long elapsed = (cTime - lastFlash);
 			if((cTime - flashStart) >= EXPLOSION_DELAY) {
-				explode(cTime);
+				explode((GameState)gs, cTime);
 			} else if(elapsed >= FLASH_DURATION) {
 				flashing = true;
 				lastFlash = cTime;
 			} else if(elapsed >= FLASH_LENGTH) {
 				flashing = false;
 			}
-		} else if(!dead()) {
+		} else if(isAlive(cTime)) {
+			// Need to make sure to update the status effects first.
 			Iterator<StatusEffect> it = statusEffects.iterator();
 			while(it.hasNext()) {
 				StatusEffect status = (StatusEffect) it.next();
@@ -81,11 +84,11 @@ public class Starfright extends Enemy {
 				}
 			}
 			
-			Player player = Player.getPlayer();
-			theta = Calculate.Hypotenuse(position, player.getPosition());
-			if(!nearPlayer(Starfright.ATTACK_DIST)) {
+			updateFlash(cTime);
+			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			if(!nearPlayer()) {
 				animation.getCurrentAnimation().update(cTime);
-				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else {
 				exploding = true;
 				flashing = true;
@@ -112,34 +115,20 @@ public class Starfright extends Enemy {
 		}
 	}
 	
-	private void explode(long cTime) {
-		Player player = Player.getPlayer();
-		AssetManager assets = AssetManager.getManager();
+	private void explode(GameState gs, long cTime) {
+		int id = Globals.generateEntityID();
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(position.x, position.y), ElSalvo.EXPLODE_DAMAGE, 0.0f, ElSalvo.EXPLODE_RADIUS);
+		gs.addEntity(String.format("explosion%d", id), exp);
 		
-		assets.getSound("explosion2").play(1.0f, assets.getSoundVolume());
-		if(player.getFlashlight().inView(getCollider())) {
-			// If the player can see Starfright, apply the flashbang effect.
-			FlashbangEffect flashbang = new FlashbangEffect(Starfright.FLASHBANG_DURATION, cTime);
-			player.addStatus(flashbang, cTime);
-		} else {
-			// Otherwise, still deafen the player.
-			DeafenedEffect deafened = new DeafenedEffect(Starfright.FLASHBANG_DURATION, cTime);
-			player.addStatus(deafened, cTime);
-		}
-		
-		double dmg = Dice.roll(Starfright.MIN_FLASH_COUNT, Starfright.MIN_FLASH_SIDES, Starfright.MIN_FLASH_MOD);
-		float dist = Calculate.Distance(position, player.getPosition());
-		double total = (1.0f - (dist / Starfright.EFFECTIVE_FLASH_DIST)) * dmg;
-		if(total < 0.0) total = 0.0;
-		player.takeDamage(total, cTime);
-		
+		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;
+		exploded = true;
 	}
 
 	@Override
 	public void move(GameState gs, int delta) {
-		velocity.x = (float)Math.cos(theta) * getSpeed() * delta;
-		velocity.y = (float)Math.sin(theta) * getSpeed() * delta;
+		velocity.x = (float)Math.cos(theta) * ElSalvo.SPEED * delta;
+		velocity.y = (float)Math.sin(theta) * ElSalvo.SPEED * delta;
 
 		avoidObstacles(gs, delta);
 		
@@ -155,41 +144,45 @@ public class Starfright extends Enemy {
 	}
 	
 	@Override
-	public float getCohesionDistance() { return 0.0f; }
+	public float getCohesionDistance() {
+		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
+	}
 	
 	@Override
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
 	
-	@Override
-	public long getAttackDelay() { return Starfright.EXPLOSION_DELAY; }
-	
-	@Override
-	public float getSpeed() {
-		Player player = Player.getPlayer();
-		
-		float speed = Starfright.SPEED;
-		boolean blinded = (player.getFlashlight().isEnabled() && player.getFlashlight().inView(getCollider()));
-		if(blinded) speed *= 0.25f;
-		
-		return speed; 
+	private boolean nearPlayer() {
+		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= ElSalvo.ATTACK_DIST);
 	}
-	
-	public static int appearsOnWave() { return Starfright.FIRST_WAVE; }
-	
-	public static int getSpawnCost() { return Starfright.SPAWN_COST; }
 
 	@Override
+	public double getDamage() { return 0.0; }
+	
+	@Override
+	public int getExpValue() { return (exploded ? 0 : experience); }
+	
+	@Override
+	public long getAttackDelay() { return 0L; }
+	
+	@Override
+	public float getSpeed() { return ElSalvo.SPEED; }
+
+	public static int appearsOnWave() { return ElSalvo.FIRST_WAVE; }
+	
+	public static int getSpawnCost() { return ElSalvo.SPAWN_COST; }
+	
+	@Override
 	public String getName() {
-		return "Starfright";
+		return "El Salvo";
 	}
 	
 	@Override
 	public String getDescription() {
-		return "Starfright";
+		return "El Salvo";
 	}
 	
 	@Override
-	public LootTable getLootTable() { return Starfright.LOOT; }
+	public LootTable getLootTable() { return ElSalvo.LOOT; }
 }
