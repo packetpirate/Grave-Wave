@@ -105,7 +105,7 @@ public class WeaponDisplay implements Entity {
 			}
 		}
 		
-		if(player.hasStatus(Status.UNLIMITED_AMMO)) {
+		if(player.getStatusHandler().hasStatus(Status.UNLIMITED_AMMO)) {
 			Image unlimitedAmmo = AssetManager.getManager().getImage("GZS_UnlimitedAmmo");
 			float x = position.x + 100.0f - (unlimitedAmmo.getWidth() / 2);
 			float y = position.y + 27.0f - (unlimitedAmmo.getHeight() / 2);

@@ -23,7 +23,7 @@ public class ExpMultiplierItem extends Item {
 	public void apply(Player player, long cTime) {
 		ExpMultiplierEffect effect = new ExpMultiplierEffect(ExpMultiplierItem.EFFECT_DURATION, cTime);
 		player.getAttributes().set("expMult", 2.0);
-		player.addStatus(effect, cTime);
+		player.getStatusHandler().addStatus(effect, cTime);
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		

@@ -29,6 +29,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
+import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.items.ItemConstants;
 import com.gzsr.objects.weapons.Weapon;
@@ -544,10 +545,15 @@ public class ShopState extends BasicGameState implements InputListener {
 				} else if(selection instanceof Item) {
 					Item item = (Item) selection;
 					
-					if(playerMoney >= item.getCost()) {
-						player.getAttributes().set("money", (playerMoney - item.getCost()));
-						item.apply(player, 0L);
-						SHOP.dropItem(item.getName());
+					boolean isArmor = (item instanceof Armor);
+					boolean needArmor = (player.getAttributes().getDouble("armor") < player.getAttributes().getDouble("maxArmor"));
+					
+					if(!isArmor || (isArmor && needArmor)) {
+						if(playerMoney >= item.getCost()) {
+							player.getAttributes().set("money", (playerMoney - item.getCost()));
+							item.apply(player, 0L);
+							SHOP.dropItem(item.getName());
+						}
 					}
 				}
 				// TODO: Add cases for other item types.
@@ -641,28 +647,7 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	public static void resetShop() {
 		SHOP = new Inventory(SHOP_SIZE);
-		
-		// Add the default purchasable weapons to the shop inventory.
-		//SHOP.addItem(new BastardSword());
-		//SHOP.addItem(new Lollipop());
 		SHOP.addItem(new NailGun());
-		//SHOP.addItem(new SAWRevolver());
-		//SHOP.addItem(new MP5());
-		//SHOP.addItem(new AK47());
-		//SHOP.addItem(new Mossberg());
-		//SHOP.addItem(new Remington());
-		//SHOP.addItem(new AWP());
-		//SHOP.addItem(new BowAndArrow());
-		//SHOP.addItem(new Crossbow());
-		//SHOP.addItem(new Flamethrower());
-		//SHOP.addItem(new MolotovWeapon());
-		//SHOP.addItem(new GrenadeLauncher());
-		//SHOP.addItem(new Stinger());
-		//SHOP.addItem(new ClaymoreWeapon());
-		//SHOP.addItem(new LaserBarrier());
-		//SHOP.addItem(new SentryWeapon());
-		//SHOP.addItem(new BigRedButton());
-		//SHOP.addItem(new Armor(Armor.Type.NORMAL, Pair.ZERO, 0L));
 	}
 	
 	@Override

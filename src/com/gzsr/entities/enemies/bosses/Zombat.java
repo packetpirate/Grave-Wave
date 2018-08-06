@@ -1,7 +1,5 @@
 package com.gzsr.entities.enemies.bosses;
 
-import java.util.Iterator;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -14,7 +12,6 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
-import com.gzsr.status.StatusEffect;
 
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
@@ -53,16 +50,7 @@ public class Zombat extends Boss {
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
-			Iterator<StatusEffect> it = statusEffects.iterator();
-			while(it.hasNext()) {
-				StatusEffect status = (StatusEffect) it.next();
-				if(status.isActive(cTime)) {
-					status.update(this, (GameState)gs, cTime, delta);
-				} else {
-					status.onDestroy(this, cTime);
-					it.remove();
-				}
-			}
+			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());

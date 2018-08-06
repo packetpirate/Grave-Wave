@@ -13,7 +13,6 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class LaserBarrier extends RangedWeapon {
 	private static final int PRICE = 1_500;
@@ -98,7 +97,7 @@ public class LaserBarrier extends RangedWeapon {
 			lastNode = node; // This node is unpaired.
 		}
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());

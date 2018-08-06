@@ -12,7 +12,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.status.Status;
 
 public class Stinger extends RangedWeapon {
 	private static final int PRICE = 38_000;
@@ -85,7 +84,7 @@ public class Stinger extends RangedWeapon {
 		Missile missile = new Missile(particle, exp);
 		projectiles.add(missile);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		
 		muzzleFlash.restart(cTime);

@@ -24,7 +24,7 @@ public class HealthKit extends Item {
 	public void apply(Player player, long cTime) {
 		double amnt = (Globals.rand.nextDouble() * (HealthKit.RESTORE_MAX - HealthKit.RESTORE_MIN)) + HealthKit.RESTORE_MIN;
 		player.addHealth(amnt);
-		player.clearHarmful();
+		player.getStatusHandler().clearHarmful();
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		

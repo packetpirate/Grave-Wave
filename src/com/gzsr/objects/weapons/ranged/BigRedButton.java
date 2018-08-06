@@ -20,7 +20,6 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
-import com.gzsr.status.Status;
 
 public class BigRedButton extends RangedWeapon {
 	private static final int PRICE = 20_000;
@@ -101,7 +100,7 @@ public class BigRedButton extends RangedWeapon {
 			explosions.add(exp);
 		}
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		useSound.play();
 	}

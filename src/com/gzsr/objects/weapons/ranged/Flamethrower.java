@@ -14,7 +14,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.BurningEffect;
-import com.gzsr.status.Status;
 
 public class Flamethrower extends RangedWeapon {
 	private static final int PRICE = 7_500;
@@ -69,7 +68,7 @@ public class Flamethrower extends RangedWeapon {
 			projectiles.add(projectile);
 		}
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		if(!useSound.playing()) useSound.loop(1.0f, AssetManager.getManager().getSoundVolume());
 	}

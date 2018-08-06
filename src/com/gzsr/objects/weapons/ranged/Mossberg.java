@@ -16,7 +16,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class Mossberg extends RangedWeapon {
 	private static final int PRICE = 4_000;
@@ -90,7 +89,7 @@ public class Mossberg extends RangedWeapon {
 		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 100L, 20L, 15.0f);
 		else Camera.getCamera().refreshShake(cTime);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		
 		muzzleFlash.restart(cTime);

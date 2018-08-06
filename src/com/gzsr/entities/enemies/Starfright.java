@@ -1,7 +1,5 @@
 package com.gzsr.entities.enemies;
 
-import java.util.Iterator;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -16,7 +14,6 @@ import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 import com.gzsr.status.DeafenedEffect;
 import com.gzsr.status.FlashbangEffect;
-import com.gzsr.status.StatusEffect;
 
 public class Starfright extends Enemy {
 	private static final int FIRST_WAVE = 25;
@@ -70,16 +67,7 @@ public class Starfright extends Enemy {
 				flashing = false;
 			}
 		} else if(!dead()) {
-			Iterator<StatusEffect> it = statusEffects.iterator();
-			while(it.hasNext()) {
-				StatusEffect status = (StatusEffect) it.next();
-				if(status.isActive(cTime)) {
-					status.update(this, (GameState)gs, cTime, delta);
-				} else {
-					status.onDestroy(this, cTime);
-					it.remove();
-				}
-			}
+			statusHandler.update((GameState)gs, cTime, delta);
 			
 			Player player = Player.getPlayer();
 			theta = Calculate.Hypotenuse(position, player.getPosition());
@@ -104,7 +92,7 @@ public class Starfright extends Enemy {
 	public void render(Graphics g, long cTime) {
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(!dead()) animation.getCurrentAnimation().render(g, position, pTheta, (flashing || shouldDrawFlash(cTime)));
-		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
+		statusHandler.render(g, cTime);
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
@@ -120,11 +108,11 @@ public class Starfright extends Enemy {
 		if(player.getFlashlight().inView(getCollider())) {
 			// If the player can see Starfright, apply the flashbang effect.
 			FlashbangEffect flashbang = new FlashbangEffect(Starfright.FLASHBANG_DURATION, cTime);
-			player.addStatus(flashbang, cTime);
+			player.getStatusHandler().addStatus(flashbang, cTime);
 		} else {
 			// Otherwise, still deafen the player.
 			DeafenedEffect deafened = new DeafenedEffect(Starfright.FLASHBANG_DURATION, cTime);
-			player.addStatus(deafened, cTime);
+			player.getStatusHandler().addStatus(deafened, cTime);
 		}
 		
 		double dmg = Dice.roll(Starfright.MIN_FLASH_COUNT, Starfright.MIN_FLASH_SIDES, Starfright.MIN_FLASH_MOD);

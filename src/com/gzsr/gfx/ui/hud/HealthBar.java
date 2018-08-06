@@ -50,7 +50,7 @@ public class HealthBar implements Entity {
 		changeColor(g, Color.lightGray, touchingPlayer);
 		g.drawRect(position.x, position.y, size.x, size.y);
 		
-		changeColor(g, (player.hasStatus(Status.POISON) ? POISON_COLOR : Color.red), touchingPlayer);
+		changeColor(g, (player.getStatusHandler().hasStatus(Status.POISON) ? POISON_COLOR : Color.red), touchingPlayer);
 		g.fillRect((position.x + 3.0f), 
 				   (position.y + 3.0f), 
 				   ((float)percentage * (size.x - 6.0f)), (size.y - 6.0f));

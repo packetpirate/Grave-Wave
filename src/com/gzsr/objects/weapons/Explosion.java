@@ -105,10 +105,12 @@ public class Explosion implements Entity {
 		if(!entitiesAffected.contains(e)) {
 			// If damage is taken, calculate damage based on distance from source.
 			if(e instanceof Player) {
-				if(Player.getPlayer().getCollider().intersects(getCollider())) {
-					Player.getPlayer().takeDamage(damage, cTime);
-					if(status != null) Player.getPlayer().addStatus(status, status.getDuration());
-					entitiesAffected.add(Player.getPlayer());
+				Player player = Player.getPlayer();
+				
+				if(player.getCollider().intersects(getCollider())) {
+					player.takeDamage(damage, cTime);
+					if(status != null) player.getStatusHandler().addStatus(status, status.getDuration());
+					entitiesAffected.add(player);
 					return true;
 				} else return false;
 			} else if(e instanceof Enemy) {

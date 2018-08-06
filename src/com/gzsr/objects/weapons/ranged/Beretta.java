@@ -16,7 +16,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class Beretta extends RangedWeapon {
 	private static final int AMMO_PRICE = 100;
@@ -90,7 +89,7 @@ public class Beretta extends RangedWeapon {
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		
 		lastUsed = cTime;
 		release = false;

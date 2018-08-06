@@ -1,7 +1,6 @@
 package com.gzsr.entities.enemies;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -24,8 +23,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
-import com.gzsr.status.Status;
-import com.gzsr.status.StatusEffect;
+import com.gzsr.status.StatusHandler;
 
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;
@@ -54,7 +52,9 @@ public abstract class Enemy implements Entity {
 	protected int experience;
 	public int getExpValue() { return experience; }
 	
-	protected List<StatusEffect> statusEffects;
+	protected StatusHandler statusHandler;
+	public StatusHandler getStatusHandler() { return statusHandler; }
+	
 	protected boolean deathHandled;
 	
 	protected boolean hit;
@@ -98,7 +98,7 @@ public abstract class Enemy implements Entity {
 		this.damage = new Dice(1, 1);
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
-		this.statusEffects = new ArrayList<StatusEffect>();
+		this.statusHandler = new StatusHandler(this);
 		this.deathHandled = false;
 		
 		this.hit = false;
@@ -122,16 +122,7 @@ public abstract class Enemy implements Entity {
 		// All enemies should update.
 		if(isAlive(cTime)) {
 			// Need to make sure to update the status effects first.
-			Iterator<StatusEffect> it = statusEffects.iterator();
-			while(it.hasNext()) {
-				StatusEffect status = (StatusEffect) it.next();
-				if(status.isActive(cTime)) {
-					status.update(this, (GameState)gs, cTime, delta);
-				} else {
-					status.onDestroy(this, cTime);
-					it.remove();
-				}
-			}
+			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
 			animation.getCurrentAnimation().update(cTime);
@@ -258,7 +249,7 @@ public abstract class Enemy implements Entity {
 		// All enemies should render their animation.
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, pTheta, shouldDrawFlash(cTime));
-		if(!statusEffects.isEmpty()) statusEffects.stream().filter(status -> status.isActive(cTime)).forEach(status -> status.render(g, cTime));
+		statusHandler.render(g, cTime);
 		
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
@@ -272,30 +263,6 @@ public abstract class Enemy implements Entity {
 	}
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
-	
-	public void addStatus(StatusEffect effect, long cTime) {
-		// First check to see if the enemy already has this status.
-		for(StatusEffect se : statusEffects) {
-			Status s = se.getStatus();
-			if(s.equals(effect.getStatus())) {
-				// Refresh the effect rather than adding it to the list.
-				se.refresh(cTime);
-				return;
-			}
-		}
-		
-		// The enemy does not have this effect. Add it.
-		statusEffects.add(effect);
-	}
-	
-	public boolean hasStatus(Status status) {
-		for(StatusEffect se : statusEffects) {
-			Status ses = se.getStatus();
-			if(ses.equals(status)) return true;
-		}
-		
-		return false;
-	}
 	
 	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
 		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);

@@ -12,7 +12,6 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class ClaymoreWeapon extends RangedWeapon {
 	private static final int PRICE = 4_000;
@@ -50,7 +49,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 		Claymore clay = new Claymore(particle);
 		projectiles.add(clay);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());

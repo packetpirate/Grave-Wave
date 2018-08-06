@@ -21,7 +21,7 @@ public class NightVisionItem extends Item {
 	@Override
 	public void apply(Player player, long cTime) {
 		NightVisionEffect effect = new NightVisionEffect(NightVisionItem.DURATION, cTime);
-		player.addStatus(effect, cTime);
+		player.getStatusHandler().addStatus(effect, cTime);
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		

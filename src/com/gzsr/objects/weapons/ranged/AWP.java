@@ -17,7 +17,6 @@ import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class AWP extends RangedWeapon {
 	private static final int PRICE = 25_000;
@@ -108,7 +107,7 @@ public class AWP extends RangedWeapon {
 		projectile.setPenetrations(2);
 		projectiles.add(projectile);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		
 		lastUsed = cTime;
 		release = false;

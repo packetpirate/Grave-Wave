@@ -13,7 +13,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.BurningEffect;
-import com.gzsr.status.Status;
 
 public class MolotovWeapon extends RangedWeapon {
 	private static final int PRICE = 2_000;
@@ -97,7 +96,7 @@ public class MolotovWeapon extends RangedWeapon {
 		
 		Molotov molotov = new Molotov(particle);
 		projectiles.add(molotov);
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		
 		release = false;
 		charge = 0.0f;

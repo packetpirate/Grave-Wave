@@ -193,7 +193,7 @@ public class GameState extends BasicGameState implements InputListener {
 		
 		hud.render(g, this, time);
 		
-		StatusEffect flash = Player.getPlayer().getStatus(Status.FLASHBANG);
+		StatusEffect flash = Player.getPlayer().getStatusHandler().getStatus(Status.FLASHBANG);
 		if(flash != null) {
 			// If the player has been blinded, draw a white flash over everything.
 			float p = flash.getPercentageTimeLeft(time);

@@ -14,6 +14,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
+import com.gzsr.status.Status;
 
 public abstract class RangedWeapon extends Weapon {
 	protected Sound reloadSound;
@@ -121,6 +122,8 @@ public abstract class RangedWeapon extends Weapon {
 	public void maxOutAmmo() {
 		ammoInInventory = (getMaxClips() * getClipSize()) - ammoInClip; 
 	}
+	
+	protected boolean hasUnlimitedAmmo() { return Player.getPlayer().getStatusHandler().hasStatus(Status.UNLIMITED_AMMO); }
 
 	public int getMaxAmmoPrice() {
 		int maxAmmo = getMaxClips() * getClipSize();

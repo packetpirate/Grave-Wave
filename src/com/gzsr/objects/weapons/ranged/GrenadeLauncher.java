@@ -13,7 +13,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.status.Status;
 
 public class GrenadeLauncher extends RangedWeapon {
 	private static final int PRICE = 7_500;
@@ -84,7 +83,7 @@ public class GrenadeLauncher extends RangedWeapon {
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		
 		muzzleFlash.restart(cTime);

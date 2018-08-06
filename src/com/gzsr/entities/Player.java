@@ -1,6 +1,5 @@
 package com.gzsr.entities;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,7 +38,7 @@ import com.gzsr.states.GameState;
 import com.gzsr.states.ShopState;
 import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
-import com.gzsr.status.StatusEffect;
+import com.gzsr.status.StatusHandler;
 
 public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
@@ -168,47 +167,8 @@ public class Player implements Entity {
 		}
 	}
 	
-	private List<StatusEffect> statusEffects;
-	public List<StatusEffect> getStatuses() { return statusEffects; }
-	public StatusEffect getStatus(Status status) {
-		for(StatusEffect se : statusEffects) {
-			Status s = se.getStatus();
-			if(s.equals(status)) return se;
-		}
-		
-		return null;
-	}
-	public void addStatus(StatusEffect effect, long cTime) {
-		// First check to see if the player already has this status.
-		for(StatusEffect se : statusEffects) {
-			Status s = se.getStatus();
-			if(s.equals(effect.getStatus())) {
-				// Refresh the effect rather than adding it to the list.
-				se.refresh(cTime);
-				return;
-			}
-		}
-		
-		// The player does not have this effect. Add it.
-		effect.onApply(this, cTime);
-		statusEffects.add(effect);
-	}
-	public boolean hasStatus(Status status) {
-		for(StatusEffect se : statusEffects) {
-			Status ses = se.getStatus();
-			if(ses.equals(status)) return true;
-		}
-		
-		return false;
-	}
-	public void clearHarmful() {
-		// TODO: Update this if more harmful status effects are added in the future.
-		Iterator<StatusEffect> it = statusEffects.iterator();
-		while(it.hasNext()) {
-			Status s = it.next().getStatus();
-			if((s == Status.POISON) || (s == Status.BURNING)) it.remove();
-		}
-	}
+	private StatusHandler statusHandler;
+	public StatusHandler getStatusHandler() { return statusHandler; }
 	
 	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player"); }
 	
@@ -219,7 +179,7 @@ public class Player implements Entity {
 		position = new Pair<Float>(0.0f, 0.0f);
 		
 		attributes = new Attributes();
-		statusEffects = new ArrayList<StatusEffect>();
+		statusHandler = new StatusHandler(this);
 		
 		reset();
 	}
@@ -237,8 +197,7 @@ public class Player implements Entity {
 				if(lives >= 0) {
 					attributes.set("lives", lives);
 					
-					statusEffects.stream().forEach(status -> status.onDestroy(this, cTime));
-					statusEffects.clear();
+					statusHandler.destroyAll(cTime);
 					
 					respawning = true;
 					respawnTime = (cTime + Player.RESPAWN_TIME);
@@ -251,7 +210,7 @@ public class Player implements Entity {
 					
 					// Make the player invincible for a brief period.
 					attributes.set("health", attributes.getDouble("maxHealth"));
-					statusEffects.add(new InvulnerableEffect(Player.RESPAWN_TIME, cTime));
+					statusHandler.addStatus(new InvulnerableEffect(Player.RESPAWN_TIME, cTime), cTime);
 					
 					// Reset the player's position.
 					position.x = (float)(Globals.WIDTH / 2);
@@ -269,16 +228,7 @@ public class Player implements Entity {
 		}
 		
 		// Need to make sure to update the status effects first.
-		Iterator<StatusEffect> it = statusEffects.iterator();
-		while(it.hasNext()) {
-			StatusEffect status = (StatusEffect) it.next();
-			if(status.isActive(cTime)) {
-				status.update(this, (GameState)gs, cTime, delta);
-			} else {
-				status.onDestroy(this, cTime);
-				it.remove();
-			}
-		}
+		statusHandler.update((GameState)gs, cTime, delta);
 		
 		boolean canMove = true;
 		MeleeWeapon cMeleeWeapon = getCurrentMelee();
@@ -374,6 +324,7 @@ public class Player implements Entity {
 			}	
 		}
 		
+		statusHandler.render(g, cTime);
 		flashlight.render(g, cTime);
 	}
 	
@@ -408,7 +359,7 @@ public class Player implements Entity {
 		inventory.addItem(beretta);
 		
 		attributes.reset();
-		statusEffects.clear();
+		statusHandler.clearAll();
 		
 		// Basic attributes.
 		attributes.set("health", 100.0);
@@ -466,7 +417,7 @@ public class Player implements Entity {
 	}
 	
 	public double takeDamage(double amnt, long cTime, boolean piercing) {
-		if(isAlive() && !hasStatus(Status.INVULNERABLE)) {
+		if(isAlive() && !statusHandler.hasStatus(Status.INVULNERABLE)) {
 			if(!piercing) amnt = damageArmor(amnt); // First, deal damage to player's armor.
 			
 			// Deal leftover damage to health.

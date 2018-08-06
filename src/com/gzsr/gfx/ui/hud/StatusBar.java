@@ -31,10 +31,11 @@ public class StatusBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		boolean touchingPlayer = intersects(Player.getPlayer());
+		Player player = Player.getPlayer();
+		boolean touchingPlayer = intersects(player);
 		
 		float xPlus = 0.0f;
-		List<StatusEffect> statusEffects = Player.getPlayer().getStatuses();
+		List<StatusEffect> statusEffects = player.getStatusHandler().getStatusEffects();
 		for(StatusEffect status : statusEffects) {
 			// Render each individual status underneath the health and experience bars.
 			if(status.isDrawn()) {

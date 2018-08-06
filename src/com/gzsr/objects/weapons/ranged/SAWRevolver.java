@@ -16,7 +16,6 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
 
 public class SAWRevolver extends RangedWeapon {
 	private static final int PRICE = 2_500;
@@ -92,7 +91,7 @@ public class SAWRevolver extends RangedWeapon {
 		projectile.setPenetrations(1);
 		projectiles.add(projectile);
 		
-		if(!player.hasStatus(Status.UNLIMITED_AMMO)) ammoInClip--;
+		if(!hasUnlimitedAmmo()) ammoInClip--;
 		
 		lastUsed = cTime;
 		release = false;
