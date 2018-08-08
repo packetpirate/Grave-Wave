@@ -1,5 +1,7 @@
 package com.gzsr.objects.weapons.ranged;
 
+import java.util.Iterator;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -14,6 +16,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
 public class BowAndArrow extends RangedWeapon {
 	private static final int PRICE = 2_000;
@@ -32,12 +35,11 @@ public class BowAndArrow extends RangedWeapon {
 	private static final String FIRE_SOUND = "bow_fire"; // TODO: Change this to a more appropriate sound.
 	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
 	
-	private boolean release;
 	private boolean charging;
 	private float charge;
 	
 	public BowAndArrow() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -46,14 +48,35 @@ public class BowAndArrow extends RangedWeapon {
 		this.useSound = assets.getSound(BowAndArrow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
 		
-		release = false;
 		charging = false;
 		charge = 0.0f;
 	}
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
+		// Basically just checking to see if the reload time has elapsed.
+		if(reloading && !isReloading(cTime)) {
+			int takeFromInv = getClipSize() - ammoInClip;
+			int taken = Math.min(takeFromInv, ammoInInventory);
+			ammoInInventory -= taken;
+			ammoInClip += taken;
+			
+			reloading = false;
+		}
+		
+		// Update all projectiles.
+		if(!getProjectiles().isEmpty()) {
+			Iterator<Projectile> it = getProjectiles().iterator();
+			while(it.hasNext()) {
+				Particle p = it.next();
+				if(p.isAlive(cTime)) {
+					p.update(gs, cTime, delta);
+				} else {
+					p.onDestroy((GameState)gs, cTime);
+					it.remove();
+				}
+			}
+		}
 		
 		if(equipped) {
 			if(charging) {
@@ -114,16 +137,10 @@ public class BowAndArrow extends RangedWeapon {
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
 		projectiles.add(projectile);
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		
-		release = false;
+
 		charge = 0.0f;
-		lastUsed = cTime;
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
-	
-	@Override
-	public boolean canUse(long cTime) { return super.canUse(cTime) && release; }
 	
 	@Override
 	public void unequip() {

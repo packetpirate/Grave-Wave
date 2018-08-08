@@ -1,14 +1,10 @@
 package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Controls;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -33,11 +29,8 @@ public class Remington extends RangedWeapon {
 	private static final String FIRE_SOUND = "sniper_shot";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private Animation muzzleFlash;
-	private boolean release;
-	
 	public Remington() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -46,32 +39,10 @@ public class Remington extends RangedWeapon {
 		this.useSound = assets.getSound(Remington.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Remington.RELOAD_SOUND);
 		
-		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
-		this.release = false;
-	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
+		this.shakeEffect = new Camera.ShakeEffect(200L, 20L, 10.0f);
 		
-		// If mouse released, release fire lock.
-		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
-		
-		// Update muzzle flash animation.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
+		addMuzzleFlash();
 	}
-
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
-		
-		// Render muzzle flash.
-		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
-	}
-
-	@Override
-	public boolean canUse(long cTime) { return (super.canUse(cTime) && release); }
 
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
@@ -91,16 +62,7 @@ public class Remington extends RangedWeapon {
 		projectile.setPenetrations(1);
 		projectiles.add(projectile);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		
-		lastUsed = cTime;
-		release = false;
-		
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 20L, 10.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

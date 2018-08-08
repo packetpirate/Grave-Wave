@@ -30,7 +30,7 @@ public class Crossbow extends RangedWeapon {
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	public Crossbow() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -55,12 +55,9 @@ public class Crossbow extends RangedWeapon {
 		double dmg = damage.roll(Crossbow.MIN_DAMAGE_MOD, critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
-		
 		projectiles.add(projectile);
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		
-		lastUsed = cTime;
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

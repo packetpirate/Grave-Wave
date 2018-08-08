@@ -28,6 +28,18 @@ public class Camera {
 		}
 	}
 	
+	public static class ShakeEffect {
+		protected long duration;
+		protected long interval;
+		protected float magnitude;
+		
+		public ShakeEffect(long duration_, long interval_, float magnitude_) {
+			this.duration = duration_;
+			this.interval = interval_;
+			this.magnitude = magnitude_;
+		}
+	}
+	
 	private static Camera camera;
 	public static Camera getCamera() {
 		if(camera == null) camera = new Camera();
@@ -136,6 +148,16 @@ public class Camera {
 		shakeStart = cTime;
 		shakeDuration = duration;
 		shakeInterval = interval;
+		lastShake = 0L;
+	}
+	
+	public void shake(ShakeEffect effect, long cTime) {
+		shaking = true;
+		magnitude = effect.magnitude;
+		
+		shakeStart = cTime;
+		shakeDuration = effect.duration;
+		shakeInterval = effect.interval;
 		lastShake = 0L;
 	}
 	

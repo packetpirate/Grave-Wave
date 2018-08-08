@@ -49,10 +49,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 		Claymore clay = new Claymore(particle);
 		projectiles.add(clay);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-		
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

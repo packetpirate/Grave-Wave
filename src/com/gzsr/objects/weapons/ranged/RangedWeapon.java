@@ -8,10 +8,15 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
@@ -30,7 +35,23 @@ public abstract class RangedWeapon extends Weapon {
 	protected boolean reloading;
 	protected long reloadStart;
 	
+	protected boolean release;
+	protected boolean automatic;
+	public boolean isAutomatic() { return automatic; }
+	public void setAutomatic(boolean val) { this.automatic = val; }
+	
+	protected Camera.ShakeEffect shakeEffect;
+	
+	protected Animation muzzleFlash;
+	public void addMuzzleFlash() {
+		if(muzzleFlash == null) muzzleFlash = AssetManager.getManager().getAnimation("GZS_MuzzleFlash");
+	}
+	
 	public RangedWeapon() {
+		this(true);
+	}
+	
+	public RangedWeapon(boolean automatic_) {
 		this.reloadSound = null;
 		
 		this.projectiles = new ArrayList<Projectile>();
@@ -40,6 +61,13 @@ public abstract class RangedWeapon extends Weapon {
 		
 		this.reloading = false;
 		this.reloadStart = 0L;
+		
+		this.automatic = automatic_;
+		this.release = false;
+		
+		this.shakeEffect = null;
+		
+		this.muzzleFlash = null;
 	}
 	
 	@Override
@@ -67,6 +95,9 @@ public abstract class RangedWeapon extends Weapon {
 				}
 			}
 		}
+		
+		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
+		if((muzzleFlash != null) && (muzzleFlash.isActive(cTime))) muzzleFlash.update(cTime);
 	}
 	
 	@Override
@@ -74,6 +105,12 @@ public abstract class RangedWeapon extends Weapon {
 		projectiles.stream()
 				   .filter(p -> p.isActive(cTime))
 				   .forEach(p -> p.render(g, cTime));
+		
+		if(muzzleFlash != null) {
+			Player player = Player.getPlayer();
+			Pair<Float> mp = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y - 28.0f));
+			if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), (player.getRotation() - (float)(Math.PI / 2)));
+		}
 	}
 	
 	@Override
@@ -84,7 +121,23 @@ public abstract class RangedWeapon extends Weapon {
 		
 		if(!clipNotEmpty) return false;
 		
-		return (Player.getPlayer().isAlive() && equipped && cool);
+		return (Player.getPlayer().isAlive() && equipped && cool && (automatic || release));
+	}
+	
+	@Override
+	public void use(Player player, Pair<Float> position, float theta, long cTime) {
+		// Derived classes should call this super method AFTER particle creation.
+		if(!hasUnlimitedAmmo()) ammoInClip--;
+		
+		if(shakeEffect != null) {
+			if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(shakeEffect, cTime);
+			else Camera.getCamera().refreshShake(cTime);
+		}
+		
+		lastUsed = cTime;
+		release = false;
+		if(muzzleFlash != null) muzzleFlash.restart(cTime);
+		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
 	public void reload(long cTime) {

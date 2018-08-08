@@ -32,7 +32,7 @@ public class LaserBarrier extends RangedWeapon {
 	private LaserNode lastNode;
 	
 	public LaserBarrier() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		this.useSound = assets.getSound(LaserBarrier.FIRE_SOUND);
@@ -97,10 +97,7 @@ public class LaserBarrier extends RangedWeapon {
 			lastNode = node; // This node is unpaired.
 		}
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-		
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

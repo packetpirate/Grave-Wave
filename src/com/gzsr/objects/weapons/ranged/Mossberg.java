@@ -1,14 +1,11 @@
 package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -35,8 +32,6 @@ public class Mossberg extends RangedWeapon {
 	private static final String FIRE_SOUND = "mossberg_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private Animation muzzleFlash;
-	
 	public Mossberg() {
 		super();
 		
@@ -44,26 +39,12 @@ public class Mossberg extends RangedWeapon {
 		
 		this.damage = new Dice(Mossberg.MIN_DAMAGE_COUNT, Mossberg.MIN_DAMAGE_SIDES);
 		
-		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.useSound = assets.getSound(Mossberg.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Mossberg.RELOAD_SOUND);
-	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
 		
-		// Update muzzle flash animation.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
-	}
-
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+		this.shakeEffect = new Camera.ShakeEffect(100L, 20L, 15.0f);
 		
-		// Render muzzle flash.
-		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
+		addMuzzleFlash();
 	}
 
 	@Override
@@ -86,14 +67,7 @@ public class Mossberg extends RangedWeapon {
 			projectiles.add(projectile);
 		}
 		
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 100L, 20L, 15.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

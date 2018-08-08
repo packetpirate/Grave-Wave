@@ -1,6 +1,5 @@
 package com.gzsr.objects.weapons.ranged;
 
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 
@@ -42,11 +41,6 @@ public class Flamethrower extends RangedWeapon {
 	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
 		if(!equipped || reloading || !Controls.getInstance().getMouse().isLeftDown()) useSound.stop();
-	}
-	
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
 	}
 	
 	@Override

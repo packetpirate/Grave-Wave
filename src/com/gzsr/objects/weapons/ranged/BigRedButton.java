@@ -100,9 +100,7 @@ public class BigRedButton extends RangedWeapon {
 			explosions.add(exp);
 		}
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-		useSound.play();
+		super.use(player, position, theta, cTime);
 	}
 	
 	private Pair<Float> getExplosionLocation(GameState gs, Player player, Pair<Float> position) {

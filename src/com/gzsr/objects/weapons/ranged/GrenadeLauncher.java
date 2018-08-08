@@ -1,13 +1,10 @@
 package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
@@ -33,8 +30,6 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final String FIRE_SOUND = "throw2";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private Animation muzzleFlash;
-	
 	public GrenadeLauncher() {
 		super();
 		
@@ -42,26 +37,10 @@ public class GrenadeLauncher extends RangedWeapon {
 		
 		this.damage = new Dice(GrenadeLauncher.MIN_DAMAGE_COUNT, GrenadeLauncher.MIN_DAMAGE_SIDES);
 		
-		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.useSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
 		this.reloadSound = assets.getSound(GrenadeLauncher.RELOAD_SOUND);
-	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
 		
-		// Update muzzle flash animation.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
-	}
-	
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
-		
-		// Render muzzle flash.
-		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
+		addMuzzleFlash();
 	}
 
 	@Override
@@ -83,11 +62,8 @@ public class GrenadeLauncher extends RangedWeapon {
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
 		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

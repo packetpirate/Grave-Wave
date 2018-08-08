@@ -1,5 +1,7 @@
 package com.gzsr.objects.weapons.ranged;
 
+import java.util.Iterator;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -9,9 +11,11 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
+import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.status.BurningEffect;
 
 public class MolotovWeapon extends RangedWeapon {
@@ -27,19 +31,40 @@ public class MolotovWeapon extends RangedWeapon {
 	private static final String PROJECTILE_NAME = "GZS_Molotov";
 	private static final String FIRE_SOUND = "throw2";
 	
-	private boolean release;
 	private boolean charging;
 	private float charge;
 	
 	public MolotovWeapon() {
-		super();
+		super(false);
 		
 		this.useSound = AssetManager.getManager().getSound(MolotovWeapon.FIRE_SOUND);
 	}
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
+		// Basically just checking to see if the reload time has elapsed.
+		if(reloading && !isReloading(cTime)) {
+			int takeFromInv = getClipSize() - ammoInClip;
+			int taken = Math.min(takeFromInv, ammoInInventory);
+			ammoInInventory -= taken;
+			ammoInClip += taken;
+			
+			reloading = false;
+		}
+		
+		// Update all projectiles.
+		if(!getProjectiles().isEmpty()) {
+			Iterator<Projectile> it = getProjectiles().iterator();
+			while(it.hasNext()) {
+				Particle p = it.next();
+				if(p.isAlive(cTime)) {
+					p.update(gs, cTime, delta);
+				} else {
+					p.onDestroy((GameState)gs, cTime);
+					it.remove();
+				}
+			}
+		}
 		
 		if(equipped) {
 			if(charging) {
@@ -96,17 +121,10 @@ public class MolotovWeapon extends RangedWeapon {
 		
 		Molotov molotov = new Molotov(particle);
 		projectiles.add(molotov);
-		if(!hasUnlimitedAmmo()) ammoInClip--;
 		
-		release = false;
 		charge = 0.0f;
-		lastUsed = cTime;
-		
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
-	
-	@Override
-	public boolean canUse(long cTime) { return super.canUse(cTime) && release; }
 	
 	@Override
 	public void unequip() {

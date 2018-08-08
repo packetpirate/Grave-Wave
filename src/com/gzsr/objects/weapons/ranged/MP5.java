@@ -1,14 +1,11 @@
 package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -34,8 +31,6 @@ public class MP5 extends RangedWeapon {
 	private static final String FIRE_SOUND = "m4a1_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private Animation muzzleFlash;
-	
 	public MP5() {
 		super();
 		
@@ -43,26 +38,12 @@ public class MP5 extends RangedWeapon {
 		
 		this.damage = new Dice(MP5.MIN_DAMAGE_COUNT, MP5.MIN_DAMAGE_SIDES);
 		
-		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.useSound = assets.getSound(MP5.FIRE_SOUND);
 		this.reloadSound = assets.getSound(MP5.RELOAD_SOUND);
-	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
 		
-		// Update muzzle flash animation.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
-	}
-
-	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+		this.shakeEffect = new Camera.ShakeEffect(150L, 50L, 5.0f);
 		
-		// Render muzzle flash.
-		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, Player.getPlayer().getPosition(), (Player.getPlayer().getRotation() - (float)(Math.PI / 2)));
+		addMuzzleFlash();
 	}
 	
 	@Override
@@ -85,14 +66,7 @@ public class MP5 extends RangedWeapon {
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 150L, 50L, 5.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

@@ -3,12 +3,9 @@ package com.gzsr.objects.weapons.ranged;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Controls;
 import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -35,11 +32,8 @@ public class AWP extends RangedWeapon {
 	private static final String FIRE_SOUND = "sniper_shot";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private Animation muzzleFlash;
-	private boolean release;
-	
 	public AWP() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -48,19 +42,9 @@ public class AWP extends RangedWeapon {
 		this.useSound = assets.getSound(AWP.FIRE_SOUND);
 		this.reloadSound = assets.getSound(AWP.RELOAD_SOUND);
 		
-		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
-		this.release = false;
-	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
+		this.shakeEffect = new Camera.ShakeEffect(200L, 50L, 15.0f);
 		
-		// If mouse released, release fire lock.
-		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
-		
-		// Update muzzle flash animation.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.update(cTime);
+		addMuzzleFlash();
 	}
 
 	@Override
@@ -68,7 +52,6 @@ public class AWP extends RangedWeapon {
 		super.render(g, cTime);
 		
 		Player player = Player.getPlayer();
-		Pair<Float> mp = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y - 28.0f));
 		float theta = (player.getRotation() - (float)(Math.PI / 2));
 		
 		// Render a laser sight.
@@ -81,9 +64,6 @@ public class AWP extends RangedWeapon {
 			g.setColor(Color.red);
 			g.drawLine(laserPos.x, laserPos.y, x2, y2);
 		}
-		
-		// Render muzzle flash.
-		if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), theta);
 	}
 
 	@Override
@@ -107,16 +87,7 @@ public class AWP extends RangedWeapon {
 		projectile.setPenetrations(2);
 		projectiles.add(projectile);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		
-		lastUsed = cTime;
-		release = false;
-		
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 50L, 15.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override

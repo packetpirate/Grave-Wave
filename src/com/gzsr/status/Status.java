@@ -4,6 +4,7 @@ public enum Status {
 	// TODO: Add images for acid and burning status effects.
 	DEAFENED(""),
 	FLASHBANG(""),
+	PARALYSIS("GZS_Paralysis"),
 	BURNING(""),
 	POISON("GZS_PoisonIcon"),
 	CRIT_CHANCE("GZS_CriticalChance"),

@@ -2,10 +2,8 @@ package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Controls;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
@@ -32,10 +30,8 @@ public class NailGun extends RangedWeapon {
 	private static final String FIRE_SOUND = "nailgun";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
-	private boolean release;
-	
 	public NailGun() {
-		super();
+		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -44,19 +40,8 @@ public class NailGun extends RangedWeapon {
 		this.useSound = assets.getSound(NailGun.FIRE_SOUND);
 		this.reloadSound = assets.getSound(NailGun.RELOAD_SOUND);
 		
-		this.release = false;
+		this.shakeEffect = new Camera.ShakeEffect(100L, 20L, 5.0f);
 	}
-	
-	@Override
-	public void update(BasicGameState gs, long cTime, int delta) {
-		super.update(gs, cTime, delta);
-		
-		// If mouse released, release fire lock.
-		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
-	}
-
-	@Override
-	public boolean canUse(long cTime) { return (super.canUse(cTime) && release); }
 
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
@@ -75,15 +60,7 @@ public class NailGun extends RangedWeapon {
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		
-		lastUsed = cTime;
-		release = false;
-		
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 100L, 20L, 5.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override
