@@ -25,6 +25,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.DamageEffect;
 import com.gzsr.status.ParalysisEffect;
 
 public class Aberration extends Boss {
@@ -43,11 +44,17 @@ public class Aberration extends Boss {
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
 	private static final long ATTACK_DELAY = 1_500L;
+	
 	private static final String TENTACLE_IMAGE = "GZS_Aberration_Tentacle";
 	private static final float TENTACLE_ATTACK_DIST = 128.0f;
 	private static final float TENTACLE_DEVIATION = (float)(Math.PI / 6);
-	private static final long TENTACLE_COOLDOWN = 5_000L;
+	private static final long TENTACLE_COOLDOWN = 10_000L;
+	private static final long TENTACLE_EFFECT_DURATION = 3_000L;
+	private static final long TENTACLE_DAMAGE_INTERVAL = 1_000L;
 	private static final float TENTACLE_GROWTH_RATE = 0.025f;
+	private static final int MIN_TENTACLE_COUNT = 5;
+	private static final int MIN_TENTACLE_SIDES = 4;
+	private static final int MIN_TENTACLE_MOD = 5;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
@@ -153,9 +160,12 @@ public class Aberration extends Boss {
 						
 						// Check for collision with player.
 						if(player.getCollider().intersects(tentacles[i])) {
-							player.getStatusHandler().addStatus(new ParalysisEffect(3_000L, cTime), cTime);
+							Dice tentacleDamage = new Dice(MIN_TENTACLE_COUNT, MIN_TENTACLE_SIDES);
+							player.getStatusHandler().addStatus(new ParalysisEffect(TENTACLE_EFFECT_DURATION, cTime), cTime);
+							player.getStatusHandler().addStatus(new DamageEffect(tentacleDamage, MIN_TENTACLE_MOD, TENTACLE_DAMAGE_INTERVAL, TENTACLE_EFFECT_DURATION, cTime), cTime);
 							playerGrabbed = true;
 							tentacleAttack = false;
+							timePlayerGrabbed = cTime;
 						}
 					}
 				}
@@ -196,11 +206,12 @@ public class Aberration extends Boss {
 		if(!dead()) {
 			for(int i = 0; i < 3; i++) {
 				Image tentacle = AssetManager.getManager().getImage(TENTACLE_IMAGE);
-				if(tentacleAttack && (tentacles[i] != null) && (tentacle != null)) {
+				if((tentacleAttack || playerGrabbed) && (tentacles[i] != null) && (tentacle != null)) {
 					float adjTheta = (theta - TENTACLE_DEVIATION) + (i * TENTACLE_DEVIATION);
 					float deg = (float)Math.toDegrees(adjTheta);
 					float x = (position.x + (float)(Math.cos(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
 					float y = (position.y + (float)(Math.sin(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
+					
 					g.rotate(x, y, deg);
 					tentacle.draw(x, (y - 16.0f), (tentacleLength * tentacle.getWidth()), tentacle.getHeight());
 					g.rotate(x, y, -deg);

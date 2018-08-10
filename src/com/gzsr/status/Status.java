@@ -2,6 +2,7 @@ package com.gzsr.status;
 
 public enum Status {
 	// TODO: Add images for acid and burning status effects.
+	DAMAGE("GZS_Damage"),
 	DEAFENED(""),
 	FLASHBANG(""),
 	PARALYSIS("GZS_Paralysis"),

@@ -10,6 +10,16 @@ import com.gzsr.entities.Entity;
 import com.gzsr.states.GameState;
 
 public class StatusHandler {
+	// TODO: Add any new harmful status effects to this list.
+	private static final List<Status> HARMFUL = new ArrayList<Status>() {{
+		add(Status.DEAFENED);
+		add(Status.FLASHBANG);
+		add(Status.POISON);
+		add(Status.BURNING);
+		add(Status.PARALYSIS);
+		add(Status.DAMAGE);
+	}};
+	
 	private Entity entity;
 	
 	private List<StatusEffect> statusEffects;
@@ -54,11 +64,10 @@ public class StatusHandler {
 	}
 	
 	public void clearHarmful() {
-		// TODO: Update this if more harmful status effects are added in the future.
 		Iterator<StatusEffect> it = statusEffects.iterator();
 		while(it.hasNext()) {
 			Status s = it.next().getStatus();
-			if((s == Status.POISON) || (s == Status.BURNING)) it.remove();
+			if(HARMFUL.contains(s)) it.remove();
 		}
 	}
 	
