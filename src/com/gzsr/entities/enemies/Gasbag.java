@@ -13,6 +13,7 @@ import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
+import com.gzsr.status.Status;
 
 public class Gasbag extends Enemy {
 	public static final int FIRST_WAVE = 8;
@@ -77,20 +78,22 @@ public class Gasbag extends Enemy {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		velocity.x = (float)Math.cos(theta) * Gasbag.SPEED * delta;
-		velocity.y = (float)Math.sin(theta) * Gasbag.SPEED * delta;
-
-		avoidObstacles(gs, delta);
-		
-		if(!moveBlocked) {
-			position.x += velocity.x;
-			position.y += velocity.y;
+		if(!statusHandler.hasStatus(Status.PARALYSIS)) {
+			velocity.x = (float)Math.cos(theta) * Gasbag.SPEED * delta;
+			velocity.y = (float)Math.sin(theta) * Gasbag.SPEED * delta;
+	
+			avoidObstacles(gs, delta);
+			
+			if(!moveBlocked) {
+				position.x += velocity.x;
+				position.y += velocity.y;
+			}
+			
+			moveBlocked = false;
+			
+			bounds.setCenterX(position.x);
+			bounds.setCenterY(position.y);
 		}
-		
-		moveBlocked = false;
-		
-		bounds.setCenterX(position.x);
-		bounds.setCenterY(position.y);
 	}
 	
 	@Override

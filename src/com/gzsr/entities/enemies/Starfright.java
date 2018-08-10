@@ -14,6 +14,7 @@ import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 import com.gzsr.status.DeafenedEffect;
 import com.gzsr.status.FlashbangEffect;
+import com.gzsr.status.Status;
 
 public class Starfright extends Enemy {
 	private static final int FIRST_WAVE = 25;
@@ -126,20 +127,22 @@ public class Starfright extends Enemy {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		velocity.x = (float)Math.cos(theta) * getSpeed() * delta;
-		velocity.y = (float)Math.sin(theta) * getSpeed() * delta;
-
-		avoidObstacles(gs, delta);
-		
-		if(!moveBlocked) {
-			position.x += velocity.x;
-			position.y += velocity.y;
+		if(!statusHandler.hasStatus(Status.PARALYSIS)) {
+			velocity.x = (float)Math.cos(theta) * getSpeed() * delta;
+			velocity.y = (float)Math.sin(theta) * getSpeed() * delta;
+	
+			avoidObstacles(gs, delta);
+			
+			if(!moveBlocked) {
+				position.x += velocity.x;
+				position.y += velocity.y;
+			}
+			
+			moveBlocked = false;
+			
+			bounds.setCenterX(position.x);
+			bounds.setCenterY(position.y);
 		}
-		
-		moveBlocked = false;
-		
-		bounds.setCenterX(position.x);
-		bounds.setCenterY(position.y);
 	}
 	
 	@Override

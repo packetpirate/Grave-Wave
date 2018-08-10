@@ -151,6 +151,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_ElSalvo.png",
 			// Boss Images
 			"images/GZS_Aberration2.png",
+			"images/GZS_Aberration_Tentacle.png",
 			"images/GZS_Zombat.png",
 			"images/GZS_Stitches.png",
 			"images/GZS_Hook.png",
@@ -196,7 +197,7 @@ public class LoadingState extends BasicGameState {
 			// Effect Images
 			"images/GZS_LightAlphaMap3.png",
 			"images/GZS_Flashlight.png",
-			"images/GZS_Explosion.png",
+			"images/GZS_Explosion2.png",
 			"images/GZS_PoisonExplosion.png",
 			"images/GZS_BloodExplosion.png",
 			// Misc Images
@@ -225,7 +226,7 @@ public class LoadingState extends BasicGameState {
 		Animation missile = new Animation("GZS_Stinger_Missile", 16, 64, 5, 50L, 250L, 250L);
 		assets.addAnimation("GZS_Stinger_Missile", missile);
 		
-		Animation exp = new Animation("GZS_Explosion", 128, 128, 8, 125L, 1000L, 1000L);
+		Animation exp = new Animation("GZS_Explosion2", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_Explosion", exp);
 		
 		Animation pc = new Animation("GZS_PoisonExplosion", 128, 128, 8, 125L, 1000L, 1000L);

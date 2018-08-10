@@ -103,8 +103,9 @@ public class Animation {
 	 * @return A boolean representing the state of the Animation.
 	 */
 	public boolean isActive(long cTime) {
+		boolean animationOver = ((lifespan != -1) && (current == (frames - 1)));
 		long elapsed = cTime - created;
-		return ((lifespan == -1) || (started && (elapsed < lifespan)));
+		return ((lifespan == -1) || (started && !animationOver && (elapsed < lifespan)));
 	}
 	
 	public void restart(long cTime) {

@@ -6,8 +6,13 @@ import java.util.List;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
@@ -20,6 +25,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.ParalysisEffect;
 
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
@@ -37,6 +43,11 @@ public class Aberration extends Boss {
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
 	private static final long ATTACK_DELAY = 1_500L;
+	private static final String TENTACLE_IMAGE = "GZS_Aberration_Tentacle";
+	private static final float TENTACLE_ATTACK_DIST = 128.0f;
+	private static final float TENTACLE_DEVIATION = (float)(Math.PI / 6);
+	private static final long TENTACLE_COOLDOWN = 5_000L;
+	private static final float TENTACLE_GROWTH_RATE = 0.025f;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
@@ -44,6 +55,13 @@ public class Aberration extends Boss {
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.40f)
 			.addItem(Powerups.Type.CRIT_CHANCE, 0.10f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.20f);
+	
+	private Shape [] tentacles;
+	private boolean tentacleAttack;
+	private boolean playerGrabbed;
+	private long timePlayerGrabbed;
+	private long lastTentacleAttack;
+	private float tentacleLength;
 	
 	private List<Projectile> bile;
 	private long lastBile;
@@ -54,6 +72,13 @@ public class Aberration extends Boss {
 		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
 		this.damage = new Dice(Aberration.MIN_DAMAGE_COUNT, Aberration.MIN_DAMAGE_SIDES);
 		
+		this.tentacles = new Shape[3];
+		this.tentacleAttack = false;
+		this.playerGrabbed = false;
+		this.timePlayerGrabbed = 0L;
+		this.lastTentacleAttack = -TENTACLE_COOLDOWN;
+		this.tentacleLength = 0.0f;
+		
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
 	}
@@ -61,14 +86,18 @@ public class Aberration extends Boss {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!dead()) {
+			Player player = Player.getPlayer();
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			if(!tentacleAttack && !playerGrabbed) theta = Calculate.Hypotenuse(position, player.getPosition());
+			
+			handleTentacleAttacks(cTime);
+			
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(player.isAlive() && !tentacleAttack && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
 		
@@ -88,8 +117,56 @@ public class Aberration extends Boss {
 		}
 	}
 	
+	private void handleTentacleAttacks(long cTime) {
+		// Handle tentacle attacks.
+		Player player = Player.getPlayer();
+		long elapsed = (cTime - lastTentacleAttack);
+		if(playerGrabbed) {
+			long timeGrabbed = (cTime - timePlayerGrabbed);
+			if(timeGrabbed > 3_000L) {
+				playerGrabbed = false;
+				tentacleLength = 0.0f;
+				lastTentacleAttack = cTime;
+				for(int i = 0; i < 3; i++) {
+					tentacles[i] = null;
+				}
+			}
+		} else if(!tentacleAttack && (elapsed >= TENTACLE_COOLDOWN) && nearPlayer(TENTACLE_ATTACK_DIST * 2)) {
+			tentacleAttack = true;
+			lastTentacleAttack = cTime;
+			tentacleLength = 0.0f;
+		} else if(tentacleAttack) {
+			if(elapsed >= 2_500L) {
+				tentacleAttack = false;
+				tentacleLength = 0.0f;
+			} else {
+				if(player.isAlive()) {
+					tentacleLength += TENTACLE_GROWTH_RATE;
+					if(tentacleLength > 1.0f) tentacleLength = 1.0f;
+					for(int i = 0; i < 3; i++) {
+						float ang = ((theta - TENTACLE_DEVIATION) + (i * TENTACLE_DEVIATION));
+						float oX = (position.x + (TENTACLE_ATTACK_DIST / 2));
+						float oY = position.y;
+						
+						Rectangle rect = new Rectangle(oX, (oY - 16.0f), (tentacleLength * TENTACLE_ATTACK_DIST), 32.0f);
+						tentacles[i] = rect.transform(Transform.createRotateTransform(ang, position.x, position.y));
+						
+						// Check for collision with player.
+						if(player.getCollider().intersects(tentacles[i])) {
+							player.getStatusHandler().addStatus(new ParalysisEffect(3_000L, cTime), cTime);
+							playerGrabbed = true;
+							tentacleAttack = false;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	private void vomit(long cTime) {
-		if(Player.getPlayer().isAlive() && (cTime >= (lastBile + Aberration.BILE_DELAY))) {
+		long sincePlayerGrabbed = (cTime - timePlayerGrabbed);
+		boolean canVomit = (sincePlayerGrabbed >= 5_000L);
+		if(Player.getPlayer().isAlive() && !tentacleAttack && !playerGrabbed && canVomit && (cTime >= (lastBile + Aberration.BILE_DELAY))) {
 			for(int i = 0; i < Aberration.BILE_PER_TICK; i++) {
 				Color color = ProjectileType.BILE.getColor();
 				float velocity = ProjectileType.BILE.getVelocity();
@@ -115,6 +192,27 @@ public class Aberration extends Boss {
 	
 	@Override
 	public void render(Graphics g, long cTime) {
+		// Render the Aberration's tentacles.
+		if(!dead()) {
+			for(int i = 0; i < 3; i++) {
+				Image tentacle = AssetManager.getManager().getImage(TENTACLE_IMAGE);
+				if(tentacleAttack && (tentacles[i] != null) && (tentacle != null)) {
+					float adjTheta = (theta - TENTACLE_DEVIATION) + (i * TENTACLE_DEVIATION);
+					float deg = (float)Math.toDegrees(adjTheta);
+					float x = (position.x + (float)(Math.cos(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
+					float y = (position.y + (float)(Math.sin(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
+					g.rotate(x, y, deg);
+					tentacle.draw(x, (y - 16.0f), (tentacleLength * tentacle.getWidth()), tentacle.getHeight());
+					g.rotate(x, y, -deg);
+					
+					if(Globals.SHOW_COLLIDERS) {
+						g.setColor(Color.red);
+						g.draw(tentacles[i]);
+					}
+				}
+			}
+		}
+		
 		// Even if Aberration is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		// Only render the Aberration until it dies.
@@ -134,20 +232,22 @@ public class Aberration extends Boss {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		velocity.x = (float)Math.cos(theta) * Aberration.SPEED * delta;
-		velocity.y = (float)Math.sin(theta) * Aberration.SPEED * delta;
-
-		avoidObstacles(gs, delta);
-		
-		if(!moveBlocked) {
-			position.x += velocity.x;
-			position.y += velocity.y;
+		if(!tentacleAttack && !playerGrabbed) {
+			velocity.x = (float)Math.cos(theta) * Aberration.SPEED * delta;
+			velocity.y = (float)Math.sin(theta) * Aberration.SPEED * delta;
+	
+			avoidObstacles(gs, delta);
+			
+			if(!moveBlocked) {
+				position.x += velocity.x;
+				position.y += velocity.y;
+			}
+			
+			moveBlocked = false;
+			
+			bounds.setCenterX(position.x);
+			bounds.setCenterY(position.y);
 		}
-		
-		moveBlocked = false;
-		
-		bounds.setCenterX(position.x);
-		bounds.setCenterY(position.y);
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
+import com.gzsr.status.Status;
 
 public class BigMama extends Enemy {
 	private static final int FIRST_WAVE = 15;
@@ -106,20 +107,22 @@ public class BigMama extends Enemy {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		velocity.x = (float)Math.cos(theta) * BigMama.SPEED * delta;
-		velocity.y = (float)Math.sin(theta) * BigMama.SPEED * delta;
-
-		avoidObstacles(gs, delta);
-		
-		if(!moveBlocked) {
-			position.x += velocity.x;
-			position.y += velocity.y;
+		if(!statusHandler.hasStatus(Status.PARALYSIS)) {
+			velocity.x = (float)Math.cos(theta) * BigMama.SPEED * delta;
+			velocity.y = (float)Math.sin(theta) * BigMama.SPEED * delta;
+	
+			avoidObstacles(gs, delta);
+			
+			if(!moveBlocked) {
+				position.x += velocity.x;
+				position.y += velocity.y;
+			}
+			
+			moveBlocked = false;
+			
+			bounds.setCenterX(position.x);
+			bounds.setCenterY(position.y);
 		}
-		
-		moveBlocked = false;
-		
-		bounds.setCenterX(position.x);
-		bounds.setCenterY(position.y);
 	}
 	
 	@Override

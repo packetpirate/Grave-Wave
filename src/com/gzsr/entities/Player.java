@@ -54,7 +54,7 @@ public class Player implements Entity {
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void move(float xOff, float yOff) {
-		if(isAlive()) {
+		if(isAlive() && !statusHandler.hasStatus(Status.PARALYSIS)) {
 			float tx = position.x + xOff;
 			float ty = position.y + yOff;
 			if((tx >= 0) && (tx < Globals.WIDTH) && 
