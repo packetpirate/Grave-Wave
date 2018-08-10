@@ -27,6 +27,7 @@ import com.gzsr.objects.weapons.ranged.Remington;
 import com.gzsr.objects.weapons.ranged.SAWRevolver;
 import com.gzsr.objects.weapons.ranged.SentryWeapon;
 import com.gzsr.objects.weapons.ranged.Stinger;
+import com.gzsr.objects.weapons.ranged.Taser;
 
 public class ShopController {
 	private static final float CHANCE = 0.4f;
@@ -105,7 +106,7 @@ public class ShopController {
 			BastardSword.class, Lollipop.class, AK47.class, AWP.class, BigRedButton.class,
 			BowAndArrow.class, ClaymoreWeapon.class, Crossbow.class, Flamethrower.class, GrenadeLauncher.class,
 			LaserBarrier.class, MolotovWeapon.class, Mossberg.class, MP5.class, Remington.class,
-			SAWRevolver.class, SentryWeapon.class, Stinger.class
+			SAWRevolver.class, SentryWeapon.class, Stinger.class, Taser.class
 		};
 		
 		unreleased.clear();
