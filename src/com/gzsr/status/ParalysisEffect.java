@@ -11,7 +11,7 @@ public class ParalysisEffect extends StatusEffect {
 	public ParalysisEffect(long duration_, long created_) {
 		super(Status.PARALYSIS, duration_, created_);
 	}
-
+	
 	@Override
 	public void onApply(Entity e, long cTime) {
 		StatusMessages.getInstance().addMessage("Paralyzed!", e, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);

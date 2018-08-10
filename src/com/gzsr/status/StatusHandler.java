@@ -26,6 +26,10 @@ public class StatusHandler {
 	public List<StatusEffect> getStatusEffects() { return statusEffects; }
 	public void clearAll() { statusEffects.clear(); }
 	
+	private List<Status> immunities;
+	public boolean isImmuneTo(Status st) { return immunities.contains(st); }
+	public void addImmunity(Status st) { immunities.add(st); }
+	
 	public void destroyAll(long cTime) {
 		statusEffects.stream().forEach(status -> status.onDestroy(entity, cTime));
 		statusEffects.clear();
@@ -48,17 +52,19 @@ public class StatusHandler {
 	}
 	
 	public void addStatus(StatusEffect effect, long cTime) {
-		// First check to see if the player already has this status.
+		if(isImmuneTo(effect.getStatus())) {
+			effect.noEffect(entity, cTime);
+			return;
+		}
+		
 		for(StatusEffect se : statusEffects) {
 			Status s = se.getStatus();
 			if(s.equals(effect.getStatus())) {
-				// Refresh the effect rather than adding it to the list.
 				se.refresh(cTime);
 				return;
 			}
 		}
 		
-		// The player does not have this effect. Add it.
 		effect.onApply(entity, cTime);
 		statusEffects.add(effect);
 	}
@@ -74,6 +80,7 @@ public class StatusHandler {
 	public StatusHandler(Entity entity_) {
 		entity = entity_;
 		statusEffects = new ArrayList<StatusEffect>();
+		immunities = new ArrayList<Status>();
 	}
 	
 	public void update(GameState gs, long cTime, int delta) {

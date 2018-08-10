@@ -12,6 +12,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.Status;
 
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
@@ -42,6 +43,9 @@ public class Zombat extends Boss {
 		
 		this.health = Dice.roll(Zombat.MIN_HEALTH_COUNT, Zombat.MIN_HEALTH_SIDES, Zombat.MIN_HEALTH_MOD);
 		this.damage = new Dice(Zombat.MIN_DAMAGE_COUNT, Zombat.MIN_DAMAGE_SIDES);
+		
+		this.statusHandler.addImmunity(Status.PARALYSIS);
+		this.statusHandler.addImmunity(Status.POISON);
 		
 		siphoningBlood = false;
 	}

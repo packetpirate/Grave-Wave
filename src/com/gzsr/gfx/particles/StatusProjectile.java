@@ -14,11 +14,9 @@ public class StatusProjectile extends Projectile {
 		
 		if(e instanceof Enemy) {
 			Enemy enemy = (Enemy) e;
-			effect.onApply(enemy, cTime);
 			enemy.getStatusHandler().addStatus(effect, cTime);
 		} else if(e instanceof Player) {
 			Player player = (Player) e;
-			effect.onApply(player, cTime);
 			player.getStatusHandler().addStatus(effect, cTime);
 		}
 	}

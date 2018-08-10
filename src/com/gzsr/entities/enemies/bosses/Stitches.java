@@ -14,6 +14,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
+import com.gzsr.status.Status;
 
 public class Stitches extends Boss {
 	private static final int FIRST_WAVE = 25;
@@ -47,6 +48,9 @@ public class Stitches extends Boss {
 		
 		this.health = Dice.roll(Stitches.MIN_HEALTH_COUNT, Stitches.MIN_HEALTH_SIDES, Stitches.MIN_HEALTH_MOD);
 		this.damage = new Dice(Stitches.MIN_DAMAGE_COUNT, Stitches.MIN_DAMAGE_SIDES);
+		
+		this.statusHandler.addImmunity(Status.PARALYSIS);
+		this.statusHandler.addImmunity(Status.POISON);
 		
 		hook = null;
 		hooked = false;

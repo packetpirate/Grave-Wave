@@ -27,6 +27,7 @@ import com.gzsr.objects.items.Powerups;
 import com.gzsr.states.GameState;
 import com.gzsr.status.DamageEffect;
 import com.gzsr.status.ParalysisEffect;
+import com.gzsr.status.Status;
 
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
@@ -78,6 +79,9 @@ public class Aberration extends Boss {
 		
 		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
 		this.damage = new Dice(Aberration.MIN_DAMAGE_COUNT, Aberration.MIN_DAMAGE_SIDES);
+		
+		this.statusHandler.addImmunity(Status.PARALYSIS);
+		this.statusHandler.addImmunity(Status.POISON);
 		
 		this.tentacles = new Shape[3];
 		this.tentacleAttack = false;
