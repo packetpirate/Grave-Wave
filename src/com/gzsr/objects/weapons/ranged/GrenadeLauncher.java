@@ -12,10 +12,10 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
 
 public class GrenadeLauncher extends RangedWeapon {
-	private static final int PRICE = 7_500;
-	private static final int AMMO_PRICE = 1_500;
-	private static final long COOLDOWN = 1_000L;
-	private static final int CLIP_SIZE = 8;
+	private static final int PRICE = 6_000;
+	private static final int AMMO_PRICE = 720;
+	private static final long COOLDOWN = 750L;
+	private static final int CLIP_SIZE = 6;
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
@@ -27,7 +27,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final String ICON_NAME = "GZS_HandEgg";
 	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
 	private static final String EXP_NAME = "GZS_Explosion";
-	private static final String FIRE_SOUND = "throw2";
+	private static final String FIRE_SOUND = "grenade_launcher";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	public GrenadeLauncher() {
@@ -59,7 +59,10 @@ public class GrenadeLauncher extends RangedWeapon {
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
 
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS);
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, 
+									  new Pair<Float>(0.0f, 0.0f), 
+									  dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS, 
+									  cTime);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		
@@ -116,7 +119,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	
 	@Override
 	public String getName() {
-		return "Grenade Launcher";
+		return "M32 MGL-140";
 	}
 	
 	@Override

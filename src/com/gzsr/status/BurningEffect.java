@@ -9,6 +9,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.particles.emitters.BurningEmitter;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 
 public class BurningEffect extends StatusEffect {
@@ -16,7 +17,7 @@ public class BurningEffect extends StatusEffect {
 	public static final int MIN_DAMAGE_SIDES = 4;
 	public static final int MIN_DAMAGE_MOD = 2;
 	public static final long DURATION = 5000L;
-	public static final long DAMAGE_INTERVAL = 100L;
+	public static final long DAMAGE_INTERVAL = 400L;
 	
 	private BurningEmitter emitter;
 	private Dice damage;
@@ -71,7 +72,7 @@ public class BurningEffect extends StatusEffect {
 					dmg += (dmg * (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
 					
-					enemy.takeDamage(dmg, 0.0f, 0.0f, cTime, 0, false);
+					enemy.takeDamage(DamageType.FIRE, dmg, 0.0f, 0.0f, cTime, 0, false);
 					lastDamage = cTime;
 				}
 			} else if(e instanceof Player) {

@@ -9,18 +9,18 @@ import com.gzsr.misc.Pair;
 
 public enum EnemyType {
 	// Enemies
-	ZUMBY("GZS_Zumby3", 48, 48, 4, 200, 30, 50, 25),
-	CHUCK("GZS_Upchuck2", 64, 64, 4, 400, 100, 140, 100),
-	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 100, 140, 100),
-	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150, 40, 60, 50),
-	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400, 300, 500, 500),
-	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 5, 15, 10),
-	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200, 400, 600, 750),
-	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200, 750, 1_000, 1_500),
+	ZUMBY("GZS_Zumby3", 48, 48, 4, 200, 1, 5, 25),
+	CHUCK("GZS_Upchuck2", 64, 64, 4, 400, 20, 40, 100),
+	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 30, 40, 100),
+	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150, 5, 20, 50),
+	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400, 50, 100, 500),
+	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 1, 5, 10),
+	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200, 75, 150, 750),
+	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200, 150, 200, 1_500),
 	
 	// Bosses
 	ABERRATION("GZS_Aberration2", 128, 128, 4, 150, 1_000, 1_500, 5_000), 
-	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50, 300, 600, 1_000),
+	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50, 500, 750, 1_000),
 	STITCHES("GZS_Stitches", 128, 128, 4, 150, 2_000, 4_000, 10_000);
 	
 	private String animationName;
@@ -60,6 +60,8 @@ public enum EnemyType {
 			case CHUCK: return Upchuck.appearsOnWave();
 			case GASBAG: return Gasbag.appearsOnWave();
 			case BIG_MAMA: return BigMama.appearsOnWave();
+			case STARFRIGHT: return Starfright.appearsOnWave();
+			case ELSALVO: return ElSalvo.appearsOnWave();
 			case ABERRATION: return Aberration.appearsOnWave();
 			case ZOMBAT_SWARM: return Zombat.appearsOnWave();
 			case STITCHES: return Stitches.appearsOnWave();
@@ -74,6 +76,8 @@ public enum EnemyType {
 			case CHUCK: return Upchuck.getSpawnCost();
 			case GASBAG: return Gasbag.getSpawnCost();
 			case BIG_MAMA: return BigMama.getSpawnCost();
+			case STARFRIGHT: return Starfright.getSpawnCost();
+			case ELSALVO: return ElSalvo.getSpawnCost();
 			case ABERRATION: return Aberration.getSpawnCost();
 			case ZOMBAT_SWARM: return Zombat.getSpawnCost();
 			case STITCHES: return Stitches.getSpawnCost();
@@ -88,6 +92,8 @@ public enum EnemyType {
 			case CHUCK: return new Upchuck(position_);
 			case GASBAG: return new Gasbag(position_);
 			case BIG_MAMA: return new BigMama(position_);
+			case STARFRIGHT: return new Starfright(position_);
+			case ELSALVO: return new ElSalvo(position_);
 			case ABERRATION: return new Aberration(position_);
 			case ZOMBAT_SWARM: return new Zombat(position_);
 			case STITCHES: return new Stitches(position_);

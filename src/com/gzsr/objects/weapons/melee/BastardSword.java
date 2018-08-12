@@ -7,7 +7,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class BastardSword extends MeleeWeapon {
-	private static final int PRICE = 5_000;
+	private static final int PRICE = 400;
 	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 96.0f);
 	private static final float HIT_AREA_OFFSET = -32.0f;
 	private static final float IMAGE_DISTANCE = -8.0f;

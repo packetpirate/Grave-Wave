@@ -11,6 +11,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.DeafenedEffect;
 import com.gzsr.status.FlashbangEffect;
@@ -41,7 +42,7 @@ public class Starfright extends Enemy {
 			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.15f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.25f);
 	
-	private boolean exploding, flashing;
+	private boolean exploding, flashing, exploded;
 	private long flashStart;
 	private long lastFlash;
 	
@@ -49,8 +50,12 @@ public class Starfright extends Enemy {
 		super(EnemyType.STARFRIGHT, position_);
 		this.health = Dice.roll(Starfright.MIN_HEALTH_COUNT, Starfright.MIN_HEALTH_SIDES, Starfright.MIN_HEALTH_MOD);
 		
+		this.damageImmunities.add(DamageType.CONCUSSIVE);
+		this.statusHandler.addImmunity(Status.PARALYSIS);
+		
 		exploding = false;
 		flashing = false;
+		exploded = false;
 		flashStart = 0L;
 		lastFlash = 0L;
 	}
@@ -123,6 +128,12 @@ public class Starfright extends Enemy {
 		player.takeDamage(total, cTime);
 		
 		health = 0.0;
+		exploded = true;
+	}
+	
+	@Override
+	public boolean isAlive(long cTime) {
+		return (!exploded && !dead());
 	}
 
 	@Override
@@ -179,6 +190,12 @@ public class Starfright extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Starfright";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Exploded? %s",
+							 getName(), position.x, position.y, health, (exploded ? "Yes" : "No"));
 	}
 	
 	@Override

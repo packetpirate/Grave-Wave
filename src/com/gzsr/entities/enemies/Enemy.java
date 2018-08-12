@@ -22,6 +22,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.StatusHandler;
 
@@ -51,6 +52,8 @@ public abstract class Enemy implements Entity {
 	public int getCashValue() { return cash; }
 	protected int experience;
 	public int getExpValue() { return experience; }
+	
+	protected List<DamageType> damageImmunities;
 	
 	protected StatusHandler statusHandler;
 	public StatusHandler getStatusHandler() { return statusHandler; }
@@ -91,13 +94,14 @@ public abstract class Enemy implements Entity {
 		
 		this.moveBlocked = false;
 		this.attacking = false;
-		this.lastAttack = 0L;
+		this.lastAttack = -getAttackDelay();
 		this.theta = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 		this.health = 0.0;
 		this.damage = new Dice(1, 1);
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
+		this.damageImmunities = new ArrayList<DamageType>();
 		this.statusHandler = new StatusHandler(this);
 		this.deathHandled = false;
 		
@@ -114,6 +118,8 @@ public abstract class Enemy implements Entity {
 	public boolean isAlive(long cTime) {
 		return !dead();
 	}
+	
+	public abstract String print();
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
@@ -264,16 +270,16 @@ public abstract class Enemy implements Entity {
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
 	
-	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
+	public void takeDamage(DamageType type, double amnt, float knockback, long cTime, int delta) {
+		takeDamage(type, amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
 	}
 	
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
-		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(type, amnt, knockback, knockbackTheta, cTime, delta, flash, false);
 	}
 	
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
-		if(!dead()) {
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
+		if(!dead() && !damageImmunities.contains(type)) {
 			health -= amnt;
 			
 			createDamageText(amnt, 24.0f, knockbackTheta, cTime, isCritical);

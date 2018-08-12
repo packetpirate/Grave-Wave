@@ -96,7 +96,7 @@ public abstract class RangedWeapon extends Weapon {
 			}
 		}
 		
-		if(!release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
+		if(!automatic && !release && !Controls.getInstance().getMouse().isLeftDown()) release = true;
 		if((muzzleFlash != null) && (muzzleFlash.isActive(cTime))) muzzleFlash.update(cTime);
 	}
 	
@@ -112,6 +112,9 @@ public abstract class RangedWeapon extends Weapon {
 			if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), (player.getRotation() - (float)(Math.PI / 2)));
 		}
 	}
+	
+	// Determines if a player can move while this weapon is being used.
+	public boolean blockingMovement() { return false; }
 	
 	@Override
 	public boolean canUse(long cTime) {
@@ -182,9 +185,9 @@ public abstract class RangedWeapon extends Weapon {
 		int maxAmmo = getMaxClips() * getClipSize();
 		int currentAmmo = ammoInClip + ammoInInventory;
 		int difference = maxAmmo - currentAmmo;
-		float pricePerAmmo = getAmmoPrice() / getClipSize();
+		double pricePerAmmo = (double)getAmmoPrice() / (double)getClipSize();
 		
-		return Math.round(pricePerAmmo * difference);
+		return (int)Math.round(pricePerAmmo * difference);
 	}
 	
 	public abstract ProjectileType getProjectile();

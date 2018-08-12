@@ -13,7 +13,7 @@ import com.gzsr.objects.weapons.Explosion;
 
 public class Stinger extends RangedWeapon {
 	private static final int PRICE = 38_000;
-	private static final int AMMO_PRICE = 5_000;
+	private static final int AMMO_PRICE = 10_000;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 2;
@@ -60,7 +60,10 @@ public class Stinger extends RangedWeapon {
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
 
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, Stinger.KNOCKBACK, Stinger.EXP_RADIUS);
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME, 
+									  new Pair<Float>(0.0f, 0.0f), 
+									  dmg, Stinger.KNOCKBACK, Stinger.EXP_RADIUS, 
+									  cTime);
 		Missile missile = new Missile(particle, exp);
 		projectiles.add(missile);
 		

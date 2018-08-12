@@ -15,10 +15,10 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.BurningEffect;
 
 public class Flamethrower extends RangedWeapon {
-	private static final int PRICE = 7_500;
-	private static final int AMMO_PRICE = 1_000; 
+	private static final int PRICE = 3_200;
+	private static final int AMMO_PRICE = 300; 
 	private static final long COOLDOWN = 25L;
-	private static final int CLIP_SIZE = 100;
+	private static final int CLIP_SIZE = 200;
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 5;
 	private static final long RELOAD_TIME = 3_000L;

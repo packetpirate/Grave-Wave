@@ -44,6 +44,7 @@ public abstract class Weapon implements Entity {
 	
 	public abstract int getPrice();
 	public abstract Pair<Integer> getDamage();
+	public DamageType getDamageType() { return DamageType.NONE; }
 	
 	public abstract float getKnockback();
 	public abstract Image getInventoryIcon();

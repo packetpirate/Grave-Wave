@@ -254,6 +254,7 @@ public class LoadingState extends BasicGameState {
 			"sounds/m4a1_shot_01.wav",
 			"sounds/mossberg_shot_01.wav",
 			"sounds/sniper_shot.wav",
+			"sounds/grenade_launcher.wav",
 			"sounds/throw2.wav",
 			"sounds/landmine_armed.wav",
 			"sounds/shotgun1.wav",

@@ -18,6 +18,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.BigMama;
 import com.gzsr.entities.enemies.ElSalvo;
+import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
 import com.gzsr.entities.enemies.Rotdog;
@@ -227,7 +228,7 @@ public class Console implements Entity {
 							float radius = Float.parseFloat(tokens[4]);
 							int id = Globals.generateEntityID();
 							
-							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(x, y), damage, 10.0f, radius);
+							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(x, y), damage, 10.0f, radius, pauseTime);
 							gs.addEntity(String.format("explosion%d", id), exp);
 						} catch(NumberFormatException nfe) {
 							pastCommands.add("  ERROR: Invalid parameters specified for /explode command.");
@@ -261,12 +262,20 @@ public class Console implements Entity {
 						}
 					} else if(command.equals("ec") && (args == 0)) {
 						// Print information about remaining enemies in each enemy controller list.
+						List<Enemy> alive = ec.getAliveEnemies();
 						int unborn = ec.getUnbornEnemies().size();
-						int alive = ec.getAliveEnemies().size();
 						int immediate = ec.getImmediateEnemies().size();
 						
 						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive, immediate);
 						pastCommands.add(str);
+						
+						// Print 5 of the remaining alive enemies, if any.
+						if(alive.size() > 0) {
+							for(int i = 0; i < Math.min(alive.size(), 5); i++) {
+								String pr = alive.get(i).print();
+								pastCommands.add(pr);
+							}
+						}
 					} else {
 						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}

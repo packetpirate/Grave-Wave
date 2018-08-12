@@ -6,18 +6,21 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.math.Dice;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 
 public class DamageEffect extends StatusEffect {
+	private DamageType type;
 	private Dice damage;
 	private int modifier;
 	
 	private long interval;
 	private long lastDamage;
 	
-	public DamageEffect(Dice damage_, int modifier_, long interval_, long duration_, long created_) {
+	public DamageEffect(DamageType type_, Dice damage_, int modifier_, long interval_, long duration_, long created_) {
 		super(Status.DAMAGE, duration_, created_);
 		
+		this.type = type_;
 		this.damage = damage_;
 		this.modifier = modifier_;
 		
@@ -40,7 +43,7 @@ public class DamageEffect extends StatusEffect {
 			if(elapsed >= interval) {
 				double amnt = damage.roll(modifier);
 				if(e instanceof Player) Player.getPlayer().takeDamage(amnt, cTime);
-				else if(e instanceof Enemy) ((Enemy)e).takeDamage(amnt, 0.0f, cTime, delta);
+				else if(e instanceof Enemy) ((Enemy)e).takeDamage(type, amnt, 0.0f, cTime, delta);
 				lastDamage = cTime;
 			}
 		}

@@ -21,12 +21,23 @@ import com.gzsr.status.StatusEffect;
 
 public class Explosion implements Entity {
 	public enum Type {
-		NORMAL, POISON, BLOOD
+		NORMAL(250L), 
+		POISON(1_000L), 
+		BLOOD(250L);
+		
+		private long damageWindow;
+		public long getDamageWindow() { return damageWindow; }
+		
+		Type(long damageWindow_) {
+			this.damageWindow = damageWindow_;
+		}
 	}
 	
 	private Animation anim;
+	
 	private Type type;
 	public Type getType() { return type; }
+	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -35,21 +46,24 @@ public class Explosion implements Entity {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
+	
 	private Shape bounds;
 	public Shape getCollider() { return bounds; }
+	
 	private StatusEffect status;
 	private double damage;
 	private float knockback;
 	private float radius;
 	private boolean started;
+	private long created;
 	
 	private List<Entity> entitiesAffected;
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float knockback_, float radius_) {
-		this(type_, animName_, position_, null, damage_, knockback_, radius_);
+	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float knockback_, float radius_, long cTime) {
+		this(type_, animName_, position_, null, damage_, knockback_, radius_, cTime);
 	}
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float knockback_, float radius_) {
+	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float knockback_, float radius_, long cTime) {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
@@ -61,6 +75,7 @@ public class Explosion implements Entity {
 		this.knockback = knockback_;
 		this.radius = radius_;
 		this.started = false;
+		this.created = cTime;
 		
 		this.entitiesAffected = new ArrayList<Entity>();
 	}
@@ -75,7 +90,8 @@ public class Explosion implements Entity {
 		// Update the animation.
 		if(anim != null) anim.update(cTime);
 		
-		if(isActive(cTime)) {
+		long elapsed = (cTime - created);
+		if(isActive(cTime) && (elapsed <= type.getDamageWindow())) {
 			// TODO: In future, will have to also check for collision with player structures (turret, barrier, etc).
 			// Check for collision with player.
 			checkCollision(Player.getPlayer(), cTime, delta);
@@ -118,7 +134,7 @@ public class Explosion implements Entity {
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					if(en.getCollider().intersects(getCollider())) {
-						en.takeDamage(damage, knockback, cTime, delta);
+						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, cTime, delta);
 						entitiesAffected.add(en);
 						return true;
 					} else return false;

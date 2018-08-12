@@ -15,11 +15,11 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class MP5 extends RangedWeapon {
-	private static final int PRICE = 1_000;
-	private static final int AMMO_PRICE = 250;
+	private static final int PRICE = 1_450;
+	private static final int AMMO_PRICE = 20;
 	private static final long COOLDOWN = 75L;
 	private static final int CLIP_SIZE = 40;
-	private static final int START_CLIPS = 4;
+	private static final int START_CLIPS = 3;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
 	private static final int MIN_DAMAGE_COUNT = 1;

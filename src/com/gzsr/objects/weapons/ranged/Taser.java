@@ -13,8 +13,8 @@ import com.gzsr.misc.Pair;
 import com.gzsr.status.ParalysisEffect;
 
 public class Taser extends RangedWeapon {
-	private static final int PRICE = 3_000;
-	private static final int AMMO_PRICE = 500;
+	private static final int PRICE = 300;
+	private static final int AMMO_PRICE = 75;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
 	private static final int START_CLIPS = 8;

@@ -18,6 +18,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 
@@ -179,6 +180,9 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		return rect;
 	}
+	
+	@Override
+	public DamageType getDamageType() { return DamageType.BLUNT; }
 	
 	public abstract float getDistance();
 	public abstract float getImageDistance();

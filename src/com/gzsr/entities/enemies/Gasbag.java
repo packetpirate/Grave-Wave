@@ -10,6 +10,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 import com.gzsr.status.PoisonEffect;
@@ -39,11 +40,16 @@ public class Gasbag extends Enemy {
 			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	
 	private Sound explode;
+	private boolean exploded;
 	
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
 		this.health = Dice.roll(Gasbag.MIN_HEALTH_COUNT, Gasbag.MIN_HEALTH_SIDES, Gasbag.MIN_HEALTH_MOD);
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
+		this.exploded = false;
+		
+		this.damageImmunities.add(DamageType.CORROSIVE);
+		this.statusHandler.addImmunity(Status.POISON);
 	}
 	
 	@Override
@@ -69,11 +75,20 @@ public class Gasbag extends Enemy {
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
 		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DAMAGE, Gasbag.POISON_DURATION, cTime);
-		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", new Pair<Float>(position.x, position.y), pe, 0.0, Gasbag.POISON_KNOCKBACK, Gasbag.EXPLODE_RADIUS);
+		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", 
+										 new Pair<Float>(position.x, position.y), pe, 
+										 0.0, Gasbag.POISON_KNOCKBACK, Gasbag.EXPLODE_RADIUS, 
+										 cTime);
 		gs.addEntity(String.format("poisonExplosion%d", id), poison);
 		
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;
+		exploded = true;
+	}
+	
+	@Override
+	public boolean isAlive(long cTime) {
+		return (!exploded && !dead());
 	}
 
 	@Override
@@ -131,6 +146,12 @@ public class Gasbag extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Gasbag";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Exploded? %s",
+							 getName(), position.x, position.y, health, (exploded ? "Yes" : "No"));
 	}
 	
 	@Override

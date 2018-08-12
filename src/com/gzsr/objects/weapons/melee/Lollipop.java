@@ -14,7 +14,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Lollipop extends MeleeWeapon {
-	private static final int PRICE = 100_000;
+	private static final int PRICE = 1_000;
 	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 64.0f);
 	private static final float HIT_AREA_OFFSET = -32.0f;
 	private static final float IMAGE_DISTANCE = -8.0f;

@@ -14,10 +14,10 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class NailGun extends RangedWeapon {
-	private static final int PRICE = 500;
-	private static final int AMMO_PRICE = 50;
+	private static final int PRICE = 400;
+	private static final int AMMO_PRICE = 2;
 	private static final long COOLDOWN = 200L;
-	private static final int CLIP_SIZE = 50;
+	private static final int CLIP_SIZE = 110;
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;

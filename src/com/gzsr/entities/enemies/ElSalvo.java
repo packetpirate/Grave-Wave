@@ -12,13 +12,14 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
 public class ElSalvo extends Enemy {
 	public static final int FIRST_WAVE = 35;
-	private static final int SPAWN_COST = 5;
+	private static final int SPAWN_COST = 12;
 	private static final int MIN_HEALTH_COUNT = 5;
 	private static final int MIN_HEALTH_SIDES = 10;
 	private static final int MIN_HEALTH_MOD = 50;
@@ -49,6 +50,10 @@ public class ElSalvo extends Enemy {
 		super(EnemyType.ELSALVO, position_);
 		this.health = Dice.roll(ElSalvo.MIN_HEALTH_COUNT, ElSalvo.MIN_HEALTH_SIDES, ElSalvo.MIN_HEALTH_MOD);
 		this.explode = AssetManager.getManager().getSound("explosion2");
+		
+		this.damageImmunities.add(DamageType.FIRE);
+		this.damageImmunities.add(DamageType.CONCUSSIVE);
+		this.statusHandler.addImmunity(Status.BURNING);
 		
 		exploding = false;
 		flashing = false;
@@ -106,12 +111,20 @@ public class ElSalvo extends Enemy {
 	
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(position.x, position.y), ElSalvo.EXPLODE_DAMAGE, 0.0f, ElSalvo.EXPLODE_RADIUS);
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", 
+									  new Pair<Float>(position.x, position.y), 
+									  ElSalvo.EXPLODE_DAMAGE, 0.0f, ElSalvo.EXPLODE_RADIUS, 
+									  cTime);
 		gs.addEntity(String.format("explosion%d", id), exp);
 		
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;
 		exploded = true;
+	}
+	
+	@Override
+	public boolean isAlive(long cTime) {
+		return (!exploded && !dead());
 	}
 
 	@Override
@@ -172,6 +185,12 @@ public class ElSalvo extends Enemy {
 	@Override
 	public String getDescription() {
 		return "El Salvo";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Exploded? %s",
+							 getName(), position.x, position.y, health, (exploded ? "Yes" : "No"));
 	}
 	
 	@Override

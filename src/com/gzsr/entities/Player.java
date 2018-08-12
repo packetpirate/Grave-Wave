@@ -53,14 +53,19 @@ public class Player implements Entity {
 	
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
+	private Pair<Float> velocity;
+	public Pair<Float> getVelocity() { return velocity; }
 	public void move(float xOff, float yOff) {
 		if(isAlive() && !statusHandler.hasStatus(Status.PARALYSIS)) {
-			float tx = position.x + xOff;
-			float ty = position.y + yOff;
+			velocity.x = xOff;
+			velocity.y = yOff;
+			
+			float tx = position.x + velocity.x;
+			float ty = position.y + velocity.y;
 			if((tx >= 0) && (tx < Globals.WIDTH) && 
 			   (ty >= 0) && (ty < Globals.HEIGHT)) {
-				position.x += xOff;
-				position.y += yOff;
+				position.x += velocity.x;
+				position.y += velocity.y;
 			}
 		}
 	}
@@ -177,6 +182,7 @@ public class Player implements Entity {
 	
 	public Player() {
 		position = new Pair<Float>(0.0f, 0.0f);
+		velocity = new Pair<Float>(0.0f, 0.0f);
 		
 		attributes = new Attributes();
 		statusHandler = new StatusHandler(this);
@@ -235,9 +241,13 @@ public class Player implements Entity {
 		RangedWeapon cRangedWeapon = getCurrentRanged();
 		
 		if(cMeleeWeapon != null) canMove = !cMeleeWeapon.isAttacking(); // Can't move if melee attacking.
+		if(cRangedWeapon != null) canMove = (canMove && !cRangedWeapon.blockingMovement());
 		
 		if(canMove) {
-			float adjSpeed = (getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta;
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
+			
+			float adjSpeed = ((getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
@@ -334,6 +344,9 @@ public class Player implements Entity {
 	public void reset() {
 		position.x = (float)(Globals.WIDTH / 2);
 		position.y = (float)(Globals.HEIGHT / 2);
+		
+		velocity.x = 0.0f;
+		velocity.y = 0.0f;
 		
 		bounds = new Rectangle(position.x, position.y, getImage().getWidth(), getImage().getHeight());
 		
@@ -541,7 +554,7 @@ public class Player implements Entity {
 						
 						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 						double totalDamage = (p.getDamage() * damagePercentage);
-						if(totalDamage > 0.0) enemy.takeDamage(totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
+						if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 					}
 					
 					return true;
@@ -553,7 +566,7 @@ public class Player implements Entity {
 			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
 				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 				double totalDamage = (mw.rollDamage() * damagePercentage);
-				if(totalDamage > 0.0) enemy.takeDamage(totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
+				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
 			}
 		}
 		

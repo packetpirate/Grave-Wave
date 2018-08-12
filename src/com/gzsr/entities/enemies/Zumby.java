@@ -83,5 +83,11 @@ public class Zumby extends Enemy {
 	}
 	
 	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health",
+							 getName(), position.x, position.y, health);
+	}
+	
+	@Override
 	public LootTable getLootTable() { return Zumby.LOOT; }
 }

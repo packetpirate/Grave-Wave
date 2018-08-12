@@ -17,6 +17,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
@@ -51,6 +52,10 @@ public class Upchuck extends Enemy {
 		this.health = Dice.roll(Upchuck.MIN_HEALTH_COUNT, Upchuck.MIN_HEALTH_SIDES, Upchuck.MIN_HEALTH_MOD);
 		this.bile = new ArrayList<Projectile>();
 		this.lastBile = 0L;
+		
+		this.damageImmunities.add(DamageType.CORROSIVE);
+		this.statusHandler.addImmunity(Status.POISON);
+		this.statusHandler.addImmunity(Status.PARALYSIS);
 	}
 	
 	@Override
@@ -181,6 +186,12 @@ public class Upchuck extends Enemy {
 	@Override
 	public String getDescription() {
 		return "Upchuck";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Bile Left: %d",
+							 getName(), position.x, position.y, health, bile.size());
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
 
@@ -20,11 +21,11 @@ public class Zombat extends Boss {
 	private static final int MIN_HEALTH_COUNT = 30;
 	private static final int MIN_HEALTH_SIDES = 10;
 	private static final int MIN_HEALTH_MOD = 1_200;
-	private static final int MIN_DAMAGE_COUNT = 2;
+	private static final int MIN_DAMAGE_COUNT = 1;
 	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 4;
+	private static final int MIN_DAMAGE_MOD = 2;
 	private static final long ATTACK_DELAY = 1_000L;
-	private static final float SPEED = 0.2f;
+	private static final float SPEED = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
 	
 	private static final Color BLOOD_COLOR = new Color(0xAA0000);
@@ -123,18 +124,18 @@ public class Zombat extends Boss {
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
+	public void takeDamage(DamageType type, double amnt, float knockback, long cTime, int delta) {
+		takeDamage(type, amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
-		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(type, amnt, knockback, knockbackTheta, cTime, delta, flash, false);
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
-		if(!dead()) {
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
+		if(!dead() && !damageImmunities.contains(type)) {
 			health -= amnt;
 			
 			createDamageText(amnt, 32.0f, knockbackTheta, cTime, isCritical);
@@ -173,6 +174,12 @@ public class Zombat extends Boss {
 	@Override
 	public String getDescription() {
 		return "Zombat";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health",
+							 getName(), position.x, position.y, health);
 	}
 	
 	@Override

@@ -47,6 +47,8 @@ public class BigMama extends Enemy {
 		super(EnemyType.BIG_MAMA, position);
 		this.health = Dice.roll(BigMama.MIN_HEALTH_COUNT, BigMama.MIN_HEALTH_SIDES, BigMama.MIN_HEALTH_MOD);
 		
+		this.statusHandler.addImmunity(Status.PARALYSIS);
+		
 		explosion = AssetManager.getManager().getSound("explosion2");
 		
 		created = -1L;
@@ -78,7 +80,10 @@ public class BigMama extends Enemy {
 				}
 				
 				// Spawn a blood explosion centered on the Big Mama.
-				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", new Pair<Float>(position.x, position.y), BigMama.EXP_DAMAGE, BigMama.EXP_KNOCKBACK, BigMama.EXP_DIST);
+				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", 
+												new Pair<Float>(position.x, position.y), 
+												BigMama.EXP_DAMAGE, BigMama.EXP_KNOCKBACK, BigMama.EXP_DIST, 
+												cTime);
 				((GameState)gs).addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;
@@ -160,6 +165,12 @@ public class BigMama extends Enemy {
 	@Override
 	public String getDescription() { 
 		return "Big Mama"; 
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Exploded? %s",
+							 getName(), position.x, position.y, health, (exploded ? "Yes" : "No"));
 	}
 
 	@Override

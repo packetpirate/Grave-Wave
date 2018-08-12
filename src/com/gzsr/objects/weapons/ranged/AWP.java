@@ -14,10 +14,11 @@ import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.DamageType;
 
 public class AWP extends RangedWeapon {
-	private static final int PRICE = 25_000;
-	private static final int AMMO_PRICE = 2_000;
+	private static final int PRICE = 5_000;
+	private static final int AMMO_PRICE = 125;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 10;
 	private static final int START_CLIPS = 2;
@@ -92,6 +93,9 @@ public class AWP extends RangedWeapon {
 	
 	@Override
 	public Pair<Integer> getDamage() { return damage.getRange(AWP.MIN_DAMAGE_MOD); }
+	
+	@Override
+	public DamageType getDamageType() { return DamageType.PIERCING; }
 	
 	@Override
 	public float getKnockback() { return AWP.KNOCKBACK; }

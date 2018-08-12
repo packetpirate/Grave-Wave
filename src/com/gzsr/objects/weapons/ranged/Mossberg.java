@@ -15,8 +15,8 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class Mossberg extends RangedWeapon {
-	private static final int PRICE = 4_000;
-	private static final int AMMO_PRICE = 500;
+	private static final int PRICE = 350;
+	private static final int AMMO_PRICE = 10;
 	private static final long COOLDOWN = 1_200L;
 	private static final int CLIP_SIZE = 8;
 	private static final int START_CLIPS = 5;

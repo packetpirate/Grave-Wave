@@ -12,10 +12,11 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.DamageType;
 
 public class Remington extends RangedWeapon {
-	private static final int PRICE = 15_000;
-	private static final int AMMO_PRICE = 1_000;
+	private static final int PRICE = 400;
+	private static final int AMMO_PRICE = 15;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 6;
 	private static final int START_CLIPS = 5;
@@ -67,6 +68,9 @@ public class Remington extends RangedWeapon {
 	
 	@Override
 	public Pair<Integer> getDamage() { return damage.getRange(Remington.MIN_DAMAGE_MOD); }
+	
+	@Override
+	public DamageType getDamageType() { return DamageType.PIERCING; }
 	
 	@Override
 	public float getKnockback() { return Remington.KNOCKBACK; }

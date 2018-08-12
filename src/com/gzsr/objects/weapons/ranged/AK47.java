@@ -19,7 +19,7 @@ import com.gzsr.misc.Pair;
 
 public class AK47 extends RangedWeapon {
 	private static final int PRICE = 2_500;
-	private static final int AMMO_PRICE = 400;
+	private static final int AMMO_PRICE = 80;
 	private static final long COOLDOWN = 100L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 4;

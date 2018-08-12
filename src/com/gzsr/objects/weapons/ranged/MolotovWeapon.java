@@ -129,6 +129,7 @@ public class MolotovWeapon extends RangedWeapon {
 	@Override
 	public void unequip() {
 		super.unequip();
+		
 		// Prevents molotov from being thrown after we've switched weapons.
 		charging = false;
 		charge = 0.0f;

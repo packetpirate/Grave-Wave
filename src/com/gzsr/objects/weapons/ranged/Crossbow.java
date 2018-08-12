@@ -13,8 +13,8 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class Crossbow extends RangedWeapon {
-	private static final int PRICE = 5_000;
-	private static final int AMMO_PRICE = 800;
+	private static final int PRICE = 600;
+	private static final int AMMO_PRICE = 75;
 	private static final long COOLDOWN = 1_500L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 5;

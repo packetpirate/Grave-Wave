@@ -14,7 +14,7 @@ import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class Beretta extends RangedWeapon {
-	private static final int AMMO_PRICE = 100;
+	private static final int AMMO_PRICE = 5;
 	private static final long COOLDOWN = 500L;
 	private static final int CLIP_SIZE = 12;
 	private static final int START_CLIPS = 4;

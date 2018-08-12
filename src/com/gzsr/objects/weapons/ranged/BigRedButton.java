@@ -96,7 +96,10 @@ public class BigRedButton extends RangedWeapon {
 			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 			if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
 			
-			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, new Pair<Float>(0.0f, 0.0f), dmg, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS);
+			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, 
+										  new Pair<Float>(0.0f, 0.0f), 
+										  dmg, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS, 
+										  cTime);
 			explosions.add(exp);
 		}
 		

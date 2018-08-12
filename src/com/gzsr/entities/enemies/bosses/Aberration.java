@@ -24,6 +24,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
+import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.DamageEffect;
 import com.gzsr.status.ParalysisEffect;
@@ -80,6 +81,7 @@ public class Aberration extends Boss {
 		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
 		this.damage = new Dice(Aberration.MIN_DAMAGE_COUNT, Aberration.MIN_DAMAGE_SIDES);
 		
+		this.damageImmunities.add(DamageType.CORROSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		this.statusHandler.addImmunity(Status.POISON);
 		
@@ -166,7 +168,7 @@ public class Aberration extends Boss {
 						if(player.getCollider().intersects(tentacles[i])) {
 							Dice tentacleDamage = new Dice(MIN_TENTACLE_COUNT, MIN_TENTACLE_SIDES);
 							player.getStatusHandler().addStatus(new ParalysisEffect(TENTACLE_EFFECT_DURATION, cTime), cTime);
-							player.getStatusHandler().addStatus(new DamageEffect(tentacleDamage, MIN_TENTACLE_MOD, TENTACLE_DAMAGE_INTERVAL, TENTACLE_EFFECT_DURATION, cTime), cTime);
+							player.getStatusHandler().addStatus(new DamageEffect(DamageType.CORROSIVE, tentacleDamage, MIN_TENTACLE_MOD, TENTACLE_DAMAGE_INTERVAL, TENTACLE_EFFECT_DURATION, cTime), cTime);
 							playerGrabbed = true;
 							tentacleAttack = false;
 							timePlayerGrabbed = cTime;
@@ -276,18 +278,18 @@ public class Aberration extends Boss {
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, long cTime, int delta) {
-		takeDamage(amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
+	public void takeDamage(DamageType type, double amnt, float knockback, long cTime, int delta) {
+		takeDamage(type, amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
-		takeDamage(amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
+		takeDamage(type, amnt, knockback, knockbackTheta, cTime, delta, flash, false);
 	}
 	
 	@Override
-	public void takeDamage(double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
-		if(!dead()) {
+	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
+		if(!dead() && !damageImmunities.contains(type)) {
 			health -= amnt;
 			
 			createDamageText(amnt, 64.0f, knockbackTheta, cTime, isCritical);
@@ -320,6 +322,12 @@ public class Aberration extends Boss {
 	@Override
 	public String getDescription() {
 		return "Aberration";
+	}
+	
+	@Override
+	public String print() {
+		return String.format("%s at (%.2f, %.2f) - %.2f health - Bile Left: %d",
+							 getName(), position.x, position.y, health, bile.size());
 	}
 	
 	@Override

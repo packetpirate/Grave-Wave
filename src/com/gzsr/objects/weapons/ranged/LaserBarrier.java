@@ -15,8 +15,8 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
 
 public class LaserBarrier extends RangedWeapon {
-	private static final int PRICE = 1_500;
-	private static final int AMMO_PRICE = 750;
+	private static final int PRICE = 2_000;
+	private static final int AMMO_PRICE = 400;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 2;
 	private static final int START_CLIPS = 4;

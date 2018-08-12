@@ -1,7 +1,5 @@
 package com.gzsr.objects.weapons.ranged;
 
-import java.util.Iterator;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -16,11 +14,10 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
 
 public class BowAndArrow extends RangedWeapon {
-	private static final int PRICE = 2_000;
-	private static final int AMMO_PRICE = 400;
+	private static final int PRICE = 500;
+	private static final int AMMO_PRICE = 150;
 	private static final long COOLDOWN = 1_000L;
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
@@ -54,34 +51,12 @@ public class BowAndArrow extends RangedWeapon {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		// Basically just checking to see if the reload time has elapsed.
-		if(reloading && !isReloading(cTime)) {
-			int takeFromInv = getClipSize() - ammoInClip;
-			int taken = Math.min(takeFromInv, ammoInInventory);
-			ammoInInventory -= taken;
-			ammoInClip += taken;
-			
-			reloading = false;
-		}
-		
-		// Update all projectiles.
-		if(!getProjectiles().isEmpty()) {
-			Iterator<Projectile> it = getProjectiles().iterator();
-			while(it.hasNext()) {
-				Particle p = it.next();
-				if(p.isAlive(cTime)) {
-					p.update(gs, cTime, delta);
-				} else {
-					p.onDestroy((GameState)gs, cTime);
-					it.remove();
-				}
-			}
-		}
+		super.update(gs, cTime, delta);
 		
 		if(equipped) {
 			if(charging) {
 				// If we're charging, increase charge up to max of 1.0f.
-				charge += BowAndArrow.CHARGE_RATE * delta;
+				charge += (BowAndArrow.CHARGE_RATE * delta);
 				if(charge > 1.0f) charge = 1.0f;
 			}
 			
@@ -145,6 +120,7 @@ public class BowAndArrow extends RangedWeapon {
 	@Override
 	public void unequip() {
 		super.unequip();
+		
 		// Prevents arrow from firing after we've switched weapons.
 		charging = false;
 		charge = 0.0f;
