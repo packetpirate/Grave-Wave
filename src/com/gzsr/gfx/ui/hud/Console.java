@@ -267,7 +267,7 @@ public class Console implements Entity {
 						int unborn = ec.getUnbornEnemies().size();
 						int immediate = ec.getImmediateEnemies().size();
 						
-						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive, immediate);
+						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive.size(), immediate);
 						pastCommands.add(str);
 						
 						// Print 5 of the remaining alive enemies, if any.
