@@ -53,6 +53,7 @@ public class Grenade extends Projectile {
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
 		
+		exp.setCreatedTime(cTime);
 		exp.setPosition(position);
 		gs.addEntity(String.format("explosion%d", id), exp);
 		

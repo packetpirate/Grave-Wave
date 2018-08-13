@@ -37,6 +37,7 @@ import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
+import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 
@@ -131,6 +132,9 @@ public class GameState extends BasicGameState implements InputListener {
 						} else if(pair.getValue() instanceof Emitter) {
 							Emitter e = (Emitter) pair.getValue();
 							if(!e.isAlive(time)) it.remove();
+						} else if(pair.getValue() instanceof Explosion) {
+							Explosion exp = (Explosion) pair.getValue();
+							if(!exp.isActive(time)) it.remove();
 						}
 					}
 					
