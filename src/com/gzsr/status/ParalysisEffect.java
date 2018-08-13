@@ -3,6 +3,8 @@ package com.gzsr.status;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
@@ -14,7 +16,13 @@ public class ParalysisEffect extends StatusEffect {
 	
 	@Override
 	public void onApply(Entity e, long cTime) {
-		StatusMessages.getInstance().addMessage("Paralyzed!", e, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
+		Pair<Float> offset = new Pair<Float>(Player.ABOVE_1);
+		if(e instanceof Enemy) {
+			Enemy enemy = (Enemy) e;
+			offset.y = -((float)enemy.getAnimation().getCurrentAnimation().getSrcSize().y);
+		}
+		
+		StatusMessages.getInstance().addMessage("Paralyzed!", e, offset, cTime, 2_000L);
 	}
 
 	@Override

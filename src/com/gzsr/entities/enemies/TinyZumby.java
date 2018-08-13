@@ -14,7 +14,7 @@ public class TinyZumby extends Enemy {
 	private static final int MIN_HEALTH_SIDES = 4;
 	private static final int MIN_HEALTH_MOD = 2;
 	private static final int DAMAGE = 1;
-	private static final float SPEED = 0.20f;
+	private static final float SPEED = 0.15f;
 	private static final long ATTACK_DELAY = 500L;
 	
 	public static final LootTable LOOT = new LootTable()

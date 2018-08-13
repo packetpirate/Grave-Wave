@@ -5,6 +5,8 @@ import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
+import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
@@ -50,7 +52,13 @@ public abstract class StatusEffect {
 	public void noEffect(Entity e, long cTime) {
 		// Entity is immune to this effect. Call this method when effect is resisted.
 		// Default behavior is to display a status message saying "Resisted!"
-		StatusMessages.getInstance().addMessage("Resisted!", e, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
+		Pair<Float> offset = new Pair<Float>(Player.ABOVE_1);
+		if(e instanceof Enemy) {
+			Enemy enemy = (Enemy) e;
+			offset.y = -((float)enemy.getAnimation().getCurrentAnimation().getSrcSize().y);
+		}
+		
+		StatusMessages.getInstance().addMessage("Resisted!", e, offset, cTime, 2_000L);
 	}
 	
 	public abstract void onApply(Entity e, long cTime);

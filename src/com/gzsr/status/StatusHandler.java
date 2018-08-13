@@ -15,6 +15,7 @@ public class StatusHandler {
 		add(Status.DEAFENED);
 		add(Status.FLASHBANG);
 		add(Status.POISON);
+		add(Status.ACID);
 		add(Status.BURNING);
 		add(Status.PARALYSIS);
 		add(Status.DAMAGE);

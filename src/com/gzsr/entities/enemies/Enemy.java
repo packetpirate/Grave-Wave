@@ -31,6 +31,7 @@ public abstract class Enemy implements Entity {
 	
 	protected EnemyType type;
 	protected AnimationState animation;
+	public AnimationState getAnimation() { return animation; }
 	protected Shape bounds;
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
@@ -132,13 +133,13 @@ public abstract class Enemy implements Entity {
 			
 			updateFlash(cTime);
 			animation.getCurrentAnimation().update(cTime);
+			
 			if(player.isAlive()) {
 				if(touchingPlayer()) {
 					if(!attacking) {
 						long elapsed = (cTime - lastAttack);
 						if(elapsed >= getAttackDelay()) {
-							double dmg = getDamage();
-							player.takeDamage(dmg, cTime);
+							player.takeDamage(getDamage(), cTime);
 							lastAttack = cTime;
 							attacking = true;
 							animation.setCurrent("attack"); // has no effect if this enemy has no attack animation
@@ -146,12 +147,12 @@ public abstract class Enemy implements Entity {
 					}
 				} else move((GameState)gs, delta);
 			}
-		}
-		
-		long elapsed = (cTime - lastAttack);
-		if(attacking && (elapsed >= 800L)) {
-			attacking = false;
-			animation.setCurrent("move");
+			
+			long elapsed = (cTime - lastAttack);
+			if(attacking && (elapsed >= animation.getCurrentAnimation().getLifespan())) {
+				attacking = false;
+				animation.setCurrent("move");
+			}
 		}
 		
 		postDamageTexts();

@@ -11,14 +11,15 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
+import com.gzsr.status.AcidEffect;
 import com.gzsr.status.Status;
 
 public class Upchuck extends Enemy {
@@ -29,7 +30,6 @@ public class Upchuck extends Enemy {
 	private static final int MIN_HEALTH_MOD = 12;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
-	private static final float BILE_DAMAGE = 0.4f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 18);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
@@ -37,20 +37,20 @@ public class Upchuck extends Enemy {
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.20f)
-			.addItem(Powerups.Type.AMMO, 0.20f)
+			.addItem(Powerups.Type.AMMO, 0.40f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.05f)
 			.addItem(Powerups.Type.CRIT_CHANCE, 0.05f)
 			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.05f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.05f)
 			.addItem(Powerups.Type.UNLIMITED_AMMO, 0.025f);
 	
-	private List<Projectile> bile;
+	private List<StatusProjectile> bile;
 	private long lastBile;
 	
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
 		this.health = Dice.roll(Upchuck.MIN_HEALTH_COUNT, Upchuck.MIN_HEALTH_SIDES, Upchuck.MIN_HEALTH_MOD);
-		this.bile = new ArrayList<Projectile>();
+		this.bile = new ArrayList<StatusProjectile>();
 		this.lastBile = 0L;
 		
 		this.damageImmunities.add(DamageType.CORROSIVE);
@@ -60,15 +60,16 @@ public class Upchuck extends Enemy {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		Player player = Player.getPlayer();
 		if(!dead()) {
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			theta = Calculate.Hypotenuse(position, player.getPosition());
 			if(!nearPlayer(Upchuck.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
 		
@@ -78,13 +79,14 @@ public class Upchuck extends Enemy {
 		}
 		
 		// Update bile projectiles.
-		Iterator<Projectile> it = bile.iterator();
+		Iterator<StatusProjectile> it = bile.iterator();
 		while(it.hasNext()) {
-			Projectile p = it.next();
+			StatusProjectile p = it.next();
 			if(p.isAlive(cTime)) {
 				p.update(gs, cTime, delta);
-				if(Player.getPlayer().checkCollision(p)) {
-					Player.getPlayer().takeDamage(p.getDamage(), cTime);
+				if(player.checkCollision(p)) {
+					p.applyEffect(player, cTime);
+					player.takeDamage(p.getDamage(), cTime);
 					it.remove();
 				}
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/
@@ -117,10 +119,13 @@ public class Upchuck extends Enemy {
 				long lifespan = ProjectileType.BILE.getLifespan();
 				float angle = (theta + (float)(Math.PI / 2)) + getBileDeviation();
 				float angularVel = ((Globals.rand.nextInt(3) - 1) * 0.001f) * Globals.rand.nextFloat();
+				
 				Particle particle = new Particle("GZS_AcidParticle2", color, position, velocity, angle,
 												 angularVel, new Pair<Float>(width, height), 
 												 lifespan, cTime);
-				Projectile projectile = new Projectile(particle, Upchuck.BILE_DAMAGE, false);
+				
+				AcidEffect acid = new AcidEffect(cTime);
+				StatusProjectile projectile = new StatusProjectile(particle, 0.0, false, acid);
 				bile.add(projectile);
 			}
 			lastBile = cTime;

@@ -49,6 +49,10 @@ public class Player implements Entity {
 	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
 	
+	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -32.0f);
+	public static final Pair<Float> BELOW_1 = new Pair<Float>(0.0f, 32.0f);
+	public static final Pair<Float> BELOW_2 = new Pair<Float>(0.0f, 47.0f);
+	
 	private static Player instance = null;
 	
 	private Pair<Float> position;
@@ -56,7 +60,7 @@ public class Player implements Entity {
 	private Pair<Float> velocity;
 	public Pair<Float> getVelocity() { return velocity; }
 	public void move(float xOff, float yOff) {
-		if(isAlive() && !statusHandler.hasStatus(Status.PARALYSIS)) {
+		if(isAlive()) {
 			velocity.x = xOff;
 			velocity.y = yOff;
 			
@@ -236,11 +240,11 @@ public class Player implements Entity {
 		// Need to make sure to update the status effects first.
 		statusHandler.update((GameState)gs, cTime, delta);
 		
-		boolean canMove = true;
+		boolean canMove = !statusHandler.hasStatus(Status.PARALYSIS);
 		MeleeWeapon cMeleeWeapon = getCurrentMelee();
 		RangedWeapon cRangedWeapon = getCurrentRanged();
 		
-		if(cMeleeWeapon != null) canMove = !cMeleeWeapon.isAttacking(); // Can't move if melee attacking.
+		if(cMeleeWeapon != null) canMove = (canMove && !cMeleeWeapon.isAttacking()); // Can't move if melee attacking.
 		if(cRangedWeapon != null) canMove = (canMove && !cRangedWeapon.blockingMovement());
 		
 		if(canMove) {
@@ -267,31 +271,40 @@ public class Player implements Entity {
 		for(int i = 0; i < 10; i++) {
 			if(Controls.getInstance().isPressed(keys[i])) {
 				setCurrentRanged(i);
+				cRangedWeapon = getCurrentRanged();
 				break; // To avoid conflicts when holding multiple numerical keys.
 			}
 		}
 		
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
-		if(cRangedWeapon != null) {
-			if(mouse.isLeftDown()) {
-				boolean empty = (cRangedWeapon.getClipAmmo() == 0);
-				boolean canUse = !cRangedWeapon.isChargedWeapon() && cRangedWeapon.canUse(cTime);
-				if(empty) {
-					long elapsed = cTime - attributes.getLong("lastClick");
-					if(elapsed >= 1_000L) {
-						Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
-						click.play(1.0f, AssetManager.getManager().getSoundVolume());
+		if(canMove) {
+			if(mouse.isLeftDown() && (cRangedWeapon != null)) {boolean clipEmpty = (cRangedWeapon.getClipAmmo() == 0);
+				boolean inventoryEmpty = (cRangedWeapon.getInventoryAmmo() == 0);
+				boolean reloading = cRangedWeapon.isReloading(cTime);
+				
+				if(!reloading) {
+					if(clipEmpty) {
+						long elapsed = (cTime - attributes.getLong("lastClick"));
+						if(elapsed >= 1_000L) {
+							Sound click = AssetManager.getManager().getSound("out-of-ammo_click");
+							click.play(1.0f, AssetManager.getManager().getSoundVolume());
+							attributes.set("lastClick", cTime);
+						}
 						
-						String message = "Out of Ammo!";
-						StatusMessages.getInstance().addMessage(message, this, new Pair<Float>(0.0f, -32.0f), cTime, 1_000L);
-						
-						attributes.set("lastClick", cTime);
+						if(inventoryEmpty) {
+							StatusMessages.getInstance().addMessage("Out of Ammo!", this, Player.ABOVE_1, cTime, 1_000L);
+						} else {
+							StatusMessages.getInstance().addMessage("Reload!", this, Player.ABOVE_1, cTime, 1_000L);
+						}
+					} else if(!cRangedWeapon.isChargedWeapon() && cRangedWeapon.canUse(cTime)) {
+						cRangedWeapon.use(this, new Pair<Float>(position), theta, cTime);
 					}
-				} else if(canUse) cRangedWeapon.use(this, new Pair<Float>(position), theta, cTime);
-			} else if(mouse.isRightDown()) {
-				MeleeWeapon mw = getCurrentMelee();
-				if(mw.canUse(cTime)) mw.use(this, new Pair<Float>(position), theta, cTime);
+				} else {
+					StatusMessages.getInstance().addMessage("Reloading...", this, Player.ABOVE_1, cTime, 1_000L);
+				}
+			} else if(mouse.isRightDown() && (cMeleeWeapon != null)) {
+				if(cMeleeWeapon.canUse(cTime)) cMeleeWeapon.use(this, new Pair<Float>(position), theta, cTime);
 			}
 		}
 		
@@ -496,8 +509,8 @@ public class Player implements Entity {
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
 				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay());
-				StatusMessages.getInstance().addMessage("Ding!", this, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
-				StatusMessages.getInstance().addMessage(reminder, this, new Pair<Float>(0.0f, 32.0f), cTime, 2_000L);
+				StatusMessages.getInstance().addMessage("Ding!", this, Player.ABOVE_1, cTime, 2_000L);
+				StatusMessages.getInstance().addMessage(reminder, this, Player.BELOW_1, cTime, 2_000L);
 			}
 			
 			{ // Random chance for the enemies to say "Gratz!".
@@ -507,13 +520,13 @@ public class Player implements Entity {
 					while(it.hasNext()) {
 						Enemy e = it.next();
 						if(e.isAlive(cTime)) {
-							StatusMessages.getInstance().addMessage("Gratz!", e, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
+							StatusMessages.getInstance().addMessage("Gratz!", e, Player.ABOVE_1, cTime, 2_000L);
 						}
 					}
 				}
 			}
 			
-			ShopController.getInstance().release(ShopState.getShop()); // Add new weapons to the shop!
+			ShopController.getInstance().release(ShopState.getShop(), cTime); // Add new weapons to the shop!
 			AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}

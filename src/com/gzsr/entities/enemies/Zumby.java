@@ -21,7 +21,7 @@ public class Zumby extends Enemy {
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.05f)
-			.addItem(Powerups.Type.AMMO, 0.025f);
+			.addItem(Powerups.Type.AMMO, 0.05f);
 	
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);

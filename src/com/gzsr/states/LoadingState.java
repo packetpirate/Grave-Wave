@@ -141,6 +141,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_PoisonIcon.png",
 			"images/GZS_Paralysis.png",
 			"images/GZS_Damage.png",
+			"images/GZS_AcidEffect.png",
+			"images/GZS_BurningEffect.png",
 			// Enemy Images
 			"images/GZS_Zumby3.png",
 			"images/GZS_Rotdog3.png",
@@ -150,6 +152,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_TinyZumby.png",
 			"images/GZS_Starfright.png",
 			"images/GZS_ElSalvo.png",
+			"images/GZS_Prowler.png",
 			// Boss Images
 			"images/GZS_Aberration2.png",
 			"images/GZS_Aberration_Tentacle.png",

@@ -29,7 +29,7 @@ public class CritChanceItem extends Item {
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
 		
 		String message = "+25% Critical Chance!";
-		StatusMessages.getInstance().addMessage(message, player, new Pair<Float>(0.0f, -32.0f), cTime, 2_000L);
+		StatusMessages.getInstance().addMessage(message, player, Player.ABOVE_1, cTime, 2_000L);
 	}
 	
 	@Override

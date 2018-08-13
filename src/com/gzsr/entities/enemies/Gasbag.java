@@ -22,7 +22,7 @@ public class Gasbag extends Enemy {
 	private static final int MIN_HEALTH_COUNT = 3;
 	private static final int MIN_HEALTH_SIDES = 8;
 	private static final int MIN_HEALTH_MOD = 8;
-	private static final float SPEED = 0.2f;
+	private static final float SPEED = 0.15f;
 	private static final float DPS = 0.5f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 128.0f;
@@ -32,7 +32,7 @@ public class Gasbag extends Enemy {
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.20f)
-			.addItem(Powerups.Type.AMMO, 0.20f)
+			.addItem(Powerups.Type.AMMO, 0.40f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.025f)
 			.addItem(Powerups.Type.CRIT_CHANCE, 0.05f)
 			.addItem(Powerups.Type.EXP_MULTIPLIER, 0.05f)
@@ -60,7 +60,7 @@ public class Gasbag extends Enemy {
 			
 			updateFlash(cTime);
 			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
-			if(!nearPlayer()) {
+			if(!nearPlayer(Gasbag.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
 				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else explode((GameState)gs, cTime);
@@ -119,10 +119,6 @@ public class Gasbag extends Enemy {
 	@Override
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
-	}
-	
-	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= Gasbag.ATTACK_DIST);
 	}
 
 	@Override

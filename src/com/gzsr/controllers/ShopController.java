@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.StatusMessages;
+import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.BastardSword;
@@ -51,7 +53,7 @@ public class ShopController {
 	 * Releases weapons randomly into the shop based on player level.
 	 * @return A list of weapons to add to the shop inventory.
 	 */
-	public void release(Inventory shop) {
+	public void release(Inventory shop, long cTime) {
 		Player player = Player.getPlayer();
 		List<Weapon> weapons = new ArrayList<Weapon>();
 		
@@ -68,6 +70,8 @@ public class ShopController {
 					if(release) {
 						weapons.add(w);
 						unreleased.remove(cl);
+						
+						StatusMessages.getInstance().addMessage("New Weapon in Shop!", player, Player.BELOW_2, cTime, 2_000L);
 					} else cChance += 0.2f;
 				}
 			}
