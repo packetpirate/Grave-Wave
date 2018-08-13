@@ -203,7 +203,7 @@ public class EnemyController implements Entity {
 		unborn.add(EnemyType.createInstance(toSpawn, position));
 	}
 	
-	public void reset() {
+	public static void reset() {
 		instance = new EnemyController();
 	}
 
