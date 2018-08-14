@@ -56,8 +56,10 @@ public class Console implements Entity {
 	
 	private GameState gs;
 	
+	private int commandIndex;
 	private String currentCommand;
 	private List<String> pastCommands;
+	private List<String> consoleLines;
 	
 	private long pauseTime; // What time was the console opened?
 	public void setPauseTime(long time) { pauseTime = time; }
@@ -70,8 +72,12 @@ public class Console implements Entity {
 	
 	public Console(GameState gs_, GameContainer gc_) {
 		this.gs = gs_;
+		
+		this.commandIndex = 0;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
+		this.consoleLines = new ArrayList<String>();
+		
 		this.pauseTime = 0L;
 		this.deleting = false;
 		this.lastDelete = 0L;
@@ -109,14 +115,14 @@ public class Console implements Entity {
 		g.fillRect((20.0f + CONSOLE_FONT.getWidth(currentCommand)), (Globals.HEIGHT - 30.0f), 2.0f, CONSOLE_FONT.getHeight());
 		
 		// Display the previous commands.
-		if(!pastCommands.isEmpty()) {
-			int command = (pastCommands.size() > 10) ? (pastCommands.size() - 10) : 0;
+		if(!consoleLines.isEmpty()) {
+			int command = (consoleLines.size() > 10) ? (consoleLines.size() - 10) : 0;
 			
 			g.setColor(CONSOLE_PASTTEXT);
-			for(int i = 0; i < Math.min(pastCommands.size(), 10); i++) {
+			for(int i = 0; i < Math.min(consoleLines.size(), 10); i++) {
 				float x = 20.0f;
-				float y = (Globals.HEIGHT - 39.0f - (19.0f * Math.min(pastCommands.size(), 10))) + (i * 19.0f);
-				g.drawString(pastCommands.get(command), x, (y + 4.0f));
+				float y = (Globals.HEIGHT - 39.0f - (19.0f * Math.min(consoleLines.size(), 10))) + (i * 19.0f);
+				g.drawString(consoleLines.get(command), x, (y + 4.0f));
 				command++;
 			}
 		}
@@ -137,25 +143,28 @@ public class Console implements Entity {
 					// Parse the command and determine what to do.
 					String command = tokens[0];
 					int args = tokens.length - 1;
-					pastCommands.add(String.format("> %s", currentCommand));
+					
+					pastCommands.add(currentCommand);
+					consoleLines.add(String.format("> %s", currentCommand));
+					commandIndex = pastCommands.size();
 					
 					EnemyController ec = EnemyController.getInstance();
 					
 					if(command.equals("help") && (args == 0)) {
-						pastCommands.add("  HELP: Here are some commands and example usage.");
-						pastCommands.add("    /spawn entityName - (usage: /spawn zumby) will enable Zumby spawning. Left click to spawn. Right click to stop.");
-						pastCommands.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
-						pastCommands.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
-						pastCommands.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
-						pastCommands.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
-						pastCommands.add("    /killall - will kill all enemies on the screen");
-						pastCommands.add("    /music [pause|resume|reset|next] - controls the music - (usage: /music next) will skip to the next song in the soundtrack.");
+						consoleLines.add("  HELP: Here are some commands and example usage.");
+						consoleLines.add("    /spawn entityName - (usage: /spawn zumby) will enable Zumby spawning. Left click to spawn. Right click to stop.");
+						consoleLines.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
+						consoleLines.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
+						consoleLines.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
+						consoleLines.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
+						consoleLines.add("    /killall - will kill all enemies on the screen");
+						consoleLines.add("    /music [pause|resume|reset|next] - controls the music - (usage: /music next) will skip to the next song in the soundtrack.");
 					} else if(command.equals("spawn")) {
 						// Requires entity name and (x, y) coordinates.
 						if(args == 1) {
 							spawnType = tokens[1];
 							continuousSpawn = true;
-							pastCommands.add("  INFO: Continuous spawn started for entity \"" + spawnType + "\".");
+							consoleLines.add("  INFO: Continuous spawn started for entity \"" + spawnType + "\".");
 						} else if(args == 3) {
 							String entityName = tokens[1];
 							float x = Float.parseFloat(tokens[2]);
@@ -201,7 +210,7 @@ public class Console implements Entity {
 							UnlimitedAmmoItem una = new UnlimitedAmmoItem(pos, cTime);
 							gs.addEntity(String.format("unlimAmmo%d", args), una);
 						} else {
-							pastCommands.add("  ERROR: Invalid item name specified.");
+							consoleLines.add("  ERROR: Invalid item name specified.");
 						}
 					} else if(command.equals("set") && (args == 2)) {
 						String attributeName = tokens[1];
@@ -213,7 +222,7 @@ public class Console implements Entity {
 							int money = Integer.parseInt(tokens[2]);
 							Player.getPlayer().getAttributes().set("money", money);
 						} else {
-							pastCommands.add("  ERROR: Invalid attribute specified.");
+							consoleLines.add("  ERROR: Invalid attribute specified.");
 						}
 					} else if(command.equals("levelup") && (args == 1)) {
 						int levels = Integer.parseInt(tokens[1]);
@@ -232,7 +241,7 @@ public class Console implements Entity {
 							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(x, y), damage, 10.0f, radius, pauseTime);
 							gs.addEntity(String.format("explosion%d", id), exp);
 						} catch(NumberFormatException nfe) {
-							pastCommands.add("  ERROR: Invalid parameters specified for /explode command.");
+							consoleLines.add("  ERROR: Invalid parameters specified for /explode command.");
 						}
 					} else if(command.equals("killall") && (args == 0)) {
 						ec.getAliveEnemies().clear();
@@ -268,24 +277,24 @@ public class Console implements Entity {
 						int immediate = ec.getImmediateEnemies().size();
 						
 						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive.size(), immediate);
-						pastCommands.add(str);
+						consoleLines.add(str);
 						
 						// Print 5 of the remaining alive enemies, if any.
 						if(alive.size() > 0) {
 							for(int i = 0; i < Math.min(alive.size(), 5); i++) {
 								String pr = alive.get(i).print();
-								pastCommands.add(pr);
+								consoleLines.add(pr);
 							}
 						}
 					} else {
-						pastCommands.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
+						consoleLines.add(String.format("  ERROR: Unrecognized command name: \"%s\"", command));
 					}
 				} else {
-					pastCommands.add("  ERROR: Invalid command format!");
+					consoleLines.add("  ERROR: Invalid command format!");
 				}
 			} else {
 				// Garbage text. Just add it to the previous commands list.
-				pastCommands.add(currentCommand);
+				consoleLines.add(currentCommand);
 			}
 		}
 		
@@ -330,10 +339,10 @@ public class Console implements Entity {
 				Stitches st = new Stitches(position);
 				ec.addAlive(st);
 			} else {
-				pastCommands.add("  ERROR: Invalid entity name specified.");
+				consoleLines.add("  ERROR: Invalid entity name specified.");
 			}
 		} else {
-			pastCommands.add("  INFO: Cannot spawn while wave is restarting.");
+			consoleLines.add("  INFO: Cannot spawn while wave is restarting.");
 		}
 	}
 	
@@ -343,7 +352,7 @@ public class Console implements Entity {
 			Pair<Float> position = new Pair<Float>((float)x, (float)y);
 			spawnEnemy(gs, spawnType, position);
 		} else if(continuousSpawn && (button == 1)) {
-			pastCommands.add("  INFO: Continuous spawn terminated for entity \"" + spawnType + "\".");
+			consoleLines.add("  INFO: Continuous spawn terminated for entity \"" + spawnType + "\".");
 			continuousSpawn = false;
 			spawnType = "";
 		} else {
@@ -363,6 +372,16 @@ public class Console implements Entity {
 		// Handle key typing.
 		if(key == Input.KEY_BACK) deleting = false;
 		if(((c == '/') || (c == ' ') || (c == '.') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
+		
+		if(key == Input.KEY_UP) {
+			if(commandIndex > 0) commandIndex--;
+			currentCommand = pastCommands.get(commandIndex);
+		}
+		
+		if(key == Input.KEY_DOWN) {
+			if(commandIndex < (pastCommands.size() - 1)) commandIndex++;
+			currentCommand = pastCommands.get(commandIndex);
+		}
 	}
 
 	@Override

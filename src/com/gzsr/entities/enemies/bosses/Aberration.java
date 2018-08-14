@@ -48,7 +48,7 @@ public class Aberration extends Boss {
 	private static final long ATTACK_DELAY = 1_500L;
 	
 	private static final String TENTACLE_IMAGE = "GZS_Aberration_Tentacle";
-	private static final float TENTACLE_ATTACK_DIST = 128.0f;
+	private static final float TENTACLE_ATTACK_DIST = 256.0f;
 	private static final float TENTACLE_DEVIATION = (float)(Math.PI / 6);
 	private static final long TENTACLE_COOLDOWN = 10_000L;
 	private static final long TENTACLE_EFFECT_DURATION = 3_000L;
@@ -159,7 +159,7 @@ public class Aberration extends Boss {
 					if(tentacleLength > 1.0f) tentacleLength = 1.0f;
 					for(int i = 0; i < 3; i++) {
 						float ang = ((theta - TENTACLE_DEVIATION) + (i * TENTACLE_DEVIATION));
-						float oX = (position.x + (TENTACLE_ATTACK_DIST / 2));
+						float oX = ((position.x - 128.0f) + (TENTACLE_ATTACK_DIST / 2));
 						float oY = position.y;
 						
 						Rectangle rect = new Rectangle(oX, (oY - 16.0f), (tentacleLength * TENTACLE_ATTACK_DIST), 32.0f);
@@ -223,7 +223,7 @@ public class Aberration extends Boss {
 					float y = (position.y + (float)(Math.sin(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
 					
 					g.rotate(x, y, deg);
-					tentacle.draw(x, (y - 16.0f), (tentacleLength * tentacle.getWidth()), tentacle.getHeight());
+					tentacle.draw((x - 128.0f), (y - 16.0f), (tentacleLength * (tentacle.getWidth() * 2.0f)), tentacle.getHeight());
 					g.rotate(x, y, -deg);
 					
 					if(Globals.SHOW_COLLIDERS) {

@@ -30,9 +30,10 @@ public class Stitches extends Boss {
 	private static final int MIN_HOOK_MOD = 4;
 	private static final long ATTACK_DELAY = 2_000L;
 	private static final float SPEED = 0.10f;
-	private static final float ATTACK_DIST = 320.0f;
+	private static final float ATTACK_DIST = 364.0f;
 	private static final float RELEASE_DIST = 128.0f;
-	private static final float HOOK_SPEED = 0.6f;
+	private static final float HOOK_THROW_SPEED = 0.6f;
+	private static final float HOOK_REEL_SPEED = 0.2f;
 	private static final long HOOK_DAMAGE_DELAY = 1_000L;
 	private static final long HOOK_COOLDOWN = 5_000L;
 	
@@ -101,7 +102,7 @@ public class Stitches extends Boss {
 				// Throw the hook.
 				Pair<Float> hookPos = new Pair<Float>(position.x, position.y);
 				hookTheta = (findPlayerIntercept(player.getPosition(), player.getVelocity(), delta) + (float)(Math.PI / 2));
-				hook = new Particle("GZS_Hook", Color.gray, hookPos, Stitches.HOOK_SPEED, hookTheta, 0.0f, new Pair<Float>(16.0f, 16.0f), -1L, cTime);
+				hook = new Particle("GZS_Hook", Color.gray, hookPos, Stitches.HOOK_THROW_SPEED, hookTheta, 0.0f, new Pair<Float>(16.0f, 16.0f), -1L, cTime);
 				AssetManager.getManager().getSound("throw2").play(1.0f, AssetManager.getManager().getSoundVolume());
 			} else if(hooked) {
 				// If we're close enough to the player now, release the hook.
@@ -111,8 +112,11 @@ public class Stitches extends Boss {
 					lastHook = cTime;
 				} else {
 					// Otherwise, reel the player in.
-					float xOff = (float)(Math.cos(theta) * -(Stitches.HOOK_SPEED * 4));
-					float yOff = (float)(Math.sin(theta) * -(Stitches.HOOK_SPEED * 4));
+					float reelSpeed = (float)((player.getSpeed() + (player.getSpeed() * (player.getAttributes().getInt("speedUp") * 0.10))) * player.getAttributes().getDouble("spdMult"));
+					reelSpeed += Stitches.HOOK_REEL_SPEED;
+					
+					float xOff = (float)(Math.cos(theta) * -(reelSpeed * delta));
+					float yOff = (float)(Math.sin(theta) * -(reelSpeed * delta));
 					player.move(xOff, yOff);
 					hook.setPosition(new Pair<Float>(player.getPosition().x, player.getPosition().y));
 					
@@ -161,7 +165,7 @@ public class Stitches extends Boss {
 	}
 	
 	private float findPlayerIntercept(Pair<Float> playerPos, Pair<Float> playerVel, int delta) {
-		float hookSpeed = HOOK_SPEED * delta;
+		float hookSpeed = HOOK_THROW_SPEED * delta;
 		Pair<Float> hPos = new Pair<Float>(position);
 		Pair<Float> pPos = new Pair<Float>(playerPos);
 		

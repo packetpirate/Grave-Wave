@@ -19,14 +19,11 @@ public class AcidEffect extends StatusEffect {
 	public static final long DAMAGE_INTERVAL = 1_000L;
 	
 	// TODO: Add emitter to show acid "bubbles" coming off the player. Maybe use the acid particle at 75% transparency?
-	private Dice damage;
-	
 	private long lastDamage;
 	
 	public AcidEffect(long created_) {
 		super(Status.ACID, DURATION, created_);
 		
-		this.damage = new Dice(AcidEffect.MIN_DAMAGE_COUNT, AcidEffect.MIN_DAMAGE_SIDES);
 		this.lastDamage = 0L;
 	}
 	
@@ -45,17 +42,17 @@ public class AcidEffect extends StatusEffect {
 			long elapsed = (cTime - lastDamage);
 			
 			if(elapsed >= DAMAGE_INTERVAL) {
+				double dmg = Dice.roll(AcidEffect.MIN_DAMAGE_COUNT, AcidEffect.MIN_DAMAGE_SIDES, AcidEffect.MIN_DAMAGE_MOD);
+				
 				if(e instanceof Enemy) {
 					Enemy enemy = (Enemy) e;
 					
 					boolean critical = (Globals.rand.nextFloat() <= player.getAttributes().getFloat("critChance"));
-					double dmg = damage.roll(AcidEffect.MIN_DAMAGE_MOD);
 					dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= player.getAttributes().getDouble("critMult");
 					
 					enemy.takeDamage(DamageType.CORROSIVE, dmg, 0.0f, 0.0f, cTime, delta, false);
 				} else if(e instanceof Player) {
-					double dmg = damage.roll(AcidEffect.MIN_DAMAGE_MOD);
 					player.takeDamage(dmg, cTime);
 				}
 				
@@ -75,5 +72,4 @@ public class AcidEffect extends StatusEffect {
 	@Override
 	public void onDestroy(Entity e, long cTime) {
 	}
-
 }

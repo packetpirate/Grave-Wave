@@ -27,7 +27,6 @@ public class Gasbag extends Enemy {
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 128.0f;
 	private static final long POISON_DURATION = 5000L;
-	private static final double POISON_DAMAGE = 0.05; // multiply by 1,000 to get damage done in 1 second
 	private static final float POISON_KNOCKBACK = 5.0f;
 	
 	public static final LootTable LOOT = new LootTable()
@@ -74,7 +73,7 @@ public class Gasbag extends Enemy {
 	
 	private void explode(GameState gs, long cTime) {
 		int id = Globals.generateEntityID();
-		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DAMAGE, Gasbag.POISON_DURATION, cTime);
+		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DURATION, cTime);
 		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", 
 										 new Pair<Float>(position.x, position.y), pe, 
 										 0.0, Gasbag.POISON_KNOCKBACK, Gasbag.EXPLODE_RADIUS, 

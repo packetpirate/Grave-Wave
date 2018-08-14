@@ -94,7 +94,6 @@ public class GameState extends BasicGameState implements InputListener {
 						exitYes.mouseEnter();
 						if(mouse.isLeftDown()) {
 							reset(gc);
-							EnemyController.getInstance().reset();
 							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
 						}
 					} else exitYes.mouseExit();
