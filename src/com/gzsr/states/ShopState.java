@@ -22,6 +22,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
+import com.gzsr.controllers.ShopController;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.TransactionButton;
@@ -648,6 +649,8 @@ public class ShopState extends BasicGameState implements InputListener {
 	public static void resetShop() {
 		SHOP = new Inventory(SHOP_SIZE);
 		SHOP.addItem(new NailGun());
+		
+		ShopController.getInstance().reset();
 	}
 	
 	@Override

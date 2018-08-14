@@ -135,7 +135,6 @@ public class Explosion implements Entity {
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					if(en.getCollider().intersects(getCollider())) {
-						System.out.println("Hit enemy!");
 						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, cTime, delta);
 						entitiesAffected.add(en);
 						return true;

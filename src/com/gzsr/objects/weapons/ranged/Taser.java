@@ -117,6 +117,6 @@ public class Taser extends RangedWeapon {
 	
 	@Override
 	public String getDescription() {
-		return "Will a taser even work on one of these braindead freaks?";
+		return "Don't taze me, bro!";
 	}
 }

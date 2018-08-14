@@ -115,7 +115,7 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 		}
 		
 		// Draw a couple enemies both in and outside the flashlight area.
-		Image zombie = assets.getImage("GZS_Zumby2").getSubImage(0, 0, 48, 48);
+		Image zombie = assets.getImage("GZS_Zumby3").getSubImage(0, 0, 48, 48);
 		if(zombie != null) {
 			for(Pair<Float> pos : positions) {
 				float theta = Calculate.Hypotenuse(playerPos, pos) - (float)(Math.PI / 2);
