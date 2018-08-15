@@ -28,11 +28,11 @@ public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);
 	private static final int SHRAPNEL_COUNT = 50;
 	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 2;
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
+	
+	private static final Dice DAMAGE = new Dice(2, 8);
+	private static final int DAMAGE_MOD = 2;
 	
 	private Sound explosion;
 	private Shape collider;
@@ -91,7 +91,7 @@ public class Claymore extends Projectile {
 												 lifespan, cTime);
 				
 				boolean critical = isCritical();
-				double dmg = Dice.roll(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD, critical);
+				double dmg = rollDamage(critical);
 				
 				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 				
@@ -128,11 +128,15 @@ public class Claymore extends Projectile {
 			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(g, cTime));
 		}
 	}
+
+	public double rollDamage(boolean critical) { return Claymore.DAMAGE.roll(Claymore.DAMAGE_MOD, critical); }
 	
 	public static Pair<Integer> getDamageRange() {
-		Pair<Integer> range = Dice.getRange(Claymore.MIN_DAMAGE_COUNT, Claymore.MIN_DAMAGE_SIDES, Claymore.MIN_DAMAGE_MOD);
+		Pair<Integer> range = Claymore.DAMAGE.getRange(Claymore.DAMAGE_MOD);
+		
 		range.x *= Claymore.SHRAPNEL_COUNT;
 		range.y *= Claymore.SHRAPNEL_COUNT;
+		
 		return range;
 	}
 	

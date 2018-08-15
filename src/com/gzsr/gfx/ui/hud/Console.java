@@ -150,15 +150,17 @@ public class Console implements Entity {
 					
 					EnemyController ec = EnemyController.getInstance();
 					
-					if(command.equals("help") && (args == 0)) {
-						consoleLines.add("  HELP: Here are some commands and example usage.");
-						consoleLines.add("    /spawn entityName - (usage: /spawn zumby) will enable Zumby spawning. Left click to spawn. Right click to stop.");
-						consoleLines.add("    /spawn entityName x y - (usage: /spawn zumby 300 300) will spawn a Zumby at (300, 300)");
-						consoleLines.add("    /item itemName x y - (usage: /item health 300 300) will spawn a Health Kit at (300, 300)");
-						consoleLines.add("    /set attribute value - (usage: /set health 300) will set your health to 300");
-						consoleLines.add("    /explode x y damage radius - (usage: /explode 300 300 100 50) will create an explosion at (300, 300) with radius 50 and doing 100 damage.");
-						consoleLines.add("    /killall - will kill all enemies on the screen");
-						consoleLines.add("    /music [pause|resume|reset|next] - controls the music - (usage: /music next) will skip to the next song in the soundtrack.");
+					if(command.equals("help") && ((args == 0) || (args == 1))) {
+						if(args == 0) {
+							consoleLines.add("  HELP: Use this command to get information about other console commands.");
+							consoleLines.add("    Usage: /help command");
+							consoleLines.add("    Example: /help spawn");
+							consoleLines.add("    Commands: spawn item set levelup explode killall music ec");
+							consoleLines.add("    Prints the help information for the given command.");
+						} else if(args == 1) {
+							String cmd = tokens[1];
+							help(cmd);
+						}
 					} else if(command.equals("spawn")) {
 						// Requires entity name and (x, y) coordinates.
 						if(args == 1) {
@@ -221,6 +223,9 @@ public class Console implements Entity {
 						} else if(attributeName.equals("money")) {
 							int money = Integer.parseInt(tokens[2]);
 							Player.getPlayer().getAttributes().set("money", money);
+						} else if(attributeName.equals("wave")) {
+							int wave = Integer.parseInt(tokens[2]);
+							EnemyController.getInstance().setWave(wave, pauseTime);
 						} else {
 							consoleLines.add("  ERROR: Invalid attribute specified.");
 						}
@@ -228,7 +233,7 @@ public class Console implements Entity {
 						int levels = Integer.parseInt(tokens[1]);
 						for(int i = 0; i < levels; i++) {
 							int toLevel = Player.getPlayer().getAttributes().getInt("expToLevel");
-							Player.getPlayer().addExperience(gs, toLevel, pauseTime);
+							Player.getPlayer().addExperience(gs, toLevel, pauseTime, false);
 						}
 					} else if(command.equals("explode") && (args == 4)) {
 						try {
@@ -299,6 +304,44 @@ public class Console implements Entity {
 		}
 		
 		currentCommand = "";
+	}
+	
+	private void help(String command) {
+		consoleLines.add(String.format("  HELP: /%s", command));
+		if(command.equals("spawn")) {
+			consoleLines.add("    Usage: /spawn entityName x y");
+			consoleLines.add("    Example: /spawn zumby 200 200");
+			consoleLines.add("    The entityName argument should be all one word in lowercase.");
+			consoleLines.add("    You can also specify just the entityName and submit the command to enter continuous spawn mode.");
+			consoleLines.add("    In continuous spawn mode, just click on the screen where you want to spawn an enemy.");
+		} else if(command.equals("item")) {
+			consoleLines.add("    Usage: /item name x y");
+			consoleLines.add("    Example: /item health 512 384");
+			consoleLines.add("    Items: health ammo armor life critchance expmult invulnerability nightvision speed unlimitedammo");
+		} else if(command.equals("set")) {
+			consoleLines.add("    Usage: /set attribute value");
+			consoleLines.add("    Example: /set health 100");
+			consoleLines.add("    Attributes: health money wave");
+		} else if(command.equals("levelup")) {
+			consoleLines.add("    Usage: /levelup times");
+			consoleLines.add("    Example: /levelup 5");
+			consoleLines.add("    Levels you up a number of times equal to the argument given.");
+		} else if(command.equals("explode")) {
+			consoleLines.add("    Usage: /explode x y damage radius");
+			consoleLines.add("    Example: /explode 200 300 20 150");
+			consoleLines.add("    Creates an explosion at the (x, y) coordinates doing the given damage to all enemies in the given radius.");
+		} else if(command.equals("killall")) {
+			consoleLines.add("    Kills all enemies on the screen, effectively ending the wave.");
+		} else if(command.equals("music")) {
+			consoleLines.add("    Usage: /music [pause|resume|reset|next]");
+			consoleLines.add("    Example: /music pause");
+			consoleLines.add("    Manipulates the music player. All commands affect the current song except reset.");
+			consoleLines.add("    The reset command will restart the entire soundtrack.");
+		} else if(command.equals("ec")) {
+			consoleLines.add("    Prints information about currently living enemies. Used to debug waves not ending properly.");
+		} else {
+			consoleLines.add("    ERROR: Invalid command specified.");
+		}
 	}
 	
 	private void spawnEnemy(GameState gs, String entityType, Pair<Float> position) {

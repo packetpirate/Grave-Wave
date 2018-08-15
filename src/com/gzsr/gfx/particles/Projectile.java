@@ -44,17 +44,24 @@ public class Projectile extends Particle {
 	}
 	
 	@Override
-	public void collide(GameState gs, Entity e, long cTime) {
-		// Don't destroy the projectile if there are penetrations left.
-		if(penetrations == 0) super.collide(gs, e, cTime);
-		else if(!penetrated.stream().anyMatch(ent -> ent.equals(e))) {
-			penetrated.add(e);
-			penetrations--;
-		}
+	public boolean collide(GameState gs, Entity e, long cTime) {
+		if(penetrated != null) {
+			for(Entity ent : penetrated) {
+				if(ent.equals(e)) return false;
+			}
+			
+			if(penetrations == 0) collision = true;
+			else {
+				penetrated.add(e);
+				penetrations--;
+			}
+		} else collision = true;
 		
 		if(bloodGenerator != null) {
 			List<Particle> particles = bloodGenerator.apply(e, cTime);
 			particles.stream().forEach(p -> gs.addEntity(String.format("blood%d", Globals.generateEntityID()), p));
 		}
+		
+		return true;
 	}
 }

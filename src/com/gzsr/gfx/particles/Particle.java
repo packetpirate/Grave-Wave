@@ -68,7 +68,10 @@ public class Particle implements Entity {
 	public void setCreated(long created_) { created = created_; }
 	
 	protected boolean collision;
-	public void collide(GameState gs, Entity e, long cTime) { collision = true; }
+	public boolean collide(GameState gs, Entity e, long cTime) { 
+		collision = true;
+		return true;
+	}
 	
 	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_, 
 					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {

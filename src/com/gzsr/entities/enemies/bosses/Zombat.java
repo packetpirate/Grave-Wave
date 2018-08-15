@@ -18,15 +18,15 @@ import com.gzsr.status.Status;
 public class Zombat extends Boss {
 	private static final int FIRST_WAVE = 20;
 	private static final int SPAWN_COST = 12;
-	private static final int MIN_HEALTH_COUNT = 30;
-	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 1_200;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 2;
 	private static final long ATTACK_DELAY = 1_000L;
 	private static final float SPEED = 0.15f;
 	private static final float ATTACK_DIST = 250.0f;
+	
+	private static final Dice HEALTH = new Dice(30, 10);
+	private static final int HEALTH_MOD = 1_200;
+	
+	private static final Dice DAMAGE = new Dice(1, 4);
+	private static final int DAMAGE_MOD = 2;
 	
 	private static final Color BLOOD_COLOR = new Color(0xAA0000);
 	
@@ -42,8 +42,7 @@ public class Zombat extends Boss {
 	public Zombat(Pair<Float> position_) {
 		super(EnemyType.ZOMBAT_SWARM, position_);
 		
-		this.health = Dice.roll(Zombat.MIN_HEALTH_COUNT, Zombat.MIN_HEALTH_SIDES, Zombat.MIN_HEALTH_MOD);
-		this.damage = new Dice(Zombat.MIN_DAMAGE_COUNT, Zombat.MIN_DAMAGE_SIDES);
+		this.health = Zombat.HEALTH.roll(Zombat.HEALTH_MOD);
 		
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		this.statusHandler.addImmunity(Status.POISON);
@@ -54,22 +53,23 @@ public class Zombat extends Boss {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			Player player = Player.getPlayer();
+			
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			theta = Calculate.Hypotenuse(position, player.getPosition());
 			
 			animation.getCurrentAnimation().update(cTime);
 			if(!nearPlayer(Zombat.ATTACK_DIST)) {
 				siphoningBlood = false;
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
-			} else siphoningBlood = Player.getPlayer().isAlive(); // Only start siphoning if player is alive, obviously...
+				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+			} else siphoningBlood = player.isAlive(); // Only start siphoning if player is alive, obviously...
 			
 			long elapsed = (cTime - lastAttack);
-			if(Player.getPlayer().isAlive() && siphoningBlood && (elapsed >= Zombat.ATTACK_DELAY)) {
-				double dmg = damage.roll(Zombat.MIN_DAMAGE_MOD);
-				double damageTaken = Player.getPlayer().takeDamage(dmg, cTime);
+			if(player.isAlive() && siphoningBlood && (elapsed >= Zombat.ATTACK_DELAY)) {
+				double damageTaken = player.takeDamage(getDamage(), cTime);
 				if(damageTaken > 0.0) health += damageTaken;
 				
 				lastAttack = cTime;
@@ -83,11 +83,14 @@ public class Zombat extends Boss {
 	public void render(Graphics g, long cTime) {
 		// Render the blood stream being siphoned from the player.
 		if(siphoningBlood) {
+			Player player = Player.getPlayer();
+			
 			float x = position.x + ((float)Math.cos(theta) * 5.0f);
 			float y = position.y + ((float)Math.sin(theta) * 5.0f);
+			
 			g.setColor(BLOOD_COLOR);
-			g.setLineWidth(2.0f);
-			g.drawLine(x, y, Player.getPlayer().getPosition().x, Player.getPlayer().getPosition().y);
+			g.setLineWidth(3.0f);
+			g.drawLine(x, y, player.getPosition().x, player.getPosition().y);
 			g.setLineWidth(1.0f);
 		}
 		
@@ -148,7 +151,7 @@ public class Zombat extends Boss {
 	}
 
 	@Override
-	public double getDamage() { return damage.roll(Zombat.MIN_DAMAGE_MOD); }
+	public double getDamage() { return Zombat.DAMAGE.roll(Zombat.DAMAGE_MOD); }
 	
 	@Override
 	public long getAttackDelay() { return Zombat.ATTACK_DELAY; }

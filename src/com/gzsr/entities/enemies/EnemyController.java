@@ -58,6 +58,10 @@ public class EnemyController implements Entity {
 	
 	private int wave;
 	public int getWave() { return wave; }
+	public void setWave(int wave_, long time) {
+		this.wave = wave_ - 1;
+		restart(time);
+	}
 	
 	private boolean bossWave;
 	public boolean isBossWave() { return bossWave; }

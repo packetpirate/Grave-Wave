@@ -20,14 +20,6 @@ import com.gzsr.status.Status;
 public class Stitches extends Boss {
 	private static final int FIRST_WAVE = 25;
 	private static final int SPAWN_COST = 40;
-	private static final int MIN_HEALTH_COUNT = 100;
-	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 4_000;
-	private static final int MIN_DAMAGE_COUNT = 10;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_HOOK_COUNT = 2;
-	private static final int MIN_HOOK_SIDES = 4;
-	private static final int MIN_HOOK_MOD = 4;
 	private static final long ATTACK_DELAY = 2_000L;
 	private static final float SPEED = 0.10f;
 	private static final float ATTACK_DIST = 364.0f;
@@ -37,6 +29,14 @@ public class Stitches extends Boss {
 	private static final long HOOK_DAMAGE_DELAY = 1_000L;
 	private static final long HOOK_COOLDOWN = 5_000L;
 	
+	private static final Dice HEALTH = new Dice(100, 10);
+	private static final int HEALTH_MOD = 4_000;
+	
+	private static final Dice DAMAGE = new Dice(10, 4);
+	
+	private static final Dice HOOK_DAMAGE = new Dice(2, 4);
+	private static final int HOOK_DAMAGE_MOD = 4;
+	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
 			.addItem(Powerups.Type.AMMO, 1.0f)
@@ -45,7 +45,6 @@ public class Stitches extends Boss {
 			.addItem(Powerups.Type.NIGHT_VISION, 0.30f);
 	
 	private Particle hook;
-	private Dice hookDamage;
 	private boolean hooked;
 	private long lastHookDamage;
 	private long lastHook;
@@ -54,15 +53,13 @@ public class Stitches extends Boss {
 	public Stitches(Pair<Float> position_) {
 		super(EnemyType.STITCHES, position_);
 		
-		this.health = Dice.roll(Stitches.MIN_HEALTH_COUNT, Stitches.MIN_HEALTH_SIDES, Stitches.MIN_HEALTH_MOD);
-		this.damage = new Dice(Stitches.MIN_DAMAGE_COUNT, Stitches.MIN_DAMAGE_SIDES);
+		this.health = Stitches.HEALTH.roll(Stitches.HEALTH_MOD);
 		
 		this.damageImmunities.add(DamageType.BLUNT);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		this.statusHandler.addImmunity(Status.POISON);
 		
 		hook = null;
-		hookDamage = new Dice(Stitches.MIN_HOOK_COUNT, Stitches.MIN_HOOK_SIDES);
 		hooked = false;
 		lastHookDamage = 0L;
 		lastHook = -Stitches.HOOK_COOLDOWN;
@@ -123,7 +120,7 @@ public class Stitches extends Boss {
 					// Make the player take bleed damage.
 					long elapsed = (cTime - lastHookDamage);
 					if(elapsed >= Stitches.HOOK_DAMAGE_DELAY) {
-						double dmg = hookDamage.roll(Stitches.MIN_HOOK_MOD);
+						double dmg = Stitches.HOOK_DAMAGE.roll(Stitches.HOOK_DAMAGE_MOD);
 						player.takeDamage(dmg, cTime);
 						lastHookDamage = cTime;
 					}
@@ -134,8 +131,7 @@ public class Stitches extends Boss {
 					if(touchingPlayer()) {
 						long elapsed = (cTime - lastAttack);
 						if(elapsed >= getAttackDelay()) {
-							double dmg = damage.roll();
-							player.takeDamage(dmg, cTime);
+							player.takeDamage(getDamage(), cTime);
 							lastAttack = cTime;
 						}
 					} else move((GameState)gs, delta);
@@ -171,11 +167,11 @@ public class Stitches extends Boss {
 		
 		// While the hook hasn't intercepted the player yet.
 		while(Calculate.Distance(position, hPos) < Calculate.Distance(position, pPos)) {
-			float toPlayer = Calculate.Hypotenuse(position, pPos);
-			
 			// Move the player according to player velocity.
 			pPos.x += playerVel.x;
 			pPos.y += playerVel.y;
+			
+			float toPlayer = Calculate.Hypotenuse(position, pPos);
 			
 			// Aim the hook at the new player position and move it in that direction.
 			hPos.x += ((float)Math.cos(toPlayer) * hookSpeed);
@@ -240,6 +236,9 @@ public class Stitches extends Boss {
 	
 	@Override
 	public long getAttackDelay() { return Stitches.ATTACK_DELAY; }
+	
+	@Override
+	public double getDamage() { return Stitches.DAMAGE.roll(); }
 	
 	@Override
 	public float getSpeed() { return Stitches.SPEED; }

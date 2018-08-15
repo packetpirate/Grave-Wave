@@ -18,7 +18,6 @@ import com.gzsr.gfx.Layers;
 import com.gzsr.gfx.ui.DamageText;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.Vector2f;
 import com.gzsr.objects.items.Powerups;
@@ -47,8 +46,8 @@ public abstract class Enemy implements Entity {
 	
 	protected double health;
 	public double getHealth() { return health; }
-	protected Dice damage;
-	public double getDamage() { return damage.roll(); }
+	//protected Dice damage;
+	public double getDamage() { return 0.0; }
 	protected int cash;
 	public int getCashValue() { return cash; }
 	protected int experience;
@@ -99,7 +98,7 @@ public abstract class Enemy implements Entity {
 		this.theta = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 		this.health = 0.0;
-		this.damage = new Dice(1, 1);
+		//this.damage = new Dice(1, 1);
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
 		this.damageImmunities = new ArrayList<DamageType>();

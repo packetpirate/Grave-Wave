@@ -31,13 +31,13 @@ public class Turret extends Projectile {
 	private static final long TURRET_LIFESPAN = 60_000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 4;
-	private static final float FIRING_RANGE = 250.0f;
+	private static final float FIRING_RANGE = 500.0f;
 	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
 	private static final String FIRE_SOUND = "shoot3";
+	
+	private static final Dice DAMAGE = new Dice(1, 8);
+	private static final int DAMAGE_MOD = 4;
 	
 	private Sound fireSound;
 	private Shape collider;
@@ -46,8 +46,6 @@ public class Turret extends Projectile {
 	
 	private double health;
 	private void takeDamage(double amnt) { health -= amnt; }
-	
-	private Dice dice;
 	
 	private List<Projectile> projectiles;
 	public List<Projectile> getProjectiles() { return projectiles; }
@@ -63,7 +61,6 @@ public class Turret extends Projectile {
 		this.target = null;
 		
 		this.health = Turret.HEALTH_MAX;
-		this.dice = new Dice(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES);
 		
 		this.projectiles = new ArrayList<Projectile>();
 		
@@ -164,7 +161,7 @@ public class Turret extends Projectile {
 										 lifespan, cTime);
 		
 		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
-		double dmg = dice.roll(Turret.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
@@ -174,8 +171,10 @@ public class Turret extends Projectile {
 	}
 	
 	public static Pair<Integer> getTotalDamage() {
-		return Dice.getRange(Turret.MIN_DAMAGE_COUNT, Turret.MIN_DAMAGE_SIDES, Turret.MIN_DAMAGE_MOD);
+		return Turret.DAMAGE.getRange(Turret.DAMAGE_MOD);
 	}
+	
+	public double rollDamage(boolean critical) { return Turret.DAMAGE.roll(Turret.DAMAGE_MOD, critical); }
 	
 	@Override
 	public boolean isAlive(long cTime) {

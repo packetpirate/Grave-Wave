@@ -20,21 +20,19 @@ public class Crossbow extends RangedWeapon {
 	private static final int START_CLIPS = 5;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 12;
 	private static final float KNOCKBACK = 10.0f;
 	private static final String ICON_NAME = "GZS_Crossbow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
 	private static final String FIRE_SOUND = "bow_fire";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(2, 8);
+	private static final int DAMAGE_MOD = 12;
+	
 	public Crossbow() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Crossbow.MIN_DAMAGE_COUNT, Crossbow.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Crossbow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Crossbow.RELOAD_SOUND);
@@ -52,7 +50,7 @@ public class Crossbow extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(Crossbow.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
@@ -97,8 +95,11 @@ public class Crossbow extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.BOLT; }
 
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(Crossbow.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Crossbow.DAMAGE.getRange(Crossbow.DAMAGE_MOD); }
 
+	@Override
+	public double rollDamage(boolean critical) { return Crossbow.DAMAGE.roll(Crossbow.DAMAGE_MOD, critical); }
+	
 	@Override
 	public float getKnockback() { return Crossbow.KNOCKBACK; }
 

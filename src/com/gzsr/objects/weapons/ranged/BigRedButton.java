@@ -29,9 +29,6 @@ public class BigRedButton extends RangedWeapon {
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 10_000L;
-	private static final int MIN_DAMAGE_COUNT = 5;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 50;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 150.0f;
 	private static final long EXP_DELAY = 500L;
@@ -41,6 +38,9 @@ public class BigRedButton extends RangedWeapon {
 	private static final String FIRE_SOUND = "landmine_armed";
 	private static final String EXP_SOUND = "explosion2";
 	private static final String RELOAD_SOUND = "buy_ammo2";
+	
+	private static final Dice DAMAGE = new Dice(5, 10);
+	private static final int DAMAGE_MOD = 50;
 	
 	private Queue<Explosion> explosions;
 	private long lastExplosion;
@@ -52,8 +52,6 @@ public class BigRedButton extends RangedWeapon {
 		lastExplosion = 0L;
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(BigRedButton.MIN_DAMAGE_COUNT, BigRedButton.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(BigRedButton.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BigRedButton.RELOAD_SOUND);
@@ -91,8 +89,7 @@ public class BigRedButton extends RangedWeapon {
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			boolean critical = isCritical();
-			
-			double dmg = damage.roll(BigRedButton.MIN_DAMAGE_MOD, critical);
+			double dmg = rollDamage(critical);
 			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 			if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
 			
@@ -147,7 +144,10 @@ public class BigRedButton extends RangedWeapon {
 	}
 
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(BigRedButton.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return BigRedButton.DAMAGE.getRange(BigRedButton.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return BigRedButton.DAMAGE.roll(BigRedButton.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return 0.0f; }

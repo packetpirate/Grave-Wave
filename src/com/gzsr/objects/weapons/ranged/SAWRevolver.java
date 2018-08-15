@@ -22,20 +22,18 @@ public class SAWRevolver extends RangedWeapon {
 	private static final int START_CLIPS = 5;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
-	private static final int MIN_DAMAGE_COUNT = 3;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 12;
 	private static final float KNOCKBACK = 7.5f;
 	private static final String ICON_NAME = "GZS_SmithAndWesson";
 	private static final String FIRE_SOUND = "revolver_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(3, 8);
+	private static final int DAMAGE_MOD = 12;
+	
 	public SAWRevolver() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(SAWRevolver.MIN_DAMAGE_COUNT, SAWRevolver.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(SAWRevolver.FIRE_SOUND);
 		this.reloadSound = assets.getSound(SAWRevolver.RELOAD_SOUND);
@@ -57,7 +55,7 @@ public class SAWRevolver extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(SAWRevolver.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectile.setPenetrations(1);
@@ -67,7 +65,10 @@ public class SAWRevolver extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(SAWRevolver.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return SAWRevolver.DAMAGE.getRange(SAWRevolver.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return SAWRevolver.DAMAGE.roll(SAWRevolver.DAMAGE_MOD, critical); }
 	
 	@Override
 	public DamageType getDamageType() { return DamageType.PIERCING; }
@@ -106,7 +107,7 @@ public class SAWRevolver extends RangedWeapon {
 	public long getCooldown() { return SAWRevolver.COOLDOWN; }
 	
 	@Override
-	public ProjectileType getProjectile() { return ProjectileType.HANDGUN; }
+	public ProjectileType getProjectile() { return ProjectileType.MAGNUM; }
 
 	@Override
 	public int getPrice() { return SAWRevolver.PRICE; }

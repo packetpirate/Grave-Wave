@@ -20,9 +20,6 @@ public class Taser extends RangedWeapon {
 	private static final int START_CLIPS = 8;
 	private static final int MAX_CLIPS = 20;
 	private static final long RELOAD_TIME = 1_000L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 1;
 	private static final long EFFECT_DURATION = 2_500L;
 	private static final float KNOCKBACK = 0.0f;
 	private static final String ICON_NAME = "GZS_Taser";
@@ -30,12 +27,13 @@ public class Taser extends RangedWeapon {
 	private static final String FIRE_SOUND = "nailgun";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(1, 4);
+	private static final int DAMAGE_MOD = 1;
+	
 	public Taser() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Taser.MIN_DAMAGE_COUNT, Taser.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Taser.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Taser.RELOAD_SOUND);
@@ -53,7 +51,7 @@ public class Taser extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(Taser.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		ParalysisEffect paralysis = new ParalysisEffect(Taser.EFFECT_DURATION, cTime);
 		StatusProjectile projectile = new StatusProjectile(particle, dmg, critical, paralysis);
@@ -63,7 +61,10 @@ public class Taser extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(Taser.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Taser.DAMAGE.getRange(Taser.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return Taser.DAMAGE.roll(Taser.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return Taser.KNOCKBACK; }

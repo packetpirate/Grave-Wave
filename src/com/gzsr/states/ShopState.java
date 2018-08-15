@@ -428,12 +428,16 @@ public class ShopState extends BasicGameState implements InputListener {
 											 Color.black);
 					} // End draw ammo button.
 					{ // Draw max ammo button.
-						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format((int)(w.getMaxAmmoPrice()));
+						int money = Player.getPlayer().getAttributes().getInt("money");
+						int maxAmmoAffordable = w.maxAmmoAffordable(money);
+						
+						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format(w.getCostForAmmo(maxAmmoAffordable));
 						FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)), 
 											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)), 
 											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
 						maxAmmoButton.render(g, 0L);
-						if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getMaxAmmoPrice())) {
+						
+						if(w.clipsMaxedOut() || (maxAmmoAffordable == 0)) {
 							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
 							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
@@ -597,6 +601,17 @@ public class ShopState extends BasicGameState implements InputListener {
 				if(selection instanceof RangedWeapon) {
 					RangedWeapon w = (RangedWeapon) selection;
 					
+					int money = Player.getPlayer().getAttributes().getInt("money");
+					int maxAmmoAffordable = w.maxAmmoAffordable(money);
+					if(maxAmmoAffordable > 0) {
+						int cost = w.getCostForAmmo(maxAmmoAffordable);
+						int moneyAfterPurchase = (money - cost);
+						
+						player.getAttributes().set("money", moneyAfterPurchase);
+						w.addInventoryAmmo(maxAmmoAffordable);
+						assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
+					}
+					/*
 					if(!w.clipsMaxedOut()) {
 						int cost = w.getMaxAmmoPrice();
 						int moneyAfterPurchase = player.getAttributes().getInt("money") - cost; 
@@ -606,7 +621,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							w.maxOutAmmo();
 							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
-					}
+					}*/
 				}
 			}
 		}

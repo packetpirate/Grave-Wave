@@ -13,7 +13,6 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 import com.gzsr.status.BurningEffect;
@@ -178,8 +177,11 @@ public class MolotovWeapon extends RangedWeapon {
 	public boolean isCharging() { return charging; }
 
 	@Override
-	public Pair<Integer> getDamage() { return Dice.getRange(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES, BurningEffect.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return BurningEffect.getDamageRange(); }
 
+	@Override
+	public double rollDamage(boolean critical) { return 0.0; }
+	
 	@Override
 	public float getKnockback() { return 0.0f; }
 

@@ -113,6 +113,9 @@ public class ClaymoreWeapon extends RangedWeapon {
 	
 	@Override
 	public Pair<Integer> getDamage() { return Claymore.getDamageRange(); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return 0.0; }
 
 	@Override
 	public float getKnockback() { return ClaymoreWeapon.KNOCKBACK; }

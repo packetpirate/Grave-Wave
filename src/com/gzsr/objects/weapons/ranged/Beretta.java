@@ -20,20 +20,18 @@ public class Beretta extends RangedWeapon {
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 12;
-	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_Beretta";
 	private static final String FIRE_SOUND = "beretta_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(1, 12);
+	private static final int DAMAGE_MOD = 8;
+	
 	public Beretta() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Beretta.MIN_DAMAGE_COUNT, Beretta.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Beretta.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Beretta.RELOAD_SOUND);
@@ -55,7 +53,7 @@ public class Beretta extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(Beretta.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
@@ -64,7 +62,10 @@ public class Beretta extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(Beretta.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Beretta.DAMAGE.getRange(Beretta.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return Beretta.DAMAGE.roll(Beretta.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return Beretta.KNOCKBACK; }

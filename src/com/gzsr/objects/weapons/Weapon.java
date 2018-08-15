@@ -7,21 +7,16 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Layers;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public abstract class Weapon implements Entity {
 	protected Sound useSound;
-	
-	protected Dice damage;
 	
 	protected boolean equipped;
 	protected long lastUsed;
 	
 	public Weapon() {
 		this.useSound = null;
-		
-		this.damage = null; // Must be set by each individual weapon.
 		
 		this.equipped = false;
 		this.lastUsed = -getCooldown();
@@ -44,6 +39,7 @@ public abstract class Weapon implements Entity {
 	
 	public abstract int getPrice();
 	public abstract Pair<Integer> getDamage();
+	public abstract double rollDamage(boolean critical);
 	public DamageType getDamageType() { return DamageType.NONE; }
 	
 	public abstract float getKnockback();

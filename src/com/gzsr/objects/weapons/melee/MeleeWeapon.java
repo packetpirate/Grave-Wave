@@ -147,8 +147,6 @@ public abstract class MeleeWeapon extends Weapon {
 		return isHit;
 	}
 	
-	public abstract int rollDamage();
-	
 	// Gets the width of the collision rectangle that can hit.
 	protected float getAttackTimeRatio(long cTime) {
 		long elapsed = (cTime - lastAttack);

@@ -25,14 +25,14 @@ public class AK47 extends RangedWeapon {
 	private static final int START_CLIPS = 4;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 4;
 	private static final float KNOCKBACK = 1.0f;
 	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
 	private static final String ICON_NAME = "GZS_RTPS";
 	private static final String FIRE_SOUND = "m4a1_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
+	
+	private static final Dice DAMAGE = new Dice(1, 10);
+	private static final int DAMAGE_MOD = 4;
 	
 	private Animation muzzleFlash;
 	
@@ -40,8 +40,6 @@ public class AK47 extends RangedWeapon {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(AK47.MIN_DAMAGE_COUNT, AK47.MIN_DAMAGE_SIDES);
 		
 		this.muzzleFlash = assets.getAnimation("GZS_MuzzleFlash");
 		this.useSound = assets.getSound(AK47.FIRE_SOUND);
@@ -74,7 +72,7 @@ public class AK47 extends RangedWeapon {
 		long lifespan = getProjectile().getLifespan();
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(AK47.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		
@@ -95,7 +93,10 @@ public class AK47 extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(AK47.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return AK47.DAMAGE.getRange(AK47.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return AK47.DAMAGE.roll(AK47.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return AK47.KNOCKBACK; }

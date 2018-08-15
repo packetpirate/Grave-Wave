@@ -22,21 +22,19 @@ public class MP5 extends RangedWeapon {
 	private static final int START_CLIPS = 3;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 8;
-	private static final int MIN_DAMAGE_MOD = 2;
 	private static final float KNOCKBACK = 1.0f;
 	private static final float MAX_DEVIATION = (float)(Math.PI / 18.0);
 	private static final String ICON_NAME = "GZS_Mp5";
 	private static final String FIRE_SOUND = "m4a1_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(1, 8);
+	private static final int DAMAGE_MOD = 2;
+	
 	public MP5() {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(MP5.MIN_DAMAGE_COUNT, MP5.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(MP5.FIRE_SOUND);
 		this.reloadSound = assets.getSound(MP5.RELOAD_SOUND);
@@ -55,7 +53,7 @@ public class MP5 extends RangedWeapon {
 		long lifespan = getProjectile().getLifespan();
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(MP5.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		
@@ -70,7 +68,10 @@ public class MP5 extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(MP5.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return MP5.DAMAGE.getRange(MP5.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return MP5.DAMAGE.roll(MP5.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return MP5.KNOCKBACK; }

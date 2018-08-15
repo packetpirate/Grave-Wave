@@ -13,14 +13,12 @@ import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 
 public class BurningEffect extends StatusEffect {
-	public static final int MIN_DAMAGE_COUNT = 1;
-	public static final int MIN_DAMAGE_SIDES = 4;
-	public static final int MIN_DAMAGE_MOD = 2;
+	private static final Dice DAMAGE = new Dice(1, 4);
+	private static final int DAMAGE_MOD = 2;
 	public static final long DURATION = 5000L;
 	public static final long DAMAGE_INTERVAL = 400L;
 	
 	private BurningEmitter emitter;
-	private Dice damage;
 	
 	private long lastDamage;
 	
@@ -28,8 +26,6 @@ public class BurningEffect extends StatusEffect {
 		super(Status.BURNING, DURATION, created_);
 		
 		this.emitter = new BurningEmitter(Pair.ZERO);
-		this.damage = new Dice(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES);
-		
 		this.lastDamage = 0L;
 	}
 	
@@ -69,13 +65,13 @@ public class BurningEffect extends StatusEffect {
 					Enemy enemy = (Enemy) e;
 					
 					boolean critical = (Globals.rand.nextFloat() <= player.getAttributes().getFloat("critChance"));
-					double dmg = damage.roll(BurningEffect.MIN_DAMAGE_MOD);
+					double dmg = rollDamage(critical);
 					dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= player.getAttributes().getDouble("critMult");
 					
 					enemy.takeDamage(DamageType.FIRE, dmg, 0.0f, 0.0f, cTime, delta, false);
 				} else if(e instanceof Player) {
-					double dmg = damage.roll(BurningEffect.MIN_DAMAGE_MOD);
+					double dmg = rollDamage(false);
 					player.takeDamage(dmg, cTime);
 				}
 				
@@ -90,8 +86,10 @@ public class BurningEffect extends StatusEffect {
 	}
 	
 	public static Pair<Integer> getDamageRange() {
-		return Dice.getRange(BurningEffect.MIN_DAMAGE_COUNT, BurningEffect.MIN_DAMAGE_SIDES, BurningEffect.MIN_DAMAGE_MOD);
+		return BurningEffect.DAMAGE.getRange(BurningEffect.DAMAGE_MOD);
 	}
+	
+	public double rollDamage(boolean critical) { return BurningEffect.DAMAGE.roll(BurningEffect.DAMAGE_MOD, critical); }
 
 	@Override
 	public void onDestroy(Entity e, long cTime) {

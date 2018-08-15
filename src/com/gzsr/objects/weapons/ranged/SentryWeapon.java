@@ -58,6 +58,9 @@ public class SentryWeapon extends RangedWeapon {
 	public Pair<Integer> getDamage() { return Turret.getTotalDamage(); }
 	
 	@Override
+	public double rollDamage(boolean critical) { return 0.0; }
+	
+	@Override
 	public float getKnockback() { return SentryWeapon.KNOCKBACK; }
 	
 	@Override

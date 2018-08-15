@@ -22,20 +22,18 @@ public class Remington extends RangedWeapon {
 	private static final int START_CLIPS = 5;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
-	private static final int MIN_DAMAGE_COUNT = 5;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 20;
 	private static final float KNOCKBACK = 10.0f;
 	private static final String ICON_NAME = "GZS_Remington";
 	private static final String FIRE_SOUND = "sniper_shot";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(5, 4);
+	private static final int DAMAGE_MOD = 20;
+	
 	public Remington() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Remington.MIN_DAMAGE_COUNT, Remington.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Remington.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Remington.RELOAD_SOUND);
@@ -57,7 +55,7 @@ public class Remington extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(Remington.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectile.setPenetrations(1);
@@ -67,7 +65,10 @@ public class Remington extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(Remington.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Remington.DAMAGE.getRange(Remington.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return Remington.DAMAGE.roll(Remington.DAMAGE_MOD, critical); }
 	
 	@Override
 	public DamageType getDamageType() { return DamageType.PIERCING; }

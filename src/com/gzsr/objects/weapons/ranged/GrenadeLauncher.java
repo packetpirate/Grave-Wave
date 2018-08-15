@@ -19,9 +19,6 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
-	private static final int MIN_DAMAGE_COUNT = 5;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 50;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 64.0f;
 	private static final String ICON_NAME = "GZS_HandEgg";
@@ -30,12 +27,13 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final String FIRE_SOUND = "grenade_launcher";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(5, 10);
+	private static final int DAMAGE_MOD = 50;
+	
 	public GrenadeLauncher() {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(GrenadeLauncher.MIN_DAMAGE_COUNT, GrenadeLauncher.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
 		this.reloadSound = assets.getSound(GrenadeLauncher.RELOAD_SOUND);
@@ -55,7 +53,7 @@ public class GrenadeLauncher extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(GrenadeLauncher.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
 
@@ -70,7 +68,10 @@ public class GrenadeLauncher extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(GrenadeLauncher.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return GrenadeLauncher.DAMAGE.getRange(GrenadeLauncher.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return GrenadeLauncher.DAMAGE.roll(GrenadeLauncher.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return GrenadeLauncher.KNOCKBACK; }

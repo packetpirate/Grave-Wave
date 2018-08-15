@@ -491,6 +491,10 @@ public class Player implements Entity {
 	}
 	
 	public void addExperience(GameState gs, int amnt, long cTime) {
+		addExperience(gs, amnt, cTime, true);
+	}
+	
+	public void addExperience(GameState gs, int amnt, long cTime, boolean playSound) {
 		int totalAmnt = (int)(amnt * attributes.getDouble("expMult"));
 		int currentExp = attributes.getInt("experience");
 		int adjusted = currentExp + totalAmnt;
@@ -527,7 +531,7 @@ public class Player implements Entity {
 			}
 			
 			ShopController.getInstance().release(ShopState.getShop(), cTime); // Add new weapons to the shop!
-			AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
+			if(playSound) AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}
 	
@@ -557,17 +561,19 @@ public class Player implements Entity {
 						node.damage(enemy.getDamage());
 						enemy.blockMovement();
 					} else {
-						p.collide(gs, enemy, cTime);
+						boolean collided = p.collide(gs, enemy, cTime);
 						
-						// If this is a special projectile, apply its status effect to the target.
-						if(p instanceof StatusProjectile) {
-							StatusProjectile sp = (StatusProjectile) p;
-							sp.applyEffect(enemy, cTime);
+						if(collided) {
+							// If this is a special projectile, apply its status effect to the target.
+							if(p instanceof StatusProjectile) {
+								StatusProjectile sp = (StatusProjectile) p;
+								sp.applyEffect(enemy, cTime);
+							}
+							
+							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
+							double totalDamage = (p.getDamage() * damagePercentage);
+							if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 						}
-						
-						float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-						double totalDamage = (p.getDamage() * damagePercentage);
-						if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
 					}
 					
 					return true;
@@ -578,7 +584,7 @@ public class Player implements Entity {
 		for(MeleeWeapon mw : getMeleeWeapons()) {
 			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
 				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-				double totalDamage = (mw.rollDamage() * damagePercentage);
+				double totalDamage = (mw.rollDamage(mw.isCurrentCritical()) * damagePercentage);
 				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
 			}
 		}

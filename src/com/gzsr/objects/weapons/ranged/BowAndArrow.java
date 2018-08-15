@@ -22,15 +22,15 @@ public class BowAndArrow extends RangedWeapon {
 	private static final int CLIP_SIZE = 30;
 	private static final int START_CLIPS = 1;
 	private static final int MAX_CLIPS = 3;
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 10;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.0015f;
 	private static final String ICON_NAME = "GZS_Bow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
 	private static final String FIRE_SOUND = "bow_fire"; // TODO: Change this to a more appropriate sound.
 	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
+	
+	private static final Dice DAMAGE = new Dice(2, 10);
+	private static final int DAMAGE_MOD = 10;
 	
 	private boolean charging;
 	private float charge;
@@ -39,8 +39,6 @@ public class BowAndArrow extends RangedWeapon {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(BowAndArrow.MIN_DAMAGE_COUNT, BowAndArrow.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(BowAndArrow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
@@ -107,7 +105,7 @@ public class BowAndArrow extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(BowAndArrow.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
@@ -127,7 +125,10 @@ public class BowAndArrow extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(BowAndArrow.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return BowAndArrow.DAMAGE.getRange(BowAndArrow.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return BowAndArrow.DAMAGE.roll(BowAndArrow.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return BowAndArrow.KNOCKBACK; }

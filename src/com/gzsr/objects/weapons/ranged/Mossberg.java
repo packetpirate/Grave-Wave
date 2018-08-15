@@ -24,20 +24,18 @@ public class Mossberg extends RangedWeapon {
 	private static final int SHOT_COUNT = 5;
 	private static final float MAX_SPREAD = (float)(Math.PI / 12);
 	private static final long RELOAD_TIME = 2_500L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 6;
-	private static final int MIN_DAMAGE_MOD = 8;
 	private static final float KNOCKBACK = 5.0f;
 	private static final String ICON_NAME = "GZS_Boomstick";
 	private static final String FIRE_SOUND = "mossberg_shot_01";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(1, 6);
+	private static final int DAMAGE_MOD = 8;
+	
 	public Mossberg() {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Mossberg.MIN_DAMAGE_COUNT, Mossberg.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Mossberg.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Mossberg.RELOAD_SOUND);
@@ -61,7 +59,7 @@ public class Mossberg extends RangedWeapon {
 											 lifespan, cTime);
 			
 			boolean critical = isCritical();
-			double dmg = damage.roll(Mossberg.MIN_DAMAGE_MOD, critical);
+			double dmg = rollDamage(critical);
 			
 			Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 			projectiles.add(projectile);
@@ -72,11 +70,16 @@ public class Mossberg extends RangedWeapon {
 	
 	@Override
 	public Pair<Integer> getDamage() {
-		Pair<Integer> range = damage.getRange(Mossberg.MIN_DAMAGE_MOD);
+		Pair<Integer> range = Mossberg.DAMAGE.getRange(Mossberg.DAMAGE_MOD);
+		
 		range.x *= Mossberg.SHOT_COUNT;
 		range.y *= Mossberg.SHOT_COUNT;
+		
 		return range;
 	}
+	
+	@Override
+	public double rollDamage(boolean critical) { return Mossberg.DAMAGE.roll(Mossberg.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return Mossberg.KNOCKBACK; }

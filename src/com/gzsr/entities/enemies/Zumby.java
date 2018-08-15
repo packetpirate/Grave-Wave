@@ -11,13 +11,13 @@ import com.gzsr.status.Status;
 public class Zumby extends Enemy {
 	private static final int FIRST_WAVE = 1;
 	private static final int SPAWN_COST = 1;
-	private static final int MIN_HEALTH_COUNT = 2;
-	private static final int MIN_HEALTH_SIDES = 8;
-	private static final int MIN_HEALTH_MOD = 12;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
 	private static final float SPEED = 0.10f;
 	private static final long ATTACK_DELAY = 1_000L;
+	
+	private static final Dice HEALTH = new Dice(2, 8);
+	private static final int HEALTH_MOD = 12;
+	
+	private static final Dice DAMAGE = new Dice(1, 4);
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.05f)
@@ -26,8 +26,7 @@ public class Zumby extends Enemy {
 	public Zumby(Pair<Float> position_) {
 		super(EnemyType.ZUMBY, position_);
 		
-		this.health = Dice.roll(Zumby.MIN_HEALTH_COUNT, Zumby.MIN_HEALTH_SIDES, Zumby.MIN_HEALTH_MOD);
-		this.damage = new Dice(Zumby.MIN_DAMAGE_COUNT, Zumby.MIN_DAMAGE_SIDES);
+		this.health = Zumby.HEALTH.roll(Zumby.HEALTH_MOD);
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
@@ -64,6 +63,9 @@ public class Zumby extends Enemy {
 	
 	@Override
 	public long getAttackDelay() { return Zumby.ATTACK_DELAY; }
+	
+	@Override
+	public double getDamage() { return Zumby.DAMAGE.roll(); }
 	
 	@Override
 	public float getSpeed() { return Zumby.SPEED; }

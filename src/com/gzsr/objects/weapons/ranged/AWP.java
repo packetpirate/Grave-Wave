@@ -25,20 +25,18 @@ public class AWP extends RangedWeapon {
 	private static final int MAX_CLIPS = 5;
 	private static final long RELOAD_TIME = 2_000L;
 	private static final float LASER_SIGHT_RANGE = 300.0f;
-	private static final int MIN_DAMAGE_COUNT = 5;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 40;
 	private static final float KNOCKBACK = 10.0f;
 	private static final String ICON_NAME = "GZS_AWP";
 	private static final String FIRE_SOUND = "sniper_shot";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(5, 4);
+	private static final int DAMAGE_MOD = 40;
+	
 	public AWP() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(AWP.MIN_DAMAGE_COUNT, AWP.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(AWP.FIRE_SOUND);
 		this.reloadSound = assets.getSound(AWP.RELOAD_SOUND);
@@ -82,7 +80,7 @@ public class AWP extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(AWP.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectile.setPenetrations(2);
@@ -92,7 +90,10 @@ public class AWP extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(AWP.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return AWP.DAMAGE.getRange(AWP.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return AWP.DAMAGE.roll(AWP.DAMAGE_MOD, critical); }
 	
 	@Override
 	public DamageType getDamageType() { return DamageType.PIERCING; }

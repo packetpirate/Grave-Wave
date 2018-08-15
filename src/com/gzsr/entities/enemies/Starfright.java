@@ -20,12 +20,6 @@ import com.gzsr.status.Status;
 public class Starfright extends Enemy {
 	private static final int FIRST_WAVE = 25;
 	private static final int SPAWN_COST = 10;
-	private static final int MIN_HEALTH_COUNT = 10;
-	private static final int MIN_HEALTH_SIDES = 6;
-	private static final int MIN_HEALTH_MOD = 40;
-	private static final int MIN_FLASH_COUNT = 10;
-	private static final int MIN_FLASH_SIDES = 4;
-	private static final int MIN_FLASH_MOD = 40;
 	private static final float SPEED = 0.30f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EFFECTIVE_FLASH_DIST = 200.0f;
@@ -33,6 +27,12 @@ public class Starfright extends Enemy {
 	private static final long EXPLOSION_DELAY = 500L;
 	private static final long FLASH_DURATION = 100L;
 	private static final long FLASH_LENGTH = 50L;
+	
+	private static final Dice HEALTH = new Dice(10, 6);
+	private static final int HEALTH_MOD = 40;
+	
+	private static final Dice DAMAGE = new Dice(10, 4);
+	private static final int DAMAGE_MOD = 40;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.25f)
@@ -48,7 +48,7 @@ public class Starfright extends Enemy {
 	
 	public Starfright(Pair<Float> position_) {
 		super(EnemyType.STARFRIGHT, position_);
-		this.health = Dice.roll(Starfright.MIN_HEALTH_COUNT, Starfright.MIN_HEALTH_SIDES, Starfright.MIN_HEALTH_MOD);
+		this.health = Starfright.HEALTH.roll(Starfright.HEALTH_MOD);
 		
 		this.damageImmunities.add(DamageType.CONCUSSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
@@ -121,7 +121,7 @@ public class Starfright extends Enemy {
 			player.getStatusHandler().addStatus(deafened, cTime);
 		}
 		
-		double dmg = Dice.roll(Starfright.MIN_FLASH_COUNT, Starfright.MIN_FLASH_SIDES, Starfright.MIN_FLASH_MOD);
+		double dmg = Starfright.DAMAGE.roll(Starfright.DAMAGE_MOD);
 		float dist = Calculate.Distance(position, player.getPosition());
 		double total = (1.0f - (dist / Starfright.EFFECTIVE_FLASH_DIST)) * dmg;
 		if(total < 0.0) total = 0.0;

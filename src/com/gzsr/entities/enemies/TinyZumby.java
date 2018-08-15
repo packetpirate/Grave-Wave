@@ -10,12 +10,12 @@ import com.gzsr.status.Status;
 
 public class TinyZumby extends Enemy {
 	private static final int SPAWN_COST = 0;
-	private static final int MIN_HEALTH_COUNT = 2;
-	private static final int MIN_HEALTH_SIDES = 4;
-	private static final int MIN_HEALTH_MOD = 2;
 	private static final int DAMAGE = 1;
 	private static final float SPEED = 0.15f;
 	private static final long ATTACK_DELAY = 500L;
+	
+	private static final Dice HEALTH = new Dice(2, 4);
+	private static final int HEALTH_MOD = 2;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.025f)
@@ -26,7 +26,7 @@ public class TinyZumby extends Enemy {
 	public TinyZumby(Pair<Float> position) {
 		super(EnemyType.LIL_ZUMBY, position);
 		
-		this.health = Dice.roll(TinyZumby.MIN_HEALTH_COUNT, TinyZumby.MIN_HEALTH_SIDES, TinyZumby.MIN_HEALTH_MOD);
+		this.health = TinyZumby.HEALTH.roll(TinyZumby.HEALTH_MOD);
 	}
 
 	@Override

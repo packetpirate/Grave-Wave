@@ -25,15 +25,15 @@ import com.gzsr.status.Status;
 public class Upchuck extends Enemy {
 	private static final int FIRST_WAVE = 5;
 	private static final int SPAWN_COST = 4;
-	private static final int MIN_HEALTH_COUNT = 4;
-	private static final int MIN_HEALTH_SIDES = 6;
-	private static final int MIN_HEALTH_MOD = 12;
 	private static final float SPEED = 0.08f;
 	private static final float DPS = 1.2f;
 	private static final float BILE_DEVIATION = (float)(Math.PI / 18);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
+	
+	private static final Dice HEALTH = new Dice(4, 6);
+	private static final int HEALTH_MOD = 12;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.20f)
@@ -49,7 +49,7 @@ public class Upchuck extends Enemy {
 	
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
-		this.health = Dice.roll(Upchuck.MIN_HEALTH_COUNT, Upchuck.MIN_HEALTH_SIDES, Upchuck.MIN_HEALTH_MOD);
+		this.health = Upchuck.HEALTH.roll(Upchuck.HEALTH_MOD);
 		this.bile = new ArrayList<StatusProjectile>();
 		this.lastBile = 0L;
 		
@@ -86,7 +86,6 @@ public class Upchuck extends Enemy {
 				p.update(gs, cTime, delta);
 				if(player.checkCollision(p)) {
 					p.applyEffect(player, cTime);
-					player.takeDamage(p.getDamage(), cTime);
 					it.remove();
 				}
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/

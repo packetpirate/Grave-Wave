@@ -34,14 +34,8 @@ import com.gzsr.status.Status;
 public class Aberration extends Boss {
 	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 25;
-	private static final int MIN_HEALTH_COUNT = 100;
-	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 2_500;
-	private static final int MIN_DAMAGE_COUNT = 4;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 4;
-	private static final float SPEED = 0.15f;
-	private static final float BILE_DEVIATION = (float)(Math.PI / 9);
+	private static final float SPEED = 0.12f;
+	private static final float BILE_DEVIATION = (float)(Math.PI / 6);
 	private static final long BILE_DELAY = 25L;
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
@@ -54,9 +48,12 @@ public class Aberration extends Boss {
 	private static final long TENTACLE_EFFECT_DURATION = 3_000L;
 	private static final long TENTACLE_DAMAGE_INTERVAL = 1_000L;
 	private static final float TENTACLE_GROWTH_RATE = 0.025f;
-	private static final int MIN_TENTACLE_COUNT = 5;
-	private static final int MIN_TENTACLE_SIDES = 4;
-	private static final int MIN_TENTACLE_MOD = 5;
+	
+	private static final Dice HEALTH = new Dice(100, 10);
+	private static final int HEALTH_MOD = 2_500;
+	
+	private static final Dice TENTACLE_DAMAGE = new Dice(5, 4);
+	private static final int TENTACLE_DAMAGE_MOD = 5;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
@@ -78,8 +75,7 @@ public class Aberration extends Boss {
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
 		
-		this.health = Dice.roll(Aberration.MIN_HEALTH_COUNT, Aberration.MIN_HEALTH_SIDES, Aberration.MIN_HEALTH_MOD);
-		this.damage = new Dice(Aberration.MIN_DAMAGE_COUNT, Aberration.MIN_DAMAGE_SIDES);
+		this.health = Aberration.HEALTH.roll(Aberration.HEALTH_MOD);
 		
 		this.damageImmunities.add(DamageType.CORROSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
@@ -124,7 +120,6 @@ public class Aberration extends Boss {
 				p.update(gs, cTime, delta);
 				if(player.checkCollision(p)) {
 					p.applyEffect(player, cTime);
-					player.takeDamage(p.getDamage(), cTime);
 					it.remove();
 				}
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/
@@ -167,9 +162,8 @@ public class Aberration extends Boss {
 						
 						// Check for collision with player.
 						if(player.getCollider().intersects(tentacles[i])) {
-							Dice tentacleDamage = new Dice(MIN_TENTACLE_COUNT, MIN_TENTACLE_SIDES);
 							player.getStatusHandler().addStatus(new ParalysisEffect(TENTACLE_EFFECT_DURATION, cTime), cTime);
-							player.getStatusHandler().addStatus(new DamageEffect(DamageType.CORROSIVE, tentacleDamage, MIN_TENTACLE_MOD, TENTACLE_DAMAGE_INTERVAL, TENTACLE_EFFECT_DURATION, cTime), cTime);
+							player.getStatusHandler().addStatus(new DamageEffect(DamageType.CORROSIVE, Aberration.TENTACLE_DAMAGE, TENTACLE_DAMAGE_MOD, TENTACLE_DAMAGE_INTERVAL, TENTACLE_EFFECT_DURATION, cTime), cTime);
 							playerGrabbed = true;
 							tentacleAttack = false;
 							timePlayerGrabbed = cTime;
@@ -304,9 +298,6 @@ public class Aberration extends Boss {
 			}
 		}
 	}
-
-	@Override
-	public double getDamage() { return damage.roll(Aberration.MIN_DAMAGE_MOD); }
 	
 	@Override
 	public long getAttackDelay() { return Aberration.ATTACK_DELAY; }

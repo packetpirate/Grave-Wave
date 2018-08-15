@@ -17,12 +17,6 @@ import com.gzsr.status.Status;
 public class Prowler extends Enemy {
 	private static final int FIRST_WAVE = 40;
 	private static final int SPAWN_COST = 15;
-	private static final int MIN_HEALTH_COUNT = 10;
-	private static final int MIN_HEALTH_SIDES = 6;
-	private static final int MIN_HEALTH_MOD = 60;
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 4;
 	private static final float SPEED = 0.10f;
 	private static final long ATTACK_DELAY = 1_000L;
 	private static final float JUMP_RANGE = 300.0f;
@@ -30,6 +24,12 @@ public class Prowler extends Enemy {
 	private static final float JUMP_SPEED = 0.50f;
 	private static final long JUMP_COOLDOWN = 5_000L;
 	private static final long PINNED_DURATION = 3_000L;
+	
+	private static final Dice HEALTH = new Dice(10, 6);
+	private static final int HEALTH_MOD = 60;
+	
+	private static final Dice DAMAGE = new Dice(2, 4);
+	private static final int DAMAGE_MOD = 4;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.40f)
@@ -47,8 +47,7 @@ public class Prowler extends Enemy {
 	public Prowler(Pair<Float> position_) {
 		super(EnemyType.PROWLER, position_);
 		
-		this.health = Dice.roll(Prowler.MIN_HEALTH_COUNT, Prowler.MIN_HEALTH_SIDES, Prowler.MIN_HEALTH_MOD);
-		this.damage = new Dice(Prowler.MIN_DAMAGE_COUNT, Prowler.MIN_DAMAGE_SIDES);
+		this.health = Prowler.HEALTH.roll(Prowler.HEALTH_MOD);
 		
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 250L, -1L, -1L));
 		
@@ -163,7 +162,7 @@ public class Prowler extends Enemy {
 	public long getAttackDelay() { return Prowler.ATTACK_DELAY; }
 	
 	@Override
-	public double getDamage() { return damage.roll(Prowler.MIN_DAMAGE_MOD); }
+	public double getDamage() { return Prowler.DAMAGE.roll(Prowler.DAMAGE_MOD); }
 	
 	@Override
 	public float getSpeed() { return (jumping ? Prowler.JUMP_SPEED : Prowler.SPEED); }

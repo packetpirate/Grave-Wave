@@ -20,9 +20,6 @@ import com.gzsr.status.Status;
 public class ElSalvo extends Enemy {
 	public static final int FIRST_WAVE = 35;
 	private static final int SPAWN_COST = 12;
-	private static final int MIN_HEALTH_COUNT = 5;
-	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 50;
 	private static final float SPEED = 0.2f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final double EXPLODE_DAMAGE = 250.0f;
@@ -30,6 +27,9 @@ public class ElSalvo extends Enemy {
 	private static final long EXPLOSION_DELAY = 500L;
 	private static final long FLASH_DURATION = 100L;
 	private static final long FLASH_LENGTH = 50L;
+	
+	private static final Dice HEALTH = new Dice(5, 10);
+	private static final int HEALTH_MOD = 50;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.25f)
@@ -48,7 +48,7 @@ public class ElSalvo extends Enemy {
 	
 	public ElSalvo(Pair<Float> position_) {
 		super(EnemyType.ELSALVO, position_);
-		this.health = Dice.roll(ElSalvo.MIN_HEALTH_COUNT, ElSalvo.MIN_HEALTH_SIDES, ElSalvo.MIN_HEALTH_MOD);
+		this.health = ElSalvo.HEALTH.roll(ElSalvo.HEALTH_MOD);
 		this.explode = AssetManager.getManager().getSound("explosion2");
 		
 		this.damageImmunities.add(DamageType.FIRE);
@@ -75,14 +75,15 @@ public class ElSalvo extends Enemy {
 				flashing = false;
 			}
 		} else if(isAlive(cTime)) {
+			Player player = Player.getPlayer();
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
-			if(!nearPlayer()) {
+			theta = Calculate.Hypotenuse(position, player.getPosition());
+			if(!nearPlayer(ElSalvo.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else {
 				exploding = true;
 				flashing = true;
@@ -156,13 +157,6 @@ public class ElSalvo extends Enemy {
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-	
-	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= ElSalvo.ATTACK_DIST);
-	}
-
-	@Override
-	public double getDamage() { return 0.0; }
 	
 	@Override
 	public int getExpValue() { return (exploded ? 0 : experience); }

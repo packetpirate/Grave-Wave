@@ -17,16 +17,15 @@ import com.gzsr.status.Status;
 public class BigMama extends Enemy {
 	private static final int FIRST_WAVE = 15;
 	private static final int SPAWN_COST = 10;
-	private static final int MIN_HEALTH_COUNT = 2;
-	private static final int MIN_HEALTH_SIDES = 10;
-	private static final int MIN_HEALTH_MOD = 30;
 	private static final float SPEED = 0.10f;
-	private static final float DPS = 0.0f;
 	private static final long LIFESPAN = 10_000L;
 	private static final float EXP_DIST = 128.0f;
 	private static final double EXP_DAMAGE = 75.0f;
 	private static final float EXP_KNOCKBACK = 10.0f;
 	private static final int ZUMBY_COUNT = 10;
+	
+	private static final Dice HEALTH = new Dice(2, 10);
+	private static final int HEALTH_MOD = 30;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.35f)
@@ -45,7 +44,7 @@ public class BigMama extends Enemy {
 	
 	public BigMama(Pair<Float> position) {
 		super(EnemyType.BIG_MAMA, position);
-		this.health = Dice.roll(BigMama.MIN_HEALTH_COUNT, BigMama.MIN_HEALTH_SIDES, BigMama.MIN_HEALTH_MOD);
+		this.health = BigMama.HEALTH.roll(BigMama.HEALTH_MOD);
 		
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		
@@ -57,14 +56,16 @@ public class BigMama extends Enemy {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		Player player = Player.getPlayer();
+		
 		if(created == -1L) created = cTime; // So that we don't have to pass spawn time into constructor.
 		if(!exploded) {
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			theta = Calculate.Hypotenuse(position, player.getPosition());
 			
 			// Has the Big Mama's lifespan elapsed, or have they been killed? Are they near the player?
 			boolean timesUp = (cTime - created) >= BigMama.LIFESPAN;
 			boolean dead = health <= 0;
-			if(nearPlayer() || timesUp || dead) {
+			if(nearPlayer(BigMama.EXP_DIST) || timesUp || dead) {
 				// Big Mama self-detonates.
 				EnemyController ec = EnemyController.getInstance();
 				
@@ -100,7 +101,7 @@ public class BigMama extends Enemy {
 				
 				updateFlash(cTime);
 				animation.getCurrentAnimation().update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			}
 		}
 	}
@@ -139,13 +140,6 @@ public class BigMama extends Enemy {
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-	
-	private boolean nearPlayer() {
-		return (Calculate.Distance(position, Player.getPlayer().getPosition()) <= BigMama.EXP_DIST);
-	}
-
-	@Override
-	public double getDamage() { return BigMama.DPS; }
 	
 	@Override
 	public long getAttackDelay() { return 0L; }

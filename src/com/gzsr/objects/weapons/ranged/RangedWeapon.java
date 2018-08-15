@@ -181,13 +181,21 @@ public abstract class RangedWeapon extends Weapon {
 	
 	protected boolean hasUnlimitedAmmo() { return Player.getPlayer().getStatusHandler().hasStatus(Status.UNLIMITED_AMMO); }
 
-	public int getMaxAmmoPrice() {
-		int maxAmmo = getMaxClips() * getClipSize();
-		int currentAmmo = ammoInClip + ammoInInventory;
-		int difference = maxAmmo - currentAmmo;
-		double pricePerAmmo = (double)getAmmoPrice() / (double)getClipSize();
+	public int maxAmmoAffordable(int money) {
+		int currentAmmo = (ammoInClip + ammoInInventory);
+		int maxAmmo = (getClipSize() * getMaxClips());
+		int difference = (maxAmmo - currentAmmo);
 		
-		return (int)Math.round(pricePerAmmo * difference);
+		double pricePerAmmo = ((double)getAmmoPrice() / (double)getClipSize());
+		int maxAffordable = (int)Math.floor(money / pricePerAmmo);
+		
+		if(maxAffordable < difference) return maxAffordable;
+		return difference;
+	}
+	
+	public int getCostForAmmo(int amnt) {
+		double pricePerAmmo = ((double)getAmmoPrice() / (double)getClipSize());
+		return (int)Math.round(amnt * pricePerAmmo);
 	}
 	
 	public abstract ProjectileType getProjectile();

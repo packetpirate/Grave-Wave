@@ -15,18 +15,18 @@ import com.gzsr.states.GameState;
 
 public class Lollipop extends MeleeWeapon {
 	private static final int PRICE = 1_000;
-	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 64.0f);
+	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 32.0f);
 	private static final float HIT_AREA_OFFSET = -32.0f;
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 500L;
 	private static final long COOLDOWN = 1_000L;
-	private static final float KNOCKBACK = 20.0f;
+	private static final float KNOCKBACK = 10.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final int MIN_DAMAGE_COUNT = 10;
-	private static final int MIN_DAMAGE_SIDES = 5;
-	private static final int MIN_DAMAGE_MOD = 10;
 	private static final String ICON_NAME = "GZS_Lollipop_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Lollipop";
+	
+	private static final Dice DAMAGE = new Dice(10, 5);
+	private static final int DAMAGE_MOD = 10;
 	
 	public Lollipop() {
 		super();
@@ -35,7 +35,6 @@ public class Lollipop extends MeleeWeapon {
 		useSound = AssetManager.getManager().getSound("throw2");
 		
 		multihit = true;
-		damage = new Dice(MIN_DAMAGE_COUNT, MIN_DAMAGE_SIDES);
 		
 		bloodGenerator = BloodGenerator.RAINBOW;
 	}
@@ -63,9 +62,6 @@ public class Lollipop extends MeleeWeapon {
 		
 		return isHit;
 	}
-
-	@Override
-	public int rollDamage() { return damage.roll(MIN_DAMAGE_MOD, isCurrentCritical()); }
 	
 	@Override
 	public float getDistance() { return Lollipop.HIT_AREA_OFFSET; }
@@ -89,7 +85,10 @@ public class Lollipop extends MeleeWeapon {
 	public int getPrice() { return Lollipop.PRICE; }
 
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Lollipop.DAMAGE.getRange(Lollipop.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return Lollipop.DAMAGE.roll(Lollipop.DAMAGE_MOD, critical); }
 
 	@Override
 	public float getKnockback() { return Lollipop.KNOCKBACK; }

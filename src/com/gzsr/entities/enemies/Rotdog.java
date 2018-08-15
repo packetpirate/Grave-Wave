@@ -11,14 +11,14 @@ import com.gzsr.status.Status;
 public class Rotdog extends Enemy {
 	private static final int FIRST_WAVE = 2;
 	private static final int SPAWN_COST = 2;
-	private static final int MIN_HEALTH_COUNT = 3;
-	private static final int MIN_HEALTH_SIDES = 4;
-	private static final int MIN_HEALTH_MOD = 8;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 2;
 	private static final long ATTACK_DELAY = 1_000L;
 	private static final float SPEED = 0.20f;
+	
+	private static final Dice HEALTH = new Dice(3, 4);
+	private static final int HEALTH_MOD = 8;
+	
+	private static final Dice DAMAGE = new Dice(1, 4);
+	private static final int DAMAGE_MOD = 2;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.10f)
@@ -28,8 +28,7 @@ public class Rotdog extends Enemy {
 	public Rotdog(Pair<Float> position_) {
 		super(EnemyType.ROTDOG, position_);
 		
-		this.health = Dice.roll(Rotdog.MIN_HEALTH_COUNT, Rotdog.MIN_HEALTH_SIDES, Rotdog.MIN_HEALTH_MOD);
-		this.damage = new Dice(Rotdog.MIN_DAMAGE_COUNT, Rotdog.MIN_DAMAGE_SIDES);
+		this.health = Rotdog.HEALTH.roll(Rotdog.HEALTH_MOD);
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
@@ -65,7 +64,7 @@ public class Rotdog extends Enemy {
 	}
 	
 	@Override
-	public double getDamage() { return damage.roll(Rotdog.MIN_DAMAGE_MOD); }
+	public double getDamage() { return Rotdog.DAMAGE.roll(Rotdog.DAMAGE_MOD); }
 	
 	@Override
 	public long getAttackDelay() { return Rotdog.ATTACK_DELAY; }

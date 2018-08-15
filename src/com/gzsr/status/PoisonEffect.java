@@ -11,8 +11,7 @@ import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
 
 public class PoisonEffect extends StatusEffect {
-	private static final int MIN_DAMAGE_COUNT = 2;
-	private static final int MIN_DAMAGE_SIDES = 4;
+	private static final Dice DAMAGE = new Dice(2, 4);
 	public static final long DAMAGE_INTERVAL = 1_000L;
 	
 	private long lastDamage;
@@ -40,17 +39,17 @@ public class PoisonEffect extends StatusEffect {
 			long elapsed = (cTime - lastDamage);
 			
 			if(elapsed >= DAMAGE_INTERVAL) {
-				double dmg = Dice.roll(PoisonEffect.MIN_DAMAGE_COUNT, PoisonEffect.MIN_DAMAGE_SIDES, 0);
-				
 				if(e instanceof Enemy) {
 					Enemy enemy = (Enemy) e;
 					
 					boolean critical = (Globals.rand.nextFloat() <= player.getAttributes().getFloat("critChance"));
+					double dmg = rollDamage(critical);
 					dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= player.getAttributes().getDouble("critMult");
 					
 					enemy.takeDamage(DamageType.CORROSIVE, dmg, 0.0f, 0.0f, cTime, delta, false);
 				} else if(e instanceof Player) {
+					double dmg = rollDamage(false);
 					player.takeDamage(dmg, cTime);
 				}
 				
@@ -58,6 +57,8 @@ public class PoisonEffect extends StatusEffect {
 			}
 		}
 	}
+	
+	public double rollDamage(boolean critical) { return PoisonEffect.DAMAGE.roll(0, critical); }
 	
 	@Override
 	public void render(Graphics g, long cTime) {

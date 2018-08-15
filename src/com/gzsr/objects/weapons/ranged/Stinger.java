@@ -19,9 +19,6 @@ public class Stinger extends RangedWeapon {
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 4;
 	private static final long RELOAD_TIME = 3_000L;
-	private static final int MIN_DAMAGE_COUNT = 25;
-	private static final int MIN_DAMAGE_SIDES = 10;
-	private static final int MIN_DAMAGE_MOD = 250;
 	private static final float KNOCKBACK = 20.0f;
 	private static final float EXP_RADIUS = 128.0f;
 	private static final String ICON_NAME = "GZS_Stinger";
@@ -30,12 +27,13 @@ public class Stinger extends RangedWeapon {
 	private static final String FIRE_SOUND = "missile";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(25, 10);
+	private static final int DAMAGE_MOD = 250;
+	
 	public Stinger() {
 		super();
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(Stinger.MIN_DAMAGE_COUNT, Stinger.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(Stinger.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Stinger.RELOAD_SOUND);
@@ -56,7 +54,7 @@ public class Stinger extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(Stinger.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
 
@@ -71,7 +69,10 @@ public class Stinger extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(Stinger.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return Stinger.DAMAGE.getRange(Stinger.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return Stinger.DAMAGE.roll(Stinger.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return Stinger.KNOCKBACK; }

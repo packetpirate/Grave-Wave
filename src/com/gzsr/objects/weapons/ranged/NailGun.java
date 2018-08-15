@@ -21,21 +21,19 @@ public class NailGun extends RangedWeapon {
 	private static final int START_CLIPS = 2;
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 1_500L;
-	private static final int MIN_DAMAGE_COUNT = 1;
-	private static final int MIN_DAMAGE_SIDES = 4;
-	private static final int MIN_DAMAGE_MOD = 2;
 	private static final float KNOCKBACK = 1.0f;
 	private static final String ICON_NAME = "GZS_NailGun";
 	private static final String PROJECTILE_IMAGE = "GZS_Nail";
 	private static final String FIRE_SOUND = "nailgun";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(1, 4);
+	private static final int DAMAGE_MOD = 2;
+	
 	public NailGun() {
 		super(false);
 		
 		AssetManager assets = AssetManager.getManager();
-		
-		this.damage = new Dice(NailGun.MIN_DAMAGE_COUNT, NailGun.MIN_DAMAGE_SIDES);
 		
 		this.useSound = assets.getSound(NailGun.FIRE_SOUND);
 		this.reloadSound = assets.getSound(NailGun.RELOAD_SOUND);
@@ -55,7 +53,7 @@ public class NailGun extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = damage.roll(NailGun.MIN_DAMAGE_MOD, critical);
+		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
@@ -64,7 +62,10 @@ public class NailGun extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return damage.getRange(NailGun.MIN_DAMAGE_MOD); }
+	public Pair<Integer> getDamage() { return NailGun.DAMAGE.getRange(NailGun.DAMAGE_MOD); }
+	
+	@Override
+	public double rollDamage(boolean critical) { return NailGun.DAMAGE.roll(NailGun.DAMAGE_MOD, critical); }
 	
 	@Override
 	public float getKnockback() { return NailGun.KNOCKBACK; }

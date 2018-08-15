@@ -19,15 +19,14 @@ import com.gzsr.status.Status;
 public class Gasbag extends Enemy {
 	public static final int FIRST_WAVE = 8;
 	private static final int SPAWN_COST = 5;
-	private static final int MIN_HEALTH_COUNT = 3;
-	private static final int MIN_HEALTH_SIDES = 8;
-	private static final int MIN_HEALTH_MOD = 8;
 	private static final float SPEED = 0.15f;
-	private static final float DPS = 0.5f;
 	private static final float ATTACK_DIST = 100.0f;
 	private static final float EXPLODE_RADIUS = 128.0f;
 	private static final long POISON_DURATION = 5000L;
 	private static final float POISON_KNOCKBACK = 5.0f;
+	
+	private static final Dice HEALTH = new Dice(3, 8);
+	private static final int HEALTH_MOD = 8;
 	
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.20f)
@@ -43,7 +42,7 @@ public class Gasbag extends Enemy {
 	
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
-		this.health = Dice.roll(Gasbag.MIN_HEALTH_COUNT, Gasbag.MIN_HEALTH_SIDES, Gasbag.MIN_HEALTH_MOD);
+		this.health = Gasbag.HEALTH.roll(Gasbag.HEALTH_MOD);
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
 		this.exploded = false;
 		
@@ -54,14 +53,15 @@ public class Gasbag extends Enemy {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(isAlive(cTime)) {
+			Player player = Player.getPlayer();
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
 			
 			updateFlash(cTime);
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+			theta = Calculate.Hypotenuse(position, player.getPosition());
 			if(!nearPlayer(Gasbag.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
-				if(Player.getPlayer().isAlive() && !touchingPlayer()) move((GameState)gs, delta);
+				if(player.isAlive() && !touchingPlayer()) move((GameState)gs, delta);
 			} else explode((GameState)gs, cTime);
 		}
 		
@@ -119,9 +119,6 @@ public class Gasbag extends Enemy {
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-
-	@Override
-	public double getDamage() { return Gasbag.DPS; }
 	
 	@Override
 	public long getAttackDelay() { return 0L; }
