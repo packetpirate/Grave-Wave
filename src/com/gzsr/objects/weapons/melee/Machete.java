@@ -5,6 +5,7 @@ import org.newdawn.slick.Image;
 import com.gzsr.AssetManager;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.DamageType;
 
 public class Machete extends MeleeWeapon {
 	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 32.0f);
@@ -12,6 +13,7 @@ public class Machete extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 200L;
 	private static final long COOLDOWN = 250L;
+	private static final double STAMINA = 20.0;
 	private static final float KNOCKBACK = 0.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final String ICON_NAME = "GZS_Machete_Icon";
@@ -49,10 +51,16 @@ public class Machete extends MeleeWeapon {
 	public int getPrice() { return 0; }
 
 	@Override
+	public DamageType getDamageType() { return DamageType.SLICING; }
+	
+	@Override
 	public Pair<Integer> getDamage() { return Machete.DAMAGE.getRange(Machete.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Machete.DAMAGE.roll(Machete.DAMAGE_MOD, critical); }
+	
+	@Override
+	public double getStaminaCost() { return Machete.STAMINA; }
 
 	@Override
 	public float getKnockback() { return Machete.KNOCKBACK; }

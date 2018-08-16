@@ -22,20 +22,28 @@ public class HUD {
 	public static final Color FADE = new Color(1.0f, 1.0f, 1.0f, 0.3f);
 	
 	private HealthBar health;
-	private BossHealthBar bossHealth;
+	private StaminaBar stamina;
 	private ExperienceBar experience;
 	private StatusBar statusBar;
+	
+	private BossHealthBar bossHealth;
 	
 	private WeaponDisplay weaponDisplay;
 	public WeaponDisplay getWeaponDisplay() { return weaponDisplay; }
 	
+	private AchievementDisplay achievementDisplay;
+	
 	public HUD() throws SlickException {
 		health = new HealthBar(new Pair<Float>(10.0f, 10.0f), new Pair<Float>(156.0f, 26.0f));
+		stamina = new StaminaBar(new Pair<Float>(10.0f, 41.0f), new Pair<Float>(156.0f, 16.0f));
+		experience = new ExperienceBar(new Pair<Float>(10.0f, 62.0f), new Pair<Float>(156.0f, 16.0f));
+		statusBar = new StatusBar(new Pair<Float>(10.0f, 83.0f));
+		
 		bossHealth = new BossHealthBar(new Pair<Float>(((Globals.WIDTH / 2) - 150.0f), 20.0f), new Pair<Float>(300.0f, 26.0f));
-		experience = new ExperienceBar(new Pair<Float>(10.0f, 41.0f), new Pair<Float>(156.0f, 16.0f));
-		statusBar = new StatusBar(new Pair<Float>(10.0f, 62.0f));
 		
 		weaponDisplay = new WeaponDisplay(new Pair<Float>(10.0f, (Globals.HEIGHT - 64.0f)));
+		
+		achievementDisplay = new AchievementDisplay();
 	}
 	
 	public void update(Player player, long cTime) {
@@ -47,11 +55,14 @@ public class HUD {
 		EnemyController ec = EnemyController.getInstance();
 		
 		health.render(g, cTime);
-		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(g, cTime);
+		stamina.render(g, cTime);
 		experience.render(g, cTime);
 		statusBar.render(g, cTime);
 		
+		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(g, cTime);
+		
 		weaponDisplay.render(g, cTime);
+		achievementDisplay.render(g, cTime);
 		
 		{ // Begin Wave Counter rendering.
 			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular");

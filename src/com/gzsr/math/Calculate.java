@@ -65,56 +65,34 @@ public class Calculate {
 	 * @param color The color to use when rendering the text.
 	 */
 	public static void TextWrap(Graphics g, String text, Font font, float x, float y, float maxWidth, boolean center, Color color) {
-		float charWidth = font.getWidth("A"); // How wide are characters in this font?
-		
 		g.setColor(color);
 		g.setFont(font);
 		
-		int i = 0; // The current beginning index of the line substring from the text.
-		int line = 0; // The current line - 1.
-		int charsPerLine = (int)(maxWidth / charWidth); // How many characters can fit on each line?
-		while(i < (text.length() - 1)) {
-			// Choose which characters will be drawn on this line.
-			String substr = "";
+		String [] words = text.split(" ");
+		String str = "";
+		int line = 0;
+		int i = 0;
+		while(i < words.length) {
+			boolean draw = false;
 			
-			int nextBreak = Calculate.nextSpace(text, i, Math.min((i + charsPerLine), (text.length() - 1)));
-			int charsToGrab = charsPerLine;
-			if((nextBreak != -1) && (nextBreak - i) < charsPerLine) {
-				charsToGrab = (nextBreak - i);
-			}
+			String word = words[i];
+			if(font.getWidth(str + word) <= maxWidth) {
+				str += (word + " ");
+				i++;
+				if(i == words.length) draw = true;
+			} else draw = true;
 			
-			if((i + charsToGrab) <= text.length()) {
-				substr = text.substring(i, (i + charsToGrab));
-			} else {
-				substr = text.substring(i);
-			}
-			substr = substr.trim(); // Trim leading and trailing whitespace to avoid ruining text centering.
-			
-			// Get the y-coordinate to draw this line on.
-			float cy = y + (line * font.getLineHeight());
-			
-			if(center) FontUtils.drawCenter(font, substr, (int)x, (int)cy, (int)maxWidth, color);
-			else g.drawString(substr, x, cy);
-			
-			i += charsToGrab;
-			line++;
-		}
-	}
-	
-	private static int nextSpace(String text, int start, int end) {
-		int next = -1;
-		
-		if(end == (text.length() - 1)) {
-			return text.length();
-		}
-		
-		for(int c = end; c >= start; c--) {
-			if(text.charAt(c) == ' ') {
-				next = c;
-				break;
+			if(draw) {
+				str = str.trim();
+				
+				float cy = (y + (line * font.getLineHeight()));
+				
+				if(center) FontUtils.drawCenter(font, str, (int)x, (int)cy, (int)maxWidth, color);
+				else g.drawString(str, x, cy);
+				
+				str = "";
+				line++;
 			}
 		}
-		
-		return next;
 	}
 }

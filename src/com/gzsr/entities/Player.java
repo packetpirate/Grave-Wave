@@ -237,6 +237,14 @@ public class Player implements Entity {
 			attributes.set("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
 		}
 		
+		// Refresh stamina if refresh time has elapsed.
+		boolean refresh = ((cTime - attributes.getLong("lastStamina")) >= 1_000L);
+		if(refresh) {
+			double refreshRate = attributes.getDouble("staminaRefreshRate");
+			addStamina(refreshRate);
+			attributes.set("lastStamina", cTime);
+		}
+		
 		// Need to make sure to update the status effects first.
 		statusHandler.update((GameState)gs, cTime, delta);
 		
@@ -390,10 +398,18 @@ public class Player implements Entity {
 		// Basic attributes.
 		attributes.set("health", 100.0);
 		attributes.set("maxHealth", 100.0);
+		
 		attributes.set("armor", 0.0);
 		attributes.set("maxArmor", 100.0);
+		
+		attributes.set("stamina", 100.0);
+		attributes.set("maxStamina", 100.0);
+		attributes.set("staminaRefreshRate", 10.0);
+		attributes.set("lastStamina", 0L);
+		
 		attributes.set("lives", 3);
 		attributes.set("maxLives", Player.MAX_LIVES);
+		
 		attributes.set("money", 0);
 		
 		// Experience related attributes.
@@ -488,6 +504,23 @@ public class Player implements Entity {
 		attributes.set("armor", ((adjusted > 0.0) ? adjusted : 0.0));
 		if(adjusted < 0.0) return Math.abs(adjusted);
 		return 0.0;
+	}
+	
+	public void addStamina(double amnt) {
+		double currentStamina = attributes.getDouble("stamina");
+		double adjStamina = (currentStamina + amnt);
+		double maxStamina = attributes.getDouble("maxStamina");
+		if(adjStamina > maxStamina) adjStamina = maxStamina;
+		
+		attributes.set("stamina", adjStamina);
+	}
+	
+	public void useStamina(double amnt) {
+		double currentStamina = attributes.getDouble("stamina");
+		double adjStamina = (currentStamina - amnt);
+		if(adjStamina < 0.0) adjStamina = 0.0;
+		
+		attributes.set("stamina", adjStamina);
 	}
 	
 	public void addExperience(GameState gs, int amnt, long cTime) {

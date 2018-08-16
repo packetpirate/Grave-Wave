@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
@@ -309,6 +310,7 @@ public abstract class Enemy implements Entity {
 	
 	public void onDeath(GameState gs, long cTime) {
 		if(!deathHandled) {
+			AchievementController.getInstance().postMetric("enemyKilled");
 			Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
 			postDamageTexts();
 		}

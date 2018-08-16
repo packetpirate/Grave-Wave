@@ -33,7 +33,6 @@ public class HealthBar implements Entity {
 	
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class HealthBar implements Entity {
 		
 		double currentHealth = player.getAttributes().getDouble("health");
 		double maxHealth = player.getAttributes().getDouble("maxHealth");
-		double percentage = currentHealth / maxHealth;
+		double percentage = (currentHealth / maxHealth);
 		
 		changeColor(g, Color.black, touchingPlayer);
 		g.fillRect(position.x, position.y, size.x, size.y);

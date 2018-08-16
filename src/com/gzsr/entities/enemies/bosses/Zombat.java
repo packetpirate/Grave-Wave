@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
@@ -148,6 +149,11 @@ public class Zombat extends Boss {
 				hitTime = cTime;
 			}
 		}
+	}
+	
+	@Override
+	public void onDeath(GameState gs, long cTime) {
+		AchievementController.getInstance().postMetric("zombatsKilled");
 	}
 
 	@Override

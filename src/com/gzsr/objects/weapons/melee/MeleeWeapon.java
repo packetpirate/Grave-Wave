@@ -103,18 +103,23 @@ public abstract class MeleeWeapon extends Weapon {
 		
 		attackArea = transformHitbox(position, theta, getHitAreaSize().x);
 		
+		player.useStamina(getStaminaCost());
+		
 		if(useSound != null) useSound.play(); 
 	}
 
 	@Override
 	public boolean canUse(long cTime) {
+		Player player = Player.getPlayer();
 		long elapsed = (cTime - lastAttack);
 		
 		// Check to see if we're already attacking, and if so, the attack time has elapsed.
 		if(attacking && (elapsed > getAttackTime())) stopAttack();
-		boolean cooledDown = (elapsed > (getAttackTime() + getCooldown()));
 		
-		return (!attacking && cooledDown);
+		boolean cooledDown = (elapsed > (getAttackTime() + getCooldown()));
+		boolean enoughStamina = (player.getAttributes().getDouble("stamina") >= getStaminaCost());
+		
+		return (!attacking && cooledDown && enoughStamina);
 	}
 	
 	protected void stopAttack() {
@@ -181,6 +186,8 @@ public abstract class MeleeWeapon extends Weapon {
 	
 	@Override
 	public DamageType getDamageType() { return DamageType.BLUNT; }
+	
+	public abstract double getStaminaCost();
 	
 	public abstract float getDistance();
 	public abstract float getImageDistance();

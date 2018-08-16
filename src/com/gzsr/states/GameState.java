@@ -22,6 +22,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Entity;
@@ -169,6 +170,8 @@ public class GameState extends BasicGameState implements InputListener {
 					Camera.getCamera().update(time);
 					MusicPlayer.getInstance().update(false);
 					hud.update(player, time);
+					
+					AchievementController.getInstance().update(this, time, delta);
 				} else if(consoleOpen) {
 					consoleTimer += (long)delta;
 					console.update(this, consoleTimer, Globals.STEP_TIME);

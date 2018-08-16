@@ -20,6 +20,7 @@ public class Lollipop extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 500L;
 	private static final long COOLDOWN = 1_000L;
+	private static final double STAMINA = 40.0;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final String ICON_NAME = "GZS_Lollipop_Icon";
@@ -89,6 +90,9 @@ public class Lollipop extends MeleeWeapon {
 	
 	@Override
 	public double rollDamage(boolean critical) { return Lollipop.DAMAGE.roll(Lollipop.DAMAGE_MOD, critical); }
+	
+	@Override
+	public double getStaminaCost() { return Lollipop.STAMINA; }
 
 	@Override
 	public float getKnockback() { return Lollipop.KNOCKBACK; }

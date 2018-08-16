@@ -13,6 +13,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Flashlight;
 import com.gzsr.states.settings.AudioSettingsState;
@@ -46,6 +47,7 @@ public class LoadingState extends BasicGameState {
 			ConfigManager.getInstance().init();
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
+			AchievementController.getInstance().init();
 			Controls.getInstance().loadControls();
 			AssetManager.finishLoad();
 		}
