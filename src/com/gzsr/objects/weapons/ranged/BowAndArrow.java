@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -174,6 +175,9 @@ public class BowAndArrow extends RangedWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 5; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.BOW_AND_ARROW; }
 	
 	@Override
 	public String getName() {

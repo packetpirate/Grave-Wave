@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
@@ -102,6 +103,9 @@ public class Lollipop extends MeleeWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 18; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.LOLLIPOP; }
 	
 	@Override
 	public String getName() {

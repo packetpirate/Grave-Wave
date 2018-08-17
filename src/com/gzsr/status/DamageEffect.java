@@ -43,7 +43,7 @@ public class DamageEffect extends StatusEffect {
 			if(elapsed >= interval) {
 				double amnt = damage.roll(modifier);
 				if(e instanceof Player) Player.getPlayer().takeDamage(amnt, cTime);
-				else if(e instanceof Enemy) ((Enemy)e).takeDamage(type, amnt, 0.0f, cTime, delta);
+				else if(e instanceof Enemy) ((Enemy)e).takeDamage(type, amnt, 0.0f, 0L, cTime, delta);
 				lastDamage = cTime;
 			}
 		}

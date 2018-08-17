@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -108,6 +109,9 @@ public class Crossbow extends RangedWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 10; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.CROSSBOW; }
 	
 	@Override
 	public String getName() {

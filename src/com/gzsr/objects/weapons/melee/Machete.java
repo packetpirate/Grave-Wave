@@ -3,6 +3,7 @@ package com.gzsr.objects.weapons.melee;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
@@ -70,6 +71,9 @@ public class Machete extends MeleeWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 1; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.MACHETE; }
 	
 	@Override
 	public String getName() {

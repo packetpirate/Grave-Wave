@@ -8,6 +8,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.bosses.Aberration;
@@ -120,6 +122,8 @@ public class EnemyController implements Entity {
 		spawnRate = (DEFAULT_SPAWN - (long)((Math.log(wave) / Math.log(8)) * 1000.0));
 		if(spawnRate < MIN_SPAWN_RATE) spawnRate = MIN_SPAWN_RATE;
 		
+		long metric = Metrics.WAVE_START;
+		
 		if((wave % Stitches.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Stitches st = new Stitches(spawnPos);
@@ -128,6 +132,8 @@ public class EnemyController implements Entity {
 			bossWave = true;
 			bossTitle = "Stitches";
 			bossWaveHealth = st.getHealth();
+			
+			metric = Metrics.compose(metric, Metrics.STITCHES);
 		} else if((wave % Zombat.appearsOnWave()) == 0) {
 			for(int i = 0; i < 3; i++) {
 				Pair<Float> spawnPos = getSpawnPosition();
@@ -139,6 +145,8 @@ public class EnemyController implements Entity {
 			
 			bossWave = true;
 			bossTitle = "Zombats";
+			
+			metric = Metrics.compose(metric, Metrics.ZOMBAT);
 		} else if((wave % Aberration.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Aberration ab = new Aberration(spawnPos);
@@ -147,6 +155,8 @@ public class EnemyController implements Entity {
 			bossWave = true;
 			bossTitle = "Aberration";
 			bossWaveHealth = ab.getHealth();
+			
+			metric = Metrics.compose(metric, Metrics.ABERRATION);
 		} else {
 			// Determine number of zombies based on wave number.
 			spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
@@ -163,6 +173,8 @@ public class EnemyController implements Entity {
 		if(armorChance <= Armor.SHOP_SPAWN_CHANCE) ShopState.getShop().addItem(new Armor(Armor.Type.randomType(), Pair.ZERO, 0L));
 		
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
+		
+		AchievementController.getInstance().postMetric(metric);
 	}
 	
 	private Pair<Float> getSpawnPosition() {
@@ -253,6 +265,7 @@ public class EnemyController implements Entity {
 		}
 		
 		if(waveClear()) {
+			AchievementController.getInstance().postMetric(Metrics.WAVE_END);
 			breakTime = true;
 			lastWave = cTime;
 			restart(cTime + EnemyController.WAVE_BREAK_TIME);

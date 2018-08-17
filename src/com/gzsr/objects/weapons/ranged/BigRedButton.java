@@ -10,6 +10,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -193,6 +194,9 @@ public class BigRedButton extends RangedWeapon {
 
 	@Override
 	public int getLevelRequirement() { return 18; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.BIG_RED_BUTTON; }
 	
 	@Override
 	public String getName() {

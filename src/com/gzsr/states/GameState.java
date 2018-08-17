@@ -71,7 +71,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 		
-		gc.setMouseCursor(assets.getImage("GZS_Crosshair"), 16, 16);
+		gc.setMouseCursor(assets.getImage("GZS_Crosshair2").getScaledCopy(0.5f), 16, 16);
 		
 		entities = new ConcurrentHashMap<String, Entity>();
 		

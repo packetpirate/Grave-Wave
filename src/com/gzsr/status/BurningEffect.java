@@ -3,6 +3,7 @@ package com.gzsr.status;
 import org.newdawn.slick.Graphics;
 
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
@@ -69,7 +70,7 @@ public class BurningEffect extends StatusEffect {
 					dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= player.getAttributes().getDouble("critMult");
 					
-					enemy.takeDamage(DamageType.FIRE, dmg, 0.0f, 0.0f, cTime, delta, false);
+					enemy.takeDamage(DamageType.FIRE, dmg, 0.0f, 0.0f, Metrics.FIRE, cTime, delta, false);
 				} else if(e instanceof Player) {
 					double dmg = rollDamage(false);
 					player.takeDamage(dmg, cTime);

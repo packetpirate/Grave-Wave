@@ -11,10 +11,15 @@ public class Achievement implements IAchievement {
 	protected String description;
 	protected String icon;
 	
+	// Short-circuits isEarned method if already complete so no complicated checks need to be performed.
+	protected boolean complete;
+	
 	public Achievement(String name_, String description_, String icon_) {
 		this.name = name_;
 		this.description = description_;
 		this.icon = icon_;
+		
+		this.complete = false;
 	}
 
 	@Override
@@ -24,7 +29,7 @@ public class Achievement implements IAchievement {
 
 	@Override
 	public boolean isEarned() {
-		return false;
+		return complete;
 	}
 
 	@Override
@@ -34,7 +39,8 @@ public class Achievement implements IAchievement {
 
 	@Override
 	public void onComplete(AchievementController controller, long cTime) {
-		// To be overridden.
+		controller.broadcast(this, cTime);
+		complete = true;
 	}
 
 	@Override

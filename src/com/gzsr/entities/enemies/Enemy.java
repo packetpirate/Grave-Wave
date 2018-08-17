@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
@@ -271,16 +272,16 @@ public abstract class Enemy implements Entity {
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
 	
-	public void takeDamage(DamageType type, double amnt, float knockback, long cTime, int delta) {
-		takeDamage(type, amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
+	public void takeDamage(DamageType dType, double amnt, float knockback, long sourceMetric, long cTime, int delta) {
+		takeDamage(dType, amnt, knockback, (float)(theta + Math.PI), sourceMetric, cTime, delta, true);
 	}
 	
-	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
-		takeDamage(type, amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric,  long cTime, int delta, boolean flash) {
+		takeDamage(dType, amnt, knockback, knockbackTheta, sourceMetric, cTime, delta, flash, false);
 	}
 	
-	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
-		if(!dead() && !damageImmunities.contains(type)) {
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash, boolean isCritical) {
+		if(!dead() && !damageImmunities.contains(dType)) {
 			health -= amnt;
 			
 			createDamageText(amnt, 24.0f, knockbackTheta, cTime, isCritical);
@@ -296,6 +297,8 @@ public abstract class Enemy implements Entity {
 				position.x += dx;
 				position.y += dy;
 			}
+			
+			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY_DAMAGE));
 		}
 	}
 	
@@ -310,7 +313,7 @@ public abstract class Enemy implements Entity {
 	
 	public void onDeath(GameState gs, long cTime) {
 		if(!deathHandled) {
-			AchievementController.getInstance().postMetric("enemyKilled");
+			AchievementController.getInstance().postMetric(Metrics.ENEMY_KILL);
 			Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
 			postDamageTexts();
 		}

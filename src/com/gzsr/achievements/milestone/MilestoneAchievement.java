@@ -10,20 +10,20 @@ import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class MilestoneAchievement extends Achievement {
-	private Map<String, Pair<Integer>> milestones;
+	private Map<Long, Pair<Integer>> milestones;
 	
 	public MilestoneAchievement(String name_, String description_, String icon_) {
 		super(name_, description_, icon_);
 		
-		milestones = new HashMap<String, Pair<Integer>>();
+		milestones = new HashMap<Long, Pair<Integer>>();
 	}
 	
 	@Override
 	public void update(AchievementController controller, GameState gs, long cTime) {
-		List<String> metrics = controller.getMetrics();
+		List<Long> metrics = controller.getMetrics();
 		
 		if(!metrics.isEmpty()) {
-			for(String metric : metrics) {
+			for(long metric : metrics) {
 				if(milestones.containsKey(metric)) {
 					milestones.get(metric).x += 1;
 				}
@@ -33,13 +33,14 @@ public class MilestoneAchievement extends Achievement {
 		if(isEarned()) onComplete(controller, cTime);
 	}
 	
-	public MilestoneAchievement addMilestone(String metric, int target) {
+	public MilestoneAchievement addMilestone(long metric, int target) {
 		milestones.put(metric, new Pair<Integer>(0, target));
 		return this;
 	}
 	
 	@Override
 	public boolean isEarned() {
+		if(complete) return true;
 		if(milestones.isEmpty()) return false;
 		
 		boolean earned = true;
@@ -49,10 +50,5 @@ public class MilestoneAchievement extends Achievement {
 		}
 		
 		return earned;
-	}
-	
-	@Override
-	public void onComplete(AchievementController controller, long cTime) {
-		controller.broadcast(this, cTime);
 	}
 }

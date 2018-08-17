@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
@@ -135,7 +136,7 @@ public class Explosion implements Entity {
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					if(en.getCollider().intersects(getCollider())) {
-						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, cTime, delta);
+						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, Metrics.EXPLOSION, cTime, delta);
 						entitiesAffected.add(en);
 						return true;
 					} else return false;

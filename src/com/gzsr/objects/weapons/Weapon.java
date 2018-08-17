@@ -47,6 +47,7 @@ public abstract class Weapon implements Entity {
 	public abstract long getCooldown();
 	
 	public abstract int getLevelRequirement();
+	public abstract long getWeaponMetric();
 	
 	@Override
 	public int getLayer() {

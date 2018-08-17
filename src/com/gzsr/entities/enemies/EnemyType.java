@@ -1,6 +1,7 @@
 package com.gzsr.entities.enemies;
 
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.enemies.bosses.Aberration;
 import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
@@ -9,20 +10,20 @@ import com.gzsr.misc.Pair;
 
 public enum EnemyType {
 	// Enemies
-	ZUMBY("GZS_Zumby3", 48, 48, 4, 200, 5, 10, 25),
-	CHUCK("GZS_Upchuck2", 64, 64, 4, 400, 25, 50, 100),
-	GASBAG("GZS_Gasbag2", 48, 48, 4, 400, 30, 60, 100),
-	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150, 10, 20, 50),
-	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400, 80, 120, 500),
-	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200, 1, 5, 10),
-	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200, 125, 175, 750),
-	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200, 200, 250, 1_500),
-	PROWLER("GZS_Prowler", 48, 48, 4, 250, 400, 500, 2_500),
+	ZUMBY("GZS_Zumby3", 48, 48, 4, 200L, Metrics.ZUMBY, 5, 10, 25),
+	CHUCK("GZS_Upchuck2", 64, 64, 4, 400L, Metrics.UPCHUCK, 25, 50, 100),
+	GASBAG("GZS_Gasbag2", 48, 48, 4, 400L, Metrics.GASBAG, 30, 60, 100),
+	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150L, Metrics.ROTDOG, 10, 20, 50),
+	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400L, Metrics.BIG_MAMA, 80, 120, 500),
+	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200L, Metrics.TINY_ZUMBY, 1, 5, 10),
+	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200L, Metrics.STARFRIGHT, 125, 175, 750),
+	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200L, Metrics.EL_SALVO, 200, 250, 1_500),
+	PROWLER("GZS_Prowler", 48, 48, 4, 250L, Metrics.PROWLER, 400, 500, 2_500),
 	
 	// Bosses
-	ABERRATION("GZS_Aberration2", 128, 128, 4, 150, 1_250, 2_000, 5_000), 
-	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50, 1_000, 1_500, 1_000),
-	STITCHES("GZS_Stitches", 128, 128, 4, 150, 4_000, 6_000, 10_000);
+	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 1_250, 2_000, 5_000), 
+	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50L, Metrics.ZOMBAT, 1_000, 1_500, 1_000),
+	STITCHES("GZS_Stitches", 128, 128, 4, 150L, Metrics.STITCHES, 4_000, 6_000, 10_000);
 	
 	private String animationName;
 	private int frameWidth;
@@ -32,6 +33,9 @@ public enum EnemyType {
 	private int frameCount;
 	private long frameDelay;
 	public Animation getAnimation() { return new Animation(animationName, frameWidth, frameHeight, frameCount, frameDelay); }
+	
+	private long enemyMetric;
+	public long getEnemyMetric() { return enemyMetric; }
 	
 	private int cashMin, cashMax;
 	public int getCashValue() { return (Globals.rand.nextInt(cashMax - cashMin) + cashMin); }
@@ -43,12 +47,14 @@ public enum EnemyType {
 		return new Animation(animationName, layer, frameWidth, frameHeight, frameCount, frameDelay, lifespan, created);
 	}
 	
-	EnemyType(String animationName_, int frameWidth_, int frameHeight_, int frameCount_, long frameDelay_, int cashMin_, int cashMax_, int experience_) {
+	EnemyType(String animationName_, int frameWidth_, int frameHeight_, int frameCount_, long frameDelay_, long enemyMetric_, int cashMin_, int cashMax_, int experience_) {
 		this.animationName = animationName_;
 		this.frameWidth = frameWidth_;
 		this.frameHeight = frameHeight_;
 		this.frameCount = frameCount_;
 		this.frameDelay = frameDelay_;
+		
+		this.enemyMetric = enemyMetric_;
 		this.cashMin = cashMin_;
 		this.cashMax = cashMax_;
 		this.experience = experience_;

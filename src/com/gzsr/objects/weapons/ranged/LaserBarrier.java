@@ -159,6 +159,9 @@ public class LaserBarrier extends RangedWeapon {
 	public int getLevelRequirement() { return 10; }
 	
 	@Override
+	public long getWeaponMetric() { return 0; }
+	
+	@Override
 	public String getName() {
 		return "Laser Barrier";
 	}

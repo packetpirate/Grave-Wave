@@ -3,6 +3,7 @@ package com.gzsr.objects.weapons.melee;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
@@ -73,6 +74,9 @@ public class BastardSword extends MeleeWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 10; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.BASTARD_SWORD; }
 	
 	@Override
 	public String getName() {

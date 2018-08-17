@@ -6,6 +6,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
@@ -117,6 +118,9 @@ public class Flamethrower extends RangedWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 12; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.FLAMETHROWER; }
 	
 	@Override
 	public String getName() {

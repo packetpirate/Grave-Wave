@@ -11,7 +11,7 @@ import com.gzsr.states.LoadingState;
 
 public class Game extends StateBasedGame {
 	public Game() {
-		super("Generic Zombie Shooter: Redux");
+		super("Generic Zombie Shooter - Redux");
 	}
 
 	public static void main(String[] args) {

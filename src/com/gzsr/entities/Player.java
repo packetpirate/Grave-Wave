@@ -605,7 +605,7 @@ public class Player implements Entity {
 							
 							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 							double totalDamage = (p.getDamage() * damagePercentage);
-							if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), cTime, delta, true, p.isCritical());
+							if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), rw.getWeaponMetric(), cTime, delta, true, p.isCritical());
 						}
 					}
 					
@@ -618,7 +618,7 @@ public class Player implements Entity {
 			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
 				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 				double totalDamage = (mw.rollDamage(mw.isCurrentCritical()) * damagePercentage);
-				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), cTime, delta, true, mw.isCurrentCritical());
+				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(), cTime, delta, true, mw.isCurrentCritical());
 			}
 		}
 		

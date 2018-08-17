@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -190,6 +191,9 @@ public class MolotovWeapon extends RangedWeapon {
 	
 	@Override
 	public int getLevelRequirement() { return 8; }
+	
+	@Override
+	public long getWeaponMetric() { return Metrics.MOLOTOV; }
 	
 	@Override
 	public String getName() {

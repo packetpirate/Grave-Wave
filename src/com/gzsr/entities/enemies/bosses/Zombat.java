@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
@@ -128,18 +129,18 @@ public class Zombat extends Boss {
 	}
 	
 	@Override
-	public void takeDamage(DamageType type, double amnt, float knockback, long cTime, int delta) {
-		takeDamage(type, amnt, knockback, (float)(theta + Math.PI), cTime, delta, true);
+	public void takeDamage(DamageType dType, double amnt, float knockback, long sourceMetric, long cTime, int delta) {
+		takeDamage(dType, amnt, knockback, (float)(theta + Math.PI), sourceMetric, cTime, delta, true);
 	}
 	
 	@Override
-	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash) {
-		takeDamage(type, amnt, knockback, knockbackTheta, cTime, delta, flash, false);
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash) {
+		takeDamage(dType, amnt, knockback, knockbackTheta, sourceMetric, cTime, delta, flash, false);
 	}
 	
 	@Override
-	public void takeDamage(DamageType type, double amnt, float knockback, float knockbackTheta, long cTime, int delta, boolean flash, boolean isCritical) {
-		if(!dead() && !damageImmunities.contains(type)) {
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash, boolean isCritical) {
+		if(!dead() && !damageImmunities.contains(dType)) {
 			health -= amnt;
 			
 			createDamageText(amnt, 32.0f, knockbackTheta, cTime, isCritical);
@@ -148,12 +149,14 @@ public class Zombat extends Boss {
 				hit = true;
 				hitTime = cTime;
 			}
+			
+			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY_DAMAGE));
 		}
 	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		AchievementController.getInstance().postMetric("zombatsKilled");
+		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY_KILL));
 	}
 
 	@Override
