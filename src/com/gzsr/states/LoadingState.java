@@ -59,6 +59,7 @@ public class LoadingState extends BasicGameState {
 		if(AssetManager.assetsLoaded() == AssetManager.assetsToLoad()) {
 			game.addState(new MenuState());
 			
+			game.addState(new AchievementMenuState());
 			game.addState(new SettingsState());
 			game.addState(new GameSettingsState());
 			game.addState(new AudioSettingsState());

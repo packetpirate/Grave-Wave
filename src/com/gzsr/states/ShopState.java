@@ -644,7 +644,7 @@ public class ShopState extends BasicGameState implements InputListener {
 		boolean mouseInShop = ((mouse.getPosition().x >= SHOP_CONTAINER.x) && (mouse.getPosition().y >= SHOP_CONTAINER.y) && 
 				(mouse.getPosition().x <= (SHOP_CONTAINER.x + CONTAINER_WIDTH)) && (mouse.getPosition().y <= SHOP_CONTAINER.y + CONTAINER_HEIGHT));
 		
-		float scrollAmount = (change > 0) ? SCROLL_SPEED : -SCROLL_SPEED;
+		float scrollAmount = ((change > 0) ? SCROLL_SPEED : -SCROLL_SPEED);
 		if(mouseInInventory) {
 			if((inventoryOrigin.y + scrollAmount) <= INVENTORY_CONTAINER.y) {
 				inventoryOrigin.y += scrollAmount;

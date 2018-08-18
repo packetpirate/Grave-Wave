@@ -95,6 +95,7 @@ public class GameState extends BasicGameState implements InputListener {
 						exitYes.mouseEnter();
 						if(mouse.isLeftDown()) {
 							reset(gc);
+							Globals.inGame = false;
 							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
 						}
 					} else exitYes.mouseExit();
@@ -144,6 +145,7 @@ public class GameState extends BasicGameState implements InputListener {
 						// If the player has died, transition state.
 						controls.resetAll();
 						Globals.gameOver = true;
+						Globals.inGame = false;
 						game.enterState(GameOverState.ID, 
 										new FadeOutTransition(Color.black, 250), 
 										new FadeInTransition(Color.black, 100));

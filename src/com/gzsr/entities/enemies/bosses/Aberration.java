@@ -299,13 +299,13 @@ public class Aberration extends Boss {
 				hitTime = cTime;
 			}
 			
-			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY_DAMAGE));
+			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY, Metrics.DAMAGE));
 		}
 	}
 	
 	@Override
 	public void onDeath(GameState gs, long cTime) {
-		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY_KILL));
+		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL));
 	}
 	
 	@Override

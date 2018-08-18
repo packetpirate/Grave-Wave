@@ -7,13 +7,15 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Ellipse;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.controllers.ShopController;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -74,8 +76,8 @@ public class Player implements Entity {
 		}
 	}
 	
-	private Rectangle bounds;
-	public Rectangle getCollider() { return bounds; }
+	private Ellipse bounds;
+	public Ellipse getCollider() { return bounds; }
 	
 	private float speed;
 	public float getSpeed() { return speed; }
@@ -212,6 +214,8 @@ public class Player implements Entity {
 					respawning = true;
 					respawnTime = (cTime + Player.RESPAWN_TIME);
 				}
+				
+				AchievementController.getInstance().postMetric(Metrics.compose(Metrics.PLAYER, Metrics.KILL));
 			} else {
 				long elapsed = (cTime - respawnTime);
 				if(elapsed >= 0) {
@@ -270,7 +274,9 @@ public class Player implements Entity {
 		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
 			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipSize())) cRangedWeapon.reload(cTime);
 		}
-		bounds.setLocation((position.x - (getImage().getWidth() / 2)), (position.y - (getImage().getHeight() / 2)));
+		
+		bounds.setCenterX(position.x);
+		bounds.setCenterY(position.y + 4.0f);
 		
 		// Check to see if the player is trying to change weapon by number.
 		Layout [] keys = new Layout[] { Controls.Layout.WEAPON_1, Controls.Layout.WEAPON_2, Controls.Layout.WEAPON_3, Controls.Layout.WEAPON_4,
@@ -342,9 +348,7 @@ public class Player implements Entity {
 				
 				if(Globals.SHOW_COLLIDERS) {
 					g.setColor(Color.red);
-					g.drawRect((position.x - (image.getWidth() / 2)), 
-							   (position.y - (image.getHeight() / 2)), 
-							   image.getWidth(), image.getHeight());
+					g.draw(bounds);
 				}
 				
 				g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
@@ -369,7 +373,7 @@ public class Player implements Entity {
 		velocity.x = 0.0f;
 		velocity.y = 0.0f;
 		
-		bounds = new Rectangle(position.x, position.y, getImage().getWidth(), getImage().getHeight());
+		bounds = new Ellipse(position.x, (position.y + 4.0f), 16.0f, 16.0f);
 		
 		speed = Player.DEFAULT_SPEED;
 		theta = 0.0f;

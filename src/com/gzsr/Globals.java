@@ -26,6 +26,7 @@ public class Globals {
 	public static Random rand = new Random();
 	
 	public static boolean gameOver = false;
+	public static boolean inGame = false; // Used to return to a different place from certain screens depending on whether the screen was accessed during gameplay.
 	
 	private static int entityNum = 0;
 	public static int generateEntityID() { return entityNum++; }

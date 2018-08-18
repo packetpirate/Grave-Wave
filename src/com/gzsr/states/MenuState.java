@@ -26,6 +26,7 @@ public class MenuState extends BasicGameState implements InputListener {
 	private AssetManager assets = null;
 	
 	private MenuButton gameStart;
+	private MenuButton achievements;
 	private MenuButton settings;
 	private MenuButton credits;
 	private MenuButton exit;
@@ -35,9 +36,10 @@ public class MenuState extends BasicGameState implements InputListener {
 		assets = AssetManager.getManager();
 		
 		gameStart = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 260.0f)), "Start Game");
-		settings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Settings");
-		credits = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 140.0f)), "Credits");
-		exit = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Exit");
+		achievements = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Achievements");
+		settings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 140.0f)), "Settings");
+		credits = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Credits");
+		exit = new MenuButton(new Pair<Float>((Globals.WIDTH - 170.0f), (Globals.HEIGHT - 80.0f)), "Exit");
 	}
 	
 	@Override
@@ -57,9 +59,15 @@ public class MenuState extends BasicGameState implements InputListener {
 			if(mouse.isLeftDown()) {
 				Globals.resetEntityNum();
 				Controls.getInstance().resetAll();
+				Globals.inGame = true;
 				game.enterState(GameState.ID, new FadeOutTransition(), new FadeInTransition()); 
 			}
 		} else gameStart.mouseExit();
+		
+		if(achievements.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+			achievements.mouseEnter();
+			if(mouse.isLeftDown()) game.enterState(AchievementMenuState.ID, new FadeOutTransition(), new FadeInTransition());
+		} else achievements.mouseExit();
 		
 		if(settings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			settings.mouseEnter();
@@ -87,6 +95,7 @@ public class MenuState extends BasicGameState implements InputListener {
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
 		gameStart.render(g, 0L);
+		achievements.render(g, 0L);
 		settings.render(g, 0L);
 		credits.render(g, 0L);
 		exit.render(g, 0L);

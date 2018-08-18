@@ -27,16 +27,20 @@ public class AmmoCrate extends Item {
 		// Filter the player's weapons by those that are not full.
 		List<RangedWeapon> weapons = player.getRangedWeapons().stream().filter(w -> !w.clipsMaxedOut()).collect(Collectors.toList());
 		
-		int weapon = Globals.rand.nextInt(weapons.size());
-		RangedWeapon w = weapons.get(weapon);
-		
-		w.addInventoryAmmo(w.getClipSize());
-		
-		duration = 0L;
-		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
-		
-		String message = String.format("+%d %s Ammo!", w.getClipSize(), w.getName());
-		StatusMessages.getInstance().addMessage(message, player, Player.ABOVE_1, cTime, 2_000L);
+		if(!weapons.isEmpty()) {
+			int weapon = Globals.rand.nextInt(weapons.size());
+			RangedWeapon w = weapons.get(weapon);
+			
+			w.addInventoryAmmo(w.getClipSize());
+			
+			duration = 0L;
+			pickup.play(1.0f, AssetManager.getManager().getSoundVolume());
+			
+			String message = String.format("+%d %s Ammo!", w.getClipSize(), w.getName());
+			StatusMessages.getInstance().addMessage(message, player, Player.ABOVE_1, cTime, 2_000L);
+		} else {
+			StatusMessages.getInstance().addMessage("All Weapons Full!", player, Player.ABOVE_1, cTime, 2_000L);
+		}
 	}
 	
 	@Override

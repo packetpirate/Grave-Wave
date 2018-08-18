@@ -11,11 +11,16 @@ import com.gzsr.states.GameState;
 
 public class MilestoneAchievement extends Achievement {
 	private Map<Long, Pair<Integer>> milestones;
+	public Map<Long, Pair<Integer>> getMilestones() { return milestones; }
+	
+	private Map<Long, String> descriptors;
+	public Map<Long, String> getDescriptors() { return descriptors; }
 	
 	public MilestoneAchievement(String name_, String description_, String icon_) {
 		super(name_, description_, icon_);
 		
 		milestones = new HashMap<Long, Pair<Integer>>();
+		descriptors = new HashMap<Long, String>();
 	}
 	
 	@Override
@@ -23,9 +28,12 @@ public class MilestoneAchievement extends Achievement {
 		List<Long> metrics = controller.getMetrics();
 		
 		if(!metrics.isEmpty()) {
-			for(long metric : metrics) {
-				if(milestones.containsKey(metric)) {
-					milestones.get(metric).x += 1;
+			for(Map.Entry<Long, Pair<Integer>> entry : milestones.entrySet()) {
+				long metric = entry.getKey();
+				Pair<Integer> milestone = entry.getValue();
+				
+				for(long m : metrics) {
+					if((metric & m) == metric) milestone.x += 1; 
 				}
 			}
 		}
@@ -33,8 +41,9 @@ public class MilestoneAchievement extends Achievement {
 		if(isEarned()) onComplete(controller, cTime);
 	}
 	
-	public MilestoneAchievement addMilestone(long metric, int target) {
+	public MilestoneAchievement addMilestone(String name, long metric, int target) {
 		milestones.put(metric, new Pair<Integer>(0, target));
+		descriptors.put(metric, name);
 		return this;
 	}
 	

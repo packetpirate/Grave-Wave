@@ -298,7 +298,7 @@ public abstract class Enemy implements Entity {
 				position.y += dy;
 			}
 			
-			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY_DAMAGE));
+			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY, Metrics.DAMAGE));
 		}
 	}
 	
@@ -313,7 +313,7 @@ public abstract class Enemy implements Entity {
 	
 	public void onDeath(GameState gs, long cTime) {
 		if(!deathHandled) {
-			AchievementController.getInstance().postMetric(Metrics.ENEMY_KILL);
+			AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ENEMY, Metrics.KILL));
 			Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
 			postDamageTexts();
 		}

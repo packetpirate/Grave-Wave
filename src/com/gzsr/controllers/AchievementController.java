@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.gzsr.achievements.Achievement;
 import com.gzsr.achievements.AchievementBroadcast;
-import com.gzsr.achievements.IAchievement;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.achievements.milestone.MilestoneAchievement;
 import com.gzsr.achievements.state.AchievementState;
@@ -30,8 +29,8 @@ public class AchievementController {
 	public List<Long> getMetrics() { return metrics; }
 	public void postMetric(long metric) { metrics.add(metric); }
 	
-	private List<IAchievement> achievements;
-	public List<IAchievement> getAchievements() { return achievements; }
+	private List<Achievement> achievements;
+	public List<Achievement> getAchievements() { return achievements; }
 	public void registerAchievement(Achievement achievement) { achievements.add(achievement); }
 	
 	private List<AchievementBroadcast> broadcasts;
@@ -40,7 +39,7 @@ public class AchievementController {
 	
 	private AchievementController() {
 		metrics = new ArrayList<Long>();
-		achievements = new ArrayList<IAchievement>();
+		achievements = new ArrayList<Achievement>();
 		broadcasts = new ArrayList<AchievementBroadcast>();
 	}
 	
@@ -61,37 +60,45 @@ public class AchievementController {
 		// Initializes all achievements.
 		
 		{ // Milestone achievements.
+			MilestoneAchievement enemies100 = new MilestoneAchievement("100 Kills", "Killed 100 enemies of any kind.", "")
+					.addMilestone("Enemies Killed", Metrics.compose(Metrics.ENEMY, Metrics.KILL), 100);
+			achievements.add(enemies100);
+			
 			MilestoneAchievement enemies500 = new MilestoneAchievement("500 Kills", "Killed 500 enemies of any kind.", "")
-					.addMilestone(Metrics.ENEMY_KILL, 500);
+					.addMilestone("Enemies Killed", Metrics.compose(Metrics.ENEMY, Metrics.KILL), 500);
 			achievements.add(enemies500);
 			
 			MilestoneAchievement enemies1000 = new MilestoneAchievement("1,000 Kills", "Killed 1,000 enemies of any kind.", "")
-					.addMilestone(Metrics.ENEMY_KILL, 1_000);
+					.addMilestone("Enemies Killed", Metrics.compose(Metrics.ENEMY, Metrics.KILL), 1_000);
 			achievements.add(enemies1000);
 			
 			MilestoneAchievement aberrationKilled = new MilestoneAchievement("Aberration", "Defeated the Aberration for the first time.", "")
-					.addMilestone(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY_KILL), 1);
+					.addMilestone("Aberration Killed", Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL), 1);
 			achievements.add(aberrationKilled);
 			
 			MilestoneAchievement stitchesKilled = new MilestoneAchievement("Stitches", "Defeated Stitches for the first time.", "")
-					.addMilestone(Metrics.compose(Metrics.STITCHES, Metrics.ENEMY_KILL), 1);
+					.addMilestone("Stitches Killed", Metrics.compose(Metrics.STITCHES, Metrics.ENEMY, Metrics.KILL), 1);
 			achievements.add(stitchesKilled);
 			
 			MilestoneAchievement zombatsKilled = new MilestoneAchievement("Zombats", "Defeated the Zombats for the first time.", "")
-					.addMilestone(Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY_KILL), 3);
+					.addMilestone("Zombats Killed", Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), 3);
 			achievements.add(zombatsKilled);
+			
+			MilestoneAchievement dontTazeMe = new MilestoneAchievement("Don't Taze Me, Bro!", "Paralyze 100 enemies with the Taser.", "")
+					.addMilestone("Enemies Tased", Metrics.compose(Metrics.TASER, Metrics.ENEMY, Metrics.DAMAGE), 100);
+			achievements.add(dontTazeMe);
 		}
 		
-		{ // Kill Aberration with just the Beretta M9.
+		{ // Kill Aberration with just the Nail Gun.
 			AchievementState s0 = new AchievementState(false);
 			AchievementState s1 = new AchievementState(false);
 			AchievementState s2 = new AchievementState(true);
 			
 			s0.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.WAVE_START), s1);
-			s1.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY_KILL), s2);
-			s1.createTransition(s0, (metric -> ((((metric & Metrics.ABERRATION) == 1) && (metric & Metrics.ENEMY_DAMAGE) == 1) && ((metric & Metrics.BERETTA) == 0))));
+			s1.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL), s2);
+			s1.createTransition(s0, (metric -> ((((metric & Metrics.ABERRATION) != 0) && (metric & Metrics.compose(Metrics.ENEMY, Metrics.DAMAGE)) != 0) && ((metric & Metrics.NAIL_GUN) == 0))));
 			
-			StateBasedAchievement aberrationWithBeretta = new StateBasedAchievement("Absolute Madman", "Killed the Aberration with just the Beretta M9.", "", s0);
+			StateBasedAchievement aberrationWithBeretta = new StateBasedAchievement("Absolute Madman", "Killed the Aberration using only the Nail Gun.", "", s0);
 			achievements.add(aberrationWithBeretta);
 		}
 	}
