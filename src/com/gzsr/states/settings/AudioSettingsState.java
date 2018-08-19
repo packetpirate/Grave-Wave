@@ -23,6 +23,7 @@ import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.Slider;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.states.SettingsState;
 
 public class AudioSettingsState extends BasicGameState implements InputListener {
@@ -66,7 +67,8 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 			if(mouse.isLeftDown()) {
 				musicVolumeSlider.apply(true);
 				ConfigManager.getInstance().save();
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();
 		
@@ -74,7 +76,8 @@ public class AudioSettingsState extends BasicGameState implements InputListener 
 			backButton.mouseEnter();
 			if(mouse.isLeftDown()) {
 				musicVolumeSlider.apply(false);
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else backButton.mouseExit();
 		

@@ -48,7 +48,6 @@ public abstract class Enemy implements Entity {
 	
 	protected double health;
 	public double getHealth() { return health; }
-	//protected Dice damage;
 	public double getDamage() { return 0.0; }
 	protected int cash;
 	public int getCashValue() { return cash; }
@@ -99,8 +98,8 @@ public abstract class Enemy implements Entity {
 		this.lastAttack = -getAttackDelay();
 		this.theta = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
+		
 		this.health = 0.0;
-		//this.damage = new Dice(1, 1);
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
 		this.damageImmunities = new ArrayList<DamageType>();
@@ -146,14 +145,13 @@ public abstract class Enemy implements Entity {
 							animation.setCurrent("attack"); // has no effect if this enemy has no attack animation
 						}
 					}
-				} else move((GameState)gs, delta);
+				} else {
+					if(!animation.getCurrent().equals("move")) animation.setCurrent("move");
+					move((GameState)gs, delta);
+				}
 			}
 			
-			long elapsed = (cTime - lastAttack);
-			if(attacking && (elapsed >= animation.getCurrentAnimation().getLifespan())) {
-				attacking = false;
-				animation.setCurrent("move");
-			}
+			if(attacking) attacking = false;
 		}
 		
 		postDamageTexts();

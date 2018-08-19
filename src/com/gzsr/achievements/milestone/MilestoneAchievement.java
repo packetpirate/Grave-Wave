@@ -17,7 +17,11 @@ public class MilestoneAchievement extends Achievement {
 	public Map<Long, String> getDescriptors() { return descriptors; }
 	
 	public MilestoneAchievement(String name_, String description_, String icon_) {
-		super(name_, description_, icon_);
+		this(name_, description_, icon_, false);
+	}
+	
+	public MilestoneAchievement(String name_, String description_, String icon_, boolean hidden_) {
+		super(name_, description_, icon_, hidden_);
 		
 		milestones = new HashMap<Long, Pair<Integer>>();
 		descriptors = new HashMap<Long, String>();
@@ -33,7 +37,7 @@ public class MilestoneAchievement extends Achievement {
 				Pair<Integer> milestone = entry.getValue();
 				
 				for(long m : metrics) {
-					if((metric & m) == metric) milestone.x += 1; 
+					if((metric & m) == metric) milestone.x += 1;
 				}
 			}
 		}

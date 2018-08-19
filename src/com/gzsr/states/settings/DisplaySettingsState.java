@@ -24,12 +24,12 @@ import com.gzsr.states.SettingsState;
 public class DisplaySettingsState extends BasicGameState implements InputListener {
 	public static final int ID = 11;
 
-	private MenuButton shadowSettings;
+	private MenuButton gammaSettings;
 	private MenuButton backButton;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		shadowSettings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Shadow Opacity");
+		gammaSettings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Gamma");
 		backButton = new MenuButton(new Pair<Float>((Globals.WIDTH - 200.0f), (Globals.HEIGHT - 80.0f)), "Back");
 	}
 	
@@ -42,10 +42,10 @@ public class DisplaySettingsState extends BasicGameState implements InputListene
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		
-		if(shadowSettings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-			shadowSettings.mouseEnter();
-			if(mouse.isLeftDown()) game.enterState(ShadowSettingsState.ID, new FadeOutTransition(), new FadeInTransition());
-		} else shadowSettings.mouseExit();
+		if(gammaSettings.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+			gammaSettings.mouseEnter();
+			if(mouse.isLeftDown()) game.enterState(GammaSettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+		} else gammaSettings.mouseExit();
 		
 		if(backButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			backButton.mouseEnter();
@@ -64,7 +64,7 @@ public class DisplaySettingsState extends BasicGameState implements InputListene
 		
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
-		shadowSettings.render(g, 0L);
+		gammaSettings.render(g, 0L);
 		backButton.render(g, 0L);
 		
 		g.setColor(Color.white);

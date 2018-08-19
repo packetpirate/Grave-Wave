@@ -84,7 +84,7 @@ public class AchievementController {
 					.addMilestone("Zombats Killed", Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), 3);
 			achievements.add(zombatsKilled);
 			
-			MilestoneAchievement dontTazeMe = new MilestoneAchievement("Don't Taze Me, Bro!", "Paralyze 100 enemies with the Taser.", "")
+			MilestoneAchievement dontTazeMe = new MilestoneAchievement("Don't Taze Me, Bro!", "Paralyze 100 enemies with the Taser.", "", true)
 					.addMilestone("Enemies Tased", Metrics.compose(Metrics.TASER, Metrics.ENEMY, Metrics.DAMAGE), 100);
 			achievements.add(dontTazeMe);
 		}

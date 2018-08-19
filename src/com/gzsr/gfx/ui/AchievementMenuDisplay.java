@@ -18,6 +18,7 @@ import com.gzsr.misc.Pair;
 public class AchievementMenuDisplay implements Entity {
 	private static final String HEADER = "PressStart2P-Regular";
 	private static final String BODY = "PressStart2P-Regular_small";
+	private static final String CHECKMARK = "GZS_Checkmark";
 	private static final Color HEADER_COLOR = Color.white;
 	private static final Color BODY_COLOR = Color.lightGray;
 	private static final Color BACKGROUND = new Color(0x2D2D2D);
@@ -56,7 +57,7 @@ public class AchievementMenuDisplay implements Entity {
 		AssetManager assets = AssetManager.getManager();
 		
 		// Background of achievement display.
-		g.setColor(BACKGROUND);
+		g.setColor((achievement.isEarned() ? Color.gray : BACKGROUND));
 		g.fillRect(origin.x, origin.y, containerWidth, containerHeight);
 		g.setColor(Color.white);
 		g.drawRect(origin.x, origin.y, containerWidth, containerHeight);
@@ -73,19 +74,23 @@ public class AchievementMenuDisplay implements Entity {
 			img.draw((origin.x + 10.0f), (origin.y + 10.0f), scale);
 		}
 		
+		boolean hideAchievementInfo = (achievement.isSecret() && !achievement.isEarned());
+		
 		// Achievement name.
 		UnicodeFont header = assets.getFont(HEADER);
 		float textX = (origin.x + ICON_SIZE + 30.0f);
+		String headerText = (hideAchievementInfo ? "Hidden" : achievement.getName());
 		g.setColor(HEADER_COLOR);
 		g.setFont(header);
-		g.drawString(achievement.getName(), textX, (origin.y + 10.0f));
+		g.drawString(headerText, textX, (origin.y + 10.0f));
 		
 		// Achievement description.
 		UnicodeFont body = assets.getFont(BODY);
 		float descY = (origin.y + header.getLineHeight() + 20.0f);
+		String bodyText = (hideAchievementInfo ? "Unlock this achievement to see more information." : achievement.getDescription());
 		g.setColor(BODY_COLOR);
 		g.setFont(body);
-		g.drawString(achievement.getDescription(), textX, descY);
+		g.drawString(bodyText, textX, descY);
 		
 		// Milestones, if any.
 		if(achievement instanceof MilestoneAchievement) {
@@ -117,9 +122,20 @@ public class AchievementMenuDisplay implements Entity {
 				
 				// Progress text.
 				g.setColor(BODY_COLOR);
-				g.drawString(String.format("%d / %d", progress.x, progress.y), (textX + PROGRESS_WIDTH + 10.0f), (y + body.getLineHeight() + 5.0f));
+				g.drawString(String.format("%d / %d", progress.x, progress.y), 
+							 (textX + PROGRESS_WIDTH + 10.0f), (y + body.getLineHeight() + ((PROGRESS_HEIGHT - body.getLineHeight()) / 2) + 5.0f));
 				
 				y += (body.getLineHeight() + PROGRESS_HEIGHT + 15.0f);
+			}
+		}
+		
+		// Draw the checkmark if this achievement has been earned.
+		if(achievement.isEarned()) {
+			Image check = assets.getImage(CHECKMARK);
+			if(check != null) {
+				float x = ((origin.x + containerWidth) - (check.getWidth() + 10.0f));
+				float y = (origin.y + 10.0f);
+				g.drawImage(check, x, y);
 			}
 		}
 	}

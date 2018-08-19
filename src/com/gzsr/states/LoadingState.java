@@ -20,7 +20,7 @@ import com.gzsr.states.settings.AudioSettingsState;
 import com.gzsr.states.settings.ControlSettingsState;
 import com.gzsr.states.settings.DisplaySettingsState;
 import com.gzsr.states.settings.GameSettingsState;
-import com.gzsr.states.settings.ShadowSettingsState;
+import com.gzsr.states.settings.GammaSettingsState;
 
 public class LoadingState extends BasicGameState {
 	public static final int ID = 7;
@@ -64,7 +64,7 @@ public class LoadingState extends BasicGameState {
 			game.addState(new GameSettingsState());
 			game.addState(new AudioSettingsState());
 			game.addState(new DisplaySettingsState());
-			game.addState(new ShadowSettingsState());
+			game.addState(new GammaSettingsState());
 			game.addState(new ControlSettingsState());
 			
 			game.addState(new GameState());
@@ -215,7 +215,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_SkillDownButton.png",
 			"images/GZS_BuyButton2.png",
 			"images/GZS_SellButton2.png",
-			"images/GZS_AmmoButton.png"
+			"images/GZS_AmmoButton.png",
+			"images/GZS_Checkmark.png"
 		};
 		
 		for(String asset : assetList) {

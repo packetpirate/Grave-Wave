@@ -27,8 +27,9 @@ import com.gzsr.gfx.ui.Slider;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 
-public class ShadowSettingsState extends BasicGameState implements InputListener {
+public class GammaSettingsState extends BasicGameState implements InputListener {
 	public static final int ID = 13;
 	
 	private static final String EXPLANATION = "Adjust the slider until you can just barely see the zombies outside the flashlight area.";
@@ -55,7 +56,7 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 		flashlight.setOrigin(playerPos.x, playerPos.y);
 		flashlight.setTheta((float)(Math.PI / 2));
 		
-		opacitySlider = new Slider("shadowLevel", "Shadow Layer Opacity", new Pair<Float>(((Globals.WIDTH / 2) - 256.0f), (Globals.HEIGHT - 400.0f)), 512.0f, opacityOperation);
+		opacitySlider = new Slider("shadowLevel", "Gamma Level", new Pair<Float>(((Globals.WIDTH / 2) - 256.0f), (Globals.HEIGHT - 400.0f)), 512.0f, opacityOperation);
 		opacitySlider.setSliderBounds(new Pair<Float>(0.60f, 0.90f));
 		opacitySlider.setDefaultVal(Flashlight.getShadowOpacity());
 		opacitySlider.setSliderVal(Flashlight.getShadowOpacity());
@@ -80,7 +81,8 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 			if(mouse.isLeftDown()) {
 				opacitySlider.apply(true);
 				ConfigManager.getInstance().save();
-				game.enterState(DisplaySettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : DisplaySettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();
 		
@@ -88,7 +90,8 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 			backButton.mouseEnter();
 			if(mouse.isLeftDown()) {
 				opacitySlider.apply(false);
-				game.enterState(DisplaySettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : DisplaySettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else backButton.mouseExit();
 		
@@ -177,7 +180,7 @@ public class ShadowSettingsState extends BasicGameState implements InputListener
 	
 	@Override
 	public int getID() {
-		return ShadowSettingsState.ID;
+		return GammaSettingsState.ID;
 	}
 
 }

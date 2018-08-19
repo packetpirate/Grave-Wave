@@ -12,13 +12,19 @@ public class Achievement implements IAchievement {
 	protected String icon;
 	
 	// Short-circuits isEarned method if already complete so no complicated checks need to be performed.
+	protected boolean hidden;
 	protected boolean complete;
 	
 	public Achievement(String name_, String description_, String icon_) {
+		this(name_, description_, icon_, false);
+	}
+	
+	public Achievement(String name_, String description_, String icon_, boolean hidden_) {
 		this.name = name_;
 		this.description = description_;
 		this.icon = icon_;
 		
+		this.hidden = hidden_;
 		this.complete = false;
 	}
 
@@ -28,14 +34,10 @@ public class Achievement implements IAchievement {
 	}
 
 	@Override
-	public boolean isEarned() {
-		return complete;
-	}
+	public boolean isEarned() { return complete; }
 
 	@Override
-	public boolean isSecret() {
-		return false;
-	}
+	public boolean isSecret() { return hidden; }
 
 	@Override
 	public void onComplete(AchievementController controller, long cTime) {

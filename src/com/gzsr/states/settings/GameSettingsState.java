@@ -23,6 +23,7 @@ import com.gzsr.gfx.ui.CheckBox;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.states.SettingsState;
 
 public class GameSettingsState extends BasicGameState implements InputListener {
@@ -57,7 +58,8 @@ public class GameSettingsState extends BasicGameState implements InputListener {
 			if(mouse.isLeftDown()) {
 				fullscreenCheckbox.apply(true);
 				ConfigManager.getInstance().save();
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();
 		
@@ -65,7 +67,8 @@ public class GameSettingsState extends BasicGameState implements InputListener {
 			backButton.mouseEnter();
 			if(mouse.isLeftDown()) {
 				fullscreenCheckbox.apply(false);
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else backButton.mouseExit();
 		

@@ -10,7 +10,11 @@ public class StateBasedAchievement extends Achievement {
 	private AchievementState currentState;
 	
 	public StateBasedAchievement(String name_, String description_, String icon_, AchievementState start_) {
-		super(name_, description_, icon_);
+		this(name_, description_, icon_, start_, false);
+	}
+	
+	public StateBasedAchievement(String name_, String description_, String icon_, AchievementState start_, boolean hidden_) {
+		super(name_, description_, icon_, hidden_);
 		
 		this.currentState = start_;
 	}

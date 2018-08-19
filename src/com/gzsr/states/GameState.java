@@ -12,7 +12,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -22,21 +21,19 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
-import com.gzsr.controllers.AchievementController;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
+import com.gzsr.controllers.AchievementController;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Emitter;
 import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.gfx.ui.hud.Console;
+import com.gzsr.gfx.ui.hud.EscapeMenu;
 import com.gzsr.gfx.ui.hud.HUD;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.status.Status;
@@ -44,9 +41,6 @@ import com.gzsr.status.StatusEffect;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
-	
-	private static final float PROMPT_WIDTH = 350.0f;
-	private static final float PROMPT_HEIGHT = 100.0f;
 	
 	private static final Color PAUSE_OVERLAY = new Color(0x331F006F);
 	
@@ -62,10 +56,10 @@ public class GameState extends BasicGameState implements InputListener {
 	public Entity getEntity(String key) { return entities.get(key); }
 	public void addEntity(String key, Entity e) { entities.put(key, e); }
 	
-	private boolean gameStarted, paused, consoleOpen, exitPrompt;
+	private boolean gameStarted, paused, consoleOpen;
 	public boolean isConsoleOpen() { return consoleOpen; }
 	
-	private MenuButton exitYes, exitNo;
+	private EscapeMenu escapeMenu;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -74,12 +68,9 @@ public class GameState extends BasicGameState implements InputListener {
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair2").getScaledCopy(0.5f), 16, 16);
 		
 		entities = new ConcurrentHashMap<String, Entity>();
+		escapeMenu = new EscapeMenu();
 		
 		reset(gc);
-		
-		UnicodeFont f = assets.getFont("PressStart2P-Regular_large");
-		exitYes = new MenuButton(new Pair<Float>((((Globals.WIDTH / 2) - (PROMPT_WIDTH / 2)) + 20.0f), (float)(Globals.HEIGHT / 2)), "Yes");
-		exitNo = new MenuButton(new Pair<Float>((((Globals.WIDTH / 2) + (PROMPT_WIDTH / 2)) - f.getWidth("No") - 20.0f), (float)(Globals.HEIGHT / 2)), "No");
 	}
 
 	@Override
@@ -88,25 +79,8 @@ public class GameState extends BasicGameState implements InputListener {
 			accu = Math.min((accu + delta), (Globals.STEP_TIME * Globals.MAX_STEPS));
 			
 			while(accu >= Globals.STEP_TIME) {
-				if(exitPrompt) {
-					MouseInfo mouse = Controls.getInstance().getMouse();
-					
-					if(exitYes.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-						exitYes.mouseEnter();
-						if(mouse.isLeftDown()) {
-							reset(gc);
-							Globals.inGame = false;
-							game.enterState(MenuState.ID, new FadeOutTransition(), new FadeInTransition());
-						}
-					} else exitYes.mouseExit();
-					
-					if(exitNo.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-						exitNo.mouseEnter();
-						if(mouse.isLeftDown()) {
-							mouse.setLeftDown(false);
-							exitPrompt = false;
-						}
-					} else exitNo.mouseExit();
+				if(escapeMenu.isOpen()) {
+					escapeMenu.update(gc, game, this);
 				} else if(!paused && !consoleOpen) {
 					time += (long)Globals.STEP_TIME; // Don't want to update time while paused; otherwise, game objects and events could despawn / occur while paused.
 					
@@ -224,21 +198,8 @@ public class GameState extends BasicGameState implements InputListener {
 								 ((Globals.WIDTH / 2) - (w / 2)), ((Globals.HEIGHT / 2) - (h / 2)), w);
 		}
 		
-		if(exitPrompt) {
-			// Draw the exit prompt in the center of the screen.
-			float px = ((Globals.WIDTH / 2) - (PROMPT_WIDTH / 2));
-			float py = ((Globals.HEIGHT / 2) - (PROMPT_HEIGHT / 2));
-			
-			g.setColor(Color.gray);
-			g.fillRect(px, py, PROMPT_WIDTH, PROMPT_HEIGHT);
-			g.setColor(Color.white);
-			g.drawRect(px, py, PROMPT_WIDTH, PROMPT_HEIGHT);
-			
-			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-			FontUtils.drawCenter(g.getFont(), "DO YOU WANT TO QUIT?", (int)(px + 5.0f), (int)(py + 10.0f), (int)(PROMPT_WIDTH - 10.0f), Color.white);
-			
-			exitYes.render(g, 0L);
-			exitNo.render(g, 0L);
+		if(escapeMenu.isOpen()) {
+			escapeMenu.render(g, time);
 		} else if(consoleOpen) console.render(g, time);
 		
 		g.resetTransform();
@@ -267,10 +228,10 @@ public class GameState extends BasicGameState implements InputListener {
 		gameStarted = false;
 		paused = false;
 		consoleOpen = false;
-		exitPrompt = false;
 		
 		Camera.getCamera().reset();
 		console = new Console(this, gc);
+		escapeMenu.reset();
 		
 		hud = new HUD();
 		
@@ -314,8 +275,8 @@ public class GameState extends BasicGameState implements InputListener {
 		EnemyController ec = EnemyController.getInstance();
 		
 		if(key == Input.KEY_ESCAPE) {
-			if(!exitPrompt) exitPrompt = true;
-			else exitPrompt = false;
+			if(!escapeMenu.isOpen()) escapeMenu.openMenu();
+			else escapeMenu.escape();
 		} else {
 			Layout keyID = Controls.Layout.identify(key);
 			if((keyID == Controls.Layout.OPEN_CONSOLE) && Globals.ENABLE_CONSOLE) {

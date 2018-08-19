@@ -81,8 +81,7 @@ public class AchievementMenuState extends BasicGameState {
 			exit.mouseEnter();
 			if(mouse.isLeftDown()) {
 				Controls.getInstance().resetAll();
-				int state = MenuState.ID;
-				if(Globals.inGame) state = GameState.ID;
+				int state = Globals.inGame ? GameState.ID : MenuState.ID;
 				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else exit.mouseExit();

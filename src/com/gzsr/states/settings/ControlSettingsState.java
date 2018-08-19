@@ -24,6 +24,7 @@ import com.gzsr.gfx.ui.ControlConfigButton;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
+import com.gzsr.states.GameState;
 import com.gzsr.states.SettingsState;
 
 public class ControlSettingsState extends BasicGameState implements InputListener {
@@ -79,7 +80,8 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 			if(mouse.isLeftDown()) {
 				configs.stream().forEach(button -> button.apply(true));
 				ConfigManager.getInstance().save();
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else applyButton.mouseExit();
 		
@@ -87,7 +89,8 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 			backButton.mouseEnter();
 			if(mouse.isLeftDown()) {
 				configs.stream().forEach(button -> button.apply(false));
-				game.enterState(SettingsState.ID, new FadeOutTransition(), new FadeInTransition());
+				int state = Globals.inGame ? GameState.ID : SettingsState.ID;
+				game.enterState(state, new FadeOutTransition(), new FadeInTransition());
 			}
 		} else backButton.mouseExit();
 		
