@@ -41,6 +41,7 @@ import com.gzsr.states.ShopState;
 import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusHandler;
+import com.gzsr.talents.Talents;
 
 public class Player implements Entity {
 	private static final double DEFAULT_MAX_HEALTH = 100.0;
@@ -97,6 +98,9 @@ public class Player implements Entity {
 	
 	private Attributes attributes;
 	public Attributes getAttributes() { return attributes; }
+	
+	private Talents talents;
+	public Talents getTalents() { return talents; }
 	
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
@@ -191,6 +195,7 @@ public class Player implements Entity {
 		velocity = new Pair<Float>(0.0f, 0.0f);
 		
 		attributes = new Attributes();
+		talents = new Talents();
 		statusHandler = new StatusHandler(this);
 		
 		reset();
@@ -397,6 +402,7 @@ public class Player implements Entity {
 		inventory.addItem(beretta);
 		
 		attributes.reset();
+		talents.reset();
 		statusHandler.clearAll();
 		
 		// Basic attributes.
