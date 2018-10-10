@@ -552,7 +552,7 @@ public class Player implements Entity {
 			attributes.set("experience", carryOver);
 			attributes.set("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
 			attributes.set("level", newLevel);
-			attributes.addTo("skillPoints", 1);
+			attributes.addTo("skillPoints", (int)((newLevel + 10) / 10));
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
 				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay());

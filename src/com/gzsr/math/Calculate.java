@@ -30,16 +30,6 @@ public class Calculate {
 		return (float)Math.sqrt((xD * xD) + (yD * yD));
 	}
 	
-	/**
-	 * Extracts the digit in place p from the given integer, n.
-	 * @param n The integer to extract a digit from. Ex: 123
-	 * @param p The place to extract from. Ex: Digit 2 in the integer "123" is 1. (0-indexed)
-	 * @return The digit at position p. Returns 0 if position p doesn't exist in n.
-	 */
-	public static int ExtractDigit(int n, int p) {
-		return ((int)(n / (int)Math.pow(10, p)) % 10);
-	}
-	
 	public static Pair<Float> rotateAboutPoint(Pair<Float> pivot, Pair<Float> point, float theta) {
 		float x = (pivot.x + ((point.x - pivot.x) * (float)Math.cos(theta)) - ((point.y - pivot.y) * (float)Math.sin(theta)));
 		float y = (pivot.y + ((point.x - pivot.x) * (float)Math.sin(theta)) + ((point.y - pivot.y) * (float)Math.cos(theta)));

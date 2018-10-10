@@ -1,132 +1,209 @@
 package com.gzsr.talents;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.newdawn.slick.Image;
 
-import com.gzsr.math.Calculate;
+import com.gzsr.AssetManager;
 
 public class Talents {
 	public interface TalentType {
-		public int val();
+		public String getName();
+		public String getDescription();
+		public Image getIcon();
+		
 		public int row();
 		public int col();
+		
+		public boolean active();
+		
+		public int ranks();
+		public void ranks(int ranks_);
 		public int maxRanks();
 	}
 	
 	public enum Munitions implements TalentType {
-		SCOUT(125),
+		SCOUT(0, 1, 5, "Scout", "Increases small weapon damage by 20% per rank.", ""),
 		
-		INVENTOR(211),
-		QUICK_FINGERS(235),
+		INVENTOR(1, 0, 1, "Inventor", "Can craft basic weapons.", ""),
+		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Increases reload speed by 20% per rank.", ""),
 		
-		SOLDIER(325),
+		SOLDIER(2, 1, 5, "Soldier", "Increases medium weapon damage by 20% per rank.", ""),
 		
-		GUN_GURU(411),
-		DEMOLITIONS(421),
-		RAPID_FIRE(432),
+		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted weapons do an additional 25% damage.", ""),
+		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", ""),
+		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", ""),
 		
-		SCAVENGER(511),
-		COMMANDO(525),
-		MODDER(531),
+		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 25%.", ""),
+		COMMANDO(4, 1, 5, "Commando", "Increases large weapon damage by 25% per rank.", ""),
+		MODDER(4, 2, 1, "Modder", "Increase magezine capacity by 50%.", ""),
 		
-		ENGINEER(711),
-		DESPOT(721),
-		HASTE(731);
+		ENGINEER(6, 0, 1, "Engineer", "Can craft advanced weaponry.", ""),
+		DESPOT(6, 1, 1, "Despot", "Increases all damage done by 50%.", ""),
+		HASTE(6, 2, 1, "Haste", "Grants a 10% chance to reload instantly.", "");
 		
-		private int qualifier;
-		public int val() { return qualifier; }
-		
-		public int row() { return Calculate.ExtractDigit(qualifier, 2); }
-		public int col() { return Calculate.ExtractDigit(qualifier, 1); }
-		public int maxRanks() { return Calculate.ExtractDigit(qualifier, 0); }
-		
-		Munitions(int qualifier_) {
-			this.qualifier = qualifier_;
+		Munitions(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
+			this.name = name_;
+			this.description = description_;
+			this.icon = icon_;
+			
+			this.row = row_;
+			this.col = col_;
+			
+			this.ranks = 0;
+			this.maxRanks = maxRanks_;
 		}
+
+		private String name;
+		public String getName() { return name; }
+		
+		private String description;
+		public String getDescription() { return description; }
+		
+		private String icon;
+		public Image getIcon() { return AssetManager.getManager().getImage(icon); }
+
+		private int row;
+		public int row() { return row; }
+
+		private int col;
+		public int col() { return col; }
+
+		public boolean active() { return (ranks > 0); }
+
+		private int ranks;
+		public int ranks() { return ranks; }
+		public void ranks(int ranks_) { this.ranks = ranks_; }
+		public void addRank() { ranks++; }
+		
+		private int maxRanks;
+		public int maxRanks() { return maxRanks; }
 	}
 	
 	public enum Fortification implements TalentType {
-		HEARTY(125),
+		HEARTY(0, 1, 5, "Hearty", "Increases HP by 20 per rank.", ""),
 		
-		MARATHON_MAN(215),
-		TARGETING(231),
+		MARATHON_MAN(1, 0, 5, "Marathon Man", "Increases Stamina by 10 per rank.", ""),
+		TARGETING(1, 2, 1, "Targeting", "Increases construct range by 100%.", ""),
 		
-		VIGOR(322),
+		VIGOR(2, 1, 2, "Vigor", "Grants a 5% chance per rank to resist poison and paralysis effects.", ""),
 		
-		INVIGORATED(413),
-		UNBREAKABLE(425),
-		MANUFACTURING(435),
+		INVIGORATED(3, 0, 3, "Invigorated", "Grants Stamina regeneration of 5/sec per rank.", ""),
+		UNBREAKABLE(3, 1, 5, "Unbreakable", "Reduces damage taken by 5% per rank.", ""),
+		MANUFACTURING(3, 2, 5, "Manufacturing", "Increases construct HP by 20%.", ""),
 		
-		FIREPOWER(535),
+		FIREPOWER(4, 2, 5, "Firepower", "Increases construct damage by 10% per rank.", ""),
 		
-		RELENTLESS(611),
-		UNDYING(621),
+		RELENTLESS(5, 0, 1, "Relentless", "Killing an enemy with a melee weapon has a 10% chance to restore 25% stamina.", ""),
+		UNDYING(5, 1, 1, "Undying", "Regenerate 1 HP / second while not taking damage.", ""),
 		
-		LAST_STAND(721),
-		DURABILITY(731);
+		LAST_STAND(6, 1, 1, "Last Stand", "When the player is below 25% health, they take 50% less damage.", ""),
+		DURABILITY(6, 2, 1, "Durability", "Increases construct duration by 100%.", "");
 		
-		private int qualifier;
-		public int val() { return qualifier; }
-		
-		public int row() { return Calculate.ExtractDigit(qualifier, 2); }
-		public int col() { return Calculate.ExtractDigit(qualifier, 1); }
-		public int maxRanks() { return Calculate.ExtractDigit(qualifier, 0); }
-		
-		Fortification(int qualifier_) {
-			this.qualifier = qualifier_;
+		Fortification(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
+			this.name = name_;
+			this.description = description_;
+			this.icon = icon_;
+			
+			this.row = row_;
+			this.col = col_;
+			
+			this.ranks = 0;
+			this.maxRanks = maxRanks_;
 		}
+
+		private String name;
+		public String getName() { return name; }
+		
+		private String description;
+		public String getDescription() { return description; }
+
+		private String icon;
+		public Image getIcon() { return AssetManager.getManager().getImage(icon); }
+		
+		private int row;
+		public int row() { return row; }
+
+		private int col;
+		public int col() { return col; }
+
+		public boolean active() { return (ranks > 0); }
+
+		private int ranks;
+		public int ranks() { return ranks; }
+		public void ranks(int ranks_) { this.ranks = ranks_; }
+		public void addRank() { ranks++; }
+		
+		private int maxRanks;
+		public int maxRanks() { return maxRanks; }
 	}
 	
 	public enum Tactics implements TalentType {
-		BRUTALITY(125),
+		BRUTALITY(0, 1, 5, "Brutality", "Increases melee damage done by 10% per rank.", ""),
 		
-		MERCANTILE(215),
-		SAVAGE(225),
+		MERCANTILE(1, 0, 5, "Mercantile", "Reduces shop prices by 10% per rank.", ""),
+		SAVAGE(1, 1, 5, "Savage", "Increases melee critical chance by 5% per rank.", ""),
 		
-		WINDFALL(315),
-		NIMBLE(335),
+		WINDFALL(2, 0, 5, "Windfall", "Increases money dropped by 10% per rank.", ""),
+		NIMBLE(2, 2, 5, "Nimble", "Increases movement speed by 10% per rank.", ""),
 		
-		STOCKPILE(412),
-		FEROCITY(431),
+		STOCKPILE(3, 0, 2, "Stockpile", "Increases ammo capacity by 50% per rank.", ""),
+		FEROCITY(3, 2, 1, "Ferocity", "Increases melee weapon attack speed by 50%.", ""),
 		
-		HEADSHOT(523),
+		HEADSHOT(4, 1, 3, "Headshot!", "Increases ranged critical chance by 5% per rank.", ""),
 		
-		SUSTAINABILITY(615),
-		ASSASSIN(621),
+		SUSTAINABILITY(5, 0, 5, "Sustainability", "Increases duration of power-ups by 20% per rank.", ""),
+		ASSASSIN(5, 1, 1, "Assassin", "Critical hits now do 3x damage.", ""),
 		
-		STASIS(731);
+		STASIS(6, 2, 1, "Stasis", "Speed power-ups now also slow enemies.", "");
 		
-		private int qualifier;
-		public int val() { return qualifier; }
-		
-		public int row() { return Calculate.ExtractDigit(qualifier, 2); }
-		public int col() { return Calculate.ExtractDigit(qualifier, 1); }
-		public int maxRanks() { return Calculate.ExtractDigit(qualifier, 0); }
-		
-		Tactics(int qualifier_) {
-			this.qualifier = qualifier_;
+		Tactics(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
+			this.name = name_;
+			this.description = description_;
+			this.icon = icon_;
+			
+			this.row = row_;
+			this.col = col_;
+			
+			this.ranks = 0;
+			this.maxRanks = maxRanks_;
 		}
+
+		private String name;
+		public String getName() { return name; }
+		
+		private String description;
+		public String getDescription() { return description; }
+		
+		private String icon;
+		public Image getIcon() { return AssetManager.getManager().getImage(icon); }
+
+		private int row;
+		public int row() { return row; }
+
+		private int col;
+		public int col() { return col; }
+
+		public boolean active() { return (ranks > 0); }
+
+		private int ranks;
+		public int ranks() { return ranks; }
+		public void ranks(int ranks_) { this.ranks = ranks_; }
+		public void addRank() { ranks++; }
+		
+		private int maxRanks;
+		public int maxRanks() { return maxRanks; }
 	}
 	
-	private Map<TalentType, Talent> talents;
-	
-	public Talent getTalent(TalentType type_) { return talents.get(type_); }
-	public boolean hasTalent(TalentType type_) { return talents.containsKey(type_); }
-	public void registerTalent(TalentType type_, Talent talent_) {
-		talents.put(type_, talent_);
-	}
-	
-	public void reset() {
-		Iterator<Entry<TalentType, Talent>> it = talents.entrySet().iterator();
-		while(it.hasNext()) {
-			Entry<TalentType, Talent> entry = it.next();
-			entry.getValue().reset();
+	public static void reset() {
+		for(Munitions m : Munitions.values()) {
+			m.ranks(0);
 		}
-	}
-	
-	public Talents() {
-		talents = new HashMap<TalentType, Talent>();
+		
+		for(Fortification f : Fortification.values()) {
+			f.ranks(0);
+		}
+		
+		for(Tactics t : Tactics.values()) {
+			t.ranks(0);
+		}
 	}
 }
