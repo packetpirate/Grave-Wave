@@ -126,10 +126,10 @@ public class GameState extends BasicGameState implements InputListener {
 					}
 					
 					if(player.isAlive()) {
-						if(controls.isPressed(Controls.Layout.TRAIN_SCREEN)) {
+						if(controls.isPressed(Controls.Layout.TALENTS_SCREEN)) {
 							// Open the training screen.
 							controls.resetAll();
-							game.enterState(TrainState.ID,
+							game.enterState(TalentsState.ID,
 											new FadeOutTransition(Color.black, 250),
 											new FadeInTransition(Color.black, 100));
 						} else if(controls.isPressed(Controls.Layout.SHOP_SCREEN)) {

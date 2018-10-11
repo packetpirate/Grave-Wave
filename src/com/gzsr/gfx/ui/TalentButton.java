@@ -37,10 +37,13 @@ public class TalentButton extends Button {
 	
 	@Override
 	public void render(Graphics g, long cTime) {
+		float w = 32.0f;
+		float h = 32.0f;
+		
 		Image img = talent.getIcon();
 		if(img != null) {
-			float w = img.getWidth();
-			float h = img.getHeight();
+			w = img.getWidth();
+			h = img.getHeight();
 			
 			g.setColor(Color.black);
 			g.fillRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
@@ -48,6 +51,11 @@ public class TalentButton extends Button {
 			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 			
 			g.drawImage(img, (position.x - (w / 2)), (position.y - (h / 2)));
+		} else {
+			g.setColor(Color.black);
+			g.fillRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
+			g.setColor(Color.white);
+			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 		}
 	}
 	

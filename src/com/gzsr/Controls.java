@@ -19,7 +19,7 @@ public class Controls {
 		RELOAD(Input.KEY_R, "Reload", "R"),
 		FLASHLIGHT(Input.KEY_F, "Flashlight", "F"),
 		NEXT_WAVE(Input.KEY_N, "Next Wave", "N"),
-		TRAIN_SCREEN(Input.KEY_T, "Train", "T"),
+		TALENTS_SCREEN(Input.KEY_T, "Train", "T"),
 		SHOP_SCREEN(Input.KEY_B, "Shop", "B"),
 		PAUSE_GAME(Input.KEY_P, "Pause", "P"),
 		OPEN_CONSOLE(Input.KEY_GRAVE, "Console", "~"),

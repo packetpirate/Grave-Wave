@@ -69,7 +69,8 @@ public class LoadingState extends BasicGameState {
 			
 			game.addState(new GameState());
 			game.addState(new ShopState());
-			game.addState(new TrainState());
+			//game.addState(new TrainState()); // OLD
+			game.addState(new TalentsState());
 			game.addState(new GameOverState());
 			game.addState(new CreditsState());
 			game.addState(new BlankState());

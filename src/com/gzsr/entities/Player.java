@@ -555,7 +555,7 @@ public class Player implements Entity {
 			attributes.addTo("skillPoints", (int)((newLevel + 10) / 10));
 			
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
-				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TRAIN_SCREEN.getDisplay());
+				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TALENTS_SCREEN.getDisplay());
 				StatusMessages.getInstance().addMessage("Ding!", this, Player.ABOVE_1, cTime, 2_000L);
 				StatusMessages.getInstance().addMessage(reminder, this, Player.BELOW_1, cTime, 2_000L);
 			}

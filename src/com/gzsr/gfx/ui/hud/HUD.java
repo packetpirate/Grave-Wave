@@ -104,9 +104,9 @@ public class HUD {
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 			
 			// Draw the character portrait on the far right.
-			float w1 = g.getFont().getWidth(Controls.Layout.TRAIN_SCREEN.getDisplay());
+			float w1 = g.getFont().getWidth(Controls.Layout.TALENTS_SCREEN.getDisplay());
 			float h = g.getFont().getLineHeight();
-			g.drawString(Controls.Layout.TRAIN_SCREEN.getDisplay(), (Globals.WIDTH - w1 - 20.0f), (Globals.HEIGHT - h - 20.0f));
+			g.drawString(Controls.Layout.TALENTS_SCREEN.getDisplay(), (Globals.WIDTH - w1 - 20.0f), (Globals.HEIGHT - h - 20.0f));
 			
 			Image character = AssetManager.getManager().getImage("GZS_Joe-Portrait");
 			character.draw((Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f)), (Globals.HEIGHT - ((character.getHeight() / 2) + 20.0f)), 0.5f);

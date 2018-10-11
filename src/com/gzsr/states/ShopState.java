@@ -658,7 +658,8 @@ public class ShopState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void keyReleased(int key, char c) {
-		if(key == Controls.Layout.SHOP_SCREEN.getKey()) exit = true;
+		if((key == Controls.Layout.SHOP_SCREEN.getKey()) || 
+		   (key == Input.KEY_ESCAPE)) exit = true;
 	}
 	
 	public static void resetShop() {
