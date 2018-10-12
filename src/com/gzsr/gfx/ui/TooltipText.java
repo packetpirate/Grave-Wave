@@ -6,24 +6,27 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Controls;
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Layers;
+import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 
 public class TooltipText implements Entity {
-	private UnicodeFont font;
-	private String text;
-	private String tooltip;
-	private Color color;
-	private Pair<Float> pos;
+	private static final float MAX_WIDTH = 250.0f;
+	private static final float MAX_HEIGHT = 50.0f;
 	
-	public TooltipText(UnicodeFont font_, String text_, String tooltip_, Color color_, Pair<Float> pos_) {
+	private UnicodeFont font;
+	private String tooltip;
+	private Pair<Float> pos;
+	private float size;
+	
+	public TooltipText(UnicodeFont font_, String tooltip_, Pair<Float> pos_, float size_) {
 		this.font = font_;
-		this.text = text_;
 		this.tooltip = tooltip_;
-		this.color = color_;
 		this.pos = pos_;
+		this.size = size_;
 	}
 
 	@Override
@@ -33,11 +36,6 @@ public class TooltipText implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		// Draw the text as normal.
-		g.setColor(color);
-		g.setFont(font);
-		g.drawString(text, pos.x, pos.y);
-		
 		// If the mouse cursor is hovering over the text, display the tooltip.
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		if(isMouseInside()) {
@@ -45,13 +43,22 @@ public class TooltipText implements Entity {
 			float my = mouse.getPosition().y;
 			float txtWidth = font.getWidth(tooltip);
 			
+			if(textOutOfBounds(mx, txtWidth)) mx -= (Math.min(txtWidth, MAX_WIDTH) + 10.0f);
+			
 			g.setColor(Color.gray);
-			g.fillRect(mx, my, (txtWidth + 10.0f), (font.getLineHeight() + 10.0f));
+			g.fillRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 10.0f), (MAX_HEIGHT + 10.0f));
 			g.setColor(Color.white);
-			g.drawRect(mx, my, (txtWidth + 10.0f), (font.getLineHeight() + 10.0f));
+			g.drawRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 10.0f), (MAX_HEIGHT + 10.0f));
+			
+			g.setFont(font);
 			g.setColor(Color.black);
-			g.drawString(tooltip, (mx + 5.0f), (my + 5.0f));
+			Calculate.TextWrap(g, tooltip, font, (mx + 5.0f), (my + 5.0f), 
+							   MAX_WIDTH, false, Color.black);
 		}
+	}
+	
+	private boolean textOutOfBounds(float x, float width) {
+		return ((x + width) >= Globals.WIDTH);
 	}
 	
 	private boolean isMouseInside() {
@@ -59,9 +66,9 @@ public class TooltipText implements Entity {
 		
 		float x = mouse.getPosition().x;
 		float y = mouse.getPosition().y;
-		float txtWidth = font.getWidth(text);
-		return ((x >= pos.x) && (y >= pos.y) && 
-				(x <= (pos.x + txtWidth)) && (y <= (pos.y + font.getLineHeight())));
+		
+		return ((x >= (pos.x - (size / 2))) && (y >= (pos.y - (size / 2))) && 
+				(x <= (pos.x + (size / 2))) && (y <= (pos.y + (size / 2))));
 	}
 
 	@Override

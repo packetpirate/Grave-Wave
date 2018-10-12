@@ -49,7 +49,7 @@ public class TrainState extends BasicGameState implements InputListener {
 		assets = AssetManager.getManager();
 		FONT_HEADER = assets.getFont("PressStart2P-Regular_large");
 		FONT_NORMAL = assets.getFont("PressStart2P-Regular");
-		
+		/*
 		expToLevelTooltip = new TooltipText(TrainState.FONT_NORMAL, 
 											"Exp To Next Level:", 
 											"Your progress towards leveling up and gaining a skill point.", 
@@ -66,7 +66,7 @@ public class TrainState extends BasicGameState implements InputListener {
 										  "Damage:",
 										  "Each point in this increases damage done by 10%.",
 										  Color.white, new Pair<Float>(30.0f, 390.0f));
-		
+		*/
 		skillButtons = new ArrayList<SkillButton>() {{
 			add(new SkillButton("healthUp", new Pair<Float>(340.0f, 240.0f)));
 			add(new SkillButton("speedUp", new Pair<Float>(340.0f, 330.0f)));

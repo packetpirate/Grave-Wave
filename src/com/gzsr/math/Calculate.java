@@ -63,8 +63,9 @@ public class Calculate {
 	 * @param maxWidth The max width for the line before text wraps.
 	 * @param center Whether or not to draw the text centered.
 	 * @param color The color to use when rendering the text.
+	 * @return Returns a float representing the size of the text field generated.
 	 */
-	public static void TextWrap(Graphics g, String text, Font font, float x, float y, float maxWidth, boolean center, Color color) {
+	public static float TextWrap(Graphics g, String text, Font font, float x, float y, float maxWidth, boolean center, Color color) {
 		g.setColor(color);
 		g.setFont(font);
 		
@@ -72,6 +73,8 @@ public class Calculate {
 		String str = "";
 		int line = 0;
 		int i = 0;
+		float height = 0.0f;
+		
 		while(i < words.length) {
 			boolean draw = false;
 			
@@ -92,7 +95,10 @@ public class Calculate {
 				
 				str = "";
 				line++;
+				height += font.getLineHeight();
 			}
 		}
+		
+		return height;
 	}
 }
