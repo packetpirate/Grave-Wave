@@ -45,9 +45,6 @@ public class MenuState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
 		Controls.getInstance().resetAll();
-		
-		MusicPlayer.getInstance().reset();
-		MusicPlayer.getInstance().nextSong();
 	}
 	
 	@Override

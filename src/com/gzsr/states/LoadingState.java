@@ -13,6 +13,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.controllers.AchievementController;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Flashlight;
@@ -51,6 +52,12 @@ public class LoadingState extends BasicGameState {
 			Controls.getInstance().loadControls();
 			AssetManager.finishLoad();
 		}
+	}
+	
+	@Override
+	public void leave(GameContainer gc, StateBasedGame game) throws SlickException {
+		MusicPlayer.getInstance().reset();
+		MusicPlayer.getInstance().nextSong();
 	}
 	
 	@Override

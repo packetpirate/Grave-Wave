@@ -43,6 +43,7 @@ public abstract class Button implements Entity {
 	public Pair<Float> getSize() { return size; }
 	public void setSize(Pair<Float> size_) { this.size = size_; }
 	public abstract void click();
+	public abstract void click(boolean left);
 	public abstract boolean inBounds(float x, float y);
 	
 	@Override

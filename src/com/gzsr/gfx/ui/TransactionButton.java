@@ -58,7 +58,12 @@ public class TransactionButton extends Button {
 	
 	@Override
 	public void click() {
-		// Not needed.
+		click(true);
+	}
+	
+	@Override
+	public void click(boolean left) {
+		
 	}
 
 	@Override

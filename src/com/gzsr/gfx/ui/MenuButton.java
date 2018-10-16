@@ -41,6 +41,11 @@ public class MenuButton extends Button {
 	
 	@Override
 	public void click() {
+		click(true);
+	}
+	
+	@Override
+	public void click(boolean left) {
 		
 	}
 	

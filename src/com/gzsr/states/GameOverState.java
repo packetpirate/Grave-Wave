@@ -13,6 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
+import com.gzsr.MusicPlayer;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
@@ -71,8 +72,9 @@ public class GameOverState extends BasicGameState implements InputListener {
 	}
 	
 	@Override
-	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
-		// TODO: Stop currently playing music and player game over track.
+	public void leave(GameContainer gc, StateBasedGame game) throws SlickException {
+		MusicPlayer.getInstance().reset();
+		MusicPlayer.getInstance().nextSong();
 	}
 	
 	@Override

@@ -17,8 +17,10 @@ import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.gfx.ui.TalentButton;
 import com.gzsr.gfx.ui.TooltipText;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.talents.Talents;
 
@@ -45,6 +47,10 @@ public class TalentsState extends BasicGameState implements InputListener {
 	private TalentButton [][] tactics;
 	private TooltipText [][] tacticsTooltips;
 	
+	private MenuButton back;
+	private MenuButton accept;
+	
+	private int changesMade;
 	private boolean exit;
 	
 	@Override
@@ -58,6 +64,12 @@ public class TalentsState extends BasicGameState implements InputListener {
 		tactics = new TalentButton[7][3];
 		tacticsTooltips = new TooltipText[7][3];
 		
+		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
+		float fh = large.getLineHeight();
+		back = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Exit") - 50.0f), (Globals.HEIGHT - fh - 30.0f)), "Exit");
+		accept = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - fh - 30.0f)), "Accept");
+		
+		changesMade = 0;
 		exit = false;
 		
 		for(Talents.Munitions m : Talents.Munitions.values()) {
@@ -95,19 +107,24 @@ public class TalentsState extends BasicGameState implements InputListener {
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		Player player = Player.getPlayer();
 		
+		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
+		UnicodeFont normal = AssetManager.getManager().getFont("PressStart2P-Regular");
+		
 		g.setColor(Color.darkGray);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
 		
-		// Render the title text.
-		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large"); 
+		// Render the title text. 
 		g.setFont(large);
 		g.setColor(Color.white);
 		g.drawString("Talents", 50.0f, 50.0f);
 		
+		// Show the player's current skill points under the experience bar.
+		String skpText = String.format("Skill Points: %d", player.getAttributes().getInt("skillPoints"));
+		g.setFont(normal);
+		g.drawString(skpText, ((Globals.WIDTH / 2) - (normal.getWidth(skpText) / 2)), 140.0f);
+		
 		// Draw the experience bar.
 		{
-			UnicodeFont normal = AssetManager.getManager().getFont("PressStart2P-Regular");
-			
 			int level = player.getAttributes().getInt("level");
 			String currentText = String.format("%d", level);
 			String nextText = String.format("%d", (level + 1));
@@ -119,7 +136,6 @@ public class TalentsState extends BasicGameState implements InputListener {
 			float nx = (Globals.WIDTH - nextWidth - 50.0f);
 			
 			g.setColor(Color.white);
-			g.setFont(normal);
 			g.drawString(currentText, cx, cy);
 			g.drawString(nextText, nx, cy);
 			
@@ -166,11 +182,55 @@ public class TalentsState extends BasicGameState implements InputListener {
 				if(tacticsTooltips[r][c] != null) tacticsTooltips[r][c].render(g, 0L);
 			}
 		}
+		
+		back.render(g, 0L);
+		if(changesMade > 0) accept.render(g, 0L);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
+		
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		if(back.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+			back.mouseEnter();
+			if(mouse.isLeftDown()) {
+				// Discard any talent changes.
+				for(int r = 0; r < 7; r++) {
+					for(int c = 0; c < 3; c++) {
+						TalentButton m = munitions[r][c];
+						TalentButton f = fortification[r][c];
+						TalentButton t = tactics[r][c];
+						
+						if((m != null) && (m.getPointsToAdd() > 0)) m.revert();
+						if((f != null) && (f.getPointsToAdd() > 0)) f.revert();
+						if((t != null) && (t.getPointsToAdd() > 0)) t.revert();
+					}
+				}
+				
+				game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
+			}
+		} else back.mouseExit();
+		
+		if(accept.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+			accept.mouseEnter();
+			if(mouse.isLeftDown()) {
+				for(int r = 0; r < 7; r++) {
+					for(int c = 0; c < 3; c++) {
+						TalentButton m = munitions[r][c];
+						TalentButton f = fortification[r][c];
+						TalentButton t = tactics[r][c];
+						
+						if((m != null) && (m.getPointsToAdd() > 0)) m.confirm();
+						if((f != null) && (f.getPointsToAdd() > 0)) f.confirm();
+						if((t != null) && (t.getPointsToAdd() > 0)) t.confirm();
+					}
+				}
+				
+				changesMade = 0;
+			}
+		} else accept.mouseExit();
+		
 		MusicPlayer.getInstance().update(false);
 	}
 	
@@ -183,18 +243,33 @@ public class TalentsState extends BasicGameState implements InputListener {
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(true);
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		if(button == Input.MOUSE_LEFT_BUTTON) mouse.setLeftDown(true);
+		if(button == Input.MOUSE_RIGHT_BUTTON) mouse.setRightDown(true);
 		
 		// Check all talent buttons to see if they've been clicked.
-		for(int r = 0; r < 7; r++) {
-			for(int c = 0; c < 3; c++) {
-				TalentButton m = munitions[r][c];
-				TalentButton f = fortification[r][c];
-				TalentButton t = tactics[r][c];
-				
-				if((m != null) && (m.inBounds(x, y))) m.click();
-				else if((f != null) && (f.inBounds(x, y))) f.click();
-				else if((t != null) && (t.inBounds(x, y))) t.click();
+		if(mouse.isLeftDown() || mouse.isRightDown()) {
+			boolean left = mouse.isLeftDown();
+			for(int r = 0; r < 7; r++) {
+				for(int c = 0; c < 3; c++) {
+					TalentButton m = munitions[r][c];
+					TalentButton f = fortification[r][c];
+					TalentButton t = tactics[r][c];
+					
+					if((m != null) && (m.inBounds(x, y))) {
+						int before = m.getPointsToAdd();
+						m.click(left);
+						if(m.getPointsToAdd() != before) changesMade += left ? 1 : -1;
+					} else if((f != null) && (f.inBounds(x, y))) {
+						int before = f.getPointsToAdd();
+						f.click(left);
+						if(f.getPointsToAdd() != before) changesMade += left ? 1 : -1;
+					} else if((t != null) && (t.inBounds(x, y))) {
+						int before = t.getPointsToAdd();
+						t.click(left);
+						if(t.getPointsToAdd() != before) changesMade += left ? 1 : -1;
+					}
+				}
 			}
 		}
 	}
@@ -202,6 +277,7 @@ public class TalentsState extends BasicGameState implements InputListener {
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
+		if(button == Input.MOUSE_RIGHT_BUTTON) Controls.getInstance().getMouse().setRightDown(false);
 	}
 	
 	@Override

@@ -94,6 +94,11 @@ public class ControlConfigButton extends Button {
 	
 	@Override
 	public void click() {
+		click(true);
+	}
+	
+	@Override
+	public void click(boolean left) {
 		awaitingInput = true;
 	}
 

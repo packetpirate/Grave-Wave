@@ -75,15 +75,29 @@ public class TalentButton extends Button {
 	
 	@Override
 	public void click() {
-		if(meetsLevelRequirement()) {
-			if((talent.ranks() + pointsToAdd) < talent.maxRanks()) {
+		click(true);
+	}
+	
+	@Override
+	public void click(boolean left) {
+		if(left) {
+			if(meetsLevelRequirement()) {
+				if((talent.ranks() + pointsToAdd) < talent.maxRanks()) {
+					Player player = Player.getPlayer();
+					int sk = player.getAttributes().getInt("skillPoints");
+					
+					if(sk > 0) {
+						pointsToAdd++;
+						player.getAttributes().set("skillPoints", (sk - 1));
+					}
+				}
+			}
+		} else {
+			if(pointsToAdd > 0) {
 				Player player = Player.getPlayer();
 				int sk = player.getAttributes().getInt("skillPoints");
-				
-				if(sk > 0) {
-					pointsToAdd++;
-					player.getAttributes().set("skillPoints", (sk - 1));
-				}
+				pointsToAdd--;
+				player.getAttributes().set("skillPoints", (sk + 1));
 			}
 		}
 	}
@@ -91,8 +105,9 @@ public class TalentButton extends Button {
 	@Override
 	public boolean inBounds(float x, float y) {
 		Image img = AssetManager.getManager().getImage(image);
-		float w = img.getWidth();
-		float h = img.getHeight();
+		
+		float w = (img != null) ? img.getWidth() : SIZE;
+		float h = (img != null) ? img.getHeight() : SIZE;
 		
 		return ((x > (position.x - (w / 2))) && (x < (position.x + (w / 2))) && 
 				(y > (position.y - (h / 2))) && (y < (position.y + (h / 2))));
