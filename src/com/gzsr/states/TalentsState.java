@@ -74,32 +74,32 @@ public class TalentsState extends BasicGameState implements InputListener {
 		
 		for(Talents.Munitions m : Talents.Munitions.values()) {
 			Pair<Float> pos = new Pair<Float>((MUNITIONS_WINDOW.x + (m.col() * (51.0f + 32.0f)) + 67.0f), 
-											  (MUNITIONS_WINDOW.y + (m.row() * (20.0f + 32.0f)) + 62.0f));
+											  (MUNITIONS_WINDOW.y + (m.row() * (30.0f + 32.0f)) + 32.0f));
 			TalentButton button = new TalentButton(m, pos);
 			
 			munitions[m.row()][m.col()] = button;
 			munitionsTooltips[m.row()][m.col()] = new TooltipText(AssetManager.getManager().getFont("PressStart2P-Regular_small"), 
-					   											  m.getDescription(), pos, TalentButton.SIZE);
+					   											  m.getName(), m.getDescription(), pos, TalentButton.SIZE);
 		}
 		
 		for(Talents.Fortification f : Talents.Fortification.values()) {
 			Pair<Float> pos = new Pair<Float>((FORTIFICATION_WINDOW.x + (f.col() * (51.0f + 32.0f)) + 67.0f), 
-											  (FORTIFICATION_WINDOW.y + (f.row() * (20.0f + 32.0f)) + 62.0f));
+											  (FORTIFICATION_WINDOW.y + (f.row() * (30.0f + 32.0f)) + 32.0f));
 			TalentButton button = new TalentButton(f, pos);
 			
 			fortification[f.row()][f.col()] = button;
 			fortificationTooltips[f.row()][f.col()] = new TooltipText(AssetManager.getManager().getFont("PressStart2P-Regular_small"), 
-					   												  f.getDescription(), pos, TalentButton.SIZE);
+					   												  f.getName(), f.getDescription(), pos, TalentButton.SIZE);
 		}
 		
 		for(Talents.Tactics t : Talents.Tactics.values()) {
 			Pair<Float> pos = new Pair<Float>((TACTICS_WINDOW.x + (t.col() * (51.0f + 32.0f)) + 67.0f), 
-											  (TACTICS_WINDOW.y + (t.row() * (20.0f + 32.0f)) + 62.0f));
+											  (TACTICS_WINDOW.y + (t.row() * (30.0f + 32.0f)) + 32.0f));
 			TalentButton button = new TalentButton(t, pos);
 			
 			tactics[t.row()][t.col()] = button;
 			tacticsTooltips[t.row()][t.col()] = new TooltipText(AssetManager.getManager().getFont("PressStart2P-Regular_small"), 
-					   											t.getDescription(), pos, TalentButton.SIZE);
+					   											t.getName(), t.getDescription(), pos, TalentButton.SIZE);
 		}
 	}
 
@@ -145,10 +145,9 @@ public class TalentsState extends BasicGameState implements InputListener {
 			g.setColor(Color.black);
 			g.fillRect((Globals.WIDTH - EXP_BAR_WIDTH - nextWidth - 70.0f), 50.0f, EXP_BAR_WIDTH, EXP_BAR_HEIGHT);
 			g.setColor(EXP_BAR_COLOR);
-			g.fillRect((Globals.WIDTH - EXP_BAR_WIDTH - nextWidth - 70.0f), 50.0f, (EXP_BAR_WIDTH * ((float)exp / (float)toLevel)), EXP_BAR_HEIGHT);
+			g.fillRect((Globals.WIDTH - EXP_BAR_WIDTH - nextWidth - 65.0f), 55.0f, Math.max(((EXP_BAR_WIDTH * ((float)exp / (float)toLevel)) - 10.0f), 0.0f), (EXP_BAR_HEIGHT - 10.0f));
 			g.setColor(Color.white);
 			g.drawRect((Globals.WIDTH - EXP_BAR_WIDTH - nextWidth - 70.0f), 50.0f, EXP_BAR_WIDTH, EXP_BAR_HEIGHT);
-			
 			
 			float expTextWidth = normal.getWidth(expText);
 			float expTextHeight = normal.getHeight(expText);

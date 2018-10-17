@@ -15,16 +15,25 @@ import com.gzsr.misc.Pair;
 
 public class TooltipText implements Entity {
 	private static final float MAX_WIDTH = 250.0f;
-	private static final float MAX_HEIGHT = 50.0f;
 	
 	private UnicodeFont font;
+	
+	private String title;
 	private String tooltip;
+	
+	private float textHeight;
+	
 	private Pair<Float> pos;
 	private float size;
 	
-	public TooltipText(UnicodeFont font_, String tooltip_, Pair<Float> pos_, float size_) {
+	public TooltipText(UnicodeFont font_, String title_, String tooltip_, Pair<Float> pos_, float size_) {
 		this.font = font_;
+		
+		this.title = title_;
 		this.tooltip = tooltip_;
+		
+		this.textHeight = (Calculate.TextHeight(tooltip_, font_, MAX_WIDTH) + font_.getHeight(title_) + 5.0f);
+		
 		this.pos = pos_;
 		this.size = size_;
 	}
@@ -46,14 +55,15 @@ public class TooltipText implements Entity {
 			if(textOutOfBounds(mx, txtWidth)) mx -= (Math.min(txtWidth, MAX_WIDTH) + 10.0f);
 			
 			g.setColor(Color.gray);
-			g.fillRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 10.0f), (MAX_HEIGHT + 10.0f));
+			g.fillRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 20.0f), (textHeight + 20.0f));
 			g.setColor(Color.white);
-			g.drawRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 10.0f), (MAX_HEIGHT + 10.0f));
+			g.drawRect(mx, my, (Math.min(txtWidth, MAX_WIDTH) + 20.0f), (textHeight + 20.0f));
 			
 			g.setFont(font);
-			g.setColor(Color.black);
-			Calculate.TextWrap(g, tooltip, font, (mx + 5.0f), (my + 5.0f), 
-							   MAX_WIDTH, false, Color.black);
+			g.setColor(Color.white);
+			g.drawString(title, (mx + 10.0f), (my + 10.0f));
+			Calculate.TextWrap(g, tooltip, font, (mx + 10.0f), (my + font.getHeight(title) + 15.0f), 
+							   MAX_WIDTH, false, Color.darkGray);
 		}
 	}
 	

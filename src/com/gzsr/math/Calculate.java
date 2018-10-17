@@ -52,6 +52,31 @@ public class Calculate {
 		TextWrap(g, text, font, x, y, maxWidth, center, Color.white);
 	}
 	
+	public static float TextHeight(String text, Font font, float maxWidth) {
+		float height = 0.0f;
+		String [] words = text.split(" ");
+		String str = "";
+		int i = 0;
+		
+		while(i < words.length) {
+			boolean lineTerminate = false;
+			
+			String word = words[i];
+			if(font.getWidth(str + word) <= maxWidth) {
+				str += (word + " ");
+				i++;
+				if(i == words.length) lineTerminate = true;
+			} else lineTerminate = true;
+			
+			if(lineTerminate) {
+				str = "";
+				height += font.getLineHeight();
+			}
+		}
+		
+		return height;
+	}
+	
 	/**
 	 * Draws the given text using the given font to the graphics context and wraps
 	 * the text according to the specified max width. Draws the text with the specified color.

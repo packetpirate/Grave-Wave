@@ -3,6 +3,7 @@ package com.gzsr.gfx.ui;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.UnicodeFont;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Player;
@@ -65,6 +66,13 @@ public class TalentButton extends Button {
 			g.setColor(Color.white);
 			g.drawRect((position.x - (SIZE / 2)), (position.y - (SIZE / 2)), SIZE, SIZE);
 		}
+		
+		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
+		String progress = String.format("%d / %d", (talent.ranks() + pointsToAdd), talent.maxRanks());
+		float tw = f.getWidth(progress);
+		g.setFont(f);
+		g.setColor(Color.white);
+		g.drawString(progress, (position.x - (tw / 2)), (position.y + (SIZE / 2) + 10.0f));
 	}
 	
 	private boolean meetsLevelRequirement() {
