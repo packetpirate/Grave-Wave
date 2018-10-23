@@ -44,9 +44,7 @@ import com.gzsr.status.StatusHandler;
 import com.gzsr.talents.Talents;
 
 public class Player implements Entity {
-	private static final double DEFAULT_MAX_HEALTH = 100.0;
 	private static final float DEFAULT_SPEED = 0.15f;
-	private static final double HEALTH_PER_SP = 20;
 	private static final int MAX_LIVES = 5;
 	private static final long RESPAWN_TIME = 3_000L;
 	private static final long GRUNT_TIMER = 1_500L;
@@ -238,20 +236,16 @@ public class Player implements Entity {
 			}
 		}
 		
-		// Make sure player's health is up to date.
-		double currentMax = attributes.getDouble("maxHealth");
-		double healthBonus = attributes.getInt("healthUp") * HEALTH_PER_SP;
-		if(currentMax != (DEFAULT_MAX_HEALTH + healthBonus)) {
-			// Update player's max health.
-			attributes.set("maxHealth", (DEFAULT_MAX_HEALTH + healthBonus));
-		}
-		
-		// Refresh stamina if refresh time has elapsed.
-		boolean refresh = ((cTime - attributes.getLong("lastStamina")) >= 1_000L);
+		// Regenerate health and stamina every second.
+		boolean refresh = ((cTime - attributes.getLong("lastRegen")) >= 1_000L);
 		if(refresh) {
-			double refreshRate = attributes.getDouble("staminaRefreshRate");
-			addStamina(refreshRate);
-			attributes.set("lastStamina", cTime);
+			double healthRegenRate = attributes.getDouble("healthRegen");
+			addHealth(healthRegenRate);
+			
+			double staminaRefreshRate = attributes.getDouble("staminaRefreshRate");
+			addStamina(staminaRefreshRate);
+			
+			attributes.set("lastRegen", cTime);
 		}
 		
 		// Need to make sure to update the status effects first.
@@ -402,20 +396,23 @@ public class Player implements Entity {
 		inventory.addItem(beretta);
 		
 		attributes.reset();
-		talents.reset();
 		statusHandler.clearAll();
+		
+		Talents.reset();
 		
 		// Basic attributes.
 		attributes.set("health", 100.0);
 		attributes.set("maxHealth", 100.0);
+		attributes.set("healthRegen", 0.0); // per second
 		
 		attributes.set("armor", 0.0);
 		attributes.set("maxArmor", 100.0);
 		
 		attributes.set("stamina", 100.0);
 		attributes.set("maxStamina", 100.0);
-		attributes.set("staminaRefreshRate", 10.0);
-		attributes.set("lastStamina", 0L);
+		attributes.set("staminaRefreshRate", 10.0); // per second
+		
+		attributes.set("lastRegen", 0L);
 		
 		attributes.set("lives", 3);
 		attributes.set("maxLives", Player.MAX_LIVES);
@@ -429,7 +426,6 @@ public class Player implements Entity {
 		attributes.set("skillPoints", 0);
 		
 		// Upgrade level attributes.
-		attributes.set("healthUp", 0);
 		attributes.set("speedUp", 0);
 		attributes.set("damageUp", 0);
 		

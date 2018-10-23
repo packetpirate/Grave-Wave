@@ -8,6 +8,7 @@ import org.newdawn.slick.UnicodeFont;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.talents.Talents;
 import com.gzsr.talents.Talents.TalentType;
 
 public class TalentButton extends Button {
@@ -33,6 +34,7 @@ public class TalentButton extends Button {
 	public void confirm() {
 		int total = (talent.ranks() + pointsToAdd);
 		talent.ranks(total);
+		Talents.applyRanks(talent);
 		
 		pointsToAdd = 0;
 	}
@@ -40,7 +42,7 @@ public class TalentButton extends Button {
 	public void revert() {
 		Player player = Player.getPlayer();
 		int sk = player.getAttributes().getInt("skillPoints");
-		player.getAttributes().set("skillPoints", (sk - pointsToAdd));
+		player.getAttributes().set("skillPoints", (sk + pointsToAdd));
 		
 		pointsToAdd = 0;
 	}

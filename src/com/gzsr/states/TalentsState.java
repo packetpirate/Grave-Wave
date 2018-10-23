@@ -207,6 +207,7 @@ public class TalentsState extends BasicGameState implements InputListener {
 					}
 				}
 				
+				changesMade = 0;
 				game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
 			}
 		} else back.mouseExit();

@@ -3,6 +3,8 @@ package com.gzsr.talents;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.entities.Attributes;
+import com.gzsr.entities.Player;
 
 public class Talents {
 	public interface TalentType {
@@ -191,6 +193,48 @@ public class Talents {
 		
 		private int maxRanks;
 		public int maxRanks() { return maxRanks; }
+	}
+	
+	/**
+	 * Calls out to relevant classes to apply effects of a talent when points
+	 * are invested in that talent. Ugly, but easy...
+	 */
+	public static void applyRanks(TalentType talent) {
+		Player player = Player.getPlayer();
+		Attributes attr = player.getAttributes();
+		int ranks = talent.ranks();
+		
+		if(talent instanceof Munitions) {
+			Munitions m = (Munitions)talent;
+			switch(m) {
+			
+			}
+		} else if(talent instanceof Fortification) {
+			Fortification f = (Fortification)talent;
+			switch(f) {
+				case HEARTY:
+					attr.set("maxHealth", ((ranks * 20.0) + 100.0));
+					break;
+				case MARATHON_MAN:
+					attr.set("maxStamina", ((ranks * 10.0) + 100.0));
+					break;
+				case INVIGORATED:
+					attr.set("staminaRefreshRate", ((ranks * 5.0) + 10.0));
+					break;
+				case UNBREAKABLE:
+					break;
+				case FIREPOWER:
+					break;
+				case UNDYING:
+					attr.set("healthRegen", (ranks * 1.0));
+					break;
+			}
+		} else if(talent instanceof Tactics) {
+			Tactics t = (Tactics)talent;
+			switch(t) {
+			
+			}
+		}
 	}
 	
 	public static void reset() {
