@@ -37,8 +37,8 @@ public class CritChanceEffect extends StatusEffect {
 	public void onDestroy(Entity e, long cTime) {
 		// Subtract the multiplier amount from the player's current multiplier.
 		Player player = (Player) e;
-		float critChance = player.getAttributes().getFloat("critChance");
-		player.getAttributes().set("critChance", (critChance - CritChanceEffect.CRIT_CHANCE));
+		float critBonus = player.getAttributes().getFloat("critBonus");
+		player.getAttributes().set("critBonus", (critBonus - CritChanceEffect.CRIT_CHANCE));
 	}
 
 }

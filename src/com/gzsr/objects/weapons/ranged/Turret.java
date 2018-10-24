@@ -160,7 +160,7 @@ public class Turret extends Projectile {
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
 		
-		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("critChance"));
+		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("rangeCritChance"));
 		double dmg = rollDamage(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);

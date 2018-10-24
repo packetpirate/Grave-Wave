@@ -232,7 +232,15 @@ public class Talents {
 		} else if(talent instanceof Tactics) {
 			Tactics t = (Tactics)talent;
 			switch(t) {
-			
+				case SAVAGE:
+					attr.set("meleeCritChance", ((ranks * 0.05f) + 0.05f));
+					break;
+				case HEADSHOT:
+					attr.set("rangeCritChance", ((ranks * 0.05f) + 0.05f));
+					break;
+				case ASSASSIN:
+					attr.set("critMult", ((ranks * 1.0) + 2.0));
+					break;
 			}
 		}
 	}

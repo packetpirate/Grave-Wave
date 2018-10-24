@@ -45,7 +45,7 @@ public class AcidEffect extends StatusEffect {
 				if(e instanceof Enemy) {
 					Enemy enemy = (Enemy) e;
 					
-					boolean critical = (Globals.rand.nextFloat() <= player.getAttributes().getFloat("critChance"));
+					boolean critical = (Globals.rand.nextFloat() <= player.getAttributes().getFloat("rangeCritChance"));
 					double dmg = rollDamage(critical);
 					dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
 					if(critical) dmg *= player.getAttributes().getDouble("critMult");

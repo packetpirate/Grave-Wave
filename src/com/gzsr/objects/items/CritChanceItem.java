@@ -22,8 +22,10 @@ public class CritChanceItem extends Item {
 	@Override
 	public void apply(Player player, long cTime) {
 		CritChanceEffect effect = new CritChanceEffect(CritChanceItem.EFFECT_DURATION, cTime);
-		float critChance = player.getAttributes().getFloat("critChance");
-		player.getAttributes().set("critChance", (critChance + CritChanceEffect.CRIT_CHANCE));
+		
+		float critBonus = player.getAttributes().getFloat("critBonus");
+		player.getAttributes().set("critBonus", (critBonus + CritChanceEffect.CRIT_CHANCE));
+		
 		player.getStatusHandler().addStatus(effect, cTime);
 		duration = 0L;
 		pickup.play(1.0f, AssetManager.getManager().getSoundVolume());

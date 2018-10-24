@@ -97,6 +97,9 @@ public class Player implements Entity {
 	private Attributes attributes;
 	public Attributes getAttributes() { return attributes; }
 	
+	public float getMeleeCritChance() { return (attributes.getFloat("meleeCritChance") + attributes.getFloat("critBonus")); }
+	public float getRangeCritChance() { return (attributes.getFloat("rangeCritChance") + attributes.getFloat("critBonus")); }
+	
 	private Talents talents;
 	public Talents getTalents() { return talents; }
 	
@@ -430,7 +433,9 @@ public class Player implements Entity {
 		attributes.set("damageUp", 0);
 		
 		// Miscellaneous Modifiers
-		attributes.set("critChance", 0.05f);
+		attributes.set("meleeCritChance", 0.05f);
+		attributes.set("rangeCritChance", 0.05f);
+		attributes.set("critBonus", 0.0f);
 		
 		// Multipliers
 		attributes.set("expMult", 1.0);

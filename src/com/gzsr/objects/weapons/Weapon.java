@@ -8,6 +8,8 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.melee.MeleeWeapon;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public abstract class Weapon implements Entity {
 	protected Sound useSound;
@@ -27,8 +29,11 @@ public abstract class Weapon implements Entity {
 	
 	public boolean isCritical() {
 		float roll = Globals.rand.nextFloat();
-		float chance = Player.getPlayer().getAttributes().getFloat("critChance");
-		return (roll <= chance); 
+		
+		if(this instanceof MeleeWeapon) return (roll <= Player.getPlayer().getMeleeCritChance());
+		else if(this instanceof RangedWeapon) return (roll <= Player.getPlayer().getRangeCritChance());
+		
+		return false;
 	}
 
 	public boolean isEquipped() { return equipped; }
