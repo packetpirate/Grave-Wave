@@ -120,21 +120,9 @@ public class ClaymoreWeapon extends RangedWeapon {
 
 	@Override
 	public float getKnockback() { return ClaymoreWeapon.KNOCKBACK; }
-	
-	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < ClaymoreWeapon.RELOAD_TIME) && reloading);
-	}
 
 	@Override
 	public long getReloadTime() { return ClaymoreWeapon.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)ClaymoreWeapon.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ClaymoreWeapon.ICON_NAME); }

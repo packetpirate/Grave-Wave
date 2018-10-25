@@ -103,19 +103,7 @@ public class AK47 extends RangedWeapon {
 	public float getKnockback() { return AK47.KNOCKBACK; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < AK47.RELOAD_TIME) && reloading);
-	}
-
-	@Override
 	public long getReloadTime() { return AK47.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)AK47.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(AK47.ICON_NAME); }

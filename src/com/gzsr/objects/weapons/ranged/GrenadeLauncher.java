@@ -78,19 +78,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	public float getKnockback() { return GrenadeLauncher.KNOCKBACK; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < GrenadeLauncher.RELOAD_TIME) && reloading);
-	}
-
-	@Override
 	public long getReloadTime() { return GrenadeLauncher.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)GrenadeLauncher.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(GrenadeLauncher.ICON_NAME); }

@@ -86,19 +86,7 @@ public class Mossberg extends RangedWeapon {
 	public float getKnockback() { return Mossberg.KNOCKBACK; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Mossberg.RELOAD_TIME) && reloading);
-	}
-
-	@Override
 	public long getReloadTime() { return Mossberg.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Mossberg.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Mossberg.ICON_NAME); }

@@ -20,6 +20,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
+import com.gzsr.talents.Talents;
 
 public abstract class RangedWeapon extends Weapon {
 	protected Sound reloadSound;
@@ -152,9 +153,22 @@ public abstract class RangedWeapon extends Weapon {
 		}
 	}
 
-	public abstract boolean isReloading(long cTime);
-	public abstract double getReloadTime(long cTime);
+	public boolean isReloading(long cTime) {
+		long elapsed = cTime - reloadStart;
+		return ((elapsed < getReloadTimeTotal()) && reloading);
+	}
+	
+	public double getReloadTime(long cTime) {
+		long elapsed = cTime - reloadStart;
+		return ((double)elapsed / (double)getReloadTimeTotal());
+	}
+	
 	public abstract long getReloadTime();
+	public long getReloadTimeTotal() {
+		long time = getReloadTime();
+		if(Talents.Munitions.QUICK_FINGERS.active()) time = (long)(time * (1.0 - (Talents.Munitions.QUICK_FINGERS.ranks() * 0.1)));
+		return time;
+	}
 	
 	public abstract int getClipSize();
 	public abstract int getStartClips();

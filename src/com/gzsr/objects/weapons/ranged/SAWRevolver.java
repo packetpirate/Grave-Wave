@@ -78,19 +78,7 @@ public class SAWRevolver extends RangedWeapon {
 	public float getKnockback() { return SAWRevolver.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < SAWRevolver.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return SAWRevolver.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)SAWRevolver.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(SAWRevolver.ICON_NAME); }

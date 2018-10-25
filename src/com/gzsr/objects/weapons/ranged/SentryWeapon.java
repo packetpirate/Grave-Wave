@@ -63,21 +63,9 @@ public class SentryWeapon extends RangedWeapon {
 	
 	@Override
 	public float getKnockback() { return SentryWeapon.KNOCKBACK; }
-	
-	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < SentryWeapon.RELOAD_TIME) && reloading);
-	}
 
 	@Override
 	public long getReloadTime() { return SentryWeapon.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)SentryWeapon.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(SentryWeapon.ICON_NAME); }

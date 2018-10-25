@@ -72,19 +72,7 @@ public class Beretta extends RangedWeapon {
 	public float getKnockback() { return Beretta.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Beretta.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return Beretta.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Beretta.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Beretta.ICON_NAME); }

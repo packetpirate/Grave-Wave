@@ -154,19 +154,7 @@ public class BigRedButton extends RangedWeapon {
 	public float getKnockback() { return 0.0f; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < BigRedButton.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return BigRedButton.RELOAD_TIME; }
-
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)BigRedButton.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BigRedButton.ICON_NAME); }

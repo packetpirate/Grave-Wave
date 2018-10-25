@@ -134,18 +134,6 @@ public class MolotovWeapon extends RangedWeapon {
 		charging = false;
 		charge = 0.0f;
 	}
-	
-	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < MolotovWeapon.RELOAD_TIME) && reloading);
-	}
-
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)MolotovWeapon.RELOAD_TIME);
-	}
 
 	@Override
 	public long getReloadTime() { return MolotovWeapon.RELOAD_TIME; }

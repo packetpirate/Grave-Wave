@@ -630,6 +630,16 @@ public class Player implements Entity {
 				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 				double totalDamage = (mw.rollDamage(mw.isCurrentCritical()) * damagePercentage);
 				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(), cTime, delta, true, mw.isCurrentCritical());
+				
+				// Check for Relentless talent effect if enemy was killed by this attack.
+				if(enemy.dead() && Talents.Fortification.RELENTLESS.active()) {
+					float roll = Globals.rand.nextFloat();
+					if(roll <= 0.1f) {
+						double maxStamina = attributes.getDouble("maxStamina");
+						addStamina(maxStamina * 0.10);
+						System.out.println("Relentless!");
+					}
+				}
 			}
 		}
 		

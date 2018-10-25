@@ -26,7 +26,7 @@ public class Talents {
 		SCOUT(0, 1, 5, "Scout", "Increases small weapon damage by 20% per rank.", ""),
 		
 		INVENTOR(1, 0, 1, "Inventor", "Can craft basic weapons.", ""),
-		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Increases reload speed by 20% per rank.", ""),
+		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Decreases reload speed by 10%. Max 5 ranks.", ""),
 		
 		SOLDIER(2, 1, 5, "Soldier", "Increases medium weapon damage by 20% per rank.", ""),
 		
@@ -234,6 +234,9 @@ public class Talents {
 			switch(t) {
 				case SAVAGE:
 					attr.set("meleeCritChance", ((ranks * 0.05f) + 0.05f));
+					break;
+				case NIMBLE:
+					attr.set("speedUp", ranks);
 					break;
 				case HEADSHOT:
 					attr.set("rangeCritChance", ((ranks * 0.05f) + 0.05f));

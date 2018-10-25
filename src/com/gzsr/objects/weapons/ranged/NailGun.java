@@ -72,19 +72,7 @@ public class NailGun extends RangedWeapon {
 	public float getKnockback() { return NailGun.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < NailGun.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return NailGun.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)NailGun.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(NailGun.ICON_NAME); }

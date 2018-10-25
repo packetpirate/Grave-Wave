@@ -117,19 +117,7 @@ public class LaserBarrier extends RangedWeapon {
 	public float getKnockback() { return 0.0f; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < LaserBarrier.RELOAD_TIME) && reloading);
-	}
-
-	@Override
 	public long getReloadTime() { return LaserBarrier.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)LaserBarrier.RELOAD_TIME);
-	}
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(LaserBarrier.ICON_NAME); }

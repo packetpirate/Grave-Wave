@@ -78,19 +78,7 @@ public class Remington extends RangedWeapon {
 	public float getKnockback() { return Remington.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Remington.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return Remington.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Remington.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Remington.ICON_NAME); }

@@ -71,19 +71,7 @@ public class Taser extends RangedWeapon {
 	public float getKnockback() { return Taser.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Taser.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return Taser.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Taser.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Taser.ICON_NAME); }

@@ -78,19 +78,7 @@ public class MP5 extends RangedWeapon {
 	public float getKnockback() { return MP5.KNOCKBACK; }
 
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < MP5.RELOAD_TIME) && reloading);
-	}
-
-	@Override
 	public long getReloadTime() { return MP5.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)MP5.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(MP5.ICON_NAME); }

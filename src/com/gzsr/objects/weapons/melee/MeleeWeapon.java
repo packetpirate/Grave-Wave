@@ -21,6 +21,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
+import com.gzsr.talents.Talents;
 
 public abstract class MeleeWeapon extends Weapon {
 	protected Image img;
@@ -52,7 +53,7 @@ public abstract class MeleeWeapon extends Weapon {
 		currentCritical = false;
 		
 		attackTheta = 0.0f;
-		lastAttack = -(getAttackTime() + getCooldown());
+		lastAttack = -(getAttackTimeTotal() + getCooldown());
 		
 		bloodGenerator = null;
 	}
@@ -63,7 +64,7 @@ public abstract class MeleeWeapon extends Weapon {
 			long elapsed = (cTime - lastAttack);
 			
 			// Check to see if we're already attacking, and if so, the attack time has elapsed.
-			if(elapsed > getAttackTime()) stopAttack();
+			if(elapsed > getAttackTimeTotal()) stopAttack();
 		}
 	}
 
@@ -114,9 +115,9 @@ public abstract class MeleeWeapon extends Weapon {
 		long elapsed = (cTime - lastAttack);
 		
 		// Check to see if we're already attacking, and if so, the attack time has elapsed.
-		if(attacking && (elapsed > getAttackTime())) stopAttack();
+		if(attacking && (elapsed > getAttackTimeTotal())) stopAttack();
 		
-		boolean cooledDown = (elapsed > (getAttackTime() + getCooldown()));
+		boolean cooledDown = (elapsed > (getAttackTimeTotal() + getCooldown()));
 		boolean enoughStamina = (player.getAttributes().getDouble("stamina") >= getStaminaCost());
 		
 		return (!attacking && cooledDown && enoughStamina);
@@ -155,7 +156,7 @@ public abstract class MeleeWeapon extends Weapon {
 	// Gets the width of the collision rectangle that can hit.
 	protected float getAttackTimeRatio(long cTime) {
 		long elapsed = (cTime - lastAttack);
-		return ((float)elapsed / (float)getAttackTime()); 
+		return ((float)elapsed / (float)getAttackTimeTotal()); 
 	}
 	
 	protected float getCurrentTheta(long cTime) {
@@ -194,6 +195,11 @@ public abstract class MeleeWeapon extends Weapon {
 	public abstract Pair<Float> getHitAreaSize();
 	public abstract float getThetaOffset();
 	public abstract long getAttackTime();
+	public long getAttackTimeTotal() {
+		long time = getAttackTime();
+		if(Talents.Tactics.FEROCITY.active()) time /= 2;
+		return time;
+	}
 
 	@Override
 	public String getName() {

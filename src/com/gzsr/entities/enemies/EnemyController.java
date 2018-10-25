@@ -20,6 +20,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.items.Armor;
 import com.gzsr.states.GameState;
 import com.gzsr.states.ShopState;
+import com.gzsr.talents.Talents;
 
 public class EnemyController implements Entity {
 	private static final int SPAWN_POOL_START = 5;
@@ -258,7 +259,11 @@ public class EnemyController implements Entity {
 				if(!enemy.isAlive(cTime)) {
 					// If the enemy died, give the player experience and cash, and remove the enemy.
 					player.addExperience(gs, enemy.getExpValue(), cTime);
-					player.getAttributes().addTo("money", enemy.getCashValue());
+					
+					int money = enemy.getCashValue();
+					if(Talents.Tactics.WINDFALL.active()) money += (money * (Talents.Tactics.WINDFALL.ranks() * 0.1));
+					player.getAttributes().addTo("money", money);
+					
 					it.remove();
 				}
 			}

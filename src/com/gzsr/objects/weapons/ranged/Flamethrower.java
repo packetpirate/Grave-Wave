@@ -76,21 +76,9 @@ public class Flamethrower extends RangedWeapon {
 	
 	@Override
 	public float getKnockback() { return 0.0f; }
-	
-	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Flamethrower.RELOAD_TIME) && reloading);
-	}
 
 	@Override
 	public long getReloadTime() { return Flamethrower.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Flamethrower.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Flamethrower.ICON_NAME); }

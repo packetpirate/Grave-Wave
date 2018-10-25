@@ -58,18 +58,6 @@ public class Crossbow extends RangedWeapon {
 
 		super.use(player, position, theta, cTime);
 	}
-	
-	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < Crossbow.RELOAD_TIME) && reloading);
-	}
-
-	@Override
-	public double getReloadTime(long cTime) { 
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)Crossbow.RELOAD_TIME); 
-	}
 
 	@Override
 	public long getReloadTime() { return Crossbow.RELOAD_TIME; }

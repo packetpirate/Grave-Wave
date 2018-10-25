@@ -103,19 +103,7 @@ public class AWP extends RangedWeapon {
 	public float getKnockback() { return AWP.KNOCKBACK; }
 	
 	@Override
-	public boolean isReloading(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((elapsed < AWP.RELOAD_TIME) && reloading);
-	}
-	
-	@Override
 	public long getReloadTime() { return AWP.RELOAD_TIME; }
-	
-	@Override
-	public double getReloadTime(long cTime) {
-		long elapsed = cTime - reloadStart;
-		return ((double)elapsed / (double)AWP.RELOAD_TIME);
-	}
 	
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(AWP.ICON_NAME); }
