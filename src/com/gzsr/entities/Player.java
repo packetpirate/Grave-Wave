@@ -471,10 +471,26 @@ public class Player implements Entity {
 	
 	public double takeDamage(double amnt, long cTime, boolean piercing) {
 		if(isAlive() && !statusHandler.hasStatus(Status.INVULNERABLE)) {
+			double currentHealth = attributes.getDouble("health");
+			double maxHealth = attributes.getDouble("maxHealth");
+			
+			boolean unbreakable = Talents.Fortification.UNBREAKABLE.active();
+			boolean lastStand = Talents.Fortification.LAST_STAND.active() && (currentHealth <= (maxHealth * 0.25));
+			double reduction = 0.0;
+			if(lastStand) reduction += 0.5;
+			if(unbreakable) {
+				int ranks = Talents.Fortification.UNBREAKABLE.ranks();
+				reduction += (ranks * 0.05);
+			}
+			
+			if(reduction > 0.0) {
+				amnt -= (amnt * reduction);
+				if(amnt <= 0.0) return -1.0;
+			}
+			
 			if(!piercing) amnt = damageArmor(amnt); // First, deal damage to player's armor.
 			
 			// Deal leftover damage to health.
-			double currentHealth = attributes.getDouble("health");
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			attributes.set("health", newHealth);

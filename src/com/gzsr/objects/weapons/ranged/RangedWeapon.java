@@ -10,12 +10,14 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
+import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
@@ -74,14 +76,7 @@ public abstract class RangedWeapon extends Weapon {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		// Basically just checking to see if the reload time has elapsed.
-		if(reloading && !isReloading(cTime)) {
-			int takeFromInv = getClipSize() - ammoInClip;
-			int taken = Math.min(takeFromInv, ammoInInventory);
-			ammoInInventory -= taken;
-			ammoInClip += taken;
-			
-			reloading = false;
-		}
+		if(reloading && !isReloading(cTime)) reload();
 		
 		// Update all projectiles.
 		if(!getProjectiles().isEmpty()) {
@@ -144,10 +139,26 @@ public abstract class RangedWeapon extends Weapon {
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 	
+	private void reload() {
+		int takeFromInv = getClipSize() - ammoInClip;
+		int taken = Math.min(takeFromInv, ammoInInventory);
+		ammoInInventory -= taken;
+		ammoInClip += taken;
+		
+		reloading = false;
+	}
+	
 	public void reload(long cTime) {
 		if(ammoInInventory > 0) {
 			reloading = true;
 			reloadStart = cTime;
+			if(Talents.Munitions.HASTE.active()) {
+				float roll = Globals.rand.nextFloat();
+				if(roll <= 0.1f) {
+					reload();
+					StatusMessages.getInstance().addMessage("Haste!", Player.getPlayer(), Player.ABOVE_1, cTime, 1_000L);
+				}
+			}
 			
 			if(reloadSound != null) reloadSound.play();
 		}

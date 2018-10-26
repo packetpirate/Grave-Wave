@@ -6,8 +6,12 @@ import java.util.List;
 
 import org.newdawn.slick.Graphics;
 
+import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
+import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.states.GameState;
+import com.gzsr.talents.Talents;
 
 public class StatusHandler {
 	// TODO: Add any new harmful status effects to this list.
@@ -53,6 +57,20 @@ public class StatusHandler {
 	}
 	
 	public void addStatus(StatusEffect effect, long cTime) {
+		if(entity instanceof Player) {
+			boolean isResistable = (effect.getStatus().equals(Status.POISON) ||
+									effect.getStatus().equals(Status.PARALYSIS));
+			boolean canResist = Talents.Fortification.VIGOR.active();
+			if(isResistable && canResist) {
+				int ranks = Talents.Fortification.VIGOR.ranks();
+				float roll = Globals.rand.nextFloat();
+				if(roll <= (ranks * 0.05f)) {
+					StatusMessages.getInstance().addMessage("Resisted!", entity, Player.ABOVE_1, cTime, 1_000L);
+					return;
+				}
+			}
+		}
+		
 		if(isImmuneTo(effect.getStatus())) {
 			effect.noEffect(entity, cTime);
 			return;
