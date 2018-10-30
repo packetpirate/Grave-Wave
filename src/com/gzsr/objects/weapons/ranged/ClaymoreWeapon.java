@@ -15,6 +15,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
+import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 
 public class ClaymoreWeapon extends RangedWeapon {
@@ -32,11 +33,14 @@ public class ClaymoreWeapon extends RangedWeapon {
 	private static final String FIRE_SOUND = "landmine_armed";
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
+	private static final Dice DAMAGE = new Dice(2, 8);
+	private static final int DAMAGE_MOD = 2;
+	
 	private boolean deploying;
 	private float progress;
 	
 	public ClaymoreWeapon() {
-		super(false);
+		super(Size.SMALL, false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -96,7 +100,10 @@ public class ClaymoreWeapon extends RangedWeapon {
 		Particle particle = new Particle(ClaymoreWeapon.PARTICLE_NAME, color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height), 
 										 lifespan, cTime);
-		Claymore clay = new Claymore(particle);
+		
+		boolean critical = isCritical();
+		double dmg = getDamageTotal(critical);
+		Claymore clay = new Claymore(particle, dmg, critical);
 		projectiles.add(clay);
 		
 		progress = 0.0f;
@@ -113,10 +120,17 @@ public class ClaymoreWeapon extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return Claymore.getDamageRange(); }
+	public Pair<Integer> getDamage() { 
+		Pair<Integer> range = ClaymoreWeapon.DAMAGE.getRange(ClaymoreWeapon.DAMAGE_MOD);
+	
+		range.x *= Claymore.SHRAPNEL_COUNT;
+		range.y *= Claymore.SHRAPNEL_COUNT;
+	
+		return range; 
+	}
 	
 	@Override
-	public double rollDamage(boolean critical) { return 0.0; }
+	public double rollDamage(boolean critical) { return ClaymoreWeapon.DAMAGE.roll(ClaymoreWeapon.DAMAGE_MOD, critical); }
 
 	@Override
 	public float getKnockback() { return ClaymoreWeapon.KNOCKBACK; }

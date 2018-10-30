@@ -33,7 +33,7 @@ public class MP5 extends RangedWeapon {
 	private static final int DAMAGE_MOD = 2;
 	
 	public MP5() {
-		super();
+		super(Size.SMALL);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -54,7 +54,7 @@ public class MP5 extends RangedWeapon {
 		long lifespan = getProjectile().getLifespan();
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		

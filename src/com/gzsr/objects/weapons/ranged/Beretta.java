@@ -30,7 +30,7 @@ public class Beretta extends RangedWeapon {
 	private static final int DAMAGE_MOD = 8;
 	
 	public Beretta() {
-		super(false);
+		super(Size.SMALL, false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -54,7 +54,7 @@ public class Beretta extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);

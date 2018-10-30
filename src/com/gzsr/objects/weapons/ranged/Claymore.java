@@ -20,19 +20,15 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
 
 public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);
-	private static final int SHRAPNEL_COUNT = 50;
+	public static final int SHRAPNEL_COUNT = 50;
 	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
-	
-	private static final Dice DAMAGE = new Dice(2, 8);
-	private static final int DAMAGE_MOD = 2;
 	
 	private Sound explosion;
 	private Shape collider;
@@ -40,8 +36,10 @@ public class Claymore extends Projectile {
 	public List<Projectile> getShrapnel() { return shrapnel; }
 	private boolean exploded;
 	private boolean shrapnelCreated;
+	private double damage;
+	private boolean critical;
 	
-	public Claymore(Particle p_) {
+	public Claymore(Particle p_, double damage_, boolean critical_) {
 		super(p_, 0.0, false);
 		
 		this.explosion = AssetManager.getManager().getSound(Claymore.EXP_SOUND);
@@ -59,6 +57,8 @@ public class Claymore extends Projectile {
 		this.shrapnel = new ArrayList<Projectile>();
 		this.exploded = false;
 		this.shrapnelCreated = false;
+		this.damage = damage_;
+		this.critical = critical_;
 	}
 
 	@Override
@@ -90,10 +90,7 @@ public class Claymore extends Projectile {
 												 0.0f, new Pair<Float>(width, height), 
 												 lifespan, cTime);
 				
-				boolean critical = isCritical();
-				double dmg = rollDamage(critical);
-				
-				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
+				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, damage, critical);
 				
 				shrapnel.add(projectile);	
 			}
@@ -127,17 +124,6 @@ public class Claymore extends Projectile {
 			// Draw the shrapnel particles.
 			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(g, cTime));
 		}
-	}
-
-	public double rollDamage(boolean critical) { return Claymore.DAMAGE.roll(Claymore.DAMAGE_MOD, critical); }
-	
-	public static Pair<Integer> getDamageRange() {
-		Pair<Integer> range = Claymore.DAMAGE.getRange(Claymore.DAMAGE_MOD);
-		
-		range.x *= Claymore.SHRAPNEL_COUNT;
-		range.y *= Claymore.SHRAPNEL_COUNT;
-		
-		return range;
 	}
 	
 	public static int getShrapnelCount() {

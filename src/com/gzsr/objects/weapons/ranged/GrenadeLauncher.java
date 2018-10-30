@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.talents.Talents;
 
 public class GrenadeLauncher extends RangedWeapon {
 	private static final int PRICE = 6_000;
@@ -32,7 +33,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final int DAMAGE_MOD = 50;
 	
 	public GrenadeLauncher() {
-		super();
+		super(Size.LARGE);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -54,9 +55,13 @@ public class GrenadeLauncher extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
-		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
-		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
+		double dmg = getDamageTotal(critical);
+		System.out.println("Damage Before: " + dmg);
+		if(Talents.Munitions.DEMOLITIONS.active()) {
+			System.out.println("Demolition Bonus: " + (dmg * 0.5));
+			dmg += (dmg * 0.5);
+		}
+		System.out.println("Damage After: " + dmg);
 
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, 
 									  new Pair<Float>(0.0f, 0.0f), 

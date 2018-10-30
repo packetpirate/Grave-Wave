@@ -47,7 +47,7 @@ public class BigRedButton extends RangedWeapon {
 	private long lastExplosion;
 	
 	public BigRedButton() {
-		super();
+		super(Size.LARGE);
 		
 		explosions = new LinkedList<Explosion>();
 		lastExplosion = 0L;
@@ -90,9 +90,7 @@ public class BigRedButton extends RangedWeapon {
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < BigRedButton.EXP_COUNT; i++) {
 			boolean critical = isCritical();
-			double dmg = rollDamage(critical);
-			dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
-			if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
+			double dmg = getDamageTotal(critical);
 			
 			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, 
 										  new Pair<Float>(0.0f, 0.0f), 

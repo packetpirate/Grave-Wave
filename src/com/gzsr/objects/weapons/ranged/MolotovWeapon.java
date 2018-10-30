@@ -35,7 +35,7 @@ public class MolotovWeapon extends RangedWeapon {
 	private float charge;
 	
 	public MolotovWeapon() {
-		super(false);
+		super(Size.SMALL, false);
 		
 		this.useSound = AssetManager.getManager().getSound(MolotovWeapon.FIRE_SOUND);
 	}

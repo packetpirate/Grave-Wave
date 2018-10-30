@@ -8,9 +8,9 @@ import java.util.List;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.ui.StatusMessages;
-import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.melee.BaseballBat;
 import com.gzsr.objects.weapons.melee.BastardSword;
 import com.gzsr.objects.weapons.melee.Lollipop;
 import com.gzsr.objects.weapons.ranged.AK47;
@@ -107,10 +107,10 @@ public class ShopController {
 	
 	public void reset() {
 		Class [] classes = new Class[] {
-			BastardSword.class, Lollipop.class, AK47.class, AWP.class, BigRedButton.class,
-			BowAndArrow.class, ClaymoreWeapon.class, Crossbow.class, Flamethrower.class, GrenadeLauncher.class,
-			LaserBarrier.class, MolotovWeapon.class, Mossberg.class, MP5.class, Remington.class,
-			SAWRevolver.class, SentryWeapon.class, Stinger.class, Taser.class
+			BaseballBat.class, BastardSword.class, Lollipop.class, AK47.class, AWP.class,
+			BigRedButton.class, BowAndArrow.class, ClaymoreWeapon.class, Crossbow.class, Flamethrower.class,
+			GrenadeLauncher.class, LaserBarrier.class, MolotovWeapon.class, Mossberg.class, MP5.class,
+			Remington.class, SAWRevolver.class, SentryWeapon.class, Stinger.class, Taser.class
 		};
 		
 		unreleased.clear();

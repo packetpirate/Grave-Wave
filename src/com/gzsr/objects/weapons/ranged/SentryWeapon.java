@@ -28,7 +28,7 @@ public class SentryWeapon extends RangedWeapon {
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	public SentryWeapon() {
-		super();
+		super(Size.LARGE);
 		
 		AssetManager assets = AssetManager.getManager();
 		this.useSound = assets.getSound(SentryWeapon.FIRE_SOUND);

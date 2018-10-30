@@ -32,7 +32,7 @@ public class Taser extends RangedWeapon {
 	private static final int DAMAGE_MOD = 1;
 	
 	public Taser() {
-		super(false);
+		super(Size.SMALL, false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -52,7 +52,7 @@ public class Taser extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		ParalysisEffect paralysis = new ParalysisEffect(Taser.EFFECT_DURATION, cTime);
 		StatusProjectile projectile = new StatusProjectile(particle, dmg, critical, paralysis);

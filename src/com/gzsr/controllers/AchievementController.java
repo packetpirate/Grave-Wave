@@ -96,10 +96,58 @@ public class AchievementController {
 			
 			s0.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.WAVE_START), s1);
 			s1.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL), s2);
-			s1.createTransition(s0, (metric -> ((((metric & Metrics.ABERRATION) != 0) && (metric & Metrics.compose(Metrics.ENEMY, Metrics.DAMAGE)) != 0) && ((metric & Metrics.NAIL_GUN) == 0))));
+			s1.createTransition(s0, (metric -> (((Metrics.has(metric, Metrics.ABERRATION) && Metrics.has(metric, Metrics.compose(Metrics.ENEMY, Metrics.DAMAGE)) && !Metrics.has(metric, Metrics.NAIL_GUN))))));
 			
-			StateBasedAchievement aberrationWithBeretta = new StateBasedAchievement("Absolute Madman", "Killed the Aberration using only the Nail Gun.", "", s0);
-			achievements.add(aberrationWithBeretta);
+			StateBasedAchievement absoluteMadman = new StateBasedAchievement("Absolute Madman", "Killed the Aberration using only the Nail Gun.", "", s0);
+			achievements.add(absoluteMadman);
+		}
+		
+		{ // Take no damage during Aberration fight.
+			AchievementState s0 = new AchievementState(false);
+			AchievementState s1 = new AchievementState(false);
+			AchievementState s2 = new AchievementState(true);
+			
+			s0.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.WAVE_START), s1);
+			s1.createTransition(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE), s0);
+			s1.createTransition(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL), s2);
+			
+			StateBasedAchievement tentacleWrangler = new StateBasedAchievement("Tentacle Wrangler", "Killed the Aberration without taking damage.", "", s0);
+			achievements.add(tentacleWrangler);
+		}
+		
+		{ // Take no damage during Stitches fight.
+			AchievementState s0 = new AchievementState(false);
+			AchievementState s1 = new AchievementState(false);
+			AchievementState s2 = new AchievementState(true);
+			
+			s0.createTransition(Metrics.compose(Metrics.STITCHES, Metrics.WAVE_START), s1);
+			s1.createTransition(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE), s0);
+			s1.createTransition(Metrics.compose(Metrics.STITCHES, Metrics.ENEMY, Metrics.KILL), s2);
+			
+			StateBasedAchievement offTheHook = new StateBasedAchievement("Off The Hook", "Killed Stitches without taking damage.", "", s0);
+			achievements.add(offTheHook);
+		}
+		
+		{ // Take no damage during Zombat fight.
+			AchievementState s0 = new AchievementState(false);
+			AchievementState s1 = new AchievementState(false);
+			AchievementState s2 = new AchievementState(false);
+			AchievementState s3 = new AchievementState(false);
+			AchievementState s4 = new AchievementState(true);
+			
+			s0.createTransition(Metrics.compose(Metrics.ZOMBAT, Metrics.WAVE_START), s1);
+			
+			s1.createTransition(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE), s0);
+			s1.createTransition(Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), s2);
+			
+			s2.createTransition(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE), s0);
+			s2.createTransition(Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), s3);
+			
+			s3.createTransition(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE), s0);
+			s3.createTransition(Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), s4);
+			
+			StateBasedAchievement blindAsABat = new StateBasedAchievement("Blind As A Bat", "Killed the Zombats without taking damage.", "", s0);
+			achievements.add(blindAsABat);
 		}
 	}
 }

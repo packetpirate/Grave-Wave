@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.talents.Talents;
 
 public class Stinger extends RangedWeapon {
 	private static final int PRICE = 38_000;
@@ -32,7 +33,7 @@ public class Stinger extends RangedWeapon {
 	private static final int DAMAGE_MOD = 250;
 	
 	public Stinger() {
-		super();
+		super(Size.LARGE);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -55,9 +56,8 @@ public class Stinger extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
-		dmg += (dmg * (player.getAttributes().getInt("damageUp") * 0.10));
-		if(isCritical()) dmg *= player.getAttributes().getDouble("critMult");
+		double dmg = getDamageTotal(critical);
+		if(Talents.Munitions.DEMOLITIONS.active()) dmg += (dmg * 0.5);
 
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME, 
 									  new Pair<Float>(0.0f, 0.0f), 

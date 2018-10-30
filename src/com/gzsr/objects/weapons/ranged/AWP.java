@@ -35,7 +35,7 @@ public class AWP extends RangedWeapon {
 	private static final int DAMAGE_MOD = 40;
 	
 	public AWP() {
-		super(false);
+		super(Size.MEDIUM, false);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -81,7 +81,7 @@ public class AWP extends RangedWeapon {
 										 lifespan, cTime);
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectile.setPenetrations(2);

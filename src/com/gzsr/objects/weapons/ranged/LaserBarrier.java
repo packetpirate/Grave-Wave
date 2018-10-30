@@ -32,7 +32,7 @@ public class LaserBarrier extends RangedWeapon {
 	private LaserNode lastNode;
 	
 	public LaserBarrier() {
-		super(false);
+		super(Size.NONE, false);
 		
 		AssetManager assets = AssetManager.getManager();
 		this.useSound = assets.getSound(LaserBarrier.FIRE_SOUND);

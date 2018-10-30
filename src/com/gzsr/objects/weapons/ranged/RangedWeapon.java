@@ -50,11 +50,16 @@ public abstract class RangedWeapon extends Weapon {
 		if(muzzleFlash == null) muzzleFlash = AssetManager.getManager().getAnimation("GZS_MuzzleFlash");
 	}
 	
-	public RangedWeapon() {
-		this(true);
+	private Size size;
+	protected enum Size {
+		NONE, SMALL, MEDIUM, LARGE
 	}
 	
-	public RangedWeapon(boolean automatic_) {
+	public RangedWeapon(Size size_) {
+		this(size_, true);
+	}
+	
+	public RangedWeapon(Size size_, boolean automatic_) {
 		this.reloadSound = null;
 		
 		this.projectiles = new ArrayList<Projectile>();
@@ -67,6 +72,8 @@ public abstract class RangedWeapon extends Weapon {
 		
 		this.automatic = automatic_;
 		this.release = false;
+		
+		this.size = size_;
 		
 		this.shakeEffect = null;
 		
@@ -179,6 +186,32 @@ public abstract class RangedWeapon extends Weapon {
 		long time = getReloadTime();
 		if(Talents.Munitions.QUICK_FINGERS.active()) time = (long)(time * (1.0 - (Talents.Munitions.QUICK_FINGERS.ranks() * 0.1)));
 		return time;
+	}
+	
+	@Override
+	public double getDamageTotal(boolean critical) {
+		double dmg = rollDamage(critical);
+		if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
+		
+		double bonus = 0.0;
+		switch(size) {
+			case SMALL:
+				bonus = (Talents.Munitions.SCOUT.ranks() * 0.20);
+				break;
+			case MEDIUM:
+				bonus = (Talents.Munitions.SOLDIER.ranks() * 0.20);
+				break;
+			case LARGE:
+				bonus = (Talents.Munitions.COMMANDO.ranks() * 0.20);
+				break;
+			default:
+				break;
+		}
+		
+		if(Talents.Munitions.DESPOT.active()) bonus += 0.5;
+		if(bonus > 0.0) dmg += (bonus * dmg);
+		
+		return dmg;
 	}
 	
 	public abstract int getClipSize();

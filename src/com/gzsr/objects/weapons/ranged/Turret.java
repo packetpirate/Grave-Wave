@@ -25,6 +25,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.misc.RotationLerp;
+import com.gzsr.talents.Talents;
 
 public class Turret extends Projectile {
 	private static final double HEALTH_MAX = 2_00.0;
@@ -34,7 +35,7 @@ public class Turret extends Projectile {
 	private static final float FIRING_RANGE = 500.0f;
 	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
-	private static final String FIRE_SOUND = "shoot3";
+	private static final String FIRE_SOUND = "revolver_shot_01";
 	
 	private static final Dice DAMAGE = new Dice(1, 8);
 	private static final int DAMAGE_MOD = 4;
@@ -161,7 +162,7 @@ public class Turret extends Projectile {
 										 lifespan, cTime);
 		
 		boolean critical = (Globals.rand.nextFloat() <= Player.getPlayer().getAttributes().getFloat("rangeCritChance"));
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		
@@ -175,6 +176,15 @@ public class Turret extends Projectile {
 	}
 	
 	public double rollDamage(boolean critical) { return Turret.DAMAGE.roll(Turret.DAMAGE_MOD, critical); }
+	private double getDamageTotal(boolean critical) {
+		double dmg = rollDamage(critical);
+		if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
+		
+		double bonus = (Talents.Munitions.COMMANDO.ranks() * 0.20);
+		if(bonus > 0.0) dmg += (bonus * dmg);
+		
+		return dmg;
+	}
 	
 	@Override
 	public boolean isAlive(long cTime) {

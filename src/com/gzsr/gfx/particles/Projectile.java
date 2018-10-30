@@ -6,18 +6,14 @@ import java.util.function.BiFunction;
 
 import com.gzsr.Globals;
 import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
 import com.gzsr.states.GameState;
 
 public class Projectile extends Particle {
 	private BiFunction<Entity, Long, List<Particle>> bloodGenerator;
 	
 	private double damage;
-	public double getDamage() { 
-		if(isCritical()) return (damage * Player.getPlayer().getAttributes().getDouble("critMult"));
-		return damage;
-	}
-
+	public double getDamage() { return damage; }
+	
 	private boolean critical;
 	public boolean isCritical() { return critical; }
 	

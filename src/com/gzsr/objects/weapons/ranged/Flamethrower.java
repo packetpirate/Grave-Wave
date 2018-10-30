@@ -30,7 +30,7 @@ public class Flamethrower extends RangedWeapon {
 	private static final String RELOAD_SOUND = "buy_ammo2";
 	
 	public Flamethrower() {
-		super();
+		super(Size.LARGE);
 		
 		AssetManager assets = AssetManager.getManager();
 		

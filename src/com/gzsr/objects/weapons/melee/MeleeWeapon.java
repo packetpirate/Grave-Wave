@@ -186,6 +186,19 @@ public abstract class MeleeWeapon extends Weapon {
 	}
 	
 	@Override
+	public double getDamageTotal(boolean critical) {
+		double dmg = rollDamage(critical);
+		
+		// TODO: Implement melee damage enhancing talents here.
+		double bonus = 0.0;
+		if(Talents.Tactics.BRUTALITY.active()) bonus += (Talents.Tactics.BRUTALITY.ranks() * 0.1);
+		
+		dmg += (dmg * bonus);
+		
+		return dmg;
+	}
+	
+	@Override
 	public DamageType getDamageType() { return DamageType.BLUNT; }
 	
 	public abstract double getStaminaCost();

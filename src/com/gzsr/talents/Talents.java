@@ -23,19 +23,19 @@ public class Talents {
 	}
 	
 	public enum Munitions implements TalentType {
-		SCOUT(0, 1, 5, "Scout", "Increases small weapon damage by 20% per rank.", ""),
+		SCOUT(0, 1, 5, "Scout", "Increases small ranged weapon damage by 20% per rank.", ""),
 		
 		INVENTOR(1, 0, 1, "Inventor", "Can craft basic weapons.", ""),
 		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Decreases reload speed by 10%. Max 5 ranks.", ""),
 		
-		SOLDIER(2, 1, 5, "Soldier", "Increases medium weapon damage by 20% per rank.", ""),
+		SOLDIER(2, 1, 5, "Soldier", "Increases medium ranged weapon damage by 20% per rank.", ""),
 		
 		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted weapons do an additional 25% damage.", ""),
 		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", ""),
 		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", ""),
 		
 		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 25%.", ""),
-		COMMANDO(4, 1, 5, "Commando", "Increases large weapon damage by 25% per rank.", ""),
+		COMMANDO(4, 1, 5, "Commando", "Increases large ranged weapon damage by 25% per rank.", ""),
 		MODDER(4, 2, 1, "Modder", "Increase magezine capacity by 50%.", ""),
 		
 		ENGINEER(6, 0, 1, "Engineer", "Can craft advanced weaponry.", ""),

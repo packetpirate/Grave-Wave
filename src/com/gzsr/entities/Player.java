@@ -495,6 +495,8 @@ public class Player implements Entity {
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			attributes.set("health", newHealth);
 			
+			if(amnt > 0.0) AchievementController.getInstance().postMetric(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE));
+			
 			if((cTime - lastGrunt) >= GRUNT_TIMER) {
 				int grunt = Globals.rand.nextInt(4) + 1;
 				AssetManager.getManager().getSound(String.format("grunt%d", grunt)).play();
@@ -643,9 +645,10 @@ public class Player implements Entity {
 		
 		for(MeleeWeapon mw : getMeleeWeapons()) {
 			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
-				float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
-				double totalDamage = (mw.rollDamage(mw.isCurrentCritical()) * damagePercentage);
-				if(totalDamage > 0.0) enemy.takeDamage(mw.getDamageType(), totalDamage, mw.getKnockback(), (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(), cTime, delta, true, mw.isCurrentCritical());
+				double damage = mw.getDamageTotal(mw.isCurrentCritical());
+				enemy.takeDamage(mw.getDamageType(), damage, mw.getKnockback(), 
+								 (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(), 
+								 cTime, delta, true, mw.isCurrentCritical());
 				
 				// Check for Relentless talent effect if enemy was killed by this attack.
 				if(enemy.dead() && Talents.Fortification.RELENTLESS.active()) {

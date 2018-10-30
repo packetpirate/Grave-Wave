@@ -38,7 +38,7 @@ public class AK47 extends RangedWeapon {
 	private Animation muzzleFlash;
 	
 	public AK47() {
-		super();
+		super(Size.MEDIUM);
 		
 		AssetManager assets = AssetManager.getManager();
 		
@@ -73,7 +73,7 @@ public class AK47 extends RangedWeapon {
 		long lifespan = getProjectile().getLifespan();
 		
 		boolean critical = isCritical();
-		double dmg = rollDamage(critical);
+		double dmg = getDamageTotal(critical);
 		
 		float deviation = Globals.rand.nextFloat() * (MAX_DEVIATION / 2) * (Globals.rand.nextBoolean() ? 1 : -1);
 		
