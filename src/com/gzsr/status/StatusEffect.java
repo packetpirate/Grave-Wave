@@ -27,6 +27,7 @@ public abstract class StatusEffect {
 	public long getDuration() { return duration; }
 	
 	protected long created;
+	public long getCreateTime() { return created; }
 	public boolean isActive(long cTime) {
 		long elapsed = cTime - created;
 		return (elapsed <= duration);

@@ -14,6 +14,7 @@ public enum Status {
 	INVULNERABLE("GZS_Invulnerability"),
 	NIGHT_VISION("GZS_NightVision"),
 	SPEED_UP("GZS_SpeedUp"),
+	SLOW_DOWN("GZS_SlowDown"),
 	UNLIMITED_AMMO("GZS_UnlimitedAmmo");
 	
 	private String iconName;

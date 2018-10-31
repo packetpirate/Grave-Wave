@@ -80,6 +80,7 @@ public class Player implements Entity {
 	
 	private float speed;
 	public float getSpeed() { return speed; }
+	public void setSpeed(float speed_) { this.speed = speed_; }
 	
 	private float theta;
 	public float getRotation() { return theta; }

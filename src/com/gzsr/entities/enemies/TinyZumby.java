@@ -27,6 +27,7 @@ public class TinyZumby extends Enemy {
 		super(EnemyType.LIL_ZUMBY, position);
 		
 		this.health = TinyZumby.HEALTH.roll(TinyZumby.HEALTH_MOD);
+		this.speed = TinyZumby.SPEED;
 	}
 
 	@Override
@@ -64,10 +65,10 @@ public class TinyZumby extends Enemy {
 	public double getDamage() { return TinyZumby.DAMAGE; }
 	
 	@Override
-	public long getAttackDelay() { return TinyZumby.ATTACK_DELAY; }
+	public void resetSpeed() { speed = TinyZumby.SPEED; }
 	
 	@Override
-	public float getSpeed() { return TinyZumby.SPEED; }
+	public long getAttackDelay() { return TinyZumby.ATTACK_DELAY; }
 	
 	public static int getSpawnCost() { return TinyZumby.SPAWN_COST; }
 

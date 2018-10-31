@@ -49,6 +49,7 @@ public class ElSalvo extends Enemy {
 	public ElSalvo(Pair<Float> position_) {
 		super(EnemyType.ELSALVO, position_);
 		this.health = ElSalvo.HEALTH.roll(ElSalvo.HEALTH_MOD);
+		this.speed = ElSalvo.SPEED;
 		this.explode = AssetManager.getManager().getSound("explosion2");
 		
 		this.damageImmunities.add(DamageType.FIRE);
@@ -159,13 +160,13 @@ public class ElSalvo extends Enemy {
 	}
 	
 	@Override
+	public void resetSpeed() { speed = ElSalvo.SPEED; }
+	
+	@Override
 	public int getExpValue() { return (exploded ? 0 : experience); }
 	
 	@Override
 	public long getAttackDelay() { return 0L; }
-	
-	@Override
-	public float getSpeed() { return ElSalvo.SPEED; }
 
 	public static int appearsOnWave() { return ElSalvo.FIRST_WAVE; }
 	

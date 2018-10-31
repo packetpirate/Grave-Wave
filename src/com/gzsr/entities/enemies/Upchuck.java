@@ -50,6 +50,8 @@ public class Upchuck extends Enemy {
 	public Upchuck(Pair<Float> position_) {
 		super(EnemyType.CHUCK, position_);
 		this.health = Upchuck.HEALTH.roll(Upchuck.HEALTH_MOD);
+		this.speed = Upchuck.SPEED;
+		
 		this.bile = new ArrayList<StatusProjectile>();
 		this.lastBile = 0L;
 		
@@ -173,10 +175,10 @@ public class Upchuck extends Enemy {
 	public double getDamage() { return Upchuck.DPS; }
 	
 	@Override
-	public long getAttackDelay() { return 0L; }
+	public void resetSpeed() { speed = Upchuck.SPEED; }
 	
 	@Override
-	public float getSpeed() { return Upchuck.SPEED; }
+	public long getAttackDelay() { return 0L; }
 	
 	public static int appearsOnWave() { return Upchuck.FIRST_WAVE; }
 	

@@ -78,6 +78,7 @@ public class Aberration extends Boss {
 		super(EnemyType.ABERRATION, position_);
 		
 		this.health = Aberration.HEALTH.roll(Aberration.HEALTH_MOD);
+		this.speed = Aberration.SPEED;
 		
 		this.damageImmunities.add(DamageType.CORROSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
@@ -309,10 +310,10 @@ public class Aberration extends Boss {
 	}
 	
 	@Override
-	public long getAttackDelay() { return Aberration.ATTACK_DELAY; }
+	public void resetSpeed() { speed = Aberration.SPEED; }
 	
 	@Override
-	public float getSpeed() { return Aberration.SPEED; }
+	public long getAttackDelay() { return Aberration.ATTACK_DELAY; }
 
 	public static int appearsOnWave() { return FIRST_WAVE; }
 	

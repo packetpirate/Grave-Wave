@@ -38,6 +38,10 @@ public abstract class Enemy implements Entity {
 	public Pair<Float> getPosition() { return position; }
 	protected float theta;
 	public float getTheta() { return theta; }
+	protected float speed;
+	public float getSpeed() { return speed; }
+	public void setSpeed(float speed_) { this.speed = speed_; }
+	public abstract void resetSpeed();
 	protected Vector2f velocity;
 	public Vector2f getVelocity() { return velocity; }
 	protected boolean moveBlocked;
@@ -97,6 +101,7 @@ public abstract class Enemy implements Entity {
 		this.attacking = false;
 		this.lastAttack = -getAttackDelay();
 		this.theta = 0.0f;
+		this.speed = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 		
 		this.health = 0.0;
@@ -318,7 +323,6 @@ public abstract class Enemy implements Entity {
 		deathHandled = true;
 	}
 	
-	public abstract float getSpeed();
 	public abstract LootTable getLootTable();
 	
 	@Override

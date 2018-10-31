@@ -27,6 +27,7 @@ public class Zumby extends Enemy {
 		super(EnemyType.ZUMBY, position_);
 		
 		this.health = Zumby.HEALTH.roll(Zumby.HEALTH_MOD);
+		this.speed = Zumby.SPEED;
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
@@ -68,7 +69,7 @@ public class Zumby extends Enemy {
 	public double getDamage() { return Zumby.DAMAGE.roll(); }
 	
 	@Override
-	public float getSpeed() { return Zumby.SPEED; }
+	public void resetSpeed() { speed = Zumby.SPEED; }
 	
 	public static int appearsOnWave() { return Zumby.FIRST_WAVE; }
 	

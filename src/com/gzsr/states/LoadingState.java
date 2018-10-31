@@ -145,6 +145,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_NightVision.png",
 			"images/GZS_UnlimitedAmmo.png",
 			"images/GZS_SpeedUp.png",
+			"images/GZS_SlowDown.png",
 			"images/GZS_Life.png",
 			"images/GZS_ExtraLife.png",
 			"images/GZS_ExpMultiplier.png",

@@ -49,6 +49,7 @@ public class Starfright extends Enemy {
 	public Starfright(Pair<Float> position_) {
 		super(EnemyType.STARFRIGHT, position_);
 		this.health = Starfright.HEALTH.roll(Starfright.HEALTH_MOD);
+		this.speed = Starfright.SPEED;
 		
 		this.damageImmunities.add(DamageType.CONCUSSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
@@ -165,15 +166,17 @@ public class Starfright extends Enemy {
 	}
 	
 	@Override
+	public void resetSpeed() { speed = Starfright.SPEED; }
+	
+	@Override
 	public long getAttackDelay() { return Starfright.EXPLOSION_DELAY; }
 	
 	@Override
 	public float getSpeed() {
 		Player player = Player.getPlayer();
 		
-		float speed = Starfright.SPEED;
 		boolean blinded = (player.getFlashlight().isEnabled() && player.getFlashlight().inView(getCollider()));
-		if(blinded) speed *= 0.25f;
+		if(blinded) return (speed * 0.25f);
 		
 		return speed; 
 	}

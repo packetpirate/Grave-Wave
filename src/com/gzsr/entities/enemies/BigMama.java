@@ -45,6 +45,7 @@ public class BigMama extends Enemy {
 	public BigMama(Pair<Float> position) {
 		super(EnemyType.BIG_MAMA, position);
 		this.health = BigMama.HEALTH.roll(BigMama.HEALTH_MOD);
+		this.speed = BigMama.SPEED;
 		
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		
@@ -142,10 +143,10 @@ public class BigMama extends Enemy {
 	}
 	
 	@Override
-	public long getAttackDelay() { return 0L; }
+	public void resetSpeed() { speed = BigMama.SPEED; }
 	
 	@Override
-	public float getSpeed() { return BigMama.SPEED; }
+	public long getAttackDelay() { return 0L; }
 	
 	public static int appearsOnWave() { return BigMama.FIRST_WAVE; }
 	

@@ -43,6 +43,7 @@ public class Gasbag extends Enemy {
 	public Gasbag(Pair<Float> position_) {
 		super(EnemyType.GASBAG, position_);
 		this.health = Gasbag.HEALTH.roll(Gasbag.HEALTH_MOD);
+		this.speed = Gasbag.SPEED;
 		this.explode = AssetManager.getManager().getSound("poison_cloud");
 		this.exploded = false;
 		
@@ -121,10 +122,10 @@ public class Gasbag extends Enemy {
 	}
 	
 	@Override
-	public long getAttackDelay() { return 0L; }
+	public void resetSpeed() { speed = Gasbag.SPEED; }
 	
 	@Override
-	public float getSpeed() { return Gasbag.SPEED; }
+	public long getAttackDelay() { return 0L; }
 
 	public static int appearsOnWave() { return Gasbag.FIRST_WAVE; }
 	

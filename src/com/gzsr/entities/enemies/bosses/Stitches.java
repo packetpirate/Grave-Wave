@@ -56,6 +56,7 @@ public class Stitches extends Boss {
 		super(EnemyType.STITCHES, position_);
 		
 		this.health = Stitches.HEALTH.roll(Stitches.HEALTH_MOD);
+		this.speed = Stitches.SPEED;
 		
 		this.damageImmunities.add(DamageType.BLUNT);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
@@ -244,13 +245,13 @@ public class Stitches extends Boss {
 	}
 	
 	@Override
+	public void resetSpeed() { speed = Stitches.SPEED; }
+	
+	@Override
 	public long getAttackDelay() { return Stitches.ATTACK_DELAY; }
 	
 	@Override
 	public double getDamage() { return Stitches.DAMAGE.roll(); }
-	
-	@Override
-	public float getSpeed() { return Stitches.SPEED; }
 	
 	public static int appearsOnWave() { return FIRST_WAVE; }
 

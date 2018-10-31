@@ -84,7 +84,7 @@ public class StatusHandler {
 			}
 		}
 		
-		effect.onApply(entity, cTime);
+		effect.onApply(entity, effect.getCreateTime());
 		statusEffects.add(effect);
 	}
 	

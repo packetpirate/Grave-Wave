@@ -21,7 +21,7 @@ public class Prowler extends Enemy {
 	private static final long ATTACK_DELAY = 1_000L;
 	private static final float JUMP_RANGE = 300.0f;
 	private static final long JUMP_DURATION = 1_000L;
-	private static final float JUMP_SPEED = 0.50f;
+	//private static final float JUMP_SPEED = 0.50f;
 	private static final long JUMP_COOLDOWN = 5_000L;
 	private static final long PINNED_DURATION = 3_000L;
 	
@@ -48,6 +48,7 @@ public class Prowler extends Enemy {
 		super(EnemyType.PROWLER, position_);
 		
 		this.health = Prowler.HEALTH.roll(Prowler.HEALTH_MOD);
+		this.speed = Prowler.SPEED;
 		
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 250L, -1L, -1L));
 		
@@ -165,7 +166,10 @@ public class Prowler extends Enemy {
 	public double getDamage() { return Prowler.DAMAGE.roll(Prowler.DAMAGE_MOD); }
 	
 	@Override
-	public float getSpeed() { return (jumping ? Prowler.JUMP_SPEED : Prowler.SPEED); }
+	public float getSpeed() { return (jumping ? (speed * 5.0f) : speed); }
+	
+	@Override
+	public void resetSpeed() { speed = Prowler.SPEED; }
 	
 	public static int appearsOnWave() { return Prowler.FIRST_WAVE; }
 	

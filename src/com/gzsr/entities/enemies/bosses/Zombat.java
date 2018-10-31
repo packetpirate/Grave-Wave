@@ -45,6 +45,7 @@ public class Zombat extends Boss {
 		super(EnemyType.ZOMBAT_SWARM, position_);
 		
 		this.health = Zombat.HEALTH.roll(Zombat.HEALTH_MOD);
+		this.speed = Zombat.SPEED;
 		
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		this.statusHandler.addImmunity(Status.POISON);
@@ -163,12 +164,10 @@ public class Zombat extends Boss {
 	public double getDamage() { return Zombat.DAMAGE.roll(Zombat.DAMAGE_MOD); }
 	
 	@Override
-	public long getAttackDelay() { return Zombat.ATTACK_DELAY; }
+	public void resetSpeed() { speed = Zombat.SPEED; }
 	
 	@Override
-	public float getSpeed() {
-		return Zombat.SPEED;
-	}
+	public long getAttackDelay() { return Zombat.ATTACK_DELAY; }
 	
 	public static int appearsOnWave() {
 		return FIRST_WAVE;

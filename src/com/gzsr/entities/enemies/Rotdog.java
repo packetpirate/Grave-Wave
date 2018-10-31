@@ -29,6 +29,7 @@ public class Rotdog extends Enemy {
 		super(EnemyType.ROTDOG, position_);
 		
 		this.health = Rotdog.HEALTH.roll(Rotdog.HEALTH_MOD);
+		this.speed = Rotdog.SPEED;
 		this.animation.addState("attack", type.createLayerAnimation(1, 4, 200L, -1L, -1L));
 	}
 
@@ -67,10 +68,10 @@ public class Rotdog extends Enemy {
 	public double getDamage() { return Rotdog.DAMAGE.roll(Rotdog.DAMAGE_MOD); }
 	
 	@Override
-	public long getAttackDelay() { return Rotdog.ATTACK_DELAY; }
+	public void resetSpeed() { speed = Rotdog.SPEED; }
 	
 	@Override
-	public float getSpeed() { return Rotdog.SPEED; }
+	public long getAttackDelay() { return Rotdog.ATTACK_DELAY; }
 	
 	public static int appearsOnWave() { return Rotdog.FIRST_WAVE; }
 	
