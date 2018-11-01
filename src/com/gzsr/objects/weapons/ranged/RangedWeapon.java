@@ -219,29 +219,38 @@ public abstract class RangedWeapon extends Weapon {
 	public abstract int getMaxClips();
 	public abstract int getAmmoPrice();
 	
+	public int getAmmoCapacity() {
+		int capacity = getMaxClips() * getClipSize();
+		
+		if(Talents.Tactics.STOCKPILE.active()) capacity += (int)(capacity * (Talents.Tactics.STOCKPILE.ranks() * 0.5));
+		
+		return capacity;
+	}
+	
 	public boolean clipsMaxedOut() {
 		int totalAmmo = ammoInClip + ammoInInventory;
-		int maxAmmo = getMaxClips() * getClipSize();
+		int maxAmmo = getAmmoCapacity();
 		return (totalAmmo >= maxAmmo); 
 	}
 	
 	public void addInventoryAmmo(int amnt) {
 		if(!clipsMaxedOut()) {
+			int maxAmmo = getAmmoCapacity();
 			int totalAmmo = ammoInClip + ammoInInventory;
-			boolean noOverflow = (totalAmmo + amnt) <= (getClipSize() * getMaxClips()); 
-			ammoInInventory += (noOverflow ? amnt : ((getClipSize() * getMaxClips()) - totalAmmo));
+			boolean noOverflow = ((totalAmmo + amnt) <= maxAmmo); 
+			ammoInInventory += (noOverflow ? amnt : (maxAmmo - totalAmmo));
 		}
 	}
 	
 	public void maxOutAmmo() {
-		ammoInInventory = (getMaxClips() * getClipSize()) - ammoInClip; 
+		ammoInInventory = (getAmmoCapacity() - ammoInClip); 
 	}
 	
 	protected boolean hasUnlimitedAmmo() { return Player.getPlayer().getStatusHandler().hasStatus(Status.UNLIMITED_AMMO); }
 
 	public int maxAmmoAffordable(int money) {
 		int currentAmmo = (ammoInClip + ammoInInventory);
-		int maxAmmo = (getClipSize() * getMaxClips());
+		int maxAmmo = getAmmoCapacity();
 		int difference = (maxAmmo - currentAmmo);
 		
 		double pricePerAmmo = ((double)getAmmoPrice() / (double)getClipSize());

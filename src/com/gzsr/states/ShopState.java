@@ -608,7 +608,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!rw.clipsMaxedOut()) {
 						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
-						boolean lessThanOne = ((rw.getInventoryAmmo() == ((rw.getMaxClips() - 1) * rw.getClipSize())) && (rw.getClipAmmo() < rw.getClipSize()));
+						boolean lessThanOne = ((rw.getInventoryAmmo() == (rw.getAmmoCapacity() - rw.getClipSize())) && (rw.getClipAmmo() < rw.getClipSize()));
 						int cost = (lessThanOne ? ((rw.getAmmoPrice() / rw.getClipSize()) * (rw.getClipSize() - rw.getClipAmmo())) : rw.getAmmoPrice());
 						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {

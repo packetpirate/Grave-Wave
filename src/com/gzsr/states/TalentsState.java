@@ -188,26 +188,16 @@ public class TalentsState extends BasicGameState implements InputListener {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
-		if(exit) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
+		if(exit) {
+			discardChanges();
+			game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
+		}
 		
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		if(back.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			back.mouseEnter();
 			if(mouse.isLeftDown()) {
-				// Discard any talent changes.
-				for(int r = 0; r < 7; r++) {
-					for(int c = 0; c < 3; c++) {
-						TalentButton m = munitions[r][c];
-						TalentButton f = fortification[r][c];
-						TalentButton t = tactics[r][c];
-						
-						if((m != null) && (m.getPointsToAdd() > 0)) m.revert();
-						if((f != null) && (f.getPointsToAdd() > 0)) f.revert();
-						if((t != null) && (t.getPointsToAdd() > 0)) t.revert();
-					}
-				}
-				
-				changesMade = 0;
+				if(changesMade > 0) discardChanges();
 				game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
 			}
 		} else back.mouseExit();
@@ -234,7 +224,22 @@ public class TalentsState extends BasicGameState implements InputListener {
 		MusicPlayer.getInstance().update(false);
 	}
 	
-	
+	private void discardChanges() {
+		// Discard any talent changes.
+		for(int r = 0; r < 7; r++) {
+			for(int c = 0; c < 3; c++) {
+				TalentButton m = munitions[r][c];
+				TalentButton f = fortification[r][c];
+				TalentButton t = tactics[r][c];
+				
+				if((m != null) && (m.getPointsToAdd() > 0)) m.revert();
+				if((f != null) && (f.getPointsToAdd() > 0)) f.revert();
+				if((t != null) && (t.getPointsToAdd() > 0)) t.revert();
+			}
+		}
+		
+		changesMade = 0;
+	}
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {

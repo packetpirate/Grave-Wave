@@ -243,7 +243,9 @@ public class Console implements Entity {
 							float radius = Float.parseFloat(tokens[4]);
 							int id = Globals.generateEntityID();
 							
-							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", new Pair<Float>(x, y), damage, 10.0f, radius, pauseTime);
+							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", 
+														  new Pair<Float>(x, y), damage, false, 
+														  10.0f, radius, pauseTime);
 							gs.addEntity(String.format("explosion%d", id), exp);
 						} catch(NumberFormatException nfe) {
 							consoleLines.add("  ERROR: Invalid parameters specified for /explode command.");

@@ -53,6 +53,7 @@ public class Explosion implements Entity {
 	
 	private StatusEffect status;
 	private double damage;
+	private boolean critical;
 	private float knockback;
 	private float radius;
 	private boolean started;
@@ -61,11 +62,11 @@ public class Explosion implements Entity {
 	
 	private List<Entity> entitiesAffected;
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, float knockback_, float radius_, long cTime) {
-		this(type_, animName_, position_, null, damage_, knockback_, radius_, cTime);
+	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, boolean critical_, float knockback_, float radius_, long cTime) {
+		this(type_, animName_, position_, null, damage_, critical_, knockback_, radius_, cTime);
 	}
 	
-	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, float knockback_, float radius_, long cTime) {
+	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, boolean critical_, float knockback_, float radius_, long cTime) {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
@@ -74,6 +75,7 @@ public class Explosion implements Entity {
 		
 		this.status = status_;
 		this.damage = damage_;
+		this.critical = critical_;
 		this.knockback = knockback_;
 		this.radius = radius_;
 		this.started = false;
@@ -136,7 +138,7 @@ public class Explosion implements Entity {
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
 					if(en.getCollider().intersects(getCollider())) {
-						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, Metrics.EXPLOSION, cTime, delta);
+						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, (float)(en.getTheta() + Math.PI), Metrics.EXPLOSION, cTime, delta, true, critical);
 						entitiesAffected.add(en);
 						return true;
 					} else return false;

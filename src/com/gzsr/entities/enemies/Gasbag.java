@@ -77,8 +77,8 @@ public class Gasbag extends Enemy {
 		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DURATION, cTime);
 		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion", 
 										 new Pair<Float>(position.x, position.y), pe, 
-										 0.0, Gasbag.POISON_KNOCKBACK, Gasbag.EXPLODE_RADIUS, 
-										 cTime);
+										 0.0, false, Gasbag.POISON_KNOCKBACK, 
+										 Gasbag.EXPLODE_RADIUS, cTime);
 		gs.addEntity(String.format("poisonExplosion%d", id), poison);
 		
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());

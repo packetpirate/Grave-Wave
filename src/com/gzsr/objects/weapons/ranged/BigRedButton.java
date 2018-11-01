@@ -94,8 +94,8 @@ public class BigRedButton extends RangedWeapon {
 			
 			Explosion exp = new Explosion(Explosion.Type.NORMAL, BigRedButton.EXP_NAME, 
 										  new Pair<Float>(0.0f, 0.0f), 
-										  dmg, BigRedButton.KNOCKBACK, BigRedButton.EXP_RADIUS, 
-										  cTime);
+										  dmg, critical, BigRedButton.KNOCKBACK, 
+										  BigRedButton.EXP_RADIUS, cTime);
 			explosions.add(exp);
 		}
 		

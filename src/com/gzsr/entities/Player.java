@@ -656,8 +656,7 @@ public class Player implements Entity {
 					float roll = Globals.rand.nextFloat();
 					if(roll <= 0.1f) {
 						double maxStamina = attributes.getDouble("maxStamina");
-						addStamina(maxStamina * 0.10);
-						System.out.println("Relentless!");
+						addStamina(maxStamina * 0.25);
 					}
 				}
 			}

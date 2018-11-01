@@ -56,17 +56,12 @@ public class GrenadeLauncher extends RangedWeapon {
 		
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
-		System.out.println("Damage Before: " + dmg);
-		if(Talents.Munitions.DEMOLITIONS.active()) {
-			System.out.println("Demolition Bonus: " + (dmg * 0.5));
-			dmg += (dmg * 0.5);
-		}
-		System.out.println("Damage After: " + dmg);
+		if(Talents.Munitions.DEMOLITIONS.active()) dmg += (dmg * 0.5);
 
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, 
 									  new Pair<Float>(0.0f, 0.0f), 
-									  dmg, GrenadeLauncher.KNOCKBACK, GrenadeLauncher.EXP_RADIUS, 
-									  cTime);
+									  dmg, critical, GrenadeLauncher.KNOCKBACK, 
+									  GrenadeLauncher.EXP_RADIUS, cTime);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
 		

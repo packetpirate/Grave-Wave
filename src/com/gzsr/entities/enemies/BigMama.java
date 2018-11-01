@@ -84,8 +84,8 @@ public class BigMama extends Enemy {
 				// Spawn a blood explosion centered on the Big Mama.
 				Explosion blood = new Explosion(Explosion.Type.BLOOD, "GZS_BloodExplosion", 
 												new Pair<Float>(position.x, position.y), 
-												BigMama.EXP_DAMAGE, BigMama.EXP_KNOCKBACK, BigMama.EXP_DIST, 
-												cTime);
+												BigMama.EXP_DAMAGE, false, BigMama.EXP_KNOCKBACK, 
+												BigMama.EXP_DIST, cTime);
 				((GameState)gs).addEntity(String.format("bloodExplosion%d", Globals.generateEntityID()), blood);
 				
 				exploded = true;

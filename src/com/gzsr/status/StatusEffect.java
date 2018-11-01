@@ -10,6 +10,7 @@ import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
 import com.gzsr.states.GameState;
+import com.gzsr.talents.Talents;
 
 public abstract class StatusEffect {
 	protected Status status;
@@ -48,6 +49,12 @@ public abstract class StatusEffect {
 		this.created = created_;
 		
 		this.drawn = true;
+		
+		if(Talents.Tactics.SUSTAINABILITY.active()) {
+			int ranks = Talents.Tactics.SUSTAINABILITY.ranks();
+			long bonus = (long)(duration_ * (ranks * 0.2));
+			this.duration += bonus;
+		}
 	}
 	
 	public void noEffect(Entity e, long cTime) {

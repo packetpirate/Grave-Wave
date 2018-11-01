@@ -61,8 +61,8 @@ public class Stinger extends RangedWeapon {
 
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME, 
 									  new Pair<Float>(0.0f, 0.0f), 
-									  dmg, Stinger.KNOCKBACK, Stinger.EXP_RADIUS, 
-									  cTime);
+									  dmg, critical, Stinger.KNOCKBACK, 
+									  Stinger.EXP_RADIUS, cTime);
 		Missile missile = new Missile(particle, exp);
 		projectiles.add(missile);
 		
