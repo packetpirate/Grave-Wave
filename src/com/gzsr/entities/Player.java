@@ -275,7 +275,7 @@ public class Player implements Entity {
 		
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
 		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
-			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipSize())) cRangedWeapon.reload(cTime);
+			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipCapacity())) cRangedWeapon.reload(cTime);
 		}
 		
 		bounds.setCenterX(position.x);

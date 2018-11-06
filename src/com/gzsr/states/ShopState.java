@@ -412,8 +412,9 @@ public class ShopState extends BasicGameState implements InputListener {
 				if(selection instanceof RangedWeapon) {
 					RangedWeapon w = (RangedWeapon) selection;
 					{ // Draw ammo button.
-						boolean lessThanOne = ((w.getInventoryAmmo() == ((w.getMaxClips() - 1) * w.getClipSize())) && (w.getClipAmmo() < w.getClipSize()));
-						int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipSize() - w.getClipAmmo())) : w.getAmmoPrice());
+						boolean modder = Talents.Munitions.MODDER.active();
+						boolean lessThanOne = ((w.getInventoryAmmo() == (w.getAmmoCapacity() - w.getClipCapacity())) && (w.getClipAmmo() < w.getClipCapacity()));
+						int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipCapacity() - w.getClipAmmo())) : (modder ? (int)(w.getAmmoPrice() * 1.5) : w.getAmmoPrice()));
 						if(Talents.Tactics.MERCANTILE.active()) ammoPrice = (int)(ammoPrice * (1.0 - (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
 						String text = "$" + NumberFormat.getInstance(Locale.US).format(ammoPrice);
 						FontUtils.drawCenter(g.getFont(), "One Clip", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)), 
@@ -608,13 +609,15 @@ public class ShopState extends BasicGameState implements InputListener {
 					
 					if(!rw.clipsMaxedOut()) {
 						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
-						boolean lessThanOne = ((rw.getInventoryAmmo() == (rw.getAmmoCapacity() - rw.getClipSize())) && (rw.getClipAmmo() < rw.getClipSize()));
-						int cost = (lessThanOne ? ((rw.getAmmoPrice() / rw.getClipSize()) * (rw.getClipSize() - rw.getClipAmmo())) : rw.getAmmoPrice());
+						boolean modder = Talents.Munitions.MODDER.active();
+						int minusOneClip = (rw.getAmmoCapacity() - rw.getClipCapacity()); // Full ammo capacity minus one clip.
+						boolean lessThanOne = ((rw.getInventoryAmmo() == minusOneClip) && (rw.getClipAmmo() < rw.getClipCapacity()));
+						int cost = (lessThanOne ? ((rw.getAmmoPrice() / rw.getClipCapacity()) * (rw.getClipCapacity() - rw.getClipAmmo())) : (modder ? (int)(rw.getAmmoPrice() * 1.5) : rw.getAmmoPrice()));
 						int moneyAfterPurchase = Player.getPlayer().getAttributes().getInt("money") - cost; 
 						if(moneyAfterPurchase >= 0) {
 							// Player has enough money. Buy the ammo.
 							player.getAttributes().set("money", moneyAfterPurchase);
-							rw.addInventoryAmmo(rw.getClipSize());
+							rw.addInventoryAmmo(rw.getClipCapacity());
 							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
 						}
 					}

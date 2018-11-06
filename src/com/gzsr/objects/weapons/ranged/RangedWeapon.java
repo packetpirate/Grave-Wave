@@ -123,7 +123,7 @@ public abstract class RangedWeapon extends Weapon {
 	public boolean canUse(long cTime) {
 		if(reloading) return false;
 		boolean clipNotEmpty = ammoInClip > 0;
-		boolean cool = (cTime - lastUsed) >= getCooldown();
+		boolean cool = (cTime - lastUsed) >= getTotalCooldown();
 		
 		if(!clipNotEmpty) return false;
 		
@@ -147,7 +147,7 @@ public abstract class RangedWeapon extends Weapon {
 	}
 	
 	private void reload() {
-		int takeFromInv = getClipSize() - ammoInClip;
+		int takeFromInv = getClipCapacity() - ammoInClip;
 		int taken = Math.min(takeFromInv, ammoInInventory);
 		ammoInInventory -= taken;
 		ammoInClip += taken;
@@ -214,16 +214,31 @@ public abstract class RangedWeapon extends Weapon {
 		return dmg;
 	}
 	
+	public long getTotalCooldown() {
+		long cooldown = getCooldown();
+		if(Talents.Munitions.RAPID_FIRE.active()) {
+			int ranks = Talents.Munitions.RAPID_FIRE.ranks();
+			double modifier = (1.0 - (ranks * 0.25));
+			cooldown = (long)(cooldown * modifier);
+		}
+		
+		return cooldown;
+	}
+	
 	public abstract int getClipSize();
 	public abstract int getStartClips();
 	public abstract int getMaxClips();
 	public abstract int getAmmoPrice();
 	
+	public int getClipCapacity() {
+		int capacity = getClipSize();
+		if(Talents.Munitions.MODDER.active()) capacity += (capacity / 2);
+		return capacity;
+	}
+	
 	public int getAmmoCapacity() {
 		int capacity = getMaxClips() * getClipSize();
-		
 		if(Talents.Tactics.STOCKPILE.active()) capacity += (int)(capacity * (Talents.Tactics.STOCKPILE.ranks() * 0.5));
-		
 		return capacity;
 	}
 	
