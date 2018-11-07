@@ -28,11 +28,12 @@ import com.gzsr.misc.RotationLerp;
 import com.gzsr.talents.Talents;
 
 public class Turret extends Projectile {
-	private static final double HEALTH_MAX = 2_00.0;
+	private static final double HEALTH_MAX = 100.0;
+	private static final long DAMAGE_COOLDOWN = 500L;
 	private static final long TURRET_LIFESPAN = 60_000L;
 	private static final long PROJECTILE_COOLDOWN = 200L;
 	private static final float PROJECTILE_SPREAD = (float)(Math.PI / 12); // 15 degree spread total
-	private static final float FIRING_RANGE = 500.0f;
+	private static final float FIRING_RANGE = 250.0f;
 	private static final Color TURRET_LASER = new Color(1.0f, 0.0f, 0.0f, 0.3f);
 	private static final String TURRET_IMAGE = "GZS_TurretPieces";
 	private static final String FIRE_SOUND = "revolver_shot_01";
@@ -46,7 +47,16 @@ public class Turret extends Projectile {
 	private Enemy target;
 	
 	private double health;
+	private long lastDamage;
 	private void takeDamage(double amnt) { health -= amnt; }
+	private double getHealthMax() {
+		double max = Turret.HEALTH_MAX;
+		if(Talents.Fortification.MANUFACTURING.active()) {
+			int ranks = Talents.Fortification.MANUFACTURING.ranks();
+			max += (max * (ranks * 0.20));
+		}
+		return max;
+	}
 	
 	private List<Projectile> projectiles;
 	public List<Projectile> getProjectiles() { return projectiles; }
@@ -61,8 +71,8 @@ public class Turret extends Projectile {
 		this.lerp = null;
 		this.target = null;
 		
-		this.health = Turret.HEALTH_MAX;
-		
+		this.health = getHealthMax();
+		this.lastDamage = 0L;
 		this.projectiles = new ArrayList<Projectile>();
 		
 		this.created = p.getCreated();
@@ -77,20 +87,27 @@ public class Turret extends Projectile {
 				target = null; // Don't want to target dead enemies...
 			}
 			
+			EnemyController ec = EnemyController.getInstance();
+			for(Enemy e : ec.getAliveEnemies()) {
+				if(collider.intersects(e.getCollider())) {
+					// Enemy is touching the sentry, so it should take damage.
+					long elapsed = (cTime - lastDamage);
+					if(elapsed >= Turret.DAMAGE_COOLDOWN) {
+						takeDamage(e.getDamage());
+						lastDamage = cTime;
+					}
+				}
+			}
+			
 			// Acquire a target only if we're not currently firing on one..
 			if(target == null) {
 				float targetDist = Float.MAX_VALUE;
-				EnemyController ec = EnemyController.getInstance();
 				Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 				while(it.hasNext()) {
 					Enemy e = it.next();
-					float dist = Calculate.Distance(position, e.getPosition());
-					if(collider.intersects(e.getCollider())) {
-						// Enemy is touching the sentry, so it should take damage.
-						takeDamage(e.getDamage());
-					}
 					
 					// If there's a closer target, aim for it.
+					float dist = Calculate.Distance(position, e.getPosition());
 					if(dist < targetDist) {
 						target = e;
 						targetDist = dist;
@@ -128,7 +145,7 @@ public class Turret extends Projectile {
 		
 		// Render the sentry's laser sight.
 		float facing = theta;
-		float dist = ((target != null) && target.isAlive(cTime)) ? Math.min(Turret.FIRING_RANGE, Calculate.Distance(position, target.getPosition())) : Turret.FIRING_RANGE;
+		float dist = ((target != null) && target.isAlive(cTime)) ? Math.min(getRange(), Calculate.Distance(position, target.getPosition())) : getRange();
 		g.setColor(Turret.TURRET_LASER);
 		g.setLineWidth(2.0f);
 		g.drawLine(position.x, position.y, 
@@ -143,6 +160,20 @@ public class Turret extends Projectile {
 			g.drawImage(head, (position.x - 24.0f), (position.y - 24.0f));
 			g.resetTransform();
 		}
+		
+		if(Globals.SHOW_COLLIDERS) {
+			g.setColor(Color.red);
+			g.draw(collider);
+		}
+		
+		// Show the turret's health.
+		float percentage = (float)(health / getHealthMax());
+		g.setColor(Color.black);
+		g.fillRect((position.x - 24.0f), (position.y - 34.0f), 48.0f, 5.0f);
+		g.setColor(Color.green);
+		g.fillRect((position.x - 24.0f), (position.y - 34.0f), (percentage * 48.0f), 5.0f);
+		g.setColor(Color.white);
+		g.drawRect((position.x - 24.0f), (position.y - 34.0f), 48.0f, 5.0f);
 	}
 	
 	private boolean canFire(Enemy target, long cTime) {
@@ -192,8 +223,14 @@ public class Turret extends Projectile {
 		return ((elapsed <= Turret.TURRET_LIFESPAN) && (health > 0.0));
 	}
 	
+	private float getRange() {
+		float range = Turret.FIRING_RANGE;
+		if(Talents.Fortification.TARGETING.active()) range *= 2.0f;
+		return range;
+	}
+	
 	private boolean inRange(Enemy e) {
 		float dist = Calculate.Distance(position, e.getPosition());
-		return (dist <= Turret.FIRING_RANGE);
+		return (dist <= getRange());
 	}
 }
