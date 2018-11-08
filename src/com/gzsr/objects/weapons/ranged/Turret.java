@@ -76,6 +76,9 @@ public class Turret extends Projectile {
 		this.projectiles = new ArrayList<Projectile>();
 		
 		this.created = p.getCreated();
+		this.lifespan = Turret.TURRET_LIFESPAN;
+		if(Talents.Fortification.DURABILITY.active()) this.lifespan *= 2;
+		
 		this.lastProjectile = 0L;
 	}
 
@@ -212,6 +215,7 @@ public class Turret extends Projectile {
 		if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
 		
 		double bonus = (Talents.Munitions.COMMANDO.ranks() * 0.20);
+		bonus += (Talents.Fortification.FIREPOWER.ranks() * 0.10);
 		if(bonus > 0.0) dmg += (bonus * dmg);
 		
 		return dmg;

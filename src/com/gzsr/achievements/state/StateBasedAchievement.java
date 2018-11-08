@@ -26,7 +26,7 @@ public class StateBasedAchievement extends Achievement {
 			AchievementState next = currentState.checkTransitions(metric);
 			if(currentState != next) {
 				currentState = next;
-				break; // Prevents multiple transitions per update.
+				//break; // Prevents multiple transitions per update.
 			}
 		}
 		

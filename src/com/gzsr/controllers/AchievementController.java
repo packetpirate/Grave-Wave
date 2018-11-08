@@ -89,6 +89,18 @@ public class AchievementController {
 			achievements.add(dontTazeMe);
 		}
 		
+		{ // Kill an enemy with the Lollipop.
+			AchievementState s0 = new AchievementState(false);
+			AchievementState s1 = new AchievementState(false);
+			AchievementState s2 = new AchievementState(true);
+			
+			s0.createTransition(s1, (metric -> Metrics.has(metric, Metrics.compose(Metrics.LOLLIPOP, Metrics.ENEMY, Metrics.DAMAGE))));
+			s1.createBranch(Metrics.compose(Metrics.ENEMY, Metrics.KILL), s2, s0);
+			
+			StateBasedAchievement timeToParty = new StateBasedAchievement("It's Time To Party!", "Kill an enemy with the Lollipop.", "", s0, true);
+			achievements.add(timeToParty);
+		}
+		
 		{ // Kill Aberration with just the Nail Gun.
 			AchievementState s0 = new AchievementState(false);
 			AchievementState s1 = new AchievementState(false);

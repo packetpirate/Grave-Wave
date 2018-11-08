@@ -76,6 +76,6 @@ public class Metrics {
 	 * @return True if the flag is set.
 	 */
 	public static final boolean has(long metric, long flag) {
-		return ((metric & flag) != 0);
+		return ((metric & flag) == flag);
 	}
 }

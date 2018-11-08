@@ -6,15 +6,29 @@ import java.util.function.Function;
 
 public class AchievementState {
 	class Transition {
-		private long metric;
+		protected long metric;
+		protected int occurrences;
+		protected int count;
 		
-		private AchievementState destination;
+		protected AchievementState destination;
 		public AchievementState getDestination() { return destination; }
 		
-		private Function<Long, Boolean> condition;
+		protected Function<Long, Boolean> condition;
 		
 		public Transition(long metric_, AchievementState destination_) {
 			this.metric = metric_;
+			this.occurrences = 1;
+			this.count = 0;
+			this.destination = destination_;
+			
+			this.condition = null;
+		}
+		
+		public Transition(long metric_, int occurrences_, AchievementState destination_) {
+			this.metric = metric_;
+			this.occurrences = occurrences_;
+			this.count = 0;
+			
 			this.destination = destination_;
 			
 			this.condition = null;
@@ -25,6 +39,8 @@ public class AchievementState {
 			this.condition = condition_;
 			
 			this.metric = 0L;
+			this.occurrences = 0;
+			this.count = 0;
 		}
 		
 		/**
@@ -33,7 +49,47 @@ public class AchievementState {
 		 */
 		public boolean checkCondition(long m) {
 			if(condition != null) return condition.apply(m);
-			else return (m == metric);
+			else if(m == metric) {
+				count++;
+				if(count >= occurrences) return true;
+			}
+
+			return false;
+		}
+	}
+	
+	class BranchTransition extends Transition {
+		private AchievementState other;
+		
+		@Override
+		public AchievementState getDestination() {
+			if(occurrences >= count) return destination;
+			else return other;
+		}
+		
+		public BranchTransition(long metric_, AchievementState destination_, AchievementState other_) {
+			super(metric_, destination_);
+			this.other = other_;
+		}
+		
+		public BranchTransition(long metric_, int occurrences_, AchievementState destination_, AchievementState other_) {
+			super(metric_, occurrences_, destination_);
+			this.other = other_;
+		}
+		
+		@Override
+		public boolean checkCondition(long m) {
+			if(condition != null) return condition.apply(m);
+			else if(m == metric) {
+				count++;
+				
+				// If we've reached the count, transition. Otherwise, don't because the count was increased.
+				if(count >= occurrences) return true;
+				else return false;
+			}
+			
+			// Metric was not seen this update, so go back to the other state.
+			return true;
 		}
 	}
 	
@@ -53,8 +109,26 @@ public class AchievementState {
 		return transition;
 	}
 	
+	public Transition createTransition(long metric, int occurrences, AchievementState state) {
+		Transition transition = new Transition(metric, occurrences, state);
+		transitions.add(transition);
+		return transition;
+	}
+	
 	public Transition createTransition(AchievementState state, Function<Long, Boolean> condition) {
 		Transition transition = new Transition(state, condition);
+		transitions.add(transition);
+		return transition;
+	}
+	
+	public BranchTransition createBranch(long metric, AchievementState dest, AchievementState other) {
+		BranchTransition transition = new BranchTransition(metric, dest, other);
+		transitions.add(transition);
+		return transition;
+	}
+	
+	public BranchTransition createBranch(long metric, int occurrences, AchievementState dest, AchievementState other) {
+		BranchTransition transition = new BranchTransition(metric, occurrences, dest, other);
 		transitions.add(transition);
 		return transition;
 	}
