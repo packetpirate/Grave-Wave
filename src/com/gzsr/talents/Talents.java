@@ -23,24 +23,24 @@ public class Talents {
 	}
 	
 	public enum Munitions implements TalentType {
-		SCOUT(0, 1, 5, "Scout", "Increases small ranged weapon damage by 20% per rank.", ""),
+		SCOUT(0, 1, 5, "Scout", "Increases small ranged weapon damage by 20% per rank.", "GZS_Talent_Scout"),
 		
-		INVENTOR(1, 0, 1, "Inventor", "Can craft basic weapons.", ""),
-		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Decreases reload speed by 10%. Max 5 ranks.", ""),
+		INVENTOR(1, 0, 1, "Inventor", "Can craft basic weapons.", "GZS_Talent_Inventor"),
+		QUICK_FINGERS(1, 2, 5, "Quick Fingers", "Decreases reload speed by 10%. Max 5 ranks.", "GZS_Talent_QuickFingers"),
 		
-		SOLDIER(2, 1, 5, "Soldier", "Increases medium ranged weapon damage by 20% per rank.", ""),
+		SOLDIER(2, 1, 5, "Soldier", "Increases medium ranged weapon damage by 20% per rank.", "GZS_Talent_Soldier"),
 		
-		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted weapons do an additional 25% damage.", ""),
-		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", ""),
-		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", ""),
+		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted weapons do an additional 25% damage.", "GZS_Talent_GunGuru"),
+		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", "GZS_Talent_Demolitions"),
+		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", "GZS_Talent_RapidFire"),
 		
-		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 25%.", ""),
-		COMMANDO(4, 1, 5, "Commando", "Increases large ranged weapon damage by 25% per rank.", ""),
-		MODDER(4, 2, 1, "Modder", "Increase magezine capacity by 50%.", ""),
+		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 25%.", "GZS_Talent_Scavenger"),
+		COMMANDO(4, 1, 5, "Commando", "Increases large ranged weapon damage by 25% per rank.", "GZS_Talent_Commando"),
+		MODDER(4, 2, 1, "Modder", "Increase magezine capacity by 50%.", "GZS_Talent_Modder"),
 		
-		ENGINEER(6, 0, 1, "Engineer", "Can craft advanced weaponry.", ""),
-		DESPOT(6, 1, 1, "Despot", "Increases all damage done by 50%.", ""),
-		HASTE(6, 2, 1, "Haste", "Grants a 10% chance to reload instantly.", "");
+		ENGINEER(6, 0, 1, "Engineer", "Can craft advanced weaponry.", "GZS_Talent_Engineer"),
+		DESPOT(6, 1, 1, "Despot", "Increases all damage done by 50%.", "GZS_Talent_Despot"),
+		HASTE(6, 2, 1, "Haste", "Grants a 10% chance to reload instantly.", "GZS_Talent_Haste");
 		
 		Munitions(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
 			this.name = name_;

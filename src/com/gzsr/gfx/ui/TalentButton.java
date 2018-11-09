@@ -58,10 +58,11 @@ public class TalentButton extends Button {
 			
 			g.setColor(Color.black);
 			g.fillRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
-			g.setColor(Color.white);
-			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 			
 			img.draw((position.x - (w / 2)), (position.y - (h / 2)), (correctLevel ? Color.white : GRAY_OUT));
+			
+			g.setColor(Color.white);
+			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 		} else {
 			g.setColor(Color.black);
 			g.fillRect((position.x - (SIZE / 2)), (position.y - (SIZE / 2)), SIZE, SIZE);
