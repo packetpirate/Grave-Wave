@@ -81,24 +81,24 @@ public class Talents {
 	}
 	
 	public enum Fortification implements TalentType {
-		HEARTY(0, 1, 5, "Hearty", "Increases HP by 20 per rank.", ""),
+		HEARTY(0, 1, 5, "Hearty", "Increases HP by 20 per rank.", "GZS_Talent_Hearty"),
 		
-		MARATHON_MAN(1, 0, 5, "Marathon Man", "Increases Stamina by 10 per rank.", ""),
-		TARGETING(1, 2, 1, "Targeting", "Increases construct range by 100%.", ""),
+		MARATHON_MAN(1, 0, 5, "Marathon Man", "Increases Stamina by 10 per rank.", "GZS_Talent_MarathonMan"),
+		TARGETING(1, 2, 1, "Targeting", "Increases construct range by 100%.", "GZS_Talent_Targeting"),
 		
-		VIGOR(2, 1, 2, "Vigor", "Grants a 5% chance per rank to resist poison and paralysis effects.", ""),
+		VIGOR(2, 1, 2, "Vigor", "Grants a 5% chance per rank to resist poison and paralysis effects.", "GZS_Talent_Vigor"),
 		
-		INVIGORATED(3, 0, 3, "Invigorated", "Grants Stamina regeneration of 5/sec per rank.", ""),
-		UNBREAKABLE(3, 1, 5, "Unbreakable", "Reduces damage taken by 5% per rank.", ""),
-		MANUFACTURING(3, 2, 5, "Manufacturing", "Increases construct HP by 20%.", ""),
+		INVIGORATED(3, 0, 3, "Invigorated", "Grants Stamina regeneration of 5/sec per rank.", "GZS_Talent_Invigorated"),
+		UNBREAKABLE(3, 1, 5, "Unbreakable", "Reduces damage taken by 5% per rank.", "GZS_Talent_Unbreakable"),
+		MANUFACTURING(3, 2, 5, "Manufacturing", "Increases construct HP by 20%.", "GZS_Talent_Manufacturing"),
 		
-		FIREPOWER(4, 2, 5, "Firepower", "Increases construct damage by 10% per rank.", ""),
+		FIREPOWER(4, 2, 5, "Firepower", "Increases construct damage by 10% per rank.", "GZS_Talent_Firepower"),
 		
-		RELENTLESS(5, 0, 1, "Relentless", "Killing an enemy with a melee weapon has a 10% chance to restore 25% stamina.", ""),
-		UNDYING(5, 1, 1, "Undying", "Regenerate 1 HP / second while not taking damage.", ""),
+		RELENTLESS(5, 0, 1, "Relentless", "Killing an enemy with a melee weapon has a 10% chance to restore 25% stamina.", "GZS_Talent_Relentless"),
+		UNDYING(5, 1, 1, "Undying", "Regenerate 1 HP / second while not taking damage.", "GZS_Talent_Undying"),
 		
-		LAST_STAND(6, 1, 1, "Last Stand", "When the player is below 25% health, they take 50% less damage.", ""),
-		DURABILITY(6, 2, 1, "Durability", "Increases construct duration by 100%.", "");
+		LAST_STAND(6, 1, 1, "Last Stand", "When the player is below 25% health, they take 50% less damage.", "GZS_Talent_LastStand"),
+		DURABILITY(6, 2, 1, "Durability", "Increases construct duration by 100%.", "GZS_Talent_Durability");
 		
 		Fortification(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
 			this.name = name_;

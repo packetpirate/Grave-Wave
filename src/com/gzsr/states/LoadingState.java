@@ -220,7 +220,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Explosion2.png",
 			"images/GZS_PoisonExplosion.png",
 			"images/GZS_BloodExplosion.png",
-			// Talent Icons
+			// Munitions Talent Icons
 			"images/GZS_Talent_Scout.png",
 			"images/GZS_Talent_Inventor.png",
 			"images/GZS_Talent_QuickFingers.png",
@@ -234,6 +234,19 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Talent_Engineer.png",
 			"images/GZS_Talent_Despot.png",
 			"images/GZS_Talent_Haste.png",
+			// Fortification Talent Icons
+			"images/GZS_Talent_Hearty.png",
+			"images/GZS_Talent_MarathonMan.png",
+			"images/GZS_Talent_Targeting.png",
+			"images/GZS_Talent_Vigor.png",
+			"images/GZS_Talent_Invigorated.png",
+			"images/GZS_Talent_Unbreakable.png",
+			"images/GZS_Talent_Manufacturing.png",
+			"images/GZS_Talent_Firepower.png",
+			"images/GZS_Talent_Relentless.png",
+			"images/GZS_Talent_Undying.png",
+			"images/GZS_Talent_LastStand.png",
+			"images/GZS_Talent_Durability.png",
 			// Misc Images
 			"images/GZS_Cash.png",
 			"images/GZS_SkillUpButton.png",
