@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.util.FontUtils;
 
+import com.gzsr.AchievementManager;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Controls.Layout;
@@ -118,6 +119,8 @@ public class GameState extends BasicGameState implements InputListener {
 					if(!player.isAlive() && (player.getAttributes().getInt("lives") <= 0)) {
 						// If the player has died, transition state.
 						controls.resetAll();
+						
+						AchievementManager.save();
 						Globals.gameOver = true;
 						Globals.inGame = false;
 						game.enterState(GameOverState.ID, 

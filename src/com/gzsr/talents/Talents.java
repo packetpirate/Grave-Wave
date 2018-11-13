@@ -139,23 +139,23 @@ public class Talents {
 	}
 	
 	public enum Tactics implements TalentType {
-		BRUTALITY(0, 1, 5, "Brutality", "Increases melee damage done by 10% per rank.", ""),
+		BRUTALITY(0, 1, 5, "Brutality", "Increases melee damage done by 10% per rank.", "GZS_Talent_Brutality"),
 		
-		MERCANTILE(1, 0, 5, "Mercantile", "Reduces shop prices by 10% per rank.", ""),
-		SAVAGE(1, 1, 5, "Savage", "Increases melee critical chance by 5% per rank.", ""),
+		MERCANTILE(1, 0, 5, "Mercantile", "Reduces shop prices by 10% per rank.", "GZS_Talent_Mercantile"),
+		SAVAGE(1, 1, 5, "Savage", "Increases melee critical chance by 5% per rank.", "GZS_Talent_Savage"),
 		
-		WINDFALL(2, 0, 5, "Windfall", "Increases money dropped by 10% per rank.", ""),
-		NIMBLE(2, 2, 5, "Nimble", "Increases movement speed by 10% per rank.", ""),
+		WINDFALL(2, 0, 5, "Windfall", "Increases money dropped by 10% per rank.", "GZS_Talent_Windfall"),
+		NIMBLE(2, 2, 5, "Nimble", "Increases movement speed by 10% per rank.", "GZS_Talent_Nimble"),
 		
-		STOCKPILE(3, 0, 2, "Stockpile", "Increases ammo capacity by 50% per rank.", ""),
-		FEROCITY(3, 2, 1, "Ferocity", "Increases melee weapon attack speed by 50%.", ""),
+		STOCKPILE(3, 0, 2, "Stockpile", "Increases ammo capacity by 50% per rank.", "GZS_Talent_Stockpile"),
+		FEROCITY(3, 2, 1, "Ferocity", "Increases melee weapon attack speed by 50%.", "GZS_Talent_Ferocity"),
 		
-		HEADSHOT(4, 1, 3, "Headshot!", "Increases ranged critical chance by 5% per rank.", ""),
+		HEADSHOT(4, 1, 3, "Headshot!", "Increases ranged critical chance by 5% per rank.", "GZS_Talent_Headshot"),
 		
-		SUSTAINABILITY(5, 0, 5, "Sustainability", "Increases duration of power-ups by 20% per rank.", ""),
-		ASSASSIN(5, 1, 1, "Assassin", "Critical hits now do 3x damage.", ""),
+		SUSTAINABILITY(5, 0, 5, "Sustainability", "Increases duration of power-ups by 20% per rank.", "GZS_Talent_Sustainability"),
+		ASSASSIN(5, 1, 1, "Assassin", "Critical hits now do 3x damage.", "GZS_Talent_Assassin"),
 		
-		STASIS(6, 2, 1, "Stasis", "Speed power-ups now also slow enemies.", "");
+		STASIS(6, 2, 1, "Stasis", "Speed power-ups now also slow enemies.", "GZS_Talent_Stasis");
 		
 		Tactics(int row_, int col_, int maxRanks_, String name_, String description_, String icon_) {
 			this.name = name_;

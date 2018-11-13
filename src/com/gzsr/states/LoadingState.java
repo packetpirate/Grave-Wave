@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.FontUtils;
 
+import com.gzsr.AchievementManager;
 import com.gzsr.AssetManager;
 import com.gzsr.ConfigManager;
 import com.gzsr.Controls;
@@ -49,6 +50,7 @@ public class LoadingState extends BasicGameState {
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
 			AchievementController.getInstance().init();
+			AchievementManager.init();
 			Controls.getInstance().loadControls();
 			AssetManager.finishLoad();
 		}
@@ -76,7 +78,6 @@ public class LoadingState extends BasicGameState {
 			
 			game.addState(new GameState());
 			game.addState(new ShopState());
-			//game.addState(new TrainState()); // OLD
 			game.addState(new TalentsState());
 			game.addState(new GameOverState());
 			game.addState(new CreditsState());
@@ -247,6 +248,18 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Talent_Undying.png",
 			"images/GZS_Talent_LastStand.png",
 			"images/GZS_Talent_Durability.png",
+			// Tactics Talent Icons
+			"images/GZS_Talent_Brutality.png",
+			"images/GZS_Talent_Mercantile.png",
+			"images/GZS_Talent_Savage.png",
+			"images/GZS_Talent_Windfall.png",
+			"images/GZS_Talent_Nimble.png",
+			"images/GZS_Talent_Stockpile.png",
+			"images/GZS_Talent_Ferocity.png",
+			"images/GZS_Talent_Headshot.png",
+			"images/GZS_Talent_Sustainability.png",
+			"images/GZS_Talent_Assassin.png",
+			"images/GZS_Talent_Stasis.png",
 			// Misc Images
 			"images/GZS_Cash.png",
 			"images/GZS_SkillUpButton.png",

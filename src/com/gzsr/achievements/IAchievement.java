@@ -6,12 +6,14 @@ import com.gzsr.controllers.AchievementController;
 import com.gzsr.states.GameState;
 
 public interface IAchievement {
+	public int getID();
 	public String getName();
 	public String getDescription();
 	public Image getIcon();
 	
 	public void update(AchievementController controller, GameState gs, long cTime);
 	
+	public boolean resets();
 	public boolean isEarned();
 	public boolean isSecret();
 	

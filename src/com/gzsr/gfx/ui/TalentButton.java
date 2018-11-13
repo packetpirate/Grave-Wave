@@ -14,7 +14,7 @@ import com.gzsr.talents.Talents.TalentType;
 public class TalentButton extends Button {
 	// Use row as index to find level requirement for a particular talent.
 	private static final int [] TIER_LEVEL_REQUIREMENTS = new int[] {1, 5, 10, 15, 20, 25, 30};
-	private static final Color GRAY_OUT = new Color(150, 150, 150);
+	private static final Color GRAY_OUT = new Color(180, 180, 180);
 	
 	public static final float SIZE = 32.0f;
 	

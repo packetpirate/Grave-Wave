@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import com.gzsr.AchievementManager;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
@@ -76,7 +77,10 @@ public class MenuState extends BasicGameState implements InputListener {
 		
 		if(exit.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
 			exit.mouseEnter();
-			if(mouse.isLeftDown()) gc.exit();
+			if(mouse.isLeftDown()) {
+				AchievementManager.save();
+				gc.exit();
+			}
 		} else exit.mouseExit();
 		
 		MusicPlayer.getInstance().update(true);

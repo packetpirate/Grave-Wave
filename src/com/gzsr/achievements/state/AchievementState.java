@@ -3,19 +3,25 @@ package com.gzsr.achievements.state;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AchievementState {
 	class Transition {
+		protected int id;
+		public int getID() { return id; }
 		protected long metric;
 		protected int occurrences;
 		protected int count;
+		public int getCount() { return count; }
 		
 		protected AchievementState destination;
 		public AchievementState getDestination() { return destination; }
 		
 		protected Function<Long, Boolean> condition;
 		
-		public Transition(long metric_, AchievementState destination_) {
+		public Transition(int id_, long metric_, AchievementState destination_) {
+			this.id = id_;
 			this.metric = metric_;
 			this.occurrences = 1;
 			this.count = 0;
@@ -24,7 +30,8 @@ public class AchievementState {
 			this.condition = null;
 		}
 		
-		public Transition(long metric_, int occurrences_, AchievementState destination_) {
+		public Transition(int id_, long metric_, int occurrences_, AchievementState destination_) {
+			this.id = id_;
 			this.metric = metric_;
 			this.occurrences = occurrences_;
 			this.count = 0;
@@ -34,7 +41,8 @@ public class AchievementState {
 			this.condition = null;
 		}
 		
-		public Transition(AchievementState destination_, Function<Long, Boolean> condition_) {
+		public Transition(int id_, AchievementState destination_, Function<Long, Boolean> condition_) {
+			this.id = id_;
 			this.destination = destination_;
 			this.condition = condition_;
 			
@@ -56,6 +64,14 @@ public class AchievementState {
 
 			return false;
 		}
+		
+		public String format() {
+			return String.format("t(%d,%d,%d)", id, metric, count);
+		}
+		
+		public void parseSaveData(int count_) {
+			this.count = count_;
+		}
 	}
 	
 	class BranchTransition extends Transition {
@@ -67,13 +83,13 @@ public class AchievementState {
 			else return other;
 		}
 		
-		public BranchTransition(long metric_, AchievementState destination_, AchievementState other_) {
-			super(metric_, destination_);
+		public BranchTransition(int id_, long metric_, AchievementState destination_, AchievementState other_) {
+			super(id_, metric_, destination_);
 			this.other = other_;
 		}
 		
-		public BranchTransition(long metric_, int occurrences_, AchievementState destination_, AchievementState other_) {
-			super(metric_, occurrences_, destination_);
+		public BranchTransition(int id_, long metric_, int occurrences_, AchievementState destination_, AchievementState other_) {
+			super(id_, metric_, occurrences_, destination_);
 			this.other = other_;
 		}
 		
@@ -93,42 +109,46 @@ public class AchievementState {
 		}
 	}
 	
+	private int id;
+	public int getID() { return id; }
+	
 	private List<Transition> transitions;
 	
 	private boolean endState;
 	public boolean isEndState() { return endState; }
 	
-	public AchievementState(boolean endState_) {
+	public AchievementState(int id_, boolean endState_) {
+		this.id = id_;
 		this.transitions = new ArrayList<Transition>();
 		this.endState = endState_;
 	}
 	
-	public Transition createTransition(long metric, AchievementState state) {
-		Transition transition = new Transition(metric, state);
+	public Transition createTransition(int id, long metric, AchievementState state) {
+		Transition transition = new Transition(id, metric, state);
 		transitions.add(transition);
 		return transition;
 	}
 	
-	public Transition createTransition(long metric, int occurrences, AchievementState state) {
-		Transition transition = new Transition(metric, occurrences, state);
+	public Transition createTransition(int id, long metric, int occurrences, AchievementState state) {
+		Transition transition = new Transition(id, metric, occurrences, state);
 		transitions.add(transition);
 		return transition;
 	}
 	
-	public Transition createTransition(AchievementState state, Function<Long, Boolean> condition) {
-		Transition transition = new Transition(state, condition);
+	public Transition createTransition(int id, AchievementState state, Function<Long, Boolean> condition) {
+		Transition transition = new Transition(id, state, condition);
 		transitions.add(transition);
 		return transition;
 	}
 	
-	public BranchTransition createBranch(long metric, AchievementState dest, AchievementState other) {
-		BranchTransition transition = new BranchTransition(metric, dest, other);
+	public BranchTransition createBranch(int id, long metric, AchievementState dest, AchievementState other) {
+		BranchTransition transition = new BranchTransition(id, metric, dest, other);
 		transitions.add(transition);
 		return transition;
 	}
 	
-	public BranchTransition createBranch(long metric, int occurrences, AchievementState dest, AchievementState other) {
-		BranchTransition transition = new BranchTransition(metric, occurrences, dest, other);
+	public BranchTransition createBranch(int id, long metric, int occurrences, AchievementState dest, AchievementState other) {
+		BranchTransition transition = new BranchTransition(id, metric, occurrences, dest, other);
 		transitions.add(transition);
 		return transition;
 	}
@@ -148,5 +168,38 @@ public class AchievementState {
 		}
 		
 		return this;
+	}
+	
+	public String formatTransitions() {
+		String format = ",";
+		for(int i = 0; i < transitions.size(); i++) {
+			Transition t = transitions.get(i);
+			format += t.format();
+			if(i < (transitions.size() - 1)) format += ",";
+		}
+		
+		return format;
+	}
+	
+	public void parseSaveData(String data) {
+		Pattern pattern = Pattern.compile("t\\((\\d+),(\\d+),(\\d+)\\)");
+		Matcher matcher = pattern.matcher(data);
+		while(matcher.find()) {
+			try {
+				int id = Integer.parseInt(matcher.group(1));
+				int count = Integer.parseInt(matcher.group(3));
+				
+				for(Transition t : transitions) {
+					if(id == t.getID()) {
+						t.parseSaveData(count);
+						break;
+					}
+				}
+			} catch(NumberFormatException nfe) {
+				System.err.println("Malformed transition format! Aborting...");
+				nfe.printStackTrace();
+				return;
+			}
+		}
 	}
 }
