@@ -14,6 +14,7 @@ import com.gzsr.talents.Talents.TalentType;
 public class TalentButton extends Button {
 	// Use row as index to find level requirement for a particular talent.
 	private static final int [] TIER_LEVEL_REQUIREMENTS = new int[] {1, 5, 10, 15, 20, 25, 30};
+	private static final String LOCK_ICON = "GZS_Talent_Locked";
 	private static final Color GRAY_OUT = new Color(180, 180, 180);
 	
 	public static final float SIZE = 32.0f;
@@ -52,6 +53,7 @@ public class TalentButton extends Button {
 		boolean correctLevel = meetsLevelRequirement();
 		
 		Image img = talent.getIcon();
+		Image lock = AssetManager.getManager().getImage(LOCK_ICON);
 		if(img != null) {
 			float w = img.getWidth();
 			float h = img.getHeight();
@@ -59,7 +61,8 @@ public class TalentButton extends Button {
 			g.setColor(Color.black);
 			g.fillRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 			
-			img.draw((position.x - (w / 2)), (position.y - (h / 2)), (correctLevel ? Color.white : GRAY_OUT));
+			if(correctLevel) img.draw((position.x - (w / 2)), (position.y - (h / 2)));
+			else lock.draw((position.x - (w / 2)), (position.y - (h / 2)), GRAY_OUT);
 			
 			g.setColor(Color.white);
 			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);

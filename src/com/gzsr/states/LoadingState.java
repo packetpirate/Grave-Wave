@@ -262,8 +262,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Talent_Stasis.png",
 			// Misc Images
 			"images/GZS_Cash.png",
-			"images/GZS_SkillUpButton.png",
-			"images/GZS_SkillDownButton.png",
+			"images/GZS_Talent_Locked.png",
 			"images/GZS_BuyButton2.png",
 			"images/GZS_SellButton2.png",
 			"images/GZS_AmmoButton.png",
