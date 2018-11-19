@@ -44,6 +44,7 @@ public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
 	
 	private static final Color PAUSE_OVERLAY = new Color(0x331F006F);
+	private static final long SAVE_DELAY = 30_000L;
 	
 	private AssetManager assets;
 	private long time, accu, consoleTimer;
@@ -59,6 +60,8 @@ public class GameState extends BasicGameState implements InputListener {
 	
 	private boolean gameStarted, paused, consoleOpen;
 	public boolean isConsoleOpen() { return consoleOpen; }
+	
+	private long lastSave;
 	
 	private EscapeMenu escapeMenu;
 	
@@ -151,6 +154,12 @@ public class GameState extends BasicGameState implements InputListener {
 					hud.update(player, time);
 					
 					AchievementController.getInstance().update(this, time, delta);
+					
+					long sinceLastSave = (time - lastSave);
+					if(sinceLastSave >= SAVE_DELAY) {
+						AchievementManager.save();
+						lastSave = time;
+					}
 				} else if(consoleOpen) {
 					consoleTimer += (long)delta;
 					console.update(this, consoleTimer, Globals.STEP_TIME);
@@ -231,6 +240,8 @@ public class GameState extends BasicGameState implements InputListener {
 		gameStarted = false;
 		paused = false;
 		consoleOpen = false;
+		
+		lastSave = 0L;
 		
 		Camera.getCamera().reset();
 		console = new Console(this, gc);

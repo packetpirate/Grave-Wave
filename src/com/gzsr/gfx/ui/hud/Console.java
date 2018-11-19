@@ -252,7 +252,6 @@ public class Console implements Entity {
 						}
 					} else if(command.equals("killall") && (args == 0)) {
 						ec.getAliveEnemies().clear();
-						ec.getUnbornEnemies().clear();
 					} else if(command.equals("music") && (args == 1)) {
 						String action = tokens[1];
 						
@@ -280,10 +279,9 @@ public class Console implements Entity {
 					} else if(command.equals("ec") && (args == 0)) {
 						// Print information about remaining enemies in each enemy controller list.
 						List<Enemy> alive = ec.getAliveEnemies();
-						int unborn = ec.getUnbornEnemies().size();
 						int immediate = ec.getImmediateEnemies().size();
 						
-						String str = String.format("Unborn: %d, Alive: %d, Immediate: %d", unborn, alive.size(), immediate);
+						String str = String.format("Alive: %d, Immediate: %d", alive.size(), immediate);
 						consoleLines.add(str);
 						
 						// Print 5 of the remaining alive enemies, if any.

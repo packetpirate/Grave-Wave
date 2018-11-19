@@ -10,20 +10,20 @@ import com.gzsr.misc.Pair;
 
 public enum EnemyType {
 	// Enemies
-	ZUMBY("GZS_Zumby3", 48, 48, 4, 200L, Metrics.ZUMBY, 5, 10, 25),
-	CHUCK("GZS_Upchuck2", 64, 64, 4, 400L, Metrics.UPCHUCK, 25, 50, 100),
-	GASBAG("GZS_Gasbag2", 48, 48, 4, 400L, Metrics.GASBAG, 30, 60, 100),
-	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150L, Metrics.ROTDOG, 10, 20, 50),
+	ZUMBY("GZS_Zumby3", 48, 48, 4, 200L, Metrics.ZUMBY, 10, 20, 25),
+	CHUCK("GZS_Upchuck2", 64, 64, 4, 400L, Metrics.UPCHUCK, 40, 60, 100),
+	GASBAG("GZS_Gasbag2", 48, 48, 4, 400L, Metrics.GASBAG, 50, 75, 100),
+	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150L, Metrics.ROTDOG, 20, 30, 50),
 	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400L, Metrics.BIG_MAMA, 80, 120, 500),
-	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200L, Metrics.TINY_ZUMBY, 1, 5, 10),
-	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200L, Metrics.STARFRIGHT, 125, 175, 750),
-	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200L, Metrics.EL_SALVO, 200, 250, 1_500),
-	PROWLER("GZS_Prowler", 48, 48, 4, 250L, Metrics.PROWLER, 400, 500, 2_500),
+	LIL_ZUMBY("GZS_TinyZumby", 24, 24, 4, 200L, Metrics.TINY_ZUMBY, 5, 10, 10),
+	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200L, Metrics.STARFRIGHT, 200, 250, 750),
+	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200L, Metrics.EL_SALVO, 300, 500, 1_500),
+	PROWLER("GZS_Prowler", 48, 48, 4, 250L, Metrics.PROWLER, 400, 600, 2_500),
 	
 	// Bosses
-	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 1_250, 2_000, 5_000), 
-	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50L, Metrics.ZOMBAT, 1_000, 1_500, 1_000),
-	STITCHES("GZS_Stitches", 128, 128, 4, 150L, Metrics.STITCHES, 4_000, 6_000, 10_000);
+	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 2_000, 3_000, 5_000), 
+	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50L, Metrics.ZOMBAT, 2_000, 2_500, 1_000),
+	STITCHES("GZS_Stitches", 128, 128, 4, 150L, Metrics.STITCHES, 5_000, 7_500, 10_000);
 	
 	private String animationName;
 	private int frameWidth;

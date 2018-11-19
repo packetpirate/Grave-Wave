@@ -2,7 +2,9 @@ package com.gzsr.entities.enemies;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -44,15 +46,14 @@ public class EnemyController implements Entity {
 		return instance;
 	}
 	
-	private List<Enemy> unborn;
-	public List<Enemy> getUnbornEnemies() { return unborn; }
-	public void addUnborn(Enemy e) { unborn.add(e); }
 	private List<Enemy> addImmediately;
 	public List<Enemy> getImmediateEnemies() { return addImmediately; }
 	public void addNextUpdate(Enemy e) { addImmediately.add(e); }
 	private List<Enemy> alive;
 	public List<Enemy> getAliveEnemies() { return alive; }
 	public void addAlive(Enemy e) { alive.add(e); }
+	
+	private Queue<EnemyType> spawnQueue;
 	
 	private int spawnPool;
 	private long spawnRate;
@@ -75,7 +76,7 @@ public class EnemyController implements Entity {
 	
 	private long lastWave;
 	private boolean breakTime;
-	public boolean waveClear() { return (unborn.isEmpty() && alive.isEmpty()); }
+	public boolean waveClear() { return (spawnQueue.isEmpty() && addImmediately.isEmpty() && alive.isEmpty()); }
 	public boolean isRestarting() { return breakTime; }
 	public void skipToNextWave() { breakTime = false; }
 	public int timeToNextWave(long cTime) {
@@ -84,9 +85,10 @@ public class EnemyController implements Entity {
 	}
 	
 	private EnemyController() {
-		unborn = new ArrayList<Enemy>();
 		addImmediately = new ArrayList<Enemy>();
 		alive = new ArrayList<Enemy>();
+		
+		spawnQueue = new LinkedList<EnemyType>();
 		
 		spawnPool = EnemyController.SPAWN_POOL_START;
 		spawnRate = EnemyController.DEFAULT_SPAWN;
@@ -116,9 +118,10 @@ public class EnemyController implements Entity {
 		bossTitle = "";
 		bossWaveHealth = 0.0;
 		
-		unborn.clear();
 		addImmediately.clear();
 		alive.clear();
+		
+		spawnQueue.clear();
 		
 		spawnRate = (DEFAULT_SPAWN - (long)((Math.log(wave) / Math.log(8)) * 1000.0));
 		if(spawnRate < MIN_SPAWN_RATE) spawnRate = MIN_SPAWN_RATE;
@@ -128,7 +131,7 @@ public class EnemyController implements Entity {
 		if((wave % Stitches.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Stitches st = new Stitches(spawnPos);
-			unborn.add(st);
+			addImmediately.add(st);
 			
 			bossWave = true;
 			bossTitle = "Stitches";
@@ -139,7 +142,7 @@ public class EnemyController implements Entity {
 			for(int i = 0; i < 3; i++) {
 				Pair<Float> spawnPos = getSpawnPosition();
 				Zombat zb = new Zombat(spawnPos);
-				unborn.add(zb);
+				addImmediately.add(zb);
 				
 				bossWaveHealth += zb.getHealth();
 			}
@@ -151,7 +154,7 @@ public class EnemyController implements Entity {
 		} else if((wave % Aberration.appearsOnWave()) == 0) {
 			Pair<Float> spawnPos = getSpawnPosition();
 			Aberration ab = new Aberration(spawnPos);
-			unborn.add(ab);
+			addImmediately.add(ab);
 			
 			bossWave = true;
 			bossTitle = "Aberration";
@@ -162,11 +165,7 @@ public class EnemyController implements Entity {
 			// Determine number of zombies based on wave number.
 			spawnPool = (int)((Math.log(wave) / Math.log(2)) * wave) + EnemyController.SPAWN_POOL_START;
 			
-			// Create unborn enemies according to spawn pool.
-			while(spawnPool > 0) {
-				Pair<Float> spawnPos = getSpawnPosition();
-				spawnEnemy(spawnPos);
-			}
+			while(spawnPool > 0) { spawnQueue.add(randomEnemy()); }
 		}
 		
 		// Shop updates? Determine if certain items should be added at this point?
@@ -205,19 +204,22 @@ public class EnemyController implements Entity {
 		return new Pair<Float>(x, y);
 	}
 	
-	private void spawnEnemy(Pair<Float> position) {
-		// Which enemies can still be spawned with our current spawning pool?
+	private EnemyType randomEnemy() {
 		EnemyType [] filteredSpawnables = EnemyController.SPAWNABLE_NAMES
-														 .stream()
-													  	 .filter(type -> ((EnemyType.spawnCost(type) <= spawnPool) && (wave >= EnemyType.appearsOnWave(type))))
-													  	 .toArray(EnemyType[]::new);
-		// Choose a random enemy from the filtered list.
-		int i = Globals.rand.nextInt(filteredSpawnables.length);
+				 		.stream()
+				 		.filter(type -> ((EnemyType.spawnCost(type) <= spawnPool) && (wave >= EnemyType.appearsOnWave(type))))
+				 		.toArray(EnemyType[]::new);
 		
-		// Spawn the enemy and deduct their cost from the spawning pool.
-		EnemyType toSpawn = filteredSpawnables[i];
-		spawnPool -= EnemyType.spawnCost(toSpawn);
-		unborn.add(EnemyType.createInstance(toSpawn, position));
+		int i = Globals.rand.nextInt(filteredSpawnables.length);
+		EnemyType type = filteredSpawnables[i];
+		spawnPool -= EnemyType.spawnCost(type);
+		
+		return type;
+	}
+	
+	private Enemy spawnEnemy(Pair<Float> position) {
+		EnemyType toSpawn = spawnQueue.poll();
+		return EnemyType.createInstance(toSpawn, position);
 	}
 	
 	public static void reset() {
@@ -230,13 +232,14 @@ public class EnemyController implements Entity {
 		if(addImmediately.size() > 0) alive.addAll(addImmediately);
 		addImmediately.clear();
 		
-		// If there are unborn enemies left and the spawn time has elapsed, spawn the next enemy.
+		// If there are enemies left to spawn and the spawn time has elapsed, spawn the next enemy.
 		if(!breakTime) {
-			if(!unborn.isEmpty() && (cTime >= (lastEnemy + nextSpawn))) {
+			long elapsed = (cTime - lastEnemy);
+			if(!spawnQueue.isEmpty() && (elapsed > nextSpawn)) {
 				lastEnemy = cTime;
 				nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 				
-				Enemy e = unborn.remove(0);
+				Enemy e = spawnEnemy(getSpawnPosition());
 				alive.add(e);
 			}
 		} else {

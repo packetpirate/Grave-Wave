@@ -6,7 +6,7 @@ import org.newdawn.slick.AppGameContainer;
 
 public class Globals {
 	// Contains global constants.
-	public static final String VERSION = "v1.2.1";
+	public static final String VERSION = "v1.3.1";
 	
 	public static final long SLEEP_MS = 20L;
 	public static final long NANO_TO_MS = 1_000_000L;

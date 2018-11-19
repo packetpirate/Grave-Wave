@@ -42,7 +42,6 @@ public class BossHealthBar implements Entity {
 		g.drawRect(position.x, position.y, size.x, size.y);
 		
 		float healthLeft = 0.0f;
-		for(Enemy e : ec.getUnbornEnemies()) healthLeft += (float)e.getHealth();
 		for(Enemy e : ec.getAliveEnemies()) if(e.isAlive(cTime)) healthLeft += (float)e.getHealth();
 		
 		float percentage = (healthLeft / (float)ec.getBossWaveHealth());
