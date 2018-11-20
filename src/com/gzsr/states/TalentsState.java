@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.FontUtils;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
@@ -109,6 +110,7 @@ public class TalentsState extends BasicGameState implements InputListener {
 		
 		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		UnicodeFont normal = AssetManager.getManager().getFont("PressStart2P-Regular");
+		UnicodeFont small = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 		
 		g.setColor(Color.darkGray);
 		g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
@@ -116,12 +118,12 @@ public class TalentsState extends BasicGameState implements InputListener {
 		// Render the title text. 
 		g.setFont(large);
 		g.setColor(Color.white);
-		g.drawString("Talents", 50.0f, 50.0f);
+		g.drawString("Talents", 50.0f, 60.0f);
 		
 		// Show the player's current skill points under the experience bar.
 		String skpText = String.format("Skill Points: %d", player.getAttributes().getInt("skillPoints"));
 		g.setFont(normal);
-		g.drawString(skpText, ((Globals.WIDTH / 2) - (normal.getWidth(skpText) / 2)), 140.0f);
+		g.drawString(skpText, ((Globals.WIDTH / 2) - (normal.getWidth(skpText) / 2)), 120.0f);
 		
 		// Draw the experience bar.
 		{
@@ -181,6 +183,15 @@ public class TalentsState extends BasicGameState implements InputListener {
 				if(tacticsTooltips[r][c] != null) tacticsTooltips[r][c].render(g, 0L);
 			}
 		}
+		
+		// Draw the talent tree names above the containers.
+		FontUtils.drawCenter(normal, "Munitions", (int)MUNITIONS_WINDOW.x.floatValue(), (int)(MUNITIONS_WINDOW.y - normal.getLineHeight() - 5.0f), (int)WINDOW_WIDTH);
+		FontUtils.drawCenter(normal, "Fortifications", (int)FORTIFICATION_WINDOW.x.floatValue(), (int)(FORTIFICATION_WINDOW.y - normal.getLineHeight() - 5.0f), (int)WINDOW_WIDTH);
+		FontUtils.drawCenter(normal, "Tactics", (int)TACTICS_WINDOW.x.floatValue(), (int)(TACTICS_WINDOW.y - normal.getLineHeight() - 5.0f), (int)WINDOW_WIDTH);
+		
+		// Draw instructions.
+		FontUtils.drawCenter(small, "Left Click: Spend Skill Point", 0, (int)(Globals.HEIGHT - (small.getLineHeight() * 2.0f) - 45.0f), Globals.WIDTH);
+		FontUtils.drawCenter(small, "Right Click: Remove Skill Point", 0, (int)(Globals.HEIGHT - small.getLineHeight() - 35.0f), Globals.WIDTH);
 		
 		back.render(g, 0L);
 		if(changesMade > 0) accept.render(g, 0L);

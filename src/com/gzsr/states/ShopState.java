@@ -367,21 +367,23 @@ public class ShopState extends BasicGameState implements InputListener {
 					MeleeWeapon mw = (MeleeWeapon) w;
 					
 					// Draw the equip button. If it's already equipped, disable it.
-					equipButton.render(g, 0L);
-					if(mw.isEquipped()) {
-						float x = equipButton.getPosition().x - (equipButton.getSize().x / 2);
-						float y = equipButton.getPosition().y - (equipButton.getSize().y / 2);
+					if(selectedInInventory) {
+						equipButton.render(g, 0L);
+						if(mw.isEquipped()) {
+							float x = equipButton.getPosition().x - (equipButton.getSize().x / 2);
+							float y = equipButton.getPosition().y - (equipButton.getSize().y / 2);
+							
+							g.setColor(new Color(0xBB333333));
+							g.fillRect(x, y, equipButton.getSize().x, equipButton.getSize().y);
+						}
 						
-						g.setColor(new Color(0xBB333333));
-						g.fillRect(x, y, equipButton.getSize().x, equipButton.getSize().y);
+						g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+						FontUtils.drawCenter(g.getFont(), "Equip", 
+											 (int)(equipButton.getPosition().x.floatValue() - (equipButton.getSize().x.floatValue() / 2)), 
+								 			 (int)(equipButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
+								 			 (int)equipButton.getSize().x.floatValue(), 
+								 			 Color.black);
 					}
-					
-					g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-					FontUtils.drawCenter(g.getFont(), "Equip", 
-										 (int)(equipButton.getPosition().x.floatValue() - (equipButton.getSize().x.floatValue() / 2)), 
-							 			 (int)(equipButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)), 
-							 			 (int)equipButton.getSize().x.floatValue(), 
-							 			 Color.black);
 				}
 			} else if(selection instanceof Item) {
 				Item item = (Item) selection;
@@ -394,19 +396,24 @@ public class ShopState extends BasicGameState implements InputListener {
 			
 			// Draw the transaction buttons.
 			if(selectedInInventory) {
-				sellButton.render(g, 0L);
-				
 				String cost = "Error";
+				boolean drawSellButton = true;
 				if(selection instanceof Weapon) {
-					int price = (int)(((Weapon)selection).getPrice());
+					Weapon w = (Weapon) selection;
+					int price = (int)(w.getPrice());
 					if(Talents.Tactics.MERCANTILE.active()) price = (int)(price + (price * (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
 					cost = "$" + NumberFormat.getInstance(Locale.US).format(price * SELL_BACK_VALUE);
+					drawSellButton = w.canSell();
 				}
 				
-				g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
-				FontUtils.drawCenter(g.getFont(), cost, (int)(CONTAINER_WIDTH + 10.0f), 
-									 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
-									 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
+				if(drawSellButton) {
+					sellButton.render(g, 0L);
+					
+					g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
+					FontUtils.drawCenter(g.getFont(), cost, (int)(CONTAINER_WIDTH + 10.0f), 
+										 (int)(buyButton.getPosition().y - (g.getFont().getLineHeight() / 2)), 
+										 (int)((Globals.WIDTH / 2) - CONTAINER_WIDTH - 58.0f), Color.white);
+				}
 				
 				// Draw the "buy ammo" and "max ammo" buttons and labels.
 				if(selection instanceof RangedWeapon) {
@@ -585,16 +592,18 @@ public class ShopState extends BasicGameState implements InputListener {
 			} else if(sellButton.inBounds(x, y) && selectedInInventory) {
 				if(selection instanceof Weapon) {
 					Weapon w = (Weapon) selection;
-					int sellValue = w.getPrice();
-					if(Talents.Tactics.MERCANTILE.active()) sellValue += (int)(sellValue * (Talents.Tactics.MERCANTILE.ranks() * 0.1));
-					sellValue *= SELL_BACK_VALUE;
-					
-					player.getAttributes().set("money", (Player.getPlayer().getAttributes().getInt("money") + sellValue));
-					player.getInventory().dropItem(w.getName());
-					player.resetCurrentRanged();
-					
-					SHOP.addItem(w);
-					assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
+					if(w.canSell()) {
+						int sellValue = w.getPrice();
+						if(Talents.Tactics.MERCANTILE.active()) sellValue += (int)(sellValue * (Talents.Tactics.MERCANTILE.ranks() * 0.1));
+						sellValue *= SELL_BACK_VALUE;
+						
+						player.getAttributes().set("money", (Player.getPlayer().getAttributes().getInt("money") + sellValue));
+						player.getInventory().dropItem(w.getName());
+						player.resetCurrentRanged();
+						
+						SHOP.addItem(w);
+						assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
+					}
 				}
 				// TODO: Add cases for other item types.
 			} else if(equipButton.inBounds(x, y) && selectedInInventory) {

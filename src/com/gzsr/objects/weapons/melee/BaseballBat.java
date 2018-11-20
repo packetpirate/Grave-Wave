@@ -50,7 +50,7 @@ public class BaseballBat extends MeleeWeapon {
 	public long getCooldown() { return BaseballBat.COOLDOWN; }
 
 	@Override
-	public int getPrice() { return 0; }
+	public int getPrice() { return BaseballBat.PRICE; }
 
 	@Override
 	public DamageType getDamageType() { return DamageType.BLUNT; }

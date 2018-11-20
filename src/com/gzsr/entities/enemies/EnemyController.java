@@ -38,6 +38,9 @@ public class EnemyController implements Entity {
 		add(EnemyType.CHUCK);
 		add(EnemyType.GASBAG);
 		add(EnemyType.BIG_MAMA);
+		add(EnemyType.STARFRIGHT);
+		add(EnemyType.ELSALVO);
+		add(EnemyType.PROWLER);
 	}};
 	
 	private static EnemyController instance;

@@ -50,6 +50,9 @@ public class Machete extends MeleeWeapon {
 
 	@Override
 	public int getPrice() { return 0; }
+	
+	@Override
+	public boolean canSell() { return false; }
 
 	@Override
 	public DamageType getDamageType() { return DamageType.SLICING; }

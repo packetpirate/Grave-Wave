@@ -96,6 +96,9 @@ public class Beretta extends RangedWeapon {
 	public int getPrice() { return 0; }
 	
 	@Override
+	public boolean canSell() { return false; }
+	
+	@Override
 	public int getAmmoPrice() { return Beretta.AMMO_PRICE; }
 
 	@Override
