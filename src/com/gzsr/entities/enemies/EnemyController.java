@@ -12,6 +12,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.bosses.Aberration;
@@ -178,6 +179,7 @@ public class EnemyController implements Entity {
 		nextSpawn = (long)(Globals.rand.nextFloat() * spawnRate);
 		
 		AchievementController.getInstance().postMetric(metric);
+		Scorekeeper.getInstance().waveCleared();
 	}
 	
 	private Pair<Float> getSpawnPosition() {
@@ -268,7 +270,7 @@ public class EnemyController implements Entity {
 					
 					int money = enemy.getCashValue();
 					if(Talents.Tactics.WINDFALL.active()) money += (money * (Talents.Tactics.WINDFALL.ranks() * 0.1));
-					player.getAttributes().addTo("money", money);
+					player.addMoney(money);
 					
 					it.remove();
 				}

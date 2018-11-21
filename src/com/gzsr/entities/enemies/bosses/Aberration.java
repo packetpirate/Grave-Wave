@@ -16,6 +16,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
@@ -307,6 +308,7 @@ public class Aberration extends Boss {
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL));
+		Scorekeeper.getInstance().addKill();
 	}
 	
 	@Override

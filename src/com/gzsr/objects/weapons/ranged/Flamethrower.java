@@ -7,6 +7,7 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.particles.Particle;
@@ -66,6 +67,8 @@ public class Flamethrower extends RangedWeapon {
 		if(!hasUnlimitedAmmo()) ammoInClip--;
 		lastUsed = cTime;
 		if(!useSound.playing()) useSound.loop(1.0f, AssetManager.getManager().getSoundVolume());
+		
+		Scorekeeper.getInstance().addShotsFired(EMBER_COUNT);
 	}
 	
 	@Override

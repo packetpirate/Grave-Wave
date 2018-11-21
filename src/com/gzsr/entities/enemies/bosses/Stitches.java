@@ -7,6 +7,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
@@ -242,6 +243,7 @@ public class Stitches extends Boss {
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.STITCHES, Metrics.ENEMY, Metrics.KILL));
+		Scorekeeper.getInstance().addKill();
 	}
 	
 	@Override

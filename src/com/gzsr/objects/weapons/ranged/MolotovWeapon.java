@@ -10,6 +10,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.achievements.Metrics;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -124,6 +125,7 @@ public class MolotovWeapon extends RangedWeapon {
 		
 		charge = 0.0f;
 		super.use(player, position, theta, cTime);
+		Scorekeeper.getInstance().addShotsFired(-1); // Molotov throws shouldn't count against accuracy.
 	}
 	
 	@Override

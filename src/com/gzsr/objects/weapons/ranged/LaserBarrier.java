@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
@@ -98,6 +99,7 @@ public class LaserBarrier extends RangedWeapon {
 		}
 		
 		super.use(player, position, theta, cTime);
+		Scorekeeper.getInstance().addShotsFired(-1); // We don't want to add to shots fired for this weapon.
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
@@ -144,6 +145,8 @@ public abstract class RangedWeapon extends Weapon {
 		release = false;
 		if(muzzleFlash != null) muzzleFlash.restart(cTime);
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		
+		Scorekeeper.getInstance().addShotFired();
 	}
 	
 	private void reload() {

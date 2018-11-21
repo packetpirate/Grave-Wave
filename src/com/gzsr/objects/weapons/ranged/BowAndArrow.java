@@ -113,6 +113,7 @@ public class BowAndArrow extends RangedWeapon {
 		projectiles.add(projectile);
 
 		charge = 0.0f;
+		
 		super.use(player, position, theta, cTime);
 	}
 	

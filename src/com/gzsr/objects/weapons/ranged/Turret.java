@@ -14,6 +14,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Globals;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -203,6 +204,8 @@ public class Turret extends Projectile {
 		projectiles.add(projectile);
 		lastProjectile = cTime;
 		fireSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		
+		Scorekeeper.getInstance().addShotFired();
 	}
 	
 	public static Pair<Integer> getTotalDamage() {

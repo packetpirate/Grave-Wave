@@ -12,6 +12,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
@@ -318,6 +319,7 @@ public abstract class Enemy implements Entity {
 		if(!deathHandled) {
 			AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ENEMY, Metrics.KILL));
 			Powerups.spawnRandomPowerup(gs, this, new Pair<Float>(position), cTime);
+			Scorekeeper.getInstance().addKill();
 			postDamageTexts();
 		}
 		deathHandled = true;

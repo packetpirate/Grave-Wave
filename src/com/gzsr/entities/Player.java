@@ -16,6 +16,7 @@ import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.controllers.ShopController;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -553,6 +554,11 @@ public class Player implements Entity {
 		attributes.set("stamina", adjStamina);
 	}
 	
+	public void addMoney(int amnt) {
+		attributes.addTo("money", amnt);
+		Scorekeeper.getInstance().addMoney(amnt);
+	}
+	
 	public void addExperience(GameState gs, int amnt, long cTime) {
 		addExperience(gs, amnt, cTime, true);
 	}
@@ -625,7 +631,6 @@ public class Player implements Entity {
 						enemy.blockMovement();
 					} else {
 						boolean collided = p.collide(gs, enemy, cTime);
-						
 						if(collided) {
 							// If this is a special projectile, apply its status effect to the target.
 							if(p instanceof StatusProjectile) {
@@ -636,6 +641,8 @@ public class Player implements Entity {
 							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 							double totalDamage = (p.getDamage() * damagePercentage);
 							if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), rw.getWeaponMetric(), cTime, delta, true, p.isCritical());
+							
+							Scorekeeper.getInstance().addShotHit();
 						}
 					}
 					

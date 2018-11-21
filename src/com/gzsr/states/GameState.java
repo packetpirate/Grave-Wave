@@ -25,6 +25,7 @@ import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.controllers.AchievementController;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
@@ -250,6 +251,7 @@ public class GameState extends BasicGameState implements InputListener {
 		hud = new HUD();
 		
 		ShopState.resetShop();
+		Scorekeeper.getInstance().reset();
 	}
 	
 	@Override

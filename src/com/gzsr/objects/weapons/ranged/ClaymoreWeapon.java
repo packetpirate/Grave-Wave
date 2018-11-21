@@ -107,6 +107,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 		projectiles.add(clay);
 		
 		progress = 0.0f;
+		
 		super.use(player, position, theta, cTime);
 	}
 	

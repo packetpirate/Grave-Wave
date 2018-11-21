@@ -10,7 +10,6 @@ import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
@@ -83,14 +82,7 @@ public class AK47 extends RangedWeapon {
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 		
-		if(!hasUnlimitedAmmo()) ammoInClip--;
-		lastUsed = cTime;
-
-		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 50L, 5.0f);
-		else Camera.getCamera().refreshShake(cTime);
-		
-		muzzleFlash.restart(cTime);
-		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
+		super.use(player, position, theta, cTime);
 	}
 	
 	@Override
