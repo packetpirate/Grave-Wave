@@ -63,7 +63,7 @@ public class Beretta extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return Beretta.DAMAGE.getRange(Beretta.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Beretta.DAMAGE.getRange(Beretta.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Beretta.DAMAGE.roll(Beretta.DAMAGE_MOD, critical); }

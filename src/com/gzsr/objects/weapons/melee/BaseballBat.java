@@ -56,7 +56,7 @@ public class BaseballBat extends MeleeWeapon {
 	public DamageType getDamageType() { return DamageType.BLUNT; }
 	
 	@Override
-	public Pair<Integer> getDamage() { return BaseballBat.DAMAGE.getRange(BaseballBat.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return BaseballBat.DAMAGE.getRange(BaseballBat.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return BaseballBat.DAMAGE.roll(BaseballBat.DAMAGE_MOD, critical); }

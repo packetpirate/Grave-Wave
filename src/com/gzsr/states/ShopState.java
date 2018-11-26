@@ -308,7 +308,7 @@ public class ShopState extends BasicGameState implements InputListener {
 				{
 					UnicodeFont regular = AssetManager.getManager().getFont("PressStart2P-Regular");
 					FontUtils.drawCenter(f, "Damage", (int)barX, (int)(barY - f.getLineHeight() - 5.0f), (int)barWidth, Color.white);
-					Pair<Integer> damageRange = w.getDamage();
+					Pair<Integer> damageRange = w.getDamageRangeTotal();
 					
 					// Apply the player's current damage bonus to the damage range.
 					double damageBonus = (Player.getPlayer().getAttributes().getInt("damageUp") * 0.10);

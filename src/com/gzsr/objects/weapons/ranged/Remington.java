@@ -66,7 +66,7 @@ public class Remington extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return Remington.DAMAGE.getRange(Remington.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Remington.DAMAGE.getRange(Remington.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Remington.DAMAGE.roll(Remington.DAMAGE_MOD, critical); }

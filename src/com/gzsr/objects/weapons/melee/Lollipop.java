@@ -87,7 +87,7 @@ public class Lollipop extends MeleeWeapon {
 	public int getPrice() { return Lollipop.PRICE; }
 
 	@Override
-	public Pair<Integer> getDamage() { return Lollipop.DAMAGE.getRange(Lollipop.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Lollipop.DAMAGE.getRange(Lollipop.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Lollipop.DAMAGE.roll(Lollipop.DAMAGE_MOD, critical); }

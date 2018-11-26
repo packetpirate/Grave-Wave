@@ -143,7 +143,7 @@ public class BigRedButton extends RangedWeapon {
 	}
 
 	@Override
-	public Pair<Integer> getDamage() { return BigRedButton.DAMAGE.getRange(BigRedButton.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return BigRedButton.DAMAGE.getRange(BigRedButton.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return BigRedButton.DAMAGE.roll(BigRedButton.DAMAGE_MOD, critical); }
@@ -159,6 +159,9 @@ public class BigRedButton extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return BigRedButton.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return BigRedButton.START_CLIPS; }

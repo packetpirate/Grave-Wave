@@ -34,6 +34,12 @@ public class SentryWeapon extends RangedWeapon {
 		this.useSound = assets.getSound(SentryWeapon.FIRE_SOUND);
 		this.reloadSound = assets.getSound(SentryWeapon.RELOAD_SOUND);
 	}
+	
+	@Override
+	public boolean canUse(long cTime) {
+		int limit = 1; // TODO: If a talent is added to increase sentry capacity, have the talent modify this.
+		return (super.canUse(cTime) && (projectiles.size() < limit));
+	}
 
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
@@ -56,7 +62,7 @@ public class SentryWeapon extends RangedWeapon {
 	}
 
 	@Override
-	public Pair<Integer> getDamage() { return Turret.getTotalDamage(); }
+	public Pair<Integer> getDamageRange() { return Turret.getTotalDamage(); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return 0.0; }
@@ -72,6 +78,9 @@ public class SentryWeapon extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return SentryWeapon.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return SentryWeapon.START_CLIPS; }

@@ -70,7 +70,7 @@ public class Mossberg extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() {
+	public Pair<Integer> getDamageRange() {
 		Pair<Integer> range = Mossberg.DAMAGE.getRange(Mossberg.DAMAGE_MOD);
 		
 		range.x *= Mossberg.SHOT_COUNT;

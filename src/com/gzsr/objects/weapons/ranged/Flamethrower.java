@@ -72,7 +72,7 @@ public class Flamethrower extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return BurningEffect.getDamageRange(); }
+	public Pair<Integer> getDamageRange() { return BurningEffect.getDamageRange(); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return 0.0; }

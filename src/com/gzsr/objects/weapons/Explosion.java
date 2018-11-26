@@ -70,6 +70,7 @@ public class Explosion implements Entity {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
+		this.radius = radius_;
 		
 		this.bounds = new Rectangle((position.x - radius_), (position.y - radius_), (radius_ * 2), (radius_ * 2));
 		
@@ -77,7 +78,6 @@ public class Explosion implements Entity {
 		this.damage = damage_;
 		this.critical = critical_;
 		this.knockback = knockback_;
-		this.radius = radius_;
 		this.started = false;
 		this.created = cTime;
 		
@@ -126,8 +126,12 @@ public class Explosion implements Entity {
 			// If damage is taken, calculate damage based on distance from source.
 			if(e instanceof Player) {
 				Player player = Player.getPlayer();
+				Shape pCollider = player.getCollider();
+				Shape eCollider = getCollider();
 				
-				if(player.getCollider().intersects(getCollider())) {
+				boolean intersects = pCollider.intersects(eCollider);
+				boolean contains = eCollider.contains(pCollider);
+				if(intersects || contains) {
 					player.takeDamage(damage, cTime);
 					if(status != null) player.getStatusHandler().addStatus(status, status.getDuration());
 					entitiesAffected.add(player);
@@ -137,7 +141,12 @@ public class Explosion implements Entity {
 				// TODO: Add support for adding status effect to an enemy.
 				if(!(type.equals(Type.BLOOD)) && !(e instanceof TinyZumby)) {
 					Enemy en = (Enemy)e;
-					if(en.getCollider().intersects(getCollider())) {
+					Shape eCollider = en.getCollider();
+					Shape expCollider = getCollider();
+					
+					boolean intersects = eCollider.intersects(expCollider);
+					boolean contains = expCollider.contains(eCollider);
+					if(intersects || contains) {
 						en.takeDamage(DamageType.CONCUSSIVE, damage, knockback, (float)(en.getTheta() + Math.PI), Metrics.EXPLOSION, cTime, delta, true, critical);
 						entitiesAffected.add(en);
 						return true;

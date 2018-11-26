@@ -110,7 +110,7 @@ public class LaserBarrier extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return new Pair<Integer>(0, 0); }
+	public Pair<Integer> getDamageRange() { return new Pair<Integer>(0, 0); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return 0.0; }
@@ -126,6 +126,9 @@ public class LaserBarrier extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return LaserBarrier.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return LaserBarrier.START_CLIPS; }

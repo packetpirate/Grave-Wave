@@ -44,7 +44,8 @@ public abstract class Weapon implements Entity {
 	
 	public abstract int getPrice();
 	public boolean canSell() { return true; }
-	public abstract Pair<Integer> getDamage();
+	public abstract Pair<Integer> getDamageRange();
+	public abstract Pair<Integer> getDamageRangeTotal();
 	public abstract double getDamageTotal(boolean critical);
 	public abstract double rollDamage(boolean critical);
 	public DamageType getDamageType() { return DamageType.NONE; }

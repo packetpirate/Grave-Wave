@@ -62,7 +62,7 @@ public class Taser extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return Taser.DAMAGE.getRange(Taser.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Taser.DAMAGE.getRange(Taser.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Taser.DAMAGE.roll(Taser.DAMAGE_MOD, critical); }
@@ -78,6 +78,9 @@ public class Taser extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return Taser.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 	
 	@Override
 	public int getStartClips() { return Taser.START_CLIPS; }

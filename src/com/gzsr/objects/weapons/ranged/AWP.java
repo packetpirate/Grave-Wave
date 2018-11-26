@@ -91,7 +91,7 @@ public class AWP extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return AWP.DAMAGE.getRange(AWP.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return AWP.DAMAGE.getRange(AWP.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return AWP.DAMAGE.roll(AWP.DAMAGE_MOD, critical); }

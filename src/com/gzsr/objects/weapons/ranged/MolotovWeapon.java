@@ -145,6 +145,9 @@ public class MolotovWeapon extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return MolotovWeapon.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return MolotovWeapon.START_CLIPS; }
@@ -168,7 +171,7 @@ public class MolotovWeapon extends RangedWeapon {
 	public boolean isCharging() { return charging; }
 
 	@Override
-	public Pair<Integer> getDamage() { return BurningEffect.getDamageRange(); }
+	public Pair<Integer> getDamageRange() { return BurningEffect.getDamageRange(); }
 
 	@Override
 	public double rollDamage(boolean critical) { return 0.0; }

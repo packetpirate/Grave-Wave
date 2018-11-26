@@ -69,7 +69,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return GrenadeLauncher.DAMAGE.getRange(GrenadeLauncher.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return GrenadeLauncher.DAMAGE.getRange(GrenadeLauncher.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return GrenadeLauncher.DAMAGE.roll(GrenadeLauncher.DAMAGE_MOD, critical); }

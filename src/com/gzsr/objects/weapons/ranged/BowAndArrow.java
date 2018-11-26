@@ -127,7 +127,7 @@ public class BowAndArrow extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return BowAndArrow.DAMAGE.getRange(BowAndArrow.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return BowAndArrow.DAMAGE.getRange(BowAndArrow.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return BowAndArrow.DAMAGE.roll(BowAndArrow.DAMAGE_MOD, critical); }

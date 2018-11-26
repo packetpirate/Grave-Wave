@@ -86,7 +86,7 @@ public class AK47 extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return AK47.DAMAGE.getRange(AK47.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return AK47.DAMAGE.getRange(AK47.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return AK47.DAMAGE.roll(AK47.DAMAGE_MOD, critical); }

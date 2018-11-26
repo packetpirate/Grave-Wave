@@ -58,7 +58,7 @@ public class Machete extends MeleeWeapon {
 	public DamageType getDamageType() { return DamageType.SLICING; }
 	
 	@Override
-	public Pair<Integer> getDamage() { return Machete.DAMAGE.getRange(Machete.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Machete.DAMAGE.getRange(Machete.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Machete.DAMAGE.roll(Machete.DAMAGE_MOD, critical); }

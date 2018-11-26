@@ -58,7 +58,7 @@ public class BastardSword extends MeleeWeapon {
 	public DamageType getDamageType() { return DamageType.SLICING; }
 	
 	@Override
-	public Pair<Integer> getDamage() { return BastardSword.DAMAGE.getRange(BastardSword.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return BastardSword.DAMAGE.getRange(BastardSword.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return BastardSword.DAMAGE.roll(BastardSword.DAMAGE_MOD, critical); }

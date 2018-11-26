@@ -69,7 +69,7 @@ public class MP5 extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return MP5.DAMAGE.getRange(MP5.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return MP5.DAMAGE.getRange(MP5.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return MP5.DAMAGE.roll(MP5.DAMAGE_MOD, critical); }

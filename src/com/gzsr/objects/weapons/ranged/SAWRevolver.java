@@ -66,7 +66,7 @@ public class SAWRevolver extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return SAWRevolver.DAMAGE.getRange(SAWRevolver.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return SAWRevolver.DAMAGE.getRange(SAWRevolver.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return SAWRevolver.DAMAGE.roll(SAWRevolver.DAMAGE_MOD, critical); }

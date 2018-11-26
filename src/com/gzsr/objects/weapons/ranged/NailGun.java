@@ -63,7 +63,7 @@ public class NailGun extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return NailGun.DAMAGE.getRange(NailGun.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return NailGun.DAMAGE.getRange(NailGun.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return NailGun.DAMAGE.roll(NailGun.DAMAGE_MOD, critical); }

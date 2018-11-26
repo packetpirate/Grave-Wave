@@ -70,7 +70,7 @@ public class Stinger extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { return Stinger.DAMAGE.getRange(Stinger.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Stinger.DAMAGE.getRange(Stinger.DAMAGE_MOD); }
 	
 	@Override
 	public double rollDamage(boolean critical) { return Stinger.DAMAGE.roll(Stinger.DAMAGE_MOD, critical); }
@@ -86,6 +86,9 @@ public class Stinger extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return Stinger.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return Stinger.START_CLIPS; }

@@ -84,7 +84,7 @@ public class Crossbow extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.BOLT; }
 
 	@Override
-	public Pair<Integer> getDamage() { return Crossbow.DAMAGE.getRange(Crossbow.DAMAGE_MOD); }
+	public Pair<Integer> getDamageRange() { return Crossbow.DAMAGE.getRange(Crossbow.DAMAGE_MOD); }
 
 	@Override
 	public double rollDamage(boolean critical) { return Crossbow.DAMAGE.roll(Crossbow.DAMAGE_MOD, critical); }

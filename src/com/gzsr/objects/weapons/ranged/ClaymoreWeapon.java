@@ -121,7 +121,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 	}
 	
 	@Override
-	public Pair<Integer> getDamage() { 
+	public Pair<Integer> getDamageRange() { 
 		Pair<Integer> range = ClaymoreWeapon.DAMAGE.getRange(ClaymoreWeapon.DAMAGE_MOD);
 	
 		range.x *= Claymore.SHRAPNEL_COUNT;
@@ -150,6 +150,9 @@ public class ClaymoreWeapon extends RangedWeapon {
 	
 	@Override
 	public int getClipSize() { return ClaymoreWeapon.CLIP_SIZE; }
+	
+	@Override
+	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return ClaymoreWeapon.START_CLIPS; }

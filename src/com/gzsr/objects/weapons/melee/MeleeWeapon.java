@@ -186,6 +186,18 @@ public abstract class MeleeWeapon extends Weapon {
 	}
 	
 	@Override
+	public Pair<Integer> getDamageRangeTotal() {
+		Pair<Integer> range = getDamageRange();
+		
+		double bonus = 0.0;
+		if(Talents.Tactics.BRUTALITY.active()) bonus += (Talents.Tactics.BRUTALITY.ranks() * 0.1);
+		range.x = (int)(range.x + (range.x * bonus));
+		range.y = (int)(range.y + (range.y * bonus));
+		
+		return range;
+	}
+	
+	@Override
 	public double getDamageTotal(boolean critical) {
 		double dmg = rollDamage(critical);
 		

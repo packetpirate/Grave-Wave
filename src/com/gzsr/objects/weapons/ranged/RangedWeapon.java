@@ -192,6 +192,34 @@ public abstract class RangedWeapon extends Weapon {
 	}
 	
 	@Override
+	public Pair<Integer> getDamageRangeTotal() {
+		Pair<Integer> range = getDamageRange();
+		
+		double bonus = 0.0;
+		switch(size) {
+			case SMALL:
+				bonus = (Talents.Munitions.SCOUT.ranks() * 0.20);
+				break;
+			case MEDIUM:
+				bonus = (Talents.Munitions.SOLDIER.ranks() * 0.20);
+				break;
+			case LARGE:
+				bonus = (Talents.Munitions.COMMANDO.ranks() * 0.20);
+				break;
+			default:
+				break;
+		}
+		
+		if(Talents.Munitions.DESPOT.active()) bonus += 0.5;
+		if(bonus > 0.0) {
+			range.x = (int)(range.x + (range.x * bonus));
+			range.y = (int)(range.y + (range.y * bonus));
+		}
+		
+		return range;
+	}
+	
+	@Override
 	public double getDamageTotal(boolean critical) {
 		double dmg = rollDamage(critical);
 		if(critical) dmg *= Player.getPlayer().getAttributes().getDouble("critMult");
