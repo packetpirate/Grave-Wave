@@ -12,7 +12,10 @@ public class Scorekeeper {
 	public void addKill() { kills++; }
 	
 	private int shotsFired, shotsHit;
-	public double getAccuracy() { return ((double)shotsFired / (double)shotsHit); }
+	public double getAccuracy() {
+		if((shotsFired == 0) || (shotsHit == 0)) return 0.0;
+		return ((double)shotsHit / (double)shotsFired); 
+	}
 	public void addShotFired() { shotsFired++; }
 	public void addShotsFired(int amnt) { shotsFired += amnt; }
 	public void addShotHit() { shotsHit++; }
@@ -38,10 +41,10 @@ public class Scorekeeper {
 	}
 	
 	public int calculateFinalScore() {
-		int score = 0;
+		int k = (kills * 10);
+		int a = (int)(getAccuracy() * k);
+		int w = (wavesCleared * 100);
 		
-		// TODO: Calculate the final score based on variables.
-		
-		return score;
+		return (a + moneyCollected + w);
 	}
 }

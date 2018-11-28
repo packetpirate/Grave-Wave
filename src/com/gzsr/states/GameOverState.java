@@ -14,17 +14,28 @@ import com.gzsr.AssetManager;
 import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
+import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.gfx.ui.MenuButton;
+import com.gzsr.gfx.ui.SlidingText;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 
 public class GameOverState extends BasicGameState implements InputListener {
 	public static final int ID = 4;
+	private static final double SCORE_COUNT_SPEED = 0.005;
 	
 	private AssetManager assets;
 	
 	private MenuButton menuButton;
-	private MenuButton exitButton;
+	
+	private SlidingText killCount;
+	private SlidingText accuracy;
+	private SlidingText moneyCollected;
+	private SlidingText wavesCleared;
+	private SlidingText scoreCount;
+	
+	private int scCurr, scEnd;
+	private boolean counting;
 	
 	private long time;
 	
@@ -33,8 +44,17 @@ public class GameOverState extends BasicGameState implements InputListener {
 		assets = AssetManager.getManager();
 		
 		UnicodeFont uni = AssetManager.getManager().getFont("PressStart2P-Regular_large");
-		menuButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Main Menu") / 2)), (Globals.HEIGHT - 200.0f)), "Main Menu");
-		exitButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Give Up") / 2)), (Globals.HEIGHT - 150.0f)), "Give Up");
+		menuButton = new MenuButton(new Pair<Float>((float)((Globals.WIDTH / 2) - (uni.getWidth("Back to Main Menu") / 2)), (Globals.HEIGHT - 150.0f)), "Back to Main Menu");
+		
+		killCount = new SlidingText(String.format("Kills: %d", Scorekeeper.getInstance().getKillCount()), -100.0f, 100.0f, (Globals.HEIGHT / 2), 1.0f, 0.0f, 1.0f);
+		accuracy = new SlidingText(String.format("Accuracy: %.1f", (Scorekeeper.getInstance().getAccuracy() * 100)), -100.0f, 100.0f, ((Globals.HEIGHT / 2) + 32.0f), 1.0f, 0.0f, 1.0f);
+		moneyCollected = new SlidingText(String.format("Money: %d", Scorekeeper.getInstance().getMoneyCollected()), -100.0f, 100.0f, ((Globals.HEIGHT / 2) + 64.0f), 1.0f, 0.0f, 1.0f);
+		wavesCleared = new SlidingText(String.format("Waves: %d", Scorekeeper.getInstance().getWavesCleared()), -100.0f, 100.0f, ((Globals.HEIGHT / 2) + 96.0f), 1.0f, 0.0f, 1.0f);
+		scoreCount = new SlidingText("Score: 0", -100.0f, 100.0f, ((Globals.HEIGHT / 2) + 160.0f), 1.0f, 0.0f, 1.0f);
+		
+		scCurr = 0;
+		scEnd = 0;
+		counting = false;
 		
 		time = 0L;
 	}
@@ -52,10 +72,30 @@ public class GameOverState extends BasicGameState implements InputListener {
 			}
 		} else menuButton.mouseExit();
 		
-		if(exitButton.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
-			exitButton.mouseEnter();
-			if(mouse.isLeftDown()) gc.exit();
-		} else exitButton.mouseExit();
+		if(!killCount.isDone()) killCount.update(null, time, delta);
+		else if(!accuracy.started()) accuracy.start();
+		
+		if(!accuracy.isDone()) accuracy.update(null, time, delta);
+		else if(!moneyCollected.started()) moneyCollected.start();
+		
+		if(!moneyCollected.isDone()) moneyCollected.update(null, time, delta);
+		else if(!wavesCleared.started()) wavesCleared.start();
+		
+		if(!wavesCleared.isDone()) wavesCleared.update(null, time, delta);
+		else if(!scoreCount.started()) scoreCount.start();
+		
+		if(!scoreCount.isDone()) scoreCount.update(null, time, delta);
+		else if(counting) {
+			if(scCurr < scEnd) {
+				scCurr += (int)(SCORE_COUNT_SPEED * scEnd);
+				if(scCurr >= scEnd) {
+					scCurr = scEnd;
+					counting = false;
+				}
+				
+				scoreCount.setText(String.format("Score: %d", scCurr));
+			} else counting = false;
+		} else counting = true;
 	}
 	
 	@Override
@@ -68,7 +108,38 @@ public class GameOverState extends BasicGameState implements InputListener {
 		}
 		
 		menuButton.render(g, 0L);
-		exitButton.render(g, 0L);
+		
+		if(killCount.started()) killCount.render(g, time);
+		if(accuracy.started()) accuracy.render(g, time);
+		if(moneyCollected.started()) moneyCollected.render(g, time);
+		if(wavesCleared.started()) wavesCleared.render(g, time);
+		if(scoreCount.started()) scoreCount.render(g, time);
+	}
+	
+	@Override
+	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
+		Scorekeeper score = Scorekeeper.getInstance();
+		
+		killCount.reset();
+		killCount.setText(String.format("Kills: %d", score.getKillCount()));
+		
+		accuracy.reset();
+		accuracy.setText(String.format("Accuracy: %.1f%%", (score.getAccuracy() * 100)));
+		
+		moneyCollected.reset();
+		moneyCollected.setText(String.format("Money: %d", score.getMoneyCollected()));
+		
+		wavesCleared.reset();
+		wavesCleared.setText(String.format("Waves: %d", score.getWavesCleared()));
+		
+		scoreCount.reset();
+		scoreCount.setText("Score: 0");
+		
+		killCount.start();
+		
+		scCurr = 0;
+		scEnd = score.calculateFinalScore();
+		counting = false;
 	}
 	
 	@Override
