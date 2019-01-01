@@ -11,7 +11,7 @@ import com.gzsr.misc.Pair;
 public enum EnemyType {
 	// Enemies
 	ZUMBY("GZS_Zumby3", 48, 48, 4, 200L, Metrics.ZUMBY, 10, 20, 25),
-	CHUCK("GZS_Upchuck2", 64, 64, 4, 400L, Metrics.UPCHUCK, 40, 60, 100),
+	CHUCK("GZS_Upchuck3", 64, 64, 4, 400L, Metrics.UPCHUCK, 40, 60, 100),
 	GASBAG("GZS_Gasbag2", 48, 48, 4, 400L, Metrics.GASBAG, 50, 75, 100),
 	ROTDOG("GZS_Rotdog3", 48, 48, 4, 150L, Metrics.ROTDOG, 20, 30, 50),
 	BIG_MAMA("GZS_BigMama2", 64, 64, 4, 400L, Metrics.BIG_MAMA, 80, 120, 500),
