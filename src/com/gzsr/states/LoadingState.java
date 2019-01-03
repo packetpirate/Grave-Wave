@@ -122,6 +122,7 @@ public class LoadingState extends BasicGameState {
 		for(String asset : assetList) {
 			String key = asset.substring((asset.indexOf('/') + 1),
 										  asset.lastIndexOf('.'));
+			assets.addFont((key + "_xs"), asset, 8, false, false);
 			assets.addFont((key + "_small"), asset, 10, false, false);
 			assets.addFont(key, asset, 16, false, false);
 			assets.addFont((key + "_large"), asset, 32, false, false);
