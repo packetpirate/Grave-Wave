@@ -26,18 +26,18 @@ import com.gzsr.states.settings.GammaSettingsState;
 
 public class LoadingState extends BasicGameState {
 	public static final int ID = 7;
-	
+
 	private AssetManager assets;
-	
+
 	private float percentLoaded;
-	
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
-		
+
 		percentLoaded = 0.0f;
 	}
-	
+
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
 		if(!AssetManager.loadingComplete()) {
@@ -45,7 +45,7 @@ public class LoadingState extends BasicGameState {
 			loadImages();
 			loadAnimations(); // has to be loaded after images
 			loadSounds();
-			
+
 			ConfigManager.getInstance().init();
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
@@ -55,19 +55,19 @@ public class LoadingState extends BasicGameState {
 			AssetManager.finishLoad();
 		}
 	}
-	
+
 	@Override
 	public void leave(GameContainer gc, StateBasedGame game) throws SlickException {
 		MusicPlayer.getInstance().reset();
 		MusicPlayer.getInstance().nextSong();
 	}
-	
+
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
 		percentLoaded = (float)AssetManager.assetsLoaded() / (float)AssetManager.assetsToLoad();
 		if(AssetManager.assetsLoaded() == AssetManager.assetsToLoad()) {
 			game.addState(new MenuState());
-			
+
 			game.addState(new AchievementMenuState());
 			game.addState(new SettingsState());
 			game.addState(new GameSettingsState());
@@ -75,14 +75,14 @@ public class LoadingState extends BasicGameState {
 			game.addState(new DisplaySettingsState());
 			game.addState(new GammaSettingsState());
 			game.addState(new ControlSettingsState());
-			
+
 			game.addState(new GameState());
 			game.addState(new ShopState());
 			game.addState(new TalentsState());
 			game.addState(new GameOverState());
 			game.addState(new CreditsState());
 			game.addState(new BlankState());
-			
+
 			game.init(gc);
 			game.enterState(MenuState.ID); // we're done loading
 		}
@@ -92,20 +92,20 @@ public class LoadingState extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		g.resetTransform();
 		g.clear();
-		
+
 		float lw = 400.0f;
 		float lh = 50.0f;
 		float lx = (Globals.WIDTH / 2) - (lw / 2);
 		float ly = (Globals.HEIGHT / 2) - (lh / 2);
 		float loadWidth = lw * percentLoaded;
-		
+
 		g.setColor(new Color(0x808080));
 		g.fillRect(lx, ly, lw, lh);
 		g.setColor(new Color(0x9B2111));
 		g.fillRect(lx, ly, loadWidth, lh);
 		g.setColor(Color.white);
 		g.drawRect(lx, ly, lw, lh);
-		
+
 		g.setColor(Color.white);
 		UnicodeFont uni = assets.getFont("PressStart2P-Regular_large");
 		if(uni != null) {
@@ -113,21 +113,21 @@ public class LoadingState extends BasicGameState {
 			FontUtils.drawCenter(uni, "Loading...", ((Globals.WIDTH / 2) - 200), (int)(ly - uni.getLineHeight() - 10), (int)lw, g.getColor());
 		}
 	}
-	
+
 	private void loadFonts() throws SlickException {
 		String [] assetList = new String [] {
 			"fonts/PressStart2P-Regular.ttf",
 		};
-		
+
 		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
+			String key = asset.substring((asset.indexOf('/') + 1),
 										  asset.lastIndexOf('.'));
 			assets.addFont((key + "_small"), asset, 10, false, false);
 			assets.addFont(key, asset, 16, false, false);
 			assets.addFont((key + "_large"), asset, 32, false, false);
 		}
 	}
-	
+
 	private void loadImages() throws SlickException {
 		String [] assetList = new String [] {
 			// Primary Images
@@ -137,6 +137,11 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Joe-Portrait.png",
 			"images/GZS_Player.png",
 			"images/GZS_Crosshair2.png",
+			// HUD Images
+			"images/GZS_HUD_01.png",
+			"images/GZS_Heart.png",
+			"images/GZS_Life_Gem.png",
+			"images/GZS_Experience_Bar.png",
 			// Item Images
 			"images/GZS_Health.png",
 			"images/GZS_Ammo.png",
@@ -268,34 +273,34 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_AmmoButton.png",
 			"images/GZS_Checkmark.png"
 		};
-		
+
 		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
+			String key = asset.substring((asset.indexOf('/') + 1),
 										  asset.lastIndexOf('.'));
 			assets.addImage(key, asset);
 		}
 	}
-	
+
 	private void loadAnimations() throws SlickException {
 		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
 		assets.addAnimation("GZS_MuzzleFlash", mf);
-		
+
 		Animation fire = new Animation("GZS_FireAnimation1", 16, 16, 8, 150L, 1200L, 1200L);
 		assets.addAnimation("GZS_FireAnimation1", fire);
-		
+
 		Animation missile = new Animation("GZS_Stinger_Missile", 16, 64, 5, 50L, 250L, 250L);
 		assets.addAnimation("GZS_Stinger_Missile", missile);
-		
+
 		Animation exp = new Animation("GZS_Explosion2", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_Explosion", exp);
-		
+
 		Animation pc = new Animation("GZS_PoisonExplosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_PoisonExplosion", pc);
-		
+
 		Animation be = new Animation("GZS_BloodExplosion", 128, 128, 8, 125L, 1000L, 1000L);
 		assets.addAnimation("GZS_BloodExplosion", be);
 	}
-	
+
 	private void loadSounds() throws SlickException {
 		String [] assetList = new String [] {
 			"sounds/grunt1.wav",
@@ -330,9 +335,9 @@ public class LoadingState extends BasicGameState {
 			"sounds/party_horn.wav",
 			"sounds/ears_ringing.wav"
 		};
-		
+
 		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1), 
+			String key = asset.substring((asset.indexOf('/') + 1),
 										  asset.lastIndexOf('.'));
 			assets.addSound(key, asset);
 		}
