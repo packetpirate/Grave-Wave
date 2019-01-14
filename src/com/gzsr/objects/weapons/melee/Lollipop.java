@@ -21,26 +21,27 @@ public class Lollipop extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 500L;
 	private static final long COOLDOWN = 1_000L;
-	private static final double STAMINA = 40.0;
+	//private static final double STAMINA = 40.0;
+	private static final int BPM = 20;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final String ICON_NAME = "GZS_Lollipop_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Lollipop";
-	
+
 	private static final Dice DAMAGE = new Dice(10, 5);
 	private static final int DAMAGE_MOD = 10;
-	
+
 	public Lollipop() {
 		super();
-		
+
 		img = AssetManager.getManager().getImage(Lollipop.WEAPON_IMAGE);
 		useSound = AssetManager.getManager().getSound("throw2");
-		
+
 		multihit = true;
-		
+
 		bloodGenerator = BloodGenerator.RAINBOW;
 	}
-	
+
 	@Override
 	public boolean hit(GameState gs, Enemy enemy, long cTime) {
 		if(multihit) {
@@ -48,26 +49,26 @@ public class Lollipop extends MeleeWeapon {
 				if(enemy.equals(e)) return false;
 			}
 		}
-		
+
 		boolean isHit = enemy.getCollider().intersects(getHitBox(cTime));
 		if(isHit) {
 			if(!multihit) stopAttack();
 			else enemiesHit.add(enemy);
-			
+
 			if(bloodGenerator != null) {
 				List<Particle> particles = bloodGenerator.apply(enemy, cTime);
 				particles.stream().forEach(p -> gs.addEntity(String.format("blood%d", Globals.generateEntityID()),  p));
 			}
-			
+
 			AssetManager.getManager().getSound("party_horn").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
-		
+
 		return isHit;
 	}
-	
+
 	@Override
 	public float getDistance() { return Lollipop.HIT_AREA_OFFSET; }
-	
+
 	@Override
 	public float getImageDistance() { return Lollipop.IMAGE_DISTANCE; }
 
@@ -79,7 +80,7 @@ public class Lollipop extends MeleeWeapon {
 
 	@Override
 	public long getAttackTime() { return Lollipop.ATTACK_TIME; }
-	
+
 	@Override
 	public long getCooldown() { return Lollipop.COOLDOWN; }
 
@@ -88,25 +89,26 @@ public class Lollipop extends MeleeWeapon {
 
 	@Override
 	public Pair<Integer> getDamageRange() { return Lollipop.DAMAGE.getRange(Lollipop.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return Lollipop.DAMAGE.roll(Lollipop.DAMAGE_MOD, critical); }
-	
+
 	@Override
-	public double getStaminaCost() { return Lollipop.STAMINA; }
+	public int getBPMCost() { return Lollipop.BPM; }
+	//public double getStaminaCost() { return Lollipop.STAMINA; }
 
 	@Override
 	public float getKnockback() { return Lollipop.KNOCKBACK; }
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
-	
+
 	@Override
 	public int getLevelRequirement() { return 18; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.LOLLIPOP; }
-	
+
 	@Override
 	public String getName() {
 		return "Lollipop";

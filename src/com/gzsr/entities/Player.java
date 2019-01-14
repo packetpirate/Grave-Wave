@@ -18,6 +18,7 @@ import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
 import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.controllers.ShopController;
+import com.gzsr.entities.components.HeartMonitor;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
@@ -50,13 +51,13 @@ public class Player implements Entity {
 	private static final long RESPAWN_TIME = 3_000L;
 	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
-	
+
 	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -32.0f);
 	public static final Pair<Float> BELOW_1 = new Pair<Float>(0.0f, 32.0f);
 	public static final Pair<Float> BELOW_2 = new Pair<Float>(0.0f, 47.0f);
-	
+
 	private static Player instance = null;
-	
+
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	private Pair<Float> velocity;
@@ -65,27 +66,27 @@ public class Player implements Entity {
 		if(isAlive()) {
 			velocity.x = xOff;
 			velocity.y = yOff;
-			
+
 			float tx = position.x + velocity.x;
 			float ty = position.y + velocity.y;
-			if((tx >= 0) && (tx < Globals.WIDTH) && 
+			if((tx >= 0) && (tx < Globals.WIDTH) &&
 			   (ty >= 0) && (ty < Globals.HEIGHT)) {
 				position.x += velocity.x;
 				position.y += velocity.y;
 			}
 		}
 	}
-	
+
 	private Ellipse bounds;
 	public Ellipse getCollider() { return bounds; }
-	
+
 	private float speed;
 	public float getSpeed() { return speed; }
 	public void setSpeed(float speed_) { this.speed = speed_; }
-	
+
 	private float theta;
 	public float getRotation() { return theta; }
-	
+
 	private boolean respawning;
 	public boolean isRespawning() { return respawning; }
 	private long respawnTime;
@@ -93,18 +94,18 @@ public class Player implements Entity {
 		if(cTime > respawnTime) return 0L;
 		return (respawnTime - cTime);
 	}
-	
+
 	private long lastGrunt;
-	
+
 	private Attributes attributes;
 	public Attributes getAttributes() { return attributes; }
-	
+
 	public float getMeleeCritChance() { return (attributes.getFloat("meleeCritChance") + attributes.getFloat("critBonus")); }
 	public float getRangeCritChance() { return (attributes.getFloat("rangeCritChance") + attributes.getFloat("critBonus")); }
-	
+
 	private Talents talents;
 	public Talents getTalents() { return talents; }
-	
+
 	private Inventory inventory;
 	public Inventory getInventory() { return inventory; }
 	public List<RangedWeapon> getRangedWeapons() { return inventory.getRangedWeapons(); }
@@ -152,7 +153,7 @@ public class Player implements Entity {
 	}
 	public void equip(Weapon w) {
 		w.equip();
-		
+
 		if(w instanceof RangedWeapon) {
 			List<RangedWeapon> weapons = getRangedWeapons();
 			getCurrentRanged().unequip();
@@ -184,31 +185,35 @@ public class Player implements Entity {
 			currentWeapon.equip(); // Notify new weapon that it is equipped.
 		}
 	}
-	
+
+	private HeartMonitor monitor;
+	public HeartMonitor getHeartMonitor() { return monitor; }
+
 	private StatusHandler statusHandler;
 	public StatusHandler getStatusHandler() { return statusHandler; }
-	
+
 	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player"); }
-	
+
 	private Flashlight flashlight;
 	public Flashlight getFlashlight() { return flashlight; }
-	
+
 	public Player() {
 		position = new Pair<Float>(0.0f, 0.0f);
 		velocity = new Pair<Float>(0.0f, 0.0f);
-		
+
 		attributes = new Attributes();
 		talents = new Talents();
 		statusHandler = new StatusHandler(this);
-		
+		monitor = new HeartMonitor();
+
 		reset();
 	}
-	
+
 	public static Player getPlayer() {
 		if(instance == null) instance = new Player();
 		return instance;
 	}
-	
+
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!isAlive()) {
@@ -216,72 +221,77 @@ public class Player implements Entity {
 				int lives = attributes.getInt("lives") - 1;
 				if(lives >= 0) {
 					attributes.set("lives", lives);
-					
+
 					statusHandler.destroyAll(cTime);
-					
+
 					respawning = true;
 					respawnTime = (cTime + Player.RESPAWN_TIME);
 				}
-				
+
+				monitor.setBPM(0);
+
 				AchievementController.getInstance().postMetric(Metrics.compose(Metrics.PLAYER, Metrics.KILL));
 			} else {
 				long elapsed = (cTime - respawnTime);
 				if(elapsed >= 0) {
 					respawning = false;
 					respawnTime = 0L;
-					
+
 					// Make the player invincible for a brief period.
 					attributes.set("health", attributes.getDouble("maxHealth"));
 					statusHandler.addStatus(new InvulnerableEffect(Player.RESPAWN_TIME, cTime), cTime);
-					
+
 					// Reset the player's position.
 					position.x = (float)(Globals.WIDTH / 2);
 					position.y = (float)(Globals.HEIGHT / 2);
+
+					// Reset the EKG.
+					monitor.reset(cTime);
 				}
 			}
 		}
-		
+
 		// Regenerate health and stamina every second.
 		boolean refresh = ((cTime - attributes.getLong("lastRegen")) >= 1_000L);
 		if(refresh) {
 			double healthRegenRate = attributes.getDouble("healthRegen");
 			addHealth(healthRegenRate);
-			
-			double staminaRefreshRate = attributes.getDouble("staminaRefreshRate");
-			addStamina(staminaRefreshRate);
-			
+
+			//double staminaRefreshRate = attributes.getDouble("staminaRefreshRate");
+			//addStamina(staminaRefreshRate);
+
 			attributes.set("lastRegen", cTime);
 		}
-		
+
 		// Need to make sure to update the status effects first.
 		statusHandler.update((GameState)gs, cTime, delta);
-		
+
 		boolean canMove = !statusHandler.hasStatus(Status.PARALYSIS);
 		MeleeWeapon cMeleeWeapon = getCurrentMelee();
 		RangedWeapon cRangedWeapon = getCurrentRanged();
-		
+
 		if(cMeleeWeapon != null) canMove = (canMove && !cMeleeWeapon.isAttacking()); // Can't move if melee attacking.
 		if(cRangedWeapon != null) canMove = (canMove && !cRangedWeapon.blockingMovement());
-		
+
 		if(canMove) {
 			velocity.x = 0.0f;
 			velocity.y = 0.0f;
-			
+
 			float adjSpeed = ((getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
 			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
 		}
-		
+
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
 		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
 			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipCapacity())) cRangedWeapon.reload(cTime);
 		}
-		
+
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y + 4.0f);
-		
+
 		// Check to see if the player is trying to change weapon by number.
 		Layout [] keys = new Layout[] { Controls.Layout.WEAPON_1, Controls.Layout.WEAPON_2, Controls.Layout.WEAPON_3, Controls.Layout.WEAPON_4,
 										Controls.Layout.WEAPON_5, Controls.Layout.WEAPON_6, Controls.Layout.WEAPON_7, Controls.Layout.WEAPON_8,
@@ -293,14 +303,14 @@ public class Player implements Entity {
 				break; // To avoid conflicts when holding multiple numerical keys.
 			}
 		}
-		
+
 		MouseInfo mouse = Controls.getInstance().getMouse();
-		
+
 		if(canMove) {
 			if(mouse.isLeftDown() && (cRangedWeapon != null)) {boolean clipEmpty = (cRangedWeapon.getClipAmmo() == 0);
 				boolean inventoryEmpty = (cRangedWeapon.getInventoryAmmo() == 0);
 				boolean reloading = cRangedWeapon.isReloading(cTime);
-				
+
 				if(!reloading) {
 					if(clipEmpty) {
 						long elapsed = (cTime - attributes.getLong("lastClick"));
@@ -309,7 +319,7 @@ public class Player implements Entity {
 							click.play(1.0f, AssetManager.getManager().getSoundVolume());
 							attributes.set("lastClick", cTime);
 						}
-						
+
 						if(inventoryEmpty) {
 							StatusMessages.getInstance().addMessage("Out of Ammo!", this, Player.ABOVE_1, cTime, 1_000L);
 						} else {
@@ -325,11 +335,13 @@ public class Player implements Entity {
 				if(cMeleeWeapon.canUse(cTime)) cMeleeWeapon.use(this, new Pair<Float>(position), theta, cTime);
 			}
 		}
-		
+
 		// Update all the player's active weapons.
 		getRangedWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
 		getMeleeWeapons().stream().forEach(w -> w.update(gs, cTime, delta));
-		
+
+		monitor.update(cTime);
+
 		// Calculate the player's rotation based on mouse position.
 		if(canMove) {
 			theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
@@ -342,115 +354,116 @@ public class Player implements Entity {
 		// Render all the player's active weapons.
 		getRangedWeapons().stream().forEach(w -> w.render(g, cTime));
 		getMeleeWeapons().stream().forEach(w -> w.render(g, cTime));
-		
+
 		if(isAlive()) {
 			Image image = getImage();
 			if(image != null) {
 				g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-				g.drawImage(image, (position.x - (image.getWidth() / 2)), 
+				g.drawImage(image, (position.x - (image.getWidth() / 2)),
 								   (position.y - (image.getHeight() / 2)));
-				
+
 				if(Globals.SHOW_COLLIDERS) {
 					g.setColor(Color.red);
 					g.draw(bounds);
 				}
-				
+
 				g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
 			} else {
 				// Draw a shape to represent the missing player image.
 				g.setColor(Color.red);
 				g.fillOval((position.x - 20), (position.y - 20), 40, 40);
-			}	
+			}
 		}
-		
+
 		statusHandler.render(g, cTime);
 		flashlight.render(g, cTime);
 	}
-	
+
 	/**
 	 * Reset all dAttributes and iAttributes members.
 	 */
 	public void reset() {
 		position.x = (float)(Globals.WIDTH / 2);
 		position.y = (float)(Globals.HEIGHT / 2);
-		
+
 		velocity.x = 0.0f;
 		velocity.y = 0.0f;
-		
+
 		bounds = new Ellipse(position.x, (position.y + 4.0f), 16.0f, 16.0f);
-		
+
 		speed = Player.DEFAULT_SPEED;
 		theta = 0.0f;
-		
+
 		respawning = false;
 		respawnTime = 0L;
-		
+
 		lastGrunt = 0L;
-		
+
 		rangedIndex = 0;
 		meleeIndex = 0;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
-		
+
 		Machete machete = new Machete();
 		Beretta beretta = new Beretta();
-		
+
 		machete.equip();
 		beretta.equip();
-		
+
 		inventory.addItem(machete);
 		inventory.addItem(beretta);
-		
+
 		attributes.reset();
 		statusHandler.clearAll();
-		
+		monitor.reset();
+
 		Talents.reset();
-		
+
 		// Basic attributes.
 		attributes.set("health", 100.0);
 		attributes.set("maxHealth", 100.0);
 		attributes.set("healthRegen", 0.0); // per second
-		
+
 		attributes.set("armor", 0.0);
 		attributes.set("maxArmor", 100.0);
-		
-		attributes.set("stamina", 100.0);
-		attributes.set("maxStamina", 100.0);
-		attributes.set("staminaRefreshRate", 10.0); // per second
-		
+
+		//attributes.set("stamina", 100.0);
+		//attributes.set("maxStamina", 100.0);
+		//attributes.set("staminaRefreshRate", 10.0); // per second
+
 		attributes.set("lastRegen", 0L);
-		
+
 		attributes.set("lives", 3);
 		attributes.set("maxLives", Player.MAX_LIVES);
-		
+
 		attributes.set("money", 0);
-		
+
 		// Experience related attributes.
 		attributes.set("experience", 0);
 		attributes.set("expToLevel", 100);
 		attributes.set("level", 1);
 		attributes.set("skillPoints", 0);
-		
+
 		// Upgrade level attributes.
 		attributes.set("speedUp", 0);
 		attributes.set("damageUp", 0);
-		
+
 		// Miscellaneous Modifiers
 		attributes.set("meleeCritChance", 0.05f);
 		attributes.set("rangeCritChance", 0.05f);
 		attributes.set("critBonus", 0.0f);
-		
+
 		// Multipliers
 		attributes.set("expMult", 1.0);
 		attributes.set("spdMult", 1.0);
 		attributes.set("damMult", 1.0);
 		attributes.set("critMult", 2.0);
-		
+
 		// Misc Properties
 		attributes.set("lastClick", 0L);
-		
+
 		flashlight = new Flashlight();
 	}
-	
+
 	/**
 	 * Add health to the player's current health. Usually only used for applying health kits to the player.
 	 * @param amnt The amount of health to give the player.
@@ -462,7 +475,7 @@ public class Player implements Entity {
 		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
 		attributes.set("health", newHealth);
 	}
-	
+
 	/**
 	 * Deal damage to the player.
 	 * @param amnt The amount of damage to apply to the player's health.
@@ -470,12 +483,12 @@ public class Player implements Entity {
 	public double takeDamage(double amnt, long cTime) {
 		return takeDamage(amnt, cTime, false);
 	}
-	
+
 	public double takeDamage(double amnt, long cTime, boolean piercing) {
 		if(isAlive() && !statusHandler.hasStatus(Status.INVULNERABLE)) {
 			double currentHealth = attributes.getDouble("health");
 			double maxHealth = attributes.getDouble("maxHealth");
-			
+
 			boolean unbreakable = Talents.Fortification.UNBREAKABLE.active();
 			boolean lastStand = Talents.Fortification.LAST_STAND.active() && (currentHealth <= (maxHealth * 0.25));
 			double reduction = 0.0;
@@ -484,34 +497,34 @@ public class Player implements Entity {
 				int ranks = Talents.Fortification.UNBREAKABLE.ranks();
 				reduction += (ranks * 0.05);
 			}
-			
+
 			if(reduction > 0.0) {
 				amnt -= (amnt * reduction);
 				if(amnt <= 0.0) return -1.0;
 			}
-			
+
 			if(!piercing) amnt = damageArmor(amnt); // First, deal damage to player's armor.
-			
+
 			// Deal leftover damage to health.
 			double adjusted = currentHealth - amnt;
 			double newHealth = (adjusted < 0) ? 0 : adjusted;
 			attributes.set("health", newHealth);
-			
+
 			if(amnt > 0.0) AchievementController.getInstance().postMetric(Metrics.compose(Metrics.PLAYER, Metrics.DAMAGE));
-			
+
 			if((cTime - lastGrunt) >= GRUNT_TIMER) {
 				int grunt = Globals.rand.nextInt(4) + 1;
 				AssetManager.getManager().getSound(String.format("grunt%d", grunt)).play();
 				Camera.getCamera().shake(cTime, 500L, 100L, 4.0f);
 				Camera.getCamera().damage(cTime);
-				
+
 				lastGrunt = cTime;
 			}
-			
+
 			return amnt;
 		} else return -1.0; // Indicates no damage taken.
 	}
-	
+
 	/**
 	 * Adds armor value to the player.
 	 * @param amnt How much armor to add.
@@ -523,7 +536,7 @@ public class Player implements Entity {
 		double newArmor = (adjusted > maxArmor) ? maxArmor : adjusted;
 		attributes.set("armor", newArmor);
 	}
-	
+
 	/**
 	 * Damages the player's armor before dealing damage to health.
 	 * @param amnt How much damage should be mitigated by the armor.
@@ -536,56 +549,57 @@ public class Player implements Entity {
 		if(adjusted < 0.0) return Math.abs(adjusted);
 		return 0.0;
 	}
-	
+
+	/**
 	public void addStamina(double amnt) {
 		double currentStamina = attributes.getDouble("stamina");
 		double adjStamina = (currentStamina + amnt);
 		double maxStamina = attributes.getDouble("maxStamina");
 		if(adjStamina > maxStamina) adjStamina = maxStamina;
-		
+
 		attributes.set("stamina", adjStamina);
 	}
-	
+
 	public void useStamina(double amnt) {
 		double currentStamina = attributes.getDouble("stamina");
 		double adjStamina = (currentStamina - amnt);
 		if(adjStamina < 0.0) adjStamina = 0.0;
-		
+
 		attributes.set("stamina", adjStamina);
-	}
-	
+	}**/
+
 	public void addMoney(int amnt) {
 		attributes.addTo("money", amnt);
 		Scorekeeper.getInstance().addMoney(amnt);
 	}
-	
+
 	public void addExperience(GameState gs, int amnt, long cTime) {
 		addExperience(gs, amnt, cTime, true);
 	}
-	
+
 	public void addExperience(GameState gs, int amnt, long cTime, boolean playSound) {
 		int totalAmnt = (int)(amnt * attributes.getDouble("expMult"));
 		int currentExp = attributes.getInt("experience");
 		int adjusted = currentExp + totalAmnt;
 		int expToLevel = attributes.getInt("expToLevel");
 		int newLevel = attributes.getInt("level") + 1;
-		
+
 		attributes.set("experience", adjusted);
-		
+
 		if(adjusted >= expToLevel) {
 			// Level up!
 			int carryOver = adjusted % expToLevel;
 			attributes.set("experience", carryOver);
 			attributes.set("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
 			attributes.set("level", newLevel);
-			attributes.addTo("skillPoints", (int)((newLevel + 10) / 10));
-			
+			attributes.addTo("skillPoints", (newLevel + 10) / 10);
+
 			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
 				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TALENTS_SCREEN.getDisplay());
 				StatusMessages.getInstance().addMessage("Ding!", this, Player.ABOVE_1, cTime, 2_000L);
 				StatusMessages.getInstance().addMessage(reminder, this, Player.BELOW_1, cTime, 2_000L);
 			}
-			
+
 			{ // Random chance for the enemies to say "Gratz!".
 				float chance = Globals.rand.nextFloat();
 				if(chance <= 0.02f) {
@@ -598,21 +612,21 @@ public class Player implements Entity {
 					}
 				}
 			}
-			
+
 			ShopController.getInstance().release(ShopState.getShop(), cTime); // Add new weapons to the shop!
 			if(playSound) AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}
-	
+
 	public boolean isAlive() {
 		// TODO: May need to revise this in the future.
 		return (attributes.getDouble("health") > 0);
 	}
-	
+
 	public boolean touchingEnemy(Enemy enemy) {
 		return enemy.getCollider().intersects(bounds);
 	}
-	
+
 	/**
 	 * Checks for a collision between the enemy and the player's projectiles.
 	 * TODO: This logic should be separated from player and put in Projectile class.
@@ -637,45 +651,46 @@ public class Player implements Entity {
 								StatusProjectile sp = (StatusProjectile) p;
 								sp.applyEffect(enemy, cTime);
 							}
-							
+
 							float damagePercentage = (1.0f + (attributes.getInt("damageUp") * 0.10f));
 							double totalDamage = (p.getDamage() * damagePercentage);
 							if(totalDamage > 0.0) enemy.takeDamage(rw.getDamageType(), totalDamage, rw.getKnockback(), (float)(p.getTheta() - (Math.PI / 2)), rw.getWeaponMetric(), cTime, delta, true, p.isCritical());
-							
+
 							Scorekeeper.getInstance().addShotHit();
 						}
 					}
-					
+
 					return true;
 				}
 			}
 		}
-		
+
 		for(MeleeWeapon mw : getMeleeWeapons()) {
 			if(mw.isAttacking() && mw.hit(gs, enemy, cTime)) {
 				double damage = mw.getDamageTotal(mw.isCurrentCritical());
-				enemy.takeDamage(mw.getDamageType(), damage, mw.getKnockback(), 
-								 (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(), 
+				enemy.takeDamage(mw.getDamageType(), damage, mw.getKnockback(),
+								 (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(),
 								 cTime, delta, true, mw.isCurrentCritical());
-				
+
 				// Check for Relentless talent effect if enemy was killed by this attack.
+				// TODO: Rewrite to use new heart rate monitor.
 				if(enemy.dead() && Talents.Fortification.RELENTLESS.active()) {
 					float roll = Globals.rand.nextFloat();
 					if(roll <= 0.1f) {
-						double maxStamina = attributes.getDouble("maxStamina");
-						addStamina(maxStamina * 0.25);
+						//double maxStamina = attributes.getDouble("maxStamina");
+						//addStamina(maxStamina * 0.25);
 					}
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean checkCollision(Projectile p) {
 		return bounds.intersects(p.getCollider());
 	}
-	
+
 	/**
 	 * Check for a collision between the player and a given Item object.
 	 * @param item The Item object to check for a collision with.
@@ -685,17 +700,17 @@ public class Player implements Entity {
 		float distance = Calculate.Distance(position, item.getPosition());
 		if(item.isTouching(distance)) item.apply(this, cTime);
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Player";
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "Player";
 	}
-	
+
 	@Override
 	public int getLayer() {
 		return Layers.PLAYER.val();

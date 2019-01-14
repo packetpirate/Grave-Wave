@@ -33,7 +33,8 @@ public class HUD {
 
 	private Heart heart;
 	private Lives lives;
-	private StaminaBar stamina;
+	private EKGBar ekg;
+	//private StaminaBar stamina;
 	private ExperienceBar experience;
 	private StatusBar statusBar;
 
@@ -51,7 +52,8 @@ public class HUD {
 
 		heart = new Heart(new Pair<Float>((HEART_OFFSET.x + 10.0f), (HEART_OFFSET.y + 10.0f)), new Pair<Float>(34.0f, 44.0f));
 		lives = new Lives(new Pair<Float>((GEM_OFFSET.x + 10.0f), (GEM_OFFSET.y + 10.0f)));
-		stamina = new StaminaBar(new Pair<Float>(10.0f, 41.0f), new Pair<Float>(156.0f, 16.0f));
+		ekg = new EKGBar(new Pair<Float>((EKG_OFFSET.x + 10.0f), (EKG_OFFSET.y + 10.0f)));
+		//stamina = new StaminaBar(new Pair<Float>(10.0f, 41.0f), new Pair<Float>(156.0f, 16.0f));
 		//experience = new ExperienceBar(new Pair<Float>(10.0f, 62.0f), new Pair<Float>(156.0f, 16.0f));
 		experience = new ExperienceBar(new Pair<Float>((EXP_OFFSET.x + 10.0f), (EXP_OFFSET.y + 10.0f)));
 		statusBar = new StatusBar(new Pair<Float>(10.0f, 83.0f));
@@ -65,6 +67,7 @@ public class HUD {
 
 	public void update(Player player, long cTime) {
 		weaponDisplay.update(null, cTime, 0);
+		ekg.update(null, cTime, 0);
 	}
 
 	public void render(Graphics g, GameState gs, long cTime) {
@@ -75,10 +78,16 @@ public class HUD {
 
 		heart.render(g, cTime);
 		lives.render(g, cTime);
+		ekg.render(g, cTime);
 		//health.render(g, cTime);
 		//stamina.render(g, cTime);
 		experience.render(g, cTime);
 		//statusBar.render(g, cTime);
+
+		UnicodeFont tiny = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
+		g.setColor(Color.white);
+		g.setFont(tiny);
+		g.drawString(String.format("BPM: %d", player.getHeartMonitor().getBPM()), 10.0f, 150.0f);
 
 		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(g, cTime);
 

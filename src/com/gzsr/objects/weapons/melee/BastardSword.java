@@ -15,27 +15,28 @@ public class BastardSword extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 400L;
 	private static final long COOLDOWN = 800L;
-	private static final double STAMINA = 60.0;
+	//private static final double STAMINA = 60.0;
+	private static final int BPM = 30;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final String ICON_NAME = "GZS_Bastard_Sword_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Bastard_Sword";
-	
+
 	private static final Dice DAMAGE = new Dice(6, 4);
 	private static final int DAMAGE_MOD = 12;
-	
+
 	public BastardSword() {
 		super();
-		
+
 		img = AssetManager.getManager().getImage(BastardSword.WEAPON_IMAGE);
 		useSound = AssetManager.getManager().getSound("throw2");
-		
+
 		multihit = true;
 	}
-	
+
 	@Override
 	public float getDistance() { return BastardSword.HIT_AREA_OFFSET; }
-	
+
 	@Override
 	public float getImageDistance() { return BastardSword.IMAGE_DISTANCE; }
 
@@ -47,7 +48,7 @@ public class BastardSword extends MeleeWeapon {
 
 	@Override
 	public long getAttackTime() { return BastardSword.ATTACK_TIME; }
-	
+
 	@Override
 	public long getCooldown() { return BastardSword.COOLDOWN; }
 
@@ -56,28 +57,29 @@ public class BastardSword extends MeleeWeapon {
 
 	@Override
 	public DamageType getDamageType() { return DamageType.SLICING; }
-	
+
 	@Override
 	public Pair<Integer> getDamageRange() { return BastardSword.DAMAGE.getRange(BastardSword.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return BastardSword.DAMAGE.roll(BastardSword.DAMAGE_MOD, critical); }
-	
+
 	@Override
-	public double getStaminaCost() { return BastardSword.STAMINA; }
+	public int getBPMCost() { return BastardSword.BPM; }
+	//public double getStaminaCost() { return BastardSword.STAMINA; }
 
 	@Override
 	public float getKnockback() { return BastardSword.KNOCKBACK; }
 
 	@Override
 	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
-	
+
 	@Override
 	public int getLevelRequirement() { return 10; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.BASTARD_SWORD; }
-	
+
 	@Override
 	public String getName() {
 		return "Bastard Sword";

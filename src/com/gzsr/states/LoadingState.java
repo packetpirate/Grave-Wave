@@ -143,6 +143,12 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Heart.png",
 			"images/GZS_Life_Gem.png",
 			"images/GZS_Experience_Bar.png",
+			// Heart Rate Sprite Sheets
+			"images/GZS_Heart_ASY.png",
+			"images/GZS_Heart_SSR.png",
+			"images/GZS_Heart_FSR.png",
+			"images/GZS_Heart_STA.png",
+			"images/GZS_Heart_SVT.png",
 			// Item Images
 			"images/GZS_Health.png",
 			"images/GZS_Ammo.png",
@@ -283,6 +289,23 @@ public class LoadingState extends BasicGameState {
 	}
 
 	private void loadAnimations() throws SlickException {
+		{ // Heart Rate Animations
+			Animation asystole = new Animation("GZS_Heart_ASY", 181, 22, 28, 86L, 1_000L, 1_000L);
+			assets.addAnimation("GZS_Heart_ASY", asystole);
+
+			Animation slowSinus = new Animation("GZS_Heart_SSR", 181, 22, 22, 109L, 1_000L, 1_000L);
+			assets.addAnimation("GZS_Heart_SSR", slowSinus);
+
+			Animation fastSinus = new Animation("GZS_Heart_FSR", 181, 22, 32, 75L, 1_000L, 1_000L);
+			assets.addAnimation("GZS_Heart_FSR", fastSinus);
+
+			Animation sinusTachycardia = new Animation("GZS_Heart_STA", 181, 22, 25, 96L, 1_000L, 1_000L);
+			assets.addAnimation("GZS_Heart_STA", sinusTachycardia);
+
+			Animation supraVentricularTachycardia = new Animation("GZS_Heart_SVT", 181, 22, 36, 67L, 1_000L, 1_000L);
+			assets.addAnimation("GZS_Heart_SVT", supraVentricularTachycardia);
+		} // End Heart Rate Animations
+
 		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
 		assets.addAnimation("GZS_MuzzleFlash", mf);
 
