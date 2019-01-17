@@ -46,8 +46,9 @@ public class Heart implements Entity {
 		Color filter = changeColor(g, (player.getStatusHandler().hasStatus(Status.POISON) ? POISON_COLOR : Color.white), touchingPlayer);
 		g.drawImage(heart, position.x, position.y, filter);
 
+		Color textColor = player.getHeartMonitor().getState().getColor();
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
-		FontUtils.drawCenter(f, String.format("%d", (int)currentHealth), (int)position.x.floatValue(), (int)(position.y + (size.y / 2) - (f.getLineHeight() / 2)), (int)size.x.floatValue(), Color.white);
+		FontUtils.drawCenter(f, String.format("%d", (int)currentHealth), (int)position.x.floatValue(), (int)(position.y + (size.y / 2) - (f.getLineHeight() / 2)), (int)size.x.floatValue(), textColor);
 	}
 
 	private Color changeColor(Graphics g, Color c, boolean touchingPlayer) {

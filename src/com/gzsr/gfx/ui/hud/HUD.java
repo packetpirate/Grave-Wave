@@ -27,14 +27,12 @@ public class HUD {
 	private static final Pair<Float> EKG_OFFSET = new Pair<Float>(65.0f, 19.0f);
 	private static final Pair<Float> GEM_OFFSET = new Pair<Float>(98.0f, 46.0f);
 
-	//private HealthBar health;
 	private Image hud;
 	private Rectangle hudBounds;
 
 	private Heart heart;
 	private Lives lives;
 	private EKGBar ekg;
-	//private StaminaBar stamina;
 	private ExperienceBar experience;
 	private StatusBar statusBar;
 
@@ -46,15 +44,12 @@ public class HUD {
 	private AchievementDisplay achievementDisplay;
 
 	public HUD() throws SlickException {
-		//health = new HealthBar(new Pair<Float>(10.0f, 10.0f), new Pair<Float>(156.0f, 26.0f));
 		hud = AssetManager.getManager().getImage("GZS_HUD_01");
 		hudBounds = new Rectangle(10.0f, 10.0f, hud.getWidth(), hud.getHeight());
 
 		heart = new Heart(new Pair<Float>((HEART_OFFSET.x + 10.0f), (HEART_OFFSET.y + 10.0f)), new Pair<Float>(34.0f, 44.0f));
 		lives = new Lives(new Pair<Float>((GEM_OFFSET.x + 10.0f), (GEM_OFFSET.y + 10.0f)));
 		ekg = new EKGBar(new Pair<Float>((EKG_OFFSET.x + 10.0f), (EKG_OFFSET.y + 10.0f)));
-		//stamina = new StaminaBar(new Pair<Float>(10.0f, 41.0f), new Pair<Float>(156.0f, 16.0f));
-		//experience = new ExperienceBar(new Pair<Float>(10.0f, 62.0f), new Pair<Float>(156.0f, 16.0f));
 		experience = new ExperienceBar(new Pair<Float>((EXP_OFFSET.x + 10.0f), (EXP_OFFSET.y + 10.0f)));
 		statusBar = new StatusBar(new Pair<Float>(10.0f, 83.0f));
 
@@ -79,8 +74,6 @@ public class HUD {
 		heart.render(g, cTime);
 		lives.render(g, cTime);
 		ekg.render(g, cTime);
-		//health.render(g, cTime);
-		//stamina.render(g, cTime);
 		experience.render(g, cTime);
 		//statusBar.render(g, cTime);
 

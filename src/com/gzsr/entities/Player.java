@@ -188,6 +188,7 @@ public class Player implements Entity {
 
 	private HeartMonitor monitor;
 	public HeartMonitor getHeartMonitor() { return monitor; }
+	public boolean isExhausted() { return !monitor.getState().equals(HeartMonitor.State.SLOW_SINUS); }
 
 	private StatusHandler statusHandler;
 	public StatusHandler getStatusHandler() { return statusHandler; }
@@ -239,6 +240,8 @@ public class Player implements Entity {
 
 					// Make the player invincible for a brief period.
 					attributes.set("health", attributes.getDouble("maxHealth"));
+					attributes.set("penalizedMaxHealth", attributes.getDouble("maxHealth"));
+					attributes.set("penalizedOverflow", 0.0);
 					statusHandler.addStatus(new InvulnerableEffect(Player.RESPAWN_TIME, cTime), cTime);
 
 					// Reset the player's position.
@@ -256,10 +259,6 @@ public class Player implements Entity {
 		if(refresh) {
 			double healthRegenRate = attributes.getDouble("healthRegen");
 			addHealth(healthRegenRate);
-
-			//double staminaRefreshRate = attributes.getDouble("staminaRefreshRate");
-			//addStamina(staminaRefreshRate);
-
 			attributes.set("lastRegen", cTime);
 		}
 
@@ -422,13 +421,11 @@ public class Player implements Entity {
 		attributes.set("health", 100.0);
 		attributes.set("maxHealth", 100.0);
 		attributes.set("healthRegen", 0.0); // per second
+		attributes.set("penalizedMaxHealth", 100.0);
+		attributes.set("penalizedOverflow", 0.0);
 
 		attributes.set("armor", 0.0);
 		attributes.set("maxArmor", 100.0);
-
-		//attributes.set("stamina", 100.0);
-		//attributes.set("maxStamina", 100.0);
-		//attributes.set("staminaRefreshRate", 10.0); // per second
 
 		attributes.set("lastRegen", 0L);
 
@@ -470,7 +467,7 @@ public class Player implements Entity {
 	 */
 	public void addHealth(double amnt) {
 		double currentHealth = attributes.getDouble("health");
-		double maxHealth = attributes.getDouble("maxHealth");
+		double maxHealth = Math.min(attributes.getDouble("maxHealth"), attributes.getDouble("penalizedMaxHealth"));
 		double adjusted = currentHealth + amnt;
 		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
 		attributes.set("health", newHealth);
@@ -549,24 +546,6 @@ public class Player implements Entity {
 		if(adjusted < 0.0) return Math.abs(adjusted);
 		return 0.0;
 	}
-
-	/**
-	public void addStamina(double amnt) {
-		double currentStamina = attributes.getDouble("stamina");
-		double adjStamina = (currentStamina + amnt);
-		double maxStamina = attributes.getDouble("maxStamina");
-		if(adjStamina > maxStamina) adjStamina = maxStamina;
-
-		attributes.set("stamina", adjStamina);
-	}
-
-	public void useStamina(double amnt) {
-		double currentStamina = attributes.getDouble("stamina");
-		double adjStamina = (currentStamina - amnt);
-		if(adjStamina < 0.0) adjStamina = 0.0;
-
-		attributes.set("stamina", adjStamina);
-	}**/
 
 	public void addMoney(int amnt) {
 		attributes.addTo("money", amnt);
@@ -679,6 +658,7 @@ public class Player implements Entity {
 					if(roll <= 0.1f) {
 						//double maxStamina = attributes.getDouble("maxStamina");
 						//addStamina(maxStamina * 0.25);
+						monitor.addBPM(-40);
 					}
 				}
 			}
