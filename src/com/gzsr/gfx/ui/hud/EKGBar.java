@@ -27,10 +27,8 @@ public class EKGBar implements Entity {
 		Player player = Player.getPlayer();
 		HeartMonitor monitor = player.getHeartMonitor();
 		Animation animation = monitor.getState().getAnimation();
+
 		animation.update(cTime);
-
-		// TODO: Add logic to play EKG beeps at appropriate intervals.
-
 	}
 
 	@Override

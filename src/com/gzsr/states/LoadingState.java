@@ -357,7 +357,8 @@ public class LoadingState extends BasicGameState {
 			"sounds/powerup2.wav",
 			"sounds/point_buy.wav",
 			"sounds/party_horn.wav",
-			"sounds/ears_ringing.wav"
+			"sounds/ears_ringing.wav",
+			"sounds/heartbeat.wav"
 		};
 
 		for(String asset : assetList) {

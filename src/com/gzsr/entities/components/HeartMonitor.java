@@ -9,11 +9,11 @@ import com.gzsr.talents.Talents;
 
 public class HeartMonitor {
 	public enum State {
-		ASYSTOLE("GZS_Heart_ASY", 0, 0, 0, 0, Color.white),
-		SLOW_SINUS("GZS_Heart_SSR", 60, 79, 10, 0, Color.white),
-		FAST_SINUS("GZS_Heart_FSR", 80, 99, 10, 20, new Color(0xFFFF66)),
-		SINUS_TACHYCARDIA("GZS_Heart_STA", 100, 149, 8, 40, new Color(0xFF9933)),
-		SUPRA_VENTRICULAR_TACHYCARDIA("GZS_Heart_SVT", 150, 220, 5, 60, new Color(0x993333));
+		ASYSTOLE("GZS_Heart_ASY", 0, 0, 0, 0.0, -1L, Color.white),
+		SLOW_SINUS("GZS_Heart_SSR", 60, 79, 10, 0.0, 1_000L, Color.white),
+		FAST_SINUS("GZS_Heart_FSR", 80, 99, 10, 20.0, 750L, new Color(0xFFFF66)),
+		SINUS_TACHYCARDIA("GZS_Heart_STA", 100, 149, 8, 40.0, 500L, new Color(0xFF9933)),
+		SUPRA_VENTRICULAR_TACHYCARDIA("GZS_Heart_SVT", 150, 220, 5, 60.0, 250L, new Color(0x993333));
 
 		private int begin, end;
 		public int getBegin() { return begin; }
@@ -21,6 +21,9 @@ public class HeartMonitor {
 
 		private int decay;
 		public int getDecay() { return decay; }
+
+		private long soundDelay;
+		public long getDelay() { return soundDelay; }
 
 		private Color color;
 		public Color getColor() { return color; }
@@ -35,13 +38,14 @@ public class HeartMonitor {
 		private Animation animation;
 		public Animation getAnimation() { return animation; }
 
-		State(String animation_, int begin_, int end_, int decay_, double penalty_, Color color_) {
+		State(String animation_, int begin_, int end_, int decay_, double penalty_, long delay_, Color color_) {
 			this.animation = AssetManager.getManager().getAnimation(animation_);
 
 			this.begin = begin_;
 			this.end = end_;
 
 			this.decay = decay_;
+			this.soundDelay = delay_;
 			this.penalty = penalty_;
 
 			this.color = color_;
@@ -104,6 +108,8 @@ public class HeartMonitor {
 	private int decay;
 	private long lastDecay;
 
+	private long lastBeat;
+
 	public State getState() { return State.getState(bpm); }
 
 	public HeartMonitor() {
@@ -135,6 +141,12 @@ public class HeartMonitor {
 
 			state.getAnimation().restart(cTime);
 		}
+
+		long sinceLastBeat = (cTime - lastBeat);
+		if(sinceLastBeat >= state.getDelay()) {
+			AssetManager.getManager().getSound("heartbeat").play();
+			lastBeat = cTime;
+		}
 	}
 
 	public void reset() {
@@ -147,6 +159,8 @@ public class HeartMonitor {
 
 		this.decay = State.SLOW_SINUS.getDecay();
 		this.lastDecay = cTime;
+
+		this.lastBeat = cTime;
 
 		State.reset(cTime);
 	}

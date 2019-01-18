@@ -51,7 +51,7 @@ public class HUD {
 		lives = new Lives(new Pair<Float>((GEM_OFFSET.x + 10.0f), (GEM_OFFSET.y + 10.0f)));
 		ekg = new EKGBar(new Pair<Float>((EKG_OFFSET.x + 10.0f), (EKG_OFFSET.y + 10.0f)));
 		experience = new ExperienceBar(new Pair<Float>((EXP_OFFSET.x + 10.0f), (EXP_OFFSET.y + 10.0f)));
-		statusBar = new StatusBar(new Pair<Float>(10.0f, 83.0f));
+		statusBar = new StatusBar(new Pair<Float>(15.0f, 83.0f));
 
 		bossHealth = new BossHealthBar(new Pair<Float>(((Globals.WIDTH / 2) - 150.0f), 20.0f), new Pair<Float>(300.0f, 26.0f));
 
@@ -75,12 +75,7 @@ public class HUD {
 		lives.render(g, cTime);
 		ekg.render(g, cTime);
 		experience.render(g, cTime);
-		//statusBar.render(g, cTime);
-
-		UnicodeFont tiny = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
-		g.setColor(Color.white);
-		g.setFont(tiny);
-		g.drawString(String.format("BPM: %d", player.getHeartMonitor().getBPM()), 10.0f, 150.0f);
+		statusBar.render(g, cTime);
 
 		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(g, cTime);
 
