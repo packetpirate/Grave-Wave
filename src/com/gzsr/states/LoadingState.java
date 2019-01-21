@@ -48,7 +48,9 @@ public class LoadingState extends BasicGameState {
 
 			ConfigManager.getInstance().init();
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
+			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("firstTimeGamma")) Globals.firstTimeGamma = ConfigManager.getInstance().getAttributes().getBoolean("firstTimeGamma");
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
+
 			AchievementController.getInstance().init();
 			AchievementManager.init();
 			Controls.getInstance().loadControls();
@@ -84,7 +86,9 @@ public class LoadingState extends BasicGameState {
 			game.addState(new BlankState());
 
 			game.init(gc);
-			game.enterState(MenuState.ID); // we're done loading
+
+			if(Globals.firstTimeGamma) game.enterState(GammaSettingsState.ID);
+			else game.enterState(MenuState.ID); // we're done loading
 		}
 	}
 

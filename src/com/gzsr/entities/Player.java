@@ -103,6 +103,9 @@ public class Player implements Entity {
 	public float getMeleeCritChance() { return (attributes.getFloat("meleeCritChance") + attributes.getFloat("critBonus")); }
 	public float getRangeCritChance() { return (attributes.getFloat("rangeCritChance") + attributes.getFloat("critBonus")); }
 
+	private Resources resources;
+	public Resources getResources() { return resources; }
+
 	private Talents talents;
 	public Talents getTalents() { return talents; }
 
@@ -203,6 +206,7 @@ public class Player implements Entity {
 		velocity = new Pair<Float>(0.0f, 0.0f);
 
 		attributes = new Attributes();
+		resources = new Resources();
 		talents = new Talents();
 		statusHandler = new StatusHandler(this);
 		monitor = new HeartMonitor();
@@ -412,6 +416,7 @@ public class Player implements Entity {
 		inventory.addItem(beretta);
 
 		attributes.reset();
+		resources.reset();
 		statusHandler.clearAll();
 		monitor.reset();
 
