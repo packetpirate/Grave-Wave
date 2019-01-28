@@ -31,6 +31,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
+import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.Machete;

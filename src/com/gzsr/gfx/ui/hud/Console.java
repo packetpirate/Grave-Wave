@@ -31,6 +31,7 @@ import com.gzsr.entities.enemies.bosses.Stitches;
 import com.gzsr.entities.enemies.bosses.Zombat;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.AmmoCrate;
 import com.gzsr.objects.items.Armor;
 import com.gzsr.objects.items.CritChanceItem;
@@ -53,31 +54,31 @@ public class Console implements Entity {
 	private static final Color CONSOLE_TEXTBORDER = Color.black;
 	private static final TrueTypeFont CONSOLE_FONT = new TrueTypeFont(new Font("Lucida Console", Font.PLAIN, 12), true);
 	private static final long DELETE_FREQ = 4L;
-	
+
 	private GameState gs;
-	
+
 	private int commandIndex;
 	private String currentCommand;
 	private List<String> pastCommands;
 	private List<String> consoleLines;
-	
+
 	private long pauseTime; // What time was the console opened?
 	public void setPauseTime(long time) { pauseTime = time; }
-	
+
 	private boolean deleting;
 	private long lastDelete;
-	
+
 	private boolean continuousSpawn;
 	private String spawnType;
-	
+
 	public Console(GameState gs_, GameContainer gc_) {
 		this.gs = gs_;
-		
+
 		this.commandIndex = 0;
 		this.currentCommand = "";
 		this.pastCommands = new ArrayList<String>();
 		this.consoleLines = new ArrayList<String>();
-		
+
 		this.pauseTime = 0L;
 		this.deleting = false;
 		this.lastDelete = 0L;
@@ -99,25 +100,25 @@ public class Console implements Entity {
 		g.fillRect(10.0f, (Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
 		g.setColor(CONSOLE_BORDER);
 		g.drawRect(10.0f, (Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
-		
+
 		// Draw the input box.
 		g.setColor(CONSOLE_TEXTBOX);
 		g.fillRect(15.0f, (Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
 		g.setColor(CONSOLE_TEXTBORDER);
 		g.drawRect(15.0f, (Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
-		
+
 		// Draw the current command.
 		g.setColor(CONSOLE_TEXT);
 		g.setFont(CONSOLE_FONT);
 		g.drawString(currentCommand, 20.0f, (Globals.HEIGHT - 30.0f));
-		
+
 		// Draw the cursor next to the last character of the current command.
 		g.fillRect((20.0f + CONSOLE_FONT.getWidth(currentCommand)), (Globals.HEIGHT - 30.0f), 2.0f, CONSOLE_FONT.getHeight());
-		
+
 		// Display the previous commands.
 		if(!consoleLines.isEmpty()) {
 			int command = (consoleLines.size() > 10) ? (consoleLines.size() - 10) : 0;
-			
+
 			g.setColor(CONSOLE_PASTTEXT);
 			for(int i = 0; i < Math.min(consoleLines.size(), 10); i++) {
 				float x = 20.0f;
@@ -127,14 +128,14 @@ public class Console implements Entity {
 			}
 		}
 	}
-	
+
 	private void deleteLastCommandChar() {
 		currentCommand = currentCommand.substring(0, (currentCommand.length() - 1));
 	}
-	
+
 	private void submitCommand() {
 		currentCommand = currentCommand.trim(); // Get rid of leading and trailing whitespace.
-		
+
 		if(currentCommand.length() > 0) {
 			if(currentCommand.charAt(0) == '/') {
 				// Command detected.
@@ -143,19 +144,19 @@ public class Console implements Entity {
 					// Parse the command and determine what to do.
 					String command = tokens[0];
 					int args = tokens.length - 1;
-					
+
 					pastCommands.add(currentCommand);
 					consoleLines.add(String.format("> %s", currentCommand));
 					commandIndex = pastCommands.size();
-					
+
 					EnemyController ec = EnemyController.getInstance();
-					
+
 					if(command.equals("help") && ((args == 0) || (args == 1))) {
 						if(args == 0) {
 							consoleLines.add("  HELP: Use this command to get information about other console commands.");
 							consoleLines.add("    Usage: /help command");
 							consoleLines.add("    Example: /help spawn");
-							consoleLines.add("    Commands: spawn item set levelup explode killall music ec");
+							consoleLines.add("    Commands: spawn item resource set levelup explode killall music ec");
 							consoleLines.add("    Prints the help information for the given command.");
 						} else if(args == 1) {
 							String cmd = tokens[1];
@@ -172,7 +173,7 @@ public class Console implements Entity {
 							float x = Float.parseFloat(tokens[2]);
 							float y = Float.parseFloat(tokens[3]);
 							Pair<Float> position = new Pair<Float>(x, y);
-							
+
 							spawnEnemy(gs, entityName, position);
 						}
 					} else if(command.equals("item") && (args == 3)) {
@@ -180,7 +181,7 @@ public class Console implements Entity {
 						Pair<Float> pos = new Pair<Float>(Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
 						long cTime = gs.getTime();
 						int id = Globals.generateEntityID();
-						
+
 						if(itemName.equals("ammo")) {
 							AmmoCrate ac = new AmmoCrate(pos, cTime);
 							gs.addEntity(String.format("ammo%d", id), ac);
@@ -214,9 +215,20 @@ public class Console implements Entity {
 						} else {
 							consoleLines.add("  ERROR: Invalid item name specified.");
 						}
+					} else if(command.equals("resource") && (args == 2)) {
+						String resource = tokens[1];
+						int amount = Integer.parseInt(tokens[2]);
+
+						if(resource.equals("metal")) Player.getPlayer().getResources().add(Resources.METAL, amount);
+						else if(resource.equals("cloth")) Player.getPlayer().getResources().add(Resources.CLOTH, amount);
+						else if(resource.equals("glass")) Player.getPlayer().getResources().add(Resources.GLASS, amount);
+						else if(resource.equals("wood")) Player.getPlayer().getResources().add(Resources.WOOD, amount);
+						else if(resource.equals("electronics")) Player.getPlayer().getResources().add(Resources.ELECTRONICS, amount);
+						else if(resource.equals("power")) Player.getPlayer().getResources().add(Resources.POWER, amount);
+						else consoleLines.add("  ERROR: Invalid resource specified.");
 					} else if(command.equals("set") && (args == 2)) {
 						String attributeName = tokens[1];
-						
+
 						if(attributeName.equals("health")) {
 							double health = Double.parseDouble(tokens[2]);
 							Player.getPlayer().getAttributes().set("health", health);
@@ -242,9 +254,9 @@ public class Console implements Entity {
 							double damage = Double.parseDouble(tokens[3]);
 							float radius = Float.parseFloat(tokens[4]);
 							int id = Globals.generateEntityID();
-							
-							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion", 
-														  new Pair<Float>(x, y), damage, false, 
+
+							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion",
+														  new Pair<Float>(x, y), damage, false,
 														  10.0f, radius, pauseTime);
 							gs.addEntity(String.format("explosion%d", id), exp);
 						} catch(NumberFormatException nfe) {
@@ -254,14 +266,14 @@ public class Console implements Entity {
 						ec.getAliveEnemies().clear();
 					} else if(command.equals("music") && (args == 1)) {
 						String action = tokens[1];
-						
+
 						if(action.equals("pause")) {
 							MusicPlayer.getInstance().pause();
 						} else if(action.equals("resume")) {
 							MusicPlayer.getInstance().resume();
 						} else if(action.equals("reset")) {
 							MusicPlayer.getInstance().reset();
-							
+
 							try {
 								MusicPlayer.getInstance().nextSong();
 							} catch(SlickException se) {
@@ -280,10 +292,10 @@ public class Console implements Entity {
 						// Print information about remaining enemies in each enemy controller list.
 						List<Enemy> alive = ec.getAliveEnemies();
 						int immediate = ec.getImmediateEnemies().size();
-						
+
 						String str = String.format("Alive: %d, Immediate: %d", alive.size(), immediate);
 						consoleLines.add(str);
-						
+
 						// Print 5 of the remaining alive enemies, if any.
 						if(alive.size() > 0) {
 							for(int i = 0; i < Math.min(alive.size(), 5); i++) {
@@ -302,10 +314,10 @@ public class Console implements Entity {
 				consoleLines.add(currentCommand);
 			}
 		}
-		
+
 		currentCommand = "";
 	}
-	
+
 	private void help(String command) {
 		consoleLines.add(String.format("  HELP: /%s", command));
 		if(command.equals("spawn")) {
@@ -318,6 +330,10 @@ public class Console implements Entity {
 			consoleLines.add("    Usage: /item name x y");
 			consoleLines.add("    Example: /item health 512 384");
 			consoleLines.add("    Items: health ammo armor life critchance expmult invulnerability nightvision speed unlimitedammo");
+		} else if(command.equals("resource")) {
+			consoleLines.add("    Usage: /resource name amount");
+			consoleLines.add("    Example: /resource metal 20");
+			consoleLines.add("    Resources: metal cloth glass wood electronics power");
 		} else if(command.equals("set")) {
 			consoleLines.add("    Usage: /set attribute value");
 			consoleLines.add("    Example: /set health 100");
@@ -343,10 +359,10 @@ public class Console implements Entity {
 			consoleLines.add("    ERROR: Invalid command specified.");
 		}
 	}
-	
+
 	private void spawnEnemy(GameState gs, String entityType, Pair<Float> position) {
 		EnemyController ec = EnemyController.getInstance();
-		
+
 		if(!ec.isRestarting()) {
 			if(entityType.equals("zumby")) {
 				Zumby z = new Zumby(position);
@@ -388,7 +404,7 @@ public class Console implements Entity {
 			consoleLines.add("  INFO: Cannot spawn while wave is restarting.");
 		}
 	}
-	
+
 	public void mousePressed(GameState gs, int button, int x, int y) {
 		if(continuousSpawn && (button == 0)) {
 			// Spawn a new enemy of the given type.
@@ -415,12 +431,12 @@ public class Console implements Entity {
 		// Handle key typing.
 		if(key == Input.KEY_BACK) deleting = false;
 		if(((c == '/') || (c == ' ') || (c == '.') || Character.isLetterOrDigit(c)) && (CONSOLE_FONT.getWidth(currentCommand) < (Globals.WIDTH - 24.0f))) currentCommand += c;
-		
+
 		if(key == Input.KEY_UP) {
 			if(commandIndex > 0) commandIndex--;
 			currentCommand = pastCommands.get(commandIndex);
 		}
-		
+
 		if(key == Input.KEY_DOWN) {
 			if(commandIndex < (pastCommands.size() - 1)) commandIndex++;
 			currentCommand = pastCommands.get(commandIndex);
@@ -431,12 +447,12 @@ public class Console implements Entity {
 	public String getName() {
 		return "Console";
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "Console";
 	}
-	
+
 	@Override
 	public int getLayer() {
 		return Layers.HUD.val();

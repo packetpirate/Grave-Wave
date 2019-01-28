@@ -34,7 +34,7 @@ public class Talents {
 		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", "GZS_Talent_Demolitions"),
 		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", "GZS_Talent_RapidFire"),
 
-		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 25%.", "GZS_Talent_Scavenger"),
+		SCAVENGER(4, 0, 1, "Scavenger", "Increases resources dropped by enemies by 1. Increases resource drop rate by 10%.", "GZS_Talent_Scavenger"),
 		COMMANDO(4, 1, 5, "Commando", "Increases large ranged weapon damage by 25% per rank.", "GZS_Talent_Commando"),
 		MODDER(4, 2, 1, "Modder", "Increase magezine capacity by 50%.", "GZS_Talent_Modder"),
 

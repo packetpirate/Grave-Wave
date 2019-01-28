@@ -20,12 +20,14 @@ import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyType;
 import com.gzsr.entities.enemies.LootTable;
+import com.gzsr.entities.enemies.ResourceTable;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
@@ -43,7 +45,7 @@ public class Aberration extends Boss {
 	private static final int BILE_PER_TICK = 5;
 	private static final float ATTACK_DIST = 200.0f;
 	private static final long ATTACK_DELAY = 1_500L;
-	
+
 	private static final String TENTACLE_IMAGE = "GZS_Aberration_Tentacle";
 	private static final float TENTACLE_ATTACK_DIST = 256.0f;
 	private static final float TENTACLE_DEVIATION = (float)(Math.PI / 6);
@@ -51,71 +53,79 @@ public class Aberration extends Boss {
 	private static final long TENTACLE_EFFECT_DURATION = 3_000L;
 	private static final long TENTACLE_DAMAGE_INTERVAL = 1_000L;
 	private static final float TENTACLE_GROWTH_RATE = 0.025f;
-	
+
 	private static final Dice HEALTH = new Dice(100, 10);
 	private static final int HEALTH_MOD = 2_500;
-	
+
 	private static final Dice TENTACLE_DAMAGE = new Dice(5, 4);
 	private static final int TENTACLE_DAMAGE_MOD = 5;
-	
+
+	public static final ResourceTable RESOURCES = new ResourceTable()
+			.addResource(Resources.METAL, 0.25f)
+			.addResource(Resources.CLOTH, 0.1f)
+			.addResource(Resources.GLASS, 0.2f)
+			.addResource(Resources.WOOD, 0.05f)
+			.addResource(Resources.ELECTRONICS, 0.2f)
+			.addResource(Resources.POWER, 0.25f);
+
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 1.0f)
 			.addItem(Powerups.Type.AMMO, 1.0f)
 			.addItem(Powerups.Type.EXTRA_LIFE, 0.40f)
 			.addItem(Powerups.Type.CRIT_CHANCE, 0.10f)
 			.addItem(Powerups.Type.NIGHT_VISION, 0.20f);
-	
+
 	private Shape [] tentacles;
 	private boolean tentacleAttack;
 	private boolean playerGrabbed;
 	private long timePlayerGrabbed;
 	private long lastTentacleAttack;
 	private float tentacleLength;
-	
+
 	private List<StatusProjectile> bile;
 	private long lastBile;
-	
+
 	public Aberration(Pair<Float> position_) {
 		super(EnemyType.ABERRATION, position_);
-		
+
 		this.health = Aberration.HEALTH.roll(Aberration.HEALTH_MOD);
 		this.speed = Aberration.SPEED;
-		
+
 		this.damageImmunities.add(DamageType.CORROSIVE);
 		this.statusHandler.addImmunity(Status.PARALYSIS);
 		this.statusHandler.addImmunity(Status.POISON);
-		
+
 		this.tentacles = new Shape[3];
 		this.tentacleAttack = false;
 		this.playerGrabbed = false;
 		this.timePlayerGrabbed = 0L;
 		this.lastTentacleAttack = -TENTACLE_COOLDOWN;
 		this.tentacleLength = 0.0f;
-		
+
 		this.bile = new ArrayList<StatusProjectile>();
 		this.lastBile = 0L;
 	}
-	
+
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		Player player = Player.getPlayer();
 		if(!dead()) {
 			// Need to make sure to update the status effects first.
 			statusHandler.update((GameState)gs, cTime, delta);
-			
+
 			updateFlash(cTime);
 			if(!tentacleAttack && !playerGrabbed) theta = Calculate.Hypotenuse(position, player.getPosition());
-			
+
 			handleTentacleAttacks(cTime);
-			
+
 			if(!nearPlayer(Aberration.ATTACK_DIST)) {
 				animation.getCurrentAnimation().update(cTime);
 				if(player.isAlive() && !tentacleAttack && !touchingPlayer()) move((GameState)gs, delta);
 			} else vomit(cTime);
 		}
-		
+
 		postDamageTexts();
-		
+
 		// Update bile projectiles.
 		Iterator<StatusProjectile> it = bile.iterator();
 		while(it.hasNext()) {
@@ -129,7 +139,7 @@ public class Aberration extends Boss {
 			} else it.remove(); // need iterator instead of stream so we can remove if they're dead :/
 		}
 	}
-	
+
 	private void handleTentacleAttacks(long cTime) {
 		// Handle tentacle attacks.
 		Player player = Player.getPlayer();
@@ -160,10 +170,10 @@ public class Aberration extends Boss {
 						float ang = ((theta - TENTACLE_DEVIATION) + (i * TENTACLE_DEVIATION));
 						float oX = ((position.x - 128.0f) + (TENTACLE_ATTACK_DIST / 2));
 						float oY = position.y;
-						
+
 						Rectangle rect = new Rectangle(oX, (oY - 16.0f), (tentacleLength * TENTACLE_ATTACK_DIST), 32.0f);
 						tentacles[i] = rect.transform(Transform.createRotateTransform(ang, position.x, position.y));
-						
+
 						// Check for collision with player.
 						if(player.getCollider().intersects(tentacles[i])) {
 							player.getStatusHandler().addStatus(new ParalysisEffect(TENTACLE_EFFECT_DURATION, cTime), cTime);
@@ -177,7 +187,7 @@ public class Aberration extends Boss {
 			}
 		}
 	}
-	
+
 	private void vomit(long cTime) {
 		long sincePlayerGrabbed = (cTime - timePlayerGrabbed);
 		boolean canVomit = (sincePlayerGrabbed >= 5_000L);
@@ -190,11 +200,11 @@ public class Aberration extends Boss {
 				long lifespan = ProjectileType.BILE.getLifespan() * 2;
 				float angle = (theta + (float)(Math.PI / 2)) + getBileDeviation();
 				float angularVel = ((Globals.rand.nextInt(3) - 1) * 0.001f) * Globals.rand.nextFloat();
-				
+
 				Particle particle = new Particle("GZS_AcidParticle2", color, position, velocity, angle,
-												 angularVel, new Pair<Float>(width, height), 
+												 angularVel, new Pair<Float>(width, height),
 												 lifespan, cTime);
-				
+
 				AcidEffect acid = new AcidEffect(cTime);
 				StatusProjectile projectile = new StatusProjectile(particle, 0.0, false, acid);
 				bile.add(projectile);
@@ -202,12 +212,12 @@ public class Aberration extends Boss {
 			lastBile = cTime;
 		}
 	}
-	
+
 	private float getBileDeviation() {
 		int rl = Globals.rand.nextInt(3) - 1;
 		return ((Globals.rand.nextFloat() * Aberration.BILE_DEVIATION) * rl);
 	}
-	
+
 	@Override
 	public void render(Graphics g, long cTime) {
 		// Render the Aberration's tentacles.
@@ -219,11 +229,11 @@ public class Aberration extends Boss {
 					float deg = (float)Math.toDegrees(adjTheta);
 					float x = (position.x + (float)(Math.cos(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
 					float y = (position.y + (float)(Math.sin(adjTheta) * (TENTACLE_ATTACK_DIST / 2)));
-					
+
 					g.rotate(x, y, deg);
 					tentacle.draw((x - 128.0f), (y - 16.0f), (tentacleLength * (tentacle.getWidth() * 2.0f)), tentacle.getHeight());
 					g.rotate(x, y, -deg);
-					
+
 					if(Globals.SHOW_COLLIDERS) {
 						g.setColor(Color.red);
 						g.draw(tentacles[i]);
@@ -231,13 +241,13 @@ public class Aberration extends Boss {
 				}
 			}
 		}
-		
+
 		// Even if Aberration is dead, render its particles until they all die.
 		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
 		// Only render the Aberration until it dies.
 		if(!dead()) animation.getCurrentAnimation().render(g, position, theta, shouldDrawFlash(cTime));
 		statusHandler.render(g, cTime);
-		
+
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
 			g.draw(bounds);
@@ -254,89 +264,92 @@ public class Aberration extends Boss {
 		if(!tentacleAttack && !playerGrabbed) {
 			velocity.x = (float)Math.cos(theta) * Aberration.SPEED * delta;
 			velocity.y = (float)Math.sin(theta) * Aberration.SPEED * delta;
-	
+
 			avoidObstacles(gs, delta);
-			
+
 			if(!moveBlocked) {
 				position.x += velocity.x;
 				position.y += velocity.y;
 			}
-			
+
 			moveBlocked = false;
-			
+
 			bounds.setCenterX(position.x);
 			bounds.setCenterY(position.y);
 		}
 	}
-	
+
 	@Override
 	public float getCohesionDistance() {
 		return (Math.min(type.getFrameWidth(), type.getFrameHeight()) * 2);
 	}
-	
+
 	@Override
 	public float getSeparationDistance() {
 		return Math.min(type.getFrameWidth(), type.getFrameHeight());
 	}
-	
+
 	@Override
 	public void takeDamage(DamageType dType, double amnt, float knockback, long sourceMetric, long cTime, int delta) {
 		takeDamage(dType, amnt, knockback, (float)(theta + Math.PI), sourceMetric, cTime, delta, true);
 	}
-	
+
 	@Override
 	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash) {
 		takeDamage(dType, amnt, knockback, knockbackTheta, sourceMetric, cTime, delta, flash, false);
 	}
-	
+
 	@Override
 	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead() && !damageImmunities.contains(dType)) {
 			health -= amnt;
-			
+
 			createDamageText(amnt, 64.0f, knockbackTheta, cTime, isCritical);
-			
+
 			if(flash) {
 				hit = true;
 				hitTime = cTime;
 			}
-			
+
 			AchievementController.getInstance().postMetric(Metrics.compose(type.getEnemyMetric(), sourceMetric, Metrics.ENEMY, Metrics.DAMAGE));
 		}
 	}
-	
+
 	@Override
 	public void onDeath(GameState gs, long cTime) {
 		AchievementController.getInstance().postMetric(Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL));
 		Scorekeeper.getInstance().addKill();
 	}
-	
+
 	@Override
 	public void resetSpeed() { speed = Aberration.SPEED; }
-	
+
 	@Override
 	public long getAttackDelay() { return Aberration.ATTACK_DELAY; }
 
 	public static int appearsOnWave() { return FIRST_WAVE; }
-	
+
 	public static int getSpawnCost() { return Aberration.SPAWN_COST; }
-	
+
 	@Override
 	public String getName() {
 		return "Aberration";
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "Aberration";
 	}
-	
+
 	@Override
 	public String print() {
 		return String.format("%s at (%.2f, %.2f) - %.2f health - Bile Left: %d",
 							 getName(), position.x, position.y, health, bile.size());
 	}
-	
+
+	@Override
+	public ResourceTable getResourceTable() { return Aberration.RESOURCES; }
+
 	@Override
 	public LootTable getLootTable() { return Aberration.LOOT; }
 }

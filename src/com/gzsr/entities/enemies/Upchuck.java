@@ -16,6 +16,7 @@ import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Powerups;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.states.GameState;
@@ -38,6 +39,12 @@ public class Upchuck extends Enemy {
 
 	private static final Dice DAMAGE = new Dice(1, 4);
 	private static final int DAMAGE_MOD = 2;
+
+	public static final ResourceTable RESOURCES = new ResourceTable()
+			.addResource(Resources.METAL, 0.025f)
+			.addResource(Resources.CLOTH, 0.1f)
+			.addResource(Resources.ELECTRONICS, 0.05f)
+			.addResource(Resources.POWER, 0.05f);
 
 	public static final LootTable LOOT = new LootTable()
 			.addItem(Powerups.Type.HEALTH, 0.20f)
@@ -237,6 +244,9 @@ public class Upchuck extends Enemy {
 		return String.format("%s at (%.2f, %.2f) - %.2f health - Bile Left: %d",
 							 getName(), position.x, position.y, health, bile.size());
 	}
+
+	@Override
+	public ResourceTable getResourceTable() { return Upchuck.RESOURCES; }
 
 	@Override
 	public LootTable getLootTable() { return Upchuck.LOOT; }
