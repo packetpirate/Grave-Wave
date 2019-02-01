@@ -473,7 +473,8 @@ public class Player implements Entity {
 	 */
 	public void addHealth(double amnt) {
 		double currentHealth = attributes.getDouble("health");
-		double maxHealth = Math.min(attributes.getDouble("maxHealth"), attributes.getDouble("penalizedMaxHealth"));
+		double maxHealth = attributes.getDouble("maxHealth");
+		maxHealth = ((!monitor.getState().equals(HeartMonitor.State.SLOW_SINUS)) ? Math.min(maxHealth, attributes.getDouble("penalizedMaxHealth")) : maxHealth);
 		double adjusted = currentHealth + amnt;
 		double newHealth = (adjusted > maxHealth) ? maxHealth : adjusted;
 		attributes.set("health", newHealth);
