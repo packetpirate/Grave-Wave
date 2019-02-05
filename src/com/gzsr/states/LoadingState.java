@@ -156,6 +156,13 @@ public class LoadingState extends BasicGameState {
 			// Item Images
 			"images/GZS_Health.png",
 			"images/GZS_Ammo.png",
+			// Resources
+			"images/GZS_Resource_Metal.png",
+			"images/GZS_Resource_Cloth.png",
+			"images/GZS_Resource_Glass.png",
+			"images/GZS_Resource_Wood.png",
+			"images/GZS_Resource_Electronics.png",
+			"images/GZS_Resource_Power.png",
 			// Status Images
 			"images/GZS_Invulnerability.png",
 			"images/GZS_Armor.png",
