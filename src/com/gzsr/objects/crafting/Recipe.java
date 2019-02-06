@@ -47,6 +47,8 @@ public class Recipe {
 
 	private boolean advanced;
 	public boolean isAdvanced() { return advanced; }
+	private boolean crafted;
+	public boolean isCrafted() { return crafted; }
 
 	private Recipe(String [] weaponCosts, Resources resourceCosts, Entity result_, boolean advanced_) {
 		this.wCost = weaponCosts;
@@ -55,6 +57,7 @@ public class Recipe {
 		this.result = result_;
 
 		this.advanced = advanced_;
+		this.crafted = false;
 	}
 
 	public void craft() {
@@ -76,6 +79,7 @@ public class Recipe {
 
 		// Add the new item to the player's inventory.
 		playerInventory.addItem(result);
+		crafted = true;
 	}
 
 	public boolean hasIngredients() {
