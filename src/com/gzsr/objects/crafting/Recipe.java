@@ -40,10 +40,15 @@ public class Recipe {
 		}
 	}
 
+	// TODO: Maybe instead of storing string names of weapons as costs, create an enum with all weapons and keep meta-info (name, description, image name)
+	// in this enumerated value, then store enum values as the recipe requirements.
 	private String [] wCost;
+	public String [] getWeapons() { return wCost; }
 	private Resources rCost;
+	public Resources getResources() { return rCost; }
 
 	private Entity result;
+	public Entity getResult() { return result; }
 
 	private boolean advanced;
 	public boolean isAdvanced() { return advanced; }

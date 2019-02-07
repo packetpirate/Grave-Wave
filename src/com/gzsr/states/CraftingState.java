@@ -23,6 +23,7 @@ import com.gzsr.Controls;
 import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.ui.CraftWindow;
 import com.gzsr.gfx.ui.MenuButton;
 import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
@@ -40,7 +41,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 
 	private MenuButton back;
 
-	private List<Recipe> recipes;
+	private List<CraftWindow> crafts;
 
 	private float sOff; // Scroll Offset
 
@@ -52,7 +53,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 		float fh = large.getLineHeight();
 		back = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Exit") - 100.0f), (Globals.HEIGHT - fh - 40.0f)), "Exit");
 
-		recipes = new ArrayList<Recipe>();
+		crafts = new ArrayList<CraftWindow>();
 
 		sOff = 0.0f;
 
@@ -92,21 +93,23 @@ public class CraftingState extends BasicGameState implements InputListener {
 	}
 
 	private void drawCrafts(Graphics g) {
-		// TODO: Render craft windows.
+		g.translate(0.0f, -sOff);
+		crafts.stream().forEach(craft -> craft.render(g, 0L));
+		g.resetTransform();
 	}
 
 	private void drawResources(Graphics g) {
-		float w = ((32.0f * 6.0f) + 60.0f);
 		int [] resources = Player.getPlayer().getResources().getAll();
+		float w = ((32.0f * resources.length) + (resources.length * 10.0f));
 
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
-		g.setFont(f);
 		for(int i = 0; i < resources.length; i++) {
 			w += (f.getWidth(Integer.toString(resources[i])) + 10.0f);
 		}
 
 		float x = ((Globals.WIDTH / 2) - (w / 2));
 		float y = 100.0f;
+		g.setFont(f);
 		for(int i = 0; i < resources.length; i++) {
 			Image icon = AssetManager.getManager().getImage(Resources.getIconName(i));
 
@@ -171,16 +174,18 @@ public class CraftingState extends BasicGameState implements InputListener {
 		Controls.getInstance().resetAll();
 
 		// Determine which recipes the player has unlocked.
-		recipes.clear();
-		if(Talents.Munitions.INVENTOR.active()) {
-			recipes.addAll(RecipeController.getBasicRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
-		}
+		crafts.clear();
 
-		if(Talents.Munitions.ENGINEER.active()) {
-			recipes.addAll(RecipeController.getAdvancedRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
-		}
+		List<Recipe> recipes = new ArrayList<Recipe>();
+		if(Talents.Munitions.INVENTOR.active()) recipes.addAll(RecipeController.getBasicRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
+		if(Talents.Munitions.ENGINEER.active()) recipes.addAll(RecipeController.getAdvancedRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
 
-		// TODO: Make CraftWindow class to encapsulate rendering of and interaction with crafting recipes. Set positions of windows here.
+		if(!recipes.isEmpty()) {
+			for(int i = 0; i < recipes.size(); i++) {
+				CraftWindow craft = new CraftWindow(new Pair<Float>((CRAFT_WINDOW_POS.x + 20.0f), (CRAFT_WINDOW_POS.y + (i * CraftWindow.HEIGHT) + ((i + 1) * 20.0f))), recipes.get(i));
+				crafts.add(craft);
+			}
+		}
 	}
 
 	@Override
