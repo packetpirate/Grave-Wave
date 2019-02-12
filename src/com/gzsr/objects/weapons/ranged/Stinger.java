@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.talents.Talents;
 
 public class Stinger extends RangedWeapon {
@@ -23,58 +24,57 @@ public class Stinger extends RangedWeapon {
 	private static final long RELOAD_TIME = 3_000L;
 	private static final float KNOCKBACK = 20.0f;
 	private static final float EXP_RADIUS = 128.0f;
-	private static final String ICON_NAME = "GZS_Stinger";
 	private static final String ANIMATION_NAME = "GZS_Stinger_Missile";
 	private static final String EXP_NAME = "GZS_Explosion";
 	private static final String FIRE_SOUND = "missile";
 	private static final String RELOAD_SOUND = "buy_ammo2";
-	
+
 	private static final Dice DAMAGE = new Dice(25, 10);
 	private static final int DAMAGE_MOD = 250;
-	
+
 	public Stinger() {
 		super(Size.LARGE);
-		
+
 		AssetManager assets = AssetManager.getManager();
-		
+
 		this.useSound = assets.getSound(Stinger.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Stinger.RELOAD_SOUND);
-		
+
 		addMuzzleFlash();
 	}
 
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Animation animation = AssetManager.getManager().getAnimation(Stinger.ANIMATION_NAME);
-		
+
 		float velocity = getProjectile().getVelocity();
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(animation, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
 		if(Talents.Munitions.DEMOLITIONS.active()) dmg += (dmg * 0.5);
 
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME, 
-									  new Pair<Float>(0.0f, 0.0f), 
-									  dmg, critical, Stinger.KNOCKBACK, 
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, Stinger.EXP_NAME,
+									  new Pair<Float>(0.0f, 0.0f),
+									  dmg, critical, Stinger.KNOCKBACK,
 									  Stinger.EXP_RADIUS, cTime);
 		Missile missile = new Missile(particle, exp);
 		projectiles.add(missile);
-		
+
 		super.use(player, position, theta, cTime);
 	}
-	
+
 	@Override
 	public Pair<Integer> getDamageRange() { return Stinger.DAMAGE.getRange(Stinger.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return Stinger.DAMAGE.roll(Stinger.DAMAGE_MOD, critical); }
-	
+
 	@Override
 	public float getKnockback() { return Stinger.KNOCKBACK; }
 
@@ -82,17 +82,17 @@ public class Stinger extends RangedWeapon {
 	public long getReloadTime() { return Stinger.RELOAD_TIME; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Stinger.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.STINGER.getImage(); }
+
 	@Override
 	public int getClipSize() { return Stinger.CLIP_SIZE; }
-	
+
 	@Override
 	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return Stinger.START_CLIPS; }
-	
+
 	@Override
 	public int getMaxClips() { return Stinger.MAX_CLIPS; }
 
@@ -104,23 +104,26 @@ public class Stinger extends RangedWeapon {
 
 	@Override
 	public int getPrice() { return Stinger.PRICE; }
-	
+
 	@Override
 	public int getAmmoPrice() { return Stinger.AMMO_PRICE; }
 
 	@Override
+	public WType getType() { return WType.STINGER; }
+
+	@Override
 	public int getLevelRequirement() { return 15; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.STINGER; }
-	
+
 	@Override
 	public String getName() {
-		return "Stinger FIM-92";
+		return WType.STINGER.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "Who just leaves something like this lying around? This just got a lot easier...";
+		return WType.STINGER.getDescription();
 	}
 }

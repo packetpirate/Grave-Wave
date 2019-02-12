@@ -15,6 +15,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.WType;
 
 public class BowAndArrow extends RangedWeapon {
 	private static final int PRICE = 500;
@@ -25,40 +26,39 @@ public class BowAndArrow extends RangedWeapon {
 	private static final int MAX_CLIPS = 3;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.0015f;
-	private static final String ICON_NAME = "GZS_Bow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
 	private static final String FIRE_SOUND = "bow_fire"; // TODO: Change this to a more appropriate sound.
 	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
-	
+
 	private static final Dice DAMAGE = new Dice(2, 10);
 	private static final int DAMAGE_MOD = 10;
-	
+
 	private boolean charging;
 	private float charge;
-	
+
 	public BowAndArrow() {
 		super(Size.MEDIUM, false);
-		
+
 		AssetManager assets = AssetManager.getManager();
-		
+
 		this.useSound = assets.getSound(BowAndArrow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(BowAndArrow.RELOAD_SOUND);
-		
+
 		charging = false;
 		charge = 0.0f;
 	}
-	
+
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		super.update(gs, cTime, delta);
-		
+
 		if(equipped) {
 			if(charging) {
 				// If we're charging, increase charge up to max of 1.0f.
 				charge += (BowAndArrow.CHARGE_RATE * delta);
 				if(charge > 1.0f) charge = 1.0f;
 			}
-			
+
 			if(Controls.getInstance().getMouse().isLeftDown()) {
 				// If the mouse is down and we're not charging, start charging.
 				if(!charging && (getClipAmmo() > 0)) charging = true;
@@ -68,32 +68,32 @@ public class BowAndArrow extends RangedWeapon {
 					// charging, release and stop charging!
 					release = true;
 					charging = false;
-					
+
 					Player player = Player.getPlayer();
 					if(canUse(cTime)) use(player, player.getPosition(), player.getRotation(), cTime);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void render(Graphics g, long cTime) {
 		super.render(g, cTime);
-		
+
 		if(equipped && charging) {
 			// Render the charge bar.
 			Player player = Player.getPlayer();
 			g.setColor(Color.white);
 			g.drawRect((player.getPosition().x - 24.0f), (player.getPosition().y - 44.0f), 48.0f, 15.0f);
-			
+
 			if(charge < 0.3f) g.setColor(Color.red);
 			else if(charge < 0.75f) g.setColor(Color.yellow);
 			else g.setColor(Color.green);
-			
+
 			g.fillRect((player.getPosition().x - 23.0f), (player.getPosition().y - 43.0f), (charge * 46.0f), 13.0f);
 		}
 	}
-	
+
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
@@ -102,42 +102,42 @@ public class BowAndArrow extends RangedWeapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(BowAndArrow.PROJECTILE_NAME, color, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
-		
+
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
-		
+
 		projectiles.add(projectile);
 
 		charge = 0.0f;
-		
+
 		super.use(player, position, theta, cTime);
 	}
-	
+
 	@Override
 	public void unequip() {
 		super.unequip();
-		
+
 		// Prevents arrow from firing after we've switched weapons.
 		charging = false;
 		charge = 0.0f;
 	}
-	
+
 	@Override
 	public Pair<Integer> getDamageRange() { return BowAndArrow.DAMAGE.getRange(BowAndArrow.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return BowAndArrow.DAMAGE.roll(BowAndArrow.DAMAGE_MOD, critical); }
-	
+
 	@Override
 	public float getKnockback() { return BowAndArrow.KNOCKBACK; }
 
 	@Override
 	public boolean isReloading(long cTime) { return false; }
-	
+
 	@Override
 	public long getReloadTime() { return 0L; }
 
@@ -145,11 +145,11 @@ public class BowAndArrow extends RangedWeapon {
 	public double getReloadTime(long cTime) { return 0.0; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(BowAndArrow.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.BOW_AND_ARROW.getImage(); }
+
 	@Override
 	public boolean isChargedWeapon() { return true; }
-	
+
 	@Override
 	public boolean isCharging() { return charging; }
 
@@ -158,7 +158,7 @@ public class BowAndArrow extends RangedWeapon {
 
 	@Override
 	public int getStartClips() { return BowAndArrow.START_CLIPS; }
-	
+
 	@Override
 	public int getMaxClips() { return BowAndArrow.MAX_CLIPS; }
 
@@ -173,20 +173,23 @@ public class BowAndArrow extends RangedWeapon {
 
 	@Override
 	public int getAmmoPrice() { return BowAndArrow.AMMO_PRICE; }
-	
+
+	@Override
+	public WType getType() { return WType.BOW_AND_ARROW; }
+
 	@Override
 	public int getLevelRequirement() { return 5; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.BOW_AND_ARROW; }
-	
+
 	@Override
 	public String getName() {
-		return "Bow & Arrow";
+		return WType.BOW_AND_ARROW.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "A primitive weapon that takes a little bit of time to fire, but is well worth the wait.";
+		return WType.BOW_AND_ARROW.getDescription();
 	}
 }

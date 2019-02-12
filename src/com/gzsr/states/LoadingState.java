@@ -233,6 +233,8 @@ public class LoadingState extends BasicGameState {
 			// Melee Weapons
 			"images/GZS_Baseball_Bat.png",
 			"images/GZS_Baseball_Bat_Icon.png",
+			"images/GZS_Spiked_Bat.png",
+			"images/GZS_Spiked_Bat_Icon.png",
 			"images/GZS_Machete.png",
 			"images/GZS_Machete_Icon.png",
 			"images/GZS_Bastard_Sword.png",

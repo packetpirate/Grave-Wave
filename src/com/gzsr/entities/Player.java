@@ -657,16 +657,12 @@ public class Player implements Entity {
 				enemy.takeDamage(mw.getDamageType(), damage, mw.getKnockback(),
 								 (theta - (float)(Math.PI / 2)), mw.getWeaponMetric(),
 								 cTime, delta, true, mw.isCurrentCritical());
+				mw.onHit(gs, enemy, cTime);
 
 				// Check for Relentless talent effect if enemy was killed by this attack.
-				// TODO: Rewrite to use new heart rate monitor.
 				if(enemy.dead() && Talents.Fortification.RELENTLESS.active()) {
 					float roll = Globals.rand.nextFloat();
-					if(roll <= 0.1f) {
-						//double maxStamina = attributes.getDouble("maxStamina");
-						//addStamina(maxStamina * 0.25);
-						monitor.addBPM(-40);
-					}
+					if(roll <= 0.1f) monitor.addBPM(-40);
 				}
 			}
 		}

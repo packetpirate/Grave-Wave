@@ -13,26 +13,26 @@ import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public abstract class Weapon implements Entity {
 	protected Sound useSound;
-	
+
 	protected boolean equipped;
 	protected long lastUsed;
-	
+
 	public Weapon() {
 		this.useSound = null;
-		
+
 		this.equipped = false;
 		this.lastUsed = -getCooldown();
 	}
-	
+
 	public abstract void use(Player player, Pair<Float> position, float theta, long cTime);
 	public abstract boolean canUse(long cTime);
-	
+
 	public boolean isCritical() {
 		float roll = Globals.rand.nextFloat();
-		
+
 		if(this instanceof MeleeWeapon) return (roll <= Player.getPlayer().getMeleeCritChance());
 		else if(this instanceof RangedWeapon) return (roll <= Player.getPlayer().getRangeCritChance());
-		
+
 		return false;
 	}
 
@@ -41,7 +41,7 @@ public abstract class Weapon implements Entity {
 	public void unequip() { equipped = false; }
 	public boolean isChargedWeapon() { return false; };
 	public boolean isCharging() { return false; }
-	
+
 	public abstract int getPrice();
 	public boolean canSell() { return true; }
 	public abstract Pair<Integer> getDamageRange();
@@ -49,14 +49,15 @@ public abstract class Weapon implements Entity {
 	public abstract double getDamageTotal(boolean critical);
 	public abstract double rollDamage(boolean critical);
 	public DamageType getDamageType() { return DamageType.NONE; }
-	
+
 	public abstract float getKnockback();
 	public abstract Image getInventoryIcon();
 	public abstract long getCooldown();
-	
+
+	public abstract WType getType();
 	public abstract int getLevelRequirement();
 	public abstract long getWeaponMetric();
-	
+
 	@Override
 	public int getLayer() {
 		return Layers.NONE.val();

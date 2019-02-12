@@ -12,6 +12,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.WType;
 
 public class Crossbow extends RangedWeapon {
 	private static final int PRICE = 600;
@@ -22,23 +23,22 @@ public class Crossbow extends RangedWeapon {
 	private static final int MAX_CLIPS = 10;
 	private static final long RELOAD_TIME = 2_000L;
 	private static final float KNOCKBACK = 10.0f;
-	private static final String ICON_NAME = "GZS_Crossbow";
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
 	private static final String FIRE_SOUND = "bow_fire";
 	private static final String RELOAD_SOUND = "buy_ammo2";
-	
+
 	private static final Dice DAMAGE = new Dice(2, 8);
 	private static final int DAMAGE_MOD = 12;
-	
+
 	public Crossbow() {
 		super(Size.SMALL, false);
-		
+
 		AssetManager assets = AssetManager.getManager();
-		
+
 		this.useSound = assets.getSound(Crossbow.FIRE_SOUND);
 		this.reloadSound = assets.getSound(Crossbow.RELOAD_SOUND);
 	}
-	
+
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		Color color = getProjectile().getColor();
@@ -47,12 +47,12 @@ public class Crossbow extends RangedWeapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(Crossbow.PROJECTILE_NAME, color, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
-		
+
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectiles.add(projectile);
 
@@ -64,7 +64,7 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public long getCooldown() { return Crossbow.COOLDOWN; }
-	
+
 	@Override
 	public int getClipSize() { return Crossbow.CLIP_SIZE; }
 
@@ -76,7 +76,7 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public int getPrice() { return Crossbow.PRICE; }
-	
+
 	@Override
 	public int getAmmoPrice() { return Crossbow.AMMO_PRICE; }
 
@@ -88,26 +88,29 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public double rollDamage(boolean critical) { return Crossbow.DAMAGE.roll(Crossbow.DAMAGE_MOD, critical); }
-	
+
 	@Override
 	public float getKnockback() { return Crossbow.KNOCKBACK; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(Crossbow.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.CROSSBOW.getImage(); }
+
+	@Override
+	public WType getType() { return WType.CROSSBOW; }
+
 	@Override
 	public int getLevelRequirement() { return 10; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.CROSSBOW; }
-	
+
 	@Override
 	public String getName() {
-		return "Crossbow";
+		return WType.CROSSBOW.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "It may not be the most efficient weapon when you're being swarmed, but it can do some serious damage.";
+		return WType.CROSSBOW.getDescription();
 	}
 }

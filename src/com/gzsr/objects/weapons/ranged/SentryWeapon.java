@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.WType;
 
 public class SentryWeapon extends RangedWeapon {
 	private static final int PRICE = 10_000;
@@ -23,18 +24,17 @@ public class SentryWeapon extends RangedWeapon {
 	private static final int MAX_CLIPS = 2;
 	private static final long RELOAD_TIME = 10_000L;
 	private static final float KNOCKBACK = 1.0f;
-	private static final String ICON_NAME = "GZS_Turret";
 	private static final String FIRE_SOUND = "landmine_armed";
 	private static final String RELOAD_SOUND = "buy_ammo2";
-	
+
 	public SentryWeapon() {
 		super(Size.LARGE);
-		
+
 		AssetManager assets = AssetManager.getManager();
 		this.useSound = assets.getSound(SentryWeapon.FIRE_SOUND);
 		this.reloadSound = assets.getSound(SentryWeapon.RELOAD_SOUND);
 	}
-	
+
 	@Override
 	public boolean canUse(long cTime) {
 		int limit = 1; // TODO: If a talent is added to increase sentry capacity, have the talent modify this.
@@ -49,24 +49,24 @@ public class SentryWeapon extends RangedWeapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(color, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		Turret turret = new Turret(particle);
 		projectiles.add(turret);
-		
+
 		ammoInClip--;
 		lastUsed = cTime;
-		
+
 		useSound.play(1.0f, AssetManager.getManager().getSoundVolume());
 	}
 
 	@Override
 	public Pair<Integer> getDamageRange() { return Turret.getTotalDamage(); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return 0.0; }
-	
+
 	@Override
 	public float getKnockback() { return SentryWeapon.KNOCKBACK; }
 
@@ -74,33 +74,33 @@ public class SentryWeapon extends RangedWeapon {
 	public long getReloadTime() { return SentryWeapon.RELOAD_TIME; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(SentryWeapon.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.SENTRY_GUN.getImage(); }
+
 	@Override
 	public int getClipSize() { return SentryWeapon.CLIP_SIZE; }
-	
+
 	@Override
 	public int getClipCapacity() { return getClipSize(); }
 
 	@Override
 	public int getStartClips() { return SentryWeapon.START_CLIPS; }
-	
+
 	@Override
 	public int getMaxClips() { return SentryWeapon.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() { return SentryWeapon.COOLDOWN; }
-	
+
 	@Override
 	public List<Projectile> getProjectiles() {
 		List<Projectile> allProjectiles = new ArrayList<Projectile>();
-		
+
 		allProjectiles.addAll(projectiles);
 		for(Projectile p : projectiles) {
 			Turret t = (Turret) p;
 			allProjectiles.addAll(t.getProjectiles());
 		}
-		
+
 		return allProjectiles;
 	}
 
@@ -114,18 +114,21 @@ public class SentryWeapon extends RangedWeapon {
 	public int getAmmoPrice() { return SentryWeapon.AMMO_PRICE; }
 
 	@Override
+	public WType getType() { return WType.SENTRY_GUN; }
+
+	@Override
 	public int getLevelRequirement() { return 15; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.SENTRY; }
-	
+
 	@Override
 	public String getName() {
-		return "Sentry Gun";
+		return WType.SENTRY_GUN.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "Feeling overwhelmed and need some automated assistance? Unleash a second, robotic apocalypse on the undead horde.";
+		return WType.SENTRY_GUN.getDescription();
 	}
 }

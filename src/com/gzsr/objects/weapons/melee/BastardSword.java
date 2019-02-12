@@ -7,6 +7,7 @@ import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
+import com.gzsr.objects.weapons.WType;
 
 public class BastardSword extends MeleeWeapon {
 	private static final int PRICE = 400;
@@ -15,11 +16,9 @@ public class BastardSword extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 400L;
 	private static final long COOLDOWN = 800L;
-	//private static final double STAMINA = 60.0;
 	private static final int BPM = 30;
 	private static final float KNOCKBACK = 5.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final String ICON_NAME = "GZS_Bastard_Sword_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Bastard_Sword";
 
 	private static final Dice DAMAGE = new Dice(6, 4);
@@ -66,13 +65,15 @@ public class BastardSword extends MeleeWeapon {
 
 	@Override
 	public int getBPMCost() { return BastardSword.BPM; }
-	//public double getStaminaCost() { return BastardSword.STAMINA; }
 
 	@Override
 	public float getKnockback() { return BastardSword.KNOCKBACK; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
+	public Image getInventoryIcon() { return WType.BASTARD_SWORD.getImage(); }
+
+	@Override
+	public WType getType() { return WType.BASTARD_SWORD; }
 
 	@Override
 	public int getLevelRequirement() { return 10; }
@@ -82,11 +83,11 @@ public class BastardSword extends MeleeWeapon {
 
 	@Override
 	public String getName() {
-		return "Bastard Sword";
+		return WType.BASTARD_SWORD.getName();
 	}
 
 	@Override
 	public String getDescription() {
-		return "Now this thing can do some damage! Go medieval on those undead freaks.";
+		return WType.BASTARD_SWORD.getDescription();
 	}
 }

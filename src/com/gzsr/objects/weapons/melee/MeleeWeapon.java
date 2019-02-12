@@ -154,6 +154,10 @@ public abstract class MeleeWeapon extends Weapon {
 		return isHit;
 	}
 
+	public void onHit(GameState gs, Enemy enemy, long cTime) {
+		// Apply effects when weapon hits an enemy.
+	}
+
 	// Gets the width of the collision rectangle that can hit.
 	protected float getAttackTimeRatio(long cTime) {
 		long elapsed = (cTime - lastAttack);

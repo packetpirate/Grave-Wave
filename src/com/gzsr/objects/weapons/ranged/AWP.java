@@ -16,6 +16,7 @@ import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
+import com.gzsr.objects.weapons.WType;
 
 public class AWP extends RangedWeapon {
 	private static final int PRICE = 5_000;
@@ -27,40 +28,39 @@ public class AWP extends RangedWeapon {
 	private static final long RELOAD_TIME = 2_000L;
 	private static final float LASER_SIGHT_RANGE = 300.0f;
 	private static final float KNOCKBACK = 10.0f;
-	private static final String ICON_NAME = "GZS_AWP";
 	private static final String FIRE_SOUND = "sniper_shot";
 	private static final String RELOAD_SOUND = "buy_ammo2";
-	
+
 	private static final Dice DAMAGE = new Dice(5, 4);
 	private static final int DAMAGE_MOD = 40;
-	
+
 	public AWP() {
 		super(Size.MEDIUM, false);
-		
+
 		AssetManager assets = AssetManager.getManager();
-		
+
 		this.useSound = assets.getSound(AWP.FIRE_SOUND);
 		this.reloadSound = assets.getSound(AWP.RELOAD_SOUND);
-		
+
 		this.shakeEffect = new Camera.ShakeEffect(200L, 50L, 15.0f);
-		
+
 		addMuzzleFlash();
 	}
 
 	@Override
 	public void render(Graphics g, long cTime) {
 		super.render(g, cTime);
-		
+
 		Player player = Player.getPlayer();
 		float theta = (player.getRotation() - (float)(Math.PI / 2));
-		
+
 		// Render a laser sight.
 		if(equipped) {
 			Pair<Float> muzzlePos = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y));
 			Pair<Float> laserPos = Calculate.rotateAboutPoint(player.getPosition(), muzzlePos, theta);
 			float x2 = (laserPos.x + ((float)Math.cos(theta) * AWP.LASER_SIGHT_RANGE));
 			float y2 = (laserPos.y + ((float)Math.sin(theta) * AWP.LASER_SIGHT_RANGE));
-			
+
 			g.setColor(Color.red);
 			g.drawLine(laserPos.x, laserPos.y, x2, y2);
 		}
@@ -77,71 +77,74 @@ public class AWP extends RangedWeapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(color, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
-		
+
 		Projectile projectile = new Projectile(particle, BloodGenerator.BURST, dmg, critical);
 		projectile.setPenetrations(2);
 		projectiles.add(projectile);
-		
+
 		super.use(player, position, theta, cTime);
 	}
-	
+
 	@Override
 	public Pair<Integer> getDamageRange() { return AWP.DAMAGE.getRange(AWP.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return AWP.DAMAGE.roll(AWP.DAMAGE_MOD, critical); }
-	
+
 	@Override
 	public DamageType getDamageType() { return DamageType.PIERCING; }
-	
+
 	@Override
 	public float getKnockback() { return AWP.KNOCKBACK; }
-	
+
 	@Override
 	public long getReloadTime() { return AWP.RELOAD_TIME; }
-	
+
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(AWP.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.AWP.getImage(); }
+
 	@Override
 	public int getClipSize() { return AWP.CLIP_SIZE; }
-	
+
 	@Override
 	public int getStartClips() { return AWP.START_CLIPS; }
-	
+
 	@Override
 	public int getMaxClips() { return AWP.MAX_CLIPS; }
 
 	@Override
 	public long getCooldown() { return AWP.COOLDOWN; }
-	
+
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.RIFLE; }
 
 	@Override
 	public int getPrice() { return AWP.PRICE; }
-	
+
 	@Override
 	public int getAmmoPrice() { return AWP.AMMO_PRICE; }
 
 	@Override
+	public WType getType() { return WType.AWP; }
+
+	@Override
 	public int getLevelRequirement() { return 15; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.AWP; }
-	
+
 	@Override
 	public String getName() {
-		return "AWP";
+		return WType.AWP.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "A military-grade AWP Sniper Rifle. Maybe a bit overkill, but you could hit several of these undead freaks at once!";
+		return WType.AWP.getDescription();
 	}
 }

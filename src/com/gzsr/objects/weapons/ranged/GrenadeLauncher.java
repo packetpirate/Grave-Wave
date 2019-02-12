@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.Explosion;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.talents.Talents;
 
 public class GrenadeLauncher extends RangedWeapon {
@@ -23,23 +24,22 @@ public class GrenadeLauncher extends RangedWeapon {
 	private static final long RELOAD_TIME = 3_000L;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float EXP_RADIUS = 64.0f;
-	private static final String ICON_NAME = "GZS_HandEgg";
 	private static final String PROJECTILE_NAME = "GZS_HandEggParticle";
 	private static final String EXP_NAME = "GZS_Explosion";
 	private static final String FIRE_SOUND = "grenade_launcher";
 	private static final String RELOAD_SOUND = "buy_ammo2";
-	
+
 	private static final Dice DAMAGE = new Dice(5, 10);
 	private static final int DAMAGE_MOD = 50;
-	
+
 	public GrenadeLauncher() {
 		super(Size.LARGE);
-		
+
 		AssetManager assets = AssetManager.getManager();
-		
+
 		this.useSound = assets.getSound(GrenadeLauncher.FIRE_SOUND);
 		this.reloadSound = assets.getSound(GrenadeLauncher.RELOAD_SOUND);
-		
+
 		addMuzzleFlash();
 	}
 
@@ -51,29 +51,29 @@ public class GrenadeLauncher extends RangedWeapon {
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
 		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
-										 0.0f, new Pair<Float>(width, height), 
+										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
-		
+
 		boolean critical = isCritical();
 		double dmg = getDamageTotal(critical);
 		if(Talents.Munitions.DEMOLITIONS.active()) dmg += (dmg * 0.5);
 
-		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME, 
-									  new Pair<Float>(0.0f, 0.0f), 
-									  dmg, critical, GrenadeLauncher.KNOCKBACK, 
+		Explosion exp = new Explosion(Explosion.Type.NORMAL, GrenadeLauncher.EXP_NAME,
+									  new Pair<Float>(0.0f, 0.0f),
+									  dmg, critical, GrenadeLauncher.KNOCKBACK,
 									  GrenadeLauncher.EXP_RADIUS, cTime);
 		Grenade gr = new Grenade(particle, exp);
 		projectiles.add(gr);
-		
+
 		super.use(player, position, theta, cTime);
 	}
-	
+
 	@Override
 	public Pair<Integer> getDamageRange() { return GrenadeLauncher.DAMAGE.getRange(GrenadeLauncher.DAMAGE_MOD); }
-	
+
 	@Override
 	public double rollDamage(boolean critical) { return GrenadeLauncher.DAMAGE.roll(GrenadeLauncher.DAMAGE_MOD, critical); }
-	
+
 	@Override
 	public float getKnockback() { return GrenadeLauncher.KNOCKBACK; }
 
@@ -81,14 +81,14 @@ public class GrenadeLauncher extends RangedWeapon {
 	public long getReloadTime() { return GrenadeLauncher.RELOAD_TIME; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(GrenadeLauncher.ICON_NAME); }
-	
+	public Image getInventoryIcon() { return WType.GRENADE_LAUNCHER.getImage(); }
+
 	@Override
 	public int getClipSize() { return GrenadeLauncher.CLIP_SIZE; }
 
 	@Override
 	public int getStartClips() { return GrenadeLauncher.START_CLIPS; }
-	
+
 	@Override
 	public int getMaxClips() { return GrenadeLauncher.MAX_CLIPS; }
 
@@ -100,23 +100,26 @@ public class GrenadeLauncher extends RangedWeapon {
 
 	@Override
 	public int getPrice() { return GrenadeLauncher.PRICE; }
-	
+
 	@Override
 	public int getAmmoPrice() { return GrenadeLauncher.AMMO_PRICE; }
 
 	@Override
+	public WType getType() { return WType.GRENADE_LAUNCHER; }
+
+	@Override
 	public int getLevelRequirement() { return 12; }
-	
+
 	@Override
 	public long getWeaponMetric() { return Metrics.GRENADE; }
-	
+
 	@Override
 	public String getName() {
-		return "M32 MGL-140";
+		return WType.GRENADE_LAUNCHER.getName();
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "A tube-barreled weapon with a revolving chamber full of grenades so you can rain concussive blasts of fire upon the undead horde.";
+		return WType.GRENADE_LAUNCHER.getDescription();
 	}
 }

@@ -3,7 +3,8 @@ package com.gzsr.objects.crafting;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gzsr.objects.weapons.ranged.MolotovWeapon;
+import com.gzsr.objects.weapons.WType;
+import com.gzsr.objects.weapons.melee.SpikedBat;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;
@@ -21,14 +22,13 @@ public class RecipeController {
 	}
 
 	private static void buildBasicRecipes() {
-		// Molotov
-		basicRecipes.add(new Recipe.Builder(new MolotovWeapon(), false)
-				.addResource(Resources.GLASS, 2)
-				.addResource(Resources.CLOTH, 1)
-				.build());
-
 		// Spiked Bat
 		// TODO: Add spiked bat and recipe. Requires Baseball Bat + 5 Metal?
+		Recipe spikedBat = new Recipe.Builder(new SpikedBat(), false)
+				.addResource(Resources.METAL, 5)
+				.addWeapon(WType.BASEBALL_BAT)
+				.build();
+		basicRecipes.add(spikedBat);
 
 		// Spear
 		// TODO: Add spear and then add recipe for it. Requires Machete + 5 Wood?

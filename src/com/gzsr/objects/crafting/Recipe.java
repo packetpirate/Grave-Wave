@@ -6,11 +6,12 @@ import java.util.List;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.objects.Inventory;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
 
 public class Recipe {
 	public static class Builder {
-		private List<String> weaponCost;
+		private List<WType> weaponCost;
 		private Resources resourceCosts;
 
 		private Entity result;
@@ -18,14 +19,14 @@ public class Recipe {
 		private boolean advanced;
 
 		public Builder(Entity result_, boolean advanced_) {
-			weaponCost = new ArrayList<String>();
+			weaponCost = new ArrayList<WType>();
 			resourceCosts = new Resources();
 
 			result = result_;
 			advanced = advanced_;
 		}
 
-		public Builder addWeapon(String weapon) {
+		public Builder addWeapon(WType weapon) {
 			weaponCost.add(weapon);
 			return this;
 		}
@@ -36,14 +37,12 @@ public class Recipe {
 		}
 
 		public Recipe build() {
-			return new Recipe(weaponCost.toArray(new String[weaponCost.size()]), resourceCosts, result, advanced);
+			return new Recipe(weaponCost.toArray(new WType[weaponCost.size()]), resourceCosts, result, advanced);
 		}
 	}
 
-	// TODO: Maybe instead of storing string names of weapons as costs, create an enum with all weapons and keep meta-info (name, description, image name)
-	// in this enumerated value, then store enum values as the recipe requirements.
-	private String [] wCost;
-	public String [] getWeapons() { return wCost; }
+	private WType [] wCost;
+	public WType [] getWeapons() { return wCost; }
 	private Resources rCost;
 	public Resources getResources() { return rCost; }
 
@@ -55,7 +54,7 @@ public class Recipe {
 	private boolean crafted;
 	public boolean isCrafted() { return crafted; }
 
-	private Recipe(String [] weaponCosts, Resources resourceCosts, Entity result_, boolean advanced_) {
+	private Recipe(WType [] weaponCosts, Resources resourceCosts, Entity result_, boolean advanced_) {
 		this.wCost = weaponCosts;
 		this.rCost = resourceCosts;
 
@@ -77,8 +76,8 @@ public class Recipe {
 
 		// Remove weapons from player inventory, if any.
 		if(wCost.length > 0) {
-			for(String name : wCost) {
-				playerInventory.dropItem(name);
+			for(WType type : wCost) {
+				playerInventory.dropItem(type);
 			}
 		}
 
@@ -104,10 +103,10 @@ public class Recipe {
 			weapons.addAll(player.getMeleeWeapons());
 			weapons.addAll(player.getRangedWeapons());
 
-			for(String name : wCost) {
+			for(WType type : wCost) {
 				boolean has = false;
 				for(Weapon w : weapons) {
-					if(w.getName().equals(name)) {
+					if(w.getType().equals(type)) {
 						has = true;
 						break;
 					}

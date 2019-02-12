@@ -12,6 +12,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.states.GameState;
 
 public class Lollipop extends MeleeWeapon {
@@ -21,11 +22,9 @@ public class Lollipop extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 500L;
 	private static final long COOLDOWN = 1_000L;
-	//private static final double STAMINA = 40.0;
 	private static final int BPM = 20;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final String ICON_NAME = "GZS_Lollipop_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Lollipop";
 
 	private static final Dice DAMAGE = new Dice(10, 5);
@@ -95,13 +94,15 @@ public class Lollipop extends MeleeWeapon {
 
 	@Override
 	public int getBPMCost() { return Lollipop.BPM; }
-	//public double getStaminaCost() { return Lollipop.STAMINA; }
 
 	@Override
 	public float getKnockback() { return Lollipop.KNOCKBACK; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
+	public Image getInventoryIcon() { return WType.LOLLIPOP.getImage(); }
+
+	@Override
+	public WType getType() { return WType.LOLLIPOP; }
 
 	@Override
 	public int getLevelRequirement() { return 18; }
@@ -111,11 +112,11 @@ public class Lollipop extends MeleeWeapon {
 
 	@Override
 	public String getName() {
-		return "Lollipop";
+		return WType.LOLLIPOP.getName();
 	}
 
 	@Override
 	public String getDescription() {
-		return "Huh... maybe the drugs are finally kicking in...";
+		return WType.LOLLIPOP.getDescription();
 	}
 }

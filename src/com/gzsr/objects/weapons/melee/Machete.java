@@ -7,6 +7,7 @@ import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
+import com.gzsr.objects.weapons.WType;
 
 public class Machete extends MeleeWeapon {
 	private static final Pair<Float> HIT_AREA_SIZE = new Pair<Float>(96.0f, 32.0f);
@@ -14,13 +15,10 @@ public class Machete extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 200L;
 	private static final long COOLDOWN = 250L;
-	//private static final double STAMINA = 20.0;
 	private static final int BPM = 10;
 	private static final float KNOCKBACK = 0.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final String ICON_NAME = "GZS_Machete_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Machete";
-
 	private static final Dice DAMAGE = new Dice(4, 4);
 	private static final int DAMAGE_MOD = 2;
 
@@ -66,13 +64,15 @@ public class Machete extends MeleeWeapon {
 
 	@Override
 	public int getBPMCost() { return Machete.BPM; }
-	//public double getStaminaCost() { return Machete.STAMINA; }
 
 	@Override
 	public float getKnockback() { return Machete.KNOCKBACK; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
+	public Image getInventoryIcon() { return WType.MACHETE.getImage(); }
+
+	@Override
+	public WType getType() { return WType.MACHETE; }
 
 	@Override
 	public int getLevelRequirement() { return 1; }
@@ -82,11 +82,11 @@ public class Machete extends MeleeWeapon {
 
 	@Override
 	public String getName() {
-		return "Machete";
+		return WType.MACHETE.getName();
 	}
 
 	@Override
 	public String getDescription() {
-		return "A simple blade, but it's sharp enough to take their heads off.";
+		return WType.MACHETE.getDescription();
 	}
 }

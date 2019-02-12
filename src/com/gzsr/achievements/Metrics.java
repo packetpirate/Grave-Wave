@@ -5,7 +5,7 @@ public class Metrics {
 	public static final long PLAYER = 2;
 	public static final long DAMAGE = 4;
 	public static final long KILL = 8;
-	
+
 	public static final long ZUMBY = 16;
 	public static final long ROTDOG = 32;
 	public static final long UPCHUCK = 64;
@@ -15,16 +15,17 @@ public class Metrics {
 	public static final long STARFRIGHT = 1_024;
 	public static final long EL_SALVO = 2_048;
 	public static final long PROWLER = 4_096;
-	
+
 	public static final long ABERRATION = 8_192;
 	public static final long STITCHES = 16_384;
 	public static final long ZOMBAT = 32_768;
-	
-	public static final long BASEBALL_BAT = 65_536; 
+
+	public static final long BASEBALL_BAT = 65_536;
+	public static final long SPIKED_BAT = 70_368_744_177_664L;
 	public static final long MACHETE = 131_072;
 	public static final long BASTARD_SWORD = 262_144;
 	public static final long LOLLIPOP = 524_288;
-	
+
 	public static final long AK47 = 1_048_576;
 	public static final long AWP = 2_097_152;
 	public static final long BERETTA = 4_194_304;
@@ -43,17 +44,17 @@ public class Metrics {
 	public static final long SAW_REVOLVER = 34_359_738_368L;
 	public static final long SENTRY = 68_719_476_736L;
 	public static final long TASER = 137_438_953_472L;
-	
+
 	public static final long ACID = 274_877_906_944L;
 	public static final long FIRE = 549_755_813_888L;
 	public static final long CRIT = 1_099_511_627_776L;
 	public static final long PARALYSIS = 2_199_023_255_552L;
 	public static final long POISON = 4_398_046_511_104L;
 	public static final long EXPLOSION = 8_796_093_022_208L;
-	
+
 	public static final long WAVE_START = 17_592_186_044_416L;
 	public static final long WAVE_END = 35_184_372_088_832L;
-	
+
 	/**
 	 * Uses bitwise AND to compose several game flags into a single long value.
 	 * @param flags The defined game metrics to be composed into a single long value.
@@ -61,14 +62,14 @@ public class Metrics {
 	 */
 	public static final long compose(long... flags) {
 		long result = 0;
-		
+
 		for(long flag : flags) {
 			result = (result | flag);
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Checks to see if a flag is set or unset in the given metric.
 	 * @param metric The flag set to check for the given flag.

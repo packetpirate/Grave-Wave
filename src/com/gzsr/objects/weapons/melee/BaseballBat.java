@@ -7,6 +7,7 @@ import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.DamageType;
+import com.gzsr.objects.weapons.WType;
 
 public class BaseballBat extends MeleeWeapon {
 	private static final int PRICE = 200;
@@ -15,11 +16,9 @@ public class BaseballBat extends MeleeWeapon {
 	private static final float IMAGE_DISTANCE = -8.0f;
 	private static final long ATTACK_TIME = 400L;
 	private static final long COOLDOWN = 500L;
-	//private static final double STAMINA = 40.0;
 	private static final int BPM = 15;
 	private static final float KNOCKBACK = 10.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
-	private static final String ICON_NAME = "GZS_Baseball_Bat_Icon";
 	private static final String WEAPON_IMAGE = "GZS_Baseball_Bat";
 
 	private static final Dice DAMAGE = new Dice(5, 4);
@@ -64,13 +63,15 @@ public class BaseballBat extends MeleeWeapon {
 
 	@Override
 	public int getBPMCost() { return BaseballBat.BPM; }
-	//public double getStaminaCost() { return BaseballBat.STAMINA; }
 
 	@Override
 	public float getKnockback() { return BaseballBat.KNOCKBACK; }
 
 	@Override
-	public Image getInventoryIcon() { return AssetManager.getManager().getImage(ICON_NAME); }
+	public Image getInventoryIcon() { return WType.BASEBALL_BAT.getImage(); }
+
+	@Override
+	public WType getType() { return WType.BASEBALL_BAT; }
 
 	@Override
 	public int getLevelRequirement() { return 5; }
@@ -80,11 +81,11 @@ public class BaseballBat extends MeleeWeapon {
 
 	@Override
 	public String getName() {
-		return "Baseball Bat";
+		return WType.BASEBALL_BAT.getName();
 	}
 
 	@Override
 	public String getDescription() {
-		return "A classic. This one has seen a lot of use, but can still bash their heads in just fine.";
+		return WType.BASEBALL_BAT.getDescription();
 	}
 }
