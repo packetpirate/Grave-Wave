@@ -36,6 +36,7 @@ import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.gfx.ui.hud.Console;
 import com.gzsr.gfx.ui.hud.EscapeMenu;
 import com.gzsr.gfx.ui.hud.HUD;
+import com.gzsr.objects.crafting.RecipeController;
 import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.status.Status;
@@ -257,6 +258,7 @@ public class GameState extends BasicGameState implements InputListener {
 		hud = new HUD();
 
 		ShopState.resetShop();
+		RecipeController.resetRecipes();
 		Scorekeeper.getInstance().reset();
 	}
 

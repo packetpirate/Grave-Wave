@@ -10,6 +10,10 @@ import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
 
 public class Recipe {
+	private static int rNum = 0;
+	private static int generateRecipeID() { return rNum++; }
+	public static void resetID() { rNum = 0; }
+
 	public static class Builder {
 		private List<WType> weaponCost;
 		private Resources resourceCosts;
@@ -41,6 +45,9 @@ public class Recipe {
 		}
 	}
 
+	private int id;
+	public int getID() { return id; }
+
 	private WType [] wCost;
 	public WType [] getWeapons() { return wCost; }
 	private Resources rCost;
@@ -55,6 +62,8 @@ public class Recipe {
 	public boolean isCrafted() { return crafted; }
 
 	private Recipe(WType [] weaponCosts, Resources resourceCosts, Entity result_, boolean advanced_) {
+		this.id = Recipe.generateRecipeID();
+
 		this.wCost = weaponCosts;
 		this.rCost = resourceCosts;
 
@@ -84,6 +93,8 @@ public class Recipe {
 		// Add the new item to the player's inventory.
 		playerInventory.addItem(result);
 		crafted = true;
+
+		RecipeController.removeRecipe(this, advanced);
 	}
 
 	public boolean hasIngredients() {
@@ -117,5 +128,12 @@ public class Recipe {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if(other.getClass() != getClass()) return false;
+		Recipe oRecipe = (Recipe) other;
+		return (oRecipe.getID() == getID());
 	}
 }

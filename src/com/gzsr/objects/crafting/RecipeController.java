@@ -13,6 +13,13 @@ public class RecipeController {
 	private static List<Recipe> advancedRecipes;
 	public static List<Recipe> getAdvancedRecipes() { return advancedRecipes; }
 
+	public static void resetRecipes() {
+		basicRecipes.clear();
+		advancedRecipes.clear();
+
+		Recipe.resetID();
+	}
+
 	static {
 		basicRecipes = new ArrayList<Recipe>();
 		advancedRecipes = new ArrayList<Recipe>();
@@ -50,5 +57,10 @@ public class RecipeController {
 		// TODO: Add particle cannon and recipe. Requires AWP + Taser + 5 Electronics + 10 Power?
 
 		// TODO: Come up with more advanced crafts.
+	}
+
+	public static void removeRecipe(Recipe recipe, boolean advanced) {
+		List<Recipe> recipes = (advanced ? advancedRecipes : basicRecipes);
+		recipes.remove(recipe);
 	}
 }

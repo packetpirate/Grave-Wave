@@ -7,12 +7,15 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
+import com.gzsr.Controls;
 import com.gzsr.entities.Entity;
 import com.gzsr.gfx.Layers;
+import com.gzsr.misc.MouseInfo;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.crafting.Recipe;
 import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Item;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
 
 public class CraftWindow implements Entity {
@@ -30,6 +33,7 @@ public class CraftWindow implements Entity {
 
 	private Recipe recipe;
 	private TooltipText tooltip;
+	private MenuButton craft;
 
 	public CraftWindow(Pair<Float> position_, Recipe recipe_) {
 		this.position = position_;
@@ -38,11 +42,18 @@ public class CraftWindow implements Entity {
 		this.tooltip = new TooltipText(AssetManager.getManager().getFont("PressStart2P-Regular_small"),
 									   recipe.getResult().getName(), recipe.getResult().getDescription(),
 									   new Pair<Float>((position.x + (ICON_SIZE / 2) + 10.0f), (position.y + (ICON_SIZE / 2) + 10.0f)), ICON_SIZE);
+
+		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
+		float w = large.getWidth("Craft");
+		craft = new MenuButton(new Pair<Float>(((position.x + WIDTH) - (w + 15.0f)), (position.y + 15.0f)), "Craft");
 	}
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-
+		MouseInfo mouse = Controls.getInstance().getMouse();
+		if(craft.inBounds(mouse.getPosition().x, mouse.getPosition().y)) {
+			craft.mouseEnter();
+		} else craft.mouseExit();
 	}
 
 	@Override
@@ -52,9 +63,18 @@ public class CraftWindow implements Entity {
 		g.setColor(Color.white);
 		g.drawRect(position.x, position.y, WIDTH, HEIGHT);
 
-		drawIcon(g, cTime);
 		drawResources(g, cTime);
 		drawWeaponCosts(g, cTime);
+		drawIcon(g, cTime);
+
+		boolean haveIngredients = recipe.hasIngredients();
+		g.setColor(haveIngredients ? Color.green : Color.gray);
+		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
+		float craftWidth = craft.getWidth();
+		g.fillRect((position.x + WIDTH - craftWidth - 20.0f), (position.y + 10.0f), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
+		craft.render(g, cTime);
+		g.setColor(Color.white);
+		g.drawRect((position.x + WIDTH - craftWidth - 20.0f), (position.y + 10.0f), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
 	}
 
 	private void drawIcon(Graphics g, long cTime) {
@@ -117,9 +137,27 @@ public class CraftWindow implements Entity {
 		float x = (position.x + 10.0f);
 		float y = (position.y + ICON_SIZE + 62.0f);
 
-		// TODO: Come back to this once you figure out how to get the icon by name and have recipes using weapons as ingredients.
-		// TODO: Maybe instead of storing string names of weapons as costs, create an enum with all weapons and keep meta-info (name, description, image name)
-		// in this enumerated value, then store enum values as the recipe requirements.
+		WType [] weapons = recipe.getWeapons();
+		for(int i = 0; i < weapons.length; i++) {
+			WType w = weapons[i];
+			Image img = w.getImage();
+			float scale = 32.0f / img.getWidth();
+
+			g.setColor(Color.black);
+			g.fillRect((x + (i * 42.0f)), y, 32.0f, 32.0f);
+			img.draw((x + (i * 42.0f)), y, scale);
+			g.setColor(Color.white);
+			g.drawRect((x + (i * 42.0f)), y, 32.0f, 32.0f);
+		}
+	}
+
+	public void click(int x, int y) {
+		if(craft.inBounds(x, y) && recipe.hasIngredients()) recipe.craft();
+	}
+
+	public boolean inBounds(int x, int y) {
+		return ((x >= position.x) && (x <= (position.x + WIDTH)) &&
+				(y >= position.y) && (y <= (position.y + HEIGHT)));
 	}
 
 	@Override

@@ -138,6 +138,8 @@ public class CraftingState extends BasicGameState implements InputListener {
 			if(mouse.isLeftDown()) game.enterState(GameState.ID, new FadeOutTransition(Color.black, 250), new FadeInTransition(Color.black, 100));
 		} else back.mouseExit();
 
+		crafts.stream().forEach(craft -> craft.update(null, 0L, delta));
+
 		MusicPlayer.getInstance().update(false);
 	}
 
@@ -153,7 +155,17 @@ public class CraftingState extends BasicGameState implements InputListener {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if(button == Input.MOUSE_LEFT_BUTTON) Controls.getInstance().getMouse().setLeftDown(false);
+		if(button == Input.MOUSE_LEFT_BUTTON) {
+			Controls.getInstance().getMouse().setLeftDown(false);
+
+			// Dispatch click if mouse is over a crafting window.
+			if((x >= CRAFT_WINDOW_POS.x) && (x <= (CRAFT_WINDOW_POS.x + CRAFT_WINDOW_SIZE.x)) &&
+			   (y >= CRAFT_WINDOW_POS.y) && (y <= (CRAFT_WINDOW_POS.y + CRAFT_WINDOW_SIZE.y))) {
+				for(CraftWindow craft : crafts) {
+					if(craft.inBounds(x, y)) craft.click(x, y);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -172,6 +184,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame game) {
 		Controls.getInstance().resetAll();
+		exit = false;
 
 		// Determine which recipes the player has unlocked.
 		crafts.clear();
