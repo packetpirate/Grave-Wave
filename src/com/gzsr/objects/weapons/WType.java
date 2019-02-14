@@ -10,7 +10,6 @@ public enum WType {
 	BASTARD_SWORD("Bastard Sword", "Now this thing can do some damage! Go medieval on those undead freaks.", "GZS_Bastard_Sword_Icon"),
 	LOLLIPOP("Lollipop", "Huh... maybe the drugs are finally kicking in...", "GZS_Lollipop_Icon"),
 	MACHETE("Machete", "A simple blade, but it's sharp enough to take their heads off.", "GZS_Machete_Icon"),
-	SPIKED_BAT("Spiked Bat", "As if their faces weren't mangled enough already...", "GZS_Spiked_Bat_Icon"),
 
 	// Ranged Weapons
 	AK47("AK47", "One of the world's most popular assault rifles... or at least it used to be, I guess.", "GZS_RTPS"),
@@ -31,7 +30,12 @@ public enum WType {
 	SAW_REVOLVER("Smith & Wesson Model 500", "One of the most popular revolvers in the world... and one of the most powerful.", "GZS_SmithAndWesson"),
 	SENTRY_GUN("Sentry Gun", "Feeling overwhelmed and need some automated assistance? Unleash a second, robotic apocalypse on the undead horde.", "GZS_Turret"),
 	STINGER("Stinger FIM-92", "Who just leaves something like this lying around? This just got a lot easier...", "GZS_Stinger"),
-	TASER("Taser", "Don't taze me, bro!", "GZS_Taser");
+	TASER("Taser", "Don't taze me, bro!", "GZS_Taser"),
+
+	// Crafted Weapons
+	SPIKED_BAT("Spiked Bat", "As if their faces weren't mangled enough already...", "GZS_Spiked_Bat_Icon"),
+	CROSSBOWGUN("Crossbowgun", "Why keep the bow part? Because it's cool, now shut up...", "GZS_Crossbowgun"),
+	ELECTRIC_NET_CANNON("Electric Net Cannon", "Get those undead extra crispy under a blanket of electric fury.", "GZS_Electric_Net_Cannon");
 
 	private String name;
 	public String getName() { return name; }

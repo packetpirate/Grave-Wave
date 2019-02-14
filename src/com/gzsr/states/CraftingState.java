@@ -1,6 +1,7 @@
 package com.gzsr.states;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -161,8 +162,16 @@ public class CraftingState extends BasicGameState implements InputListener {
 			// Dispatch click if mouse is over a crafting window.
 			if((x >= CRAFT_WINDOW_POS.x) && (x <= (CRAFT_WINDOW_POS.x + CRAFT_WINDOW_SIZE.x)) &&
 			   (y >= CRAFT_WINDOW_POS.y) && (y <= (CRAFT_WINDOW_POS.y + CRAFT_WINDOW_SIZE.y))) {
-				for(CraftWindow craft : crafts) {
-					if(craft.inBounds(x, y)) craft.click(x, y);
+				Iterator<CraftWindow> it = crafts.iterator();
+				while(it.hasNext()) {
+					CraftWindow craft = it.next();
+					if(craft.inBounds(x, y)) {
+						boolean crafted = craft.click(x, y);
+						if(crafted) {
+							it.remove();
+							break;
+						}
+					}
 				}
 			}
 		}

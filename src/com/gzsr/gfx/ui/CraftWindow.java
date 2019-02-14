@@ -22,6 +22,8 @@ public class CraftWindow implements Entity {
 	public static final float WIDTH = 784;
 	public static final float HEIGHT = 200;
 
+	private static final Color ACTIVE_COLOR = new Color(0x278C38);
+
 	private static final float ICON_SIZE = 64.0f;
 
 	private Pair<Float> position;
@@ -45,7 +47,7 @@ public class CraftWindow implements Entity {
 
 		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		float w = large.getWidth("Craft");
-		craft = new MenuButton(new Pair<Float>(((position.x + WIDTH) - (w + 15.0f)), (position.y + 15.0f)), "Craft");
+		craft = new MenuButton(new Pair<Float>(((position.x + WIDTH) - (w + 15.0f)), ((position.y + HEIGHT) - (large.getLineHeight() + 15.0f))), "Craft");
 	}
 
 	@Override
@@ -68,13 +70,13 @@ public class CraftWindow implements Entity {
 		drawIcon(g, cTime);
 
 		boolean haveIngredients = recipe.hasIngredients();
-		g.setColor(haveIngredients ? Color.green : Color.gray);
+		g.setColor(haveIngredients ? ACTIVE_COLOR : Color.gray);
 		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		float craftWidth = craft.getWidth();
-		g.fillRect((position.x + WIDTH - craftWidth - 20.0f), (position.y + 10.0f), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
+		g.fillRect((position.x + WIDTH - craftWidth - 20.0f), ((position.y + HEIGHT) - (large.getLineHeight() + 20.0f)), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
 		craft.render(g, cTime);
 		g.setColor(Color.white);
-		g.drawRect((position.x + WIDTH - craftWidth - 20.0f), (position.y + 10.0f), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
+		g.drawRect((position.x + WIDTH - craftWidth - 20.0f), ((position.y + HEIGHT) - (large.getLineHeight() + 20.0f)), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
 	}
 
 	private void drawIcon(Graphics g, long cTime) {
@@ -151,8 +153,13 @@ public class CraftWindow implements Entity {
 		}
 	}
 
-	public void click(int x, int y) {
-		if(craft.inBounds(x, y) && recipe.hasIngredients()) recipe.craft();
+	public boolean click(int x, int y) {
+		if(craft.inBounds(x, y) && recipe.hasIngredients()) {
+			recipe.craft();
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean inBounds(int x, int y) {

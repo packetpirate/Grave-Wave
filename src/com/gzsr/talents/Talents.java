@@ -30,7 +30,7 @@ public class Talents {
 
 		SOLDIER(2, 1, 5, "Soldier", "Increases medium ranged weapon damage by 20% per rank.", "GZS_Talent_Soldier"),
 
-		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted weapons do an additional 25% damage.", "GZS_Talent_GunGuru"),
+		GUN_GURU(3, 0, 1, "Gun Guru", "Crafted ranged weapons do an additional 25% damage.", "GZS_Talent_GunGuru"),
 		DEMOLITIONS(3, 1, 1, "Demolitions", "Increases damage of explosions by 50%.", "GZS_Talent_Demolitions"),
 		RAPID_FIRE(3, 2, 2, "Rapid Fire", "Increases rate of fire by 25% per rank.", "GZS_Talent_RapidFire"),
 

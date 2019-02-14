@@ -3,7 +3,6 @@ package com.gzsr.objects.crafting;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.weapons.WType;
@@ -18,11 +17,11 @@ public class Recipe {
 		private List<WType> weaponCost;
 		private Resources resourceCosts;
 
-		private Entity result;
+		private Weapon result;
 
 		private boolean advanced;
 
-		public Builder(Entity result_, boolean advanced_) {
+		public Builder(Weapon result_, boolean advanced_) {
 			weaponCost = new ArrayList<WType>();
 			resourceCosts = new Resources();
 
@@ -53,15 +52,15 @@ public class Recipe {
 	private Resources rCost;
 	public Resources getResources() { return rCost; }
 
-	private Entity result;
-	public Entity getResult() { return result; }
+	private Weapon result;
+	public Weapon getResult() { return result; }
 
 	private boolean advanced;
 	public boolean isAdvanced() { return advanced; }
 	private boolean crafted;
 	public boolean isCrafted() { return crafted; }
 
-	private Recipe(WType [] weaponCosts, Resources resourceCosts, Entity result_, boolean advanced_) {
+	private Recipe(WType [] weaponCosts, Resources resourceCosts, Weapon result_, boolean advanced_) {
 		this.id = Recipe.generateRecipeID();
 
 		this.wCost = weaponCosts;
@@ -92,6 +91,7 @@ public class Recipe {
 
 		// Add the new item to the player's inventory.
 		playerInventory.addItem(result);
+		Player.getPlayer().equip(result);
 		crafted = true;
 
 		RecipeController.removeRecipe(this, advanced);

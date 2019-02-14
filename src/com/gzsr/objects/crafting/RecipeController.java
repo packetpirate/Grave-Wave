@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.melee.SpikedBat;
+import com.gzsr.objects.weapons.ranged.Crossbowgun;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;
@@ -16,6 +17,9 @@ public class RecipeController {
 	public static void resetRecipes() {
 		basicRecipes.clear();
 		advancedRecipes.clear();
+
+		buildBasicRecipes();
+		buildAdvancedRecipes();
 
 		Recipe.resetID();
 	}
@@ -30,7 +34,6 @@ public class RecipeController {
 
 	private static void buildBasicRecipes() {
 		// Spiked Bat
-		// TODO: Add spiked bat and recipe. Requires Baseball Bat + 5 Metal?
 		Recipe spikedBat = new Recipe.Builder(new SpikedBat(), false)
 				.addResource(Resources.METAL, 5)
 				.addWeapon(WType.BASEBALL_BAT)
@@ -44,7 +47,12 @@ public class RecipeController {
 		// TODO: Add composite bow and recipe. Requires Bow + 5 Metal?
 
 		// Crossbow Gun
-		// TODO: Add crossbow gun and recipe. Requires Crossbow + 10 Metal?
+		Recipe crossbowgun = new Recipe.Builder(new Crossbowgun(), false)
+				.addResource(Resources.METAL, 10)
+				.addWeapon(WType.CROSSBOW)
+				.addWeapon(WType.SAW_REVOLVER)
+				.build();
+		basicRecipes.add(crossbowgun);
 
 		// TODO: Come up with more basic crafts.
 	}

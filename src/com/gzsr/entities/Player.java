@@ -120,11 +120,13 @@ public class Player implements Entity {
 	public int getMeleeIndex() { return meleeIndex; }
 	public RangedWeapon getCurrentRanged() {
 		List<RangedWeapon> weapons = getRangedWeapons();
+		if(rangedIndex >= weapons.size()) return weapons.get(0);
 		if(!weapons.isEmpty()) return weapons.get(rangedIndex);
 		else return null;
 	}
 	public MeleeWeapon getCurrentMelee() {
 		List<MeleeWeapon> weapons = getMeleeWeapons();
+		if(meleeIndex >= weapons.size()) return weapons.get(0);
 		if(!weapons.isEmpty()) return weapons.get(meleeIndex);
 		else return null;
 	}

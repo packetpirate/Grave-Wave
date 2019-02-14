@@ -17,7 +17,7 @@ public class BaseballBat extends MeleeWeapon {
 	private static final long ATTACK_TIME = 400L;
 	private static final long COOLDOWN = 500L;
 	private static final int BPM = 15;
-	private static final float KNOCKBACK = 10.0f;
+	private static final float KNOCKBACK = 8.0f;
 	private static final float THETA_OFFSET = (float)(Math.PI / 3.6);
 	private static final String WEAPON_IMAGE = "GZS_Baseball_Bat";
 

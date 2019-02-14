@@ -218,6 +218,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Boomstick.png",
 			"images/GZS_Bow.png",
 			"images/GZS_Crossbow.png",
+			"images/GZS_Crossbowgun.png",
 			"images/GZS_Remington.png",
 			"images/GZS_AWP.png",
 			"images/GZS_Flammenwerfer.png",
@@ -230,6 +231,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_BigRedButton.png",
 			"images/GZS_Molotov.png",
 			"images/GZS_Molotov_Icon.png",
+			"images/GZS_Electric_Net_Cannon.png",
 			// Melee Weapons
 			"images/GZS_Baseball_Bat.png",
 			"images/GZS_Baseball_Bat_Icon.png",

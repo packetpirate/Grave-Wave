@@ -17,11 +17,11 @@ public class SpikedBat extends BaseballBat {
 	private static final long ATTACK_TIME = 500L;
 	private static final long COOLDOWN = 750L;
 	private static final int BPM = 20;
-	private static final float KNOCKBACK = 15.0f;
+	private static final float KNOCKBACK = 8.0f;
 	private static final String WEAPON_IMAGE = "GZS_Spiked_Bat";
 
-	private static final Dice DAMAGE = new Dice(4, 6);
-	private static final int DAMAGE_MOD = 12;
+	private static final Dice DAMAGE = new Dice(4, 4);
+	private static final int DAMAGE_MOD = 8;
 
 	private static final Dice BLEED_DAMAGE = new Dice(0, 0);
 	private static final int BLEED_MOD = 4;
