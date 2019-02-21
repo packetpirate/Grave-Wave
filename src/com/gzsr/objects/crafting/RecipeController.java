@@ -6,6 +6,7 @@ import java.util.List;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.melee.SpikedBat;
 import com.gzsr.objects.weapons.ranged.Crossbowgun;
+import com.gzsr.objects.weapons.ranged.ENCannon;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;
@@ -60,6 +61,13 @@ public class RecipeController {
 	private static void buildAdvancedRecipes() {
 		// Electric Net Cannon
 		// TODO: Add electric net cannon and recipe. Requires Grenade Launcher + Laser Barrier + Taser + 10 Power?
+		Recipe enCannon = new Recipe.Builder(new ENCannon(), true)
+				.addResource(Resources.POWER, 10)
+				.addWeapon(WType.GRENADE_LAUNCHER)
+				.addWeapon(WType.LASER_BARRIER)
+				.addWeapon(WType.TASER)
+				.build();
+		advancedRecipes.add(enCannon);
 
 		// Particle Cannon
 		// TODO: Add particle cannon and recipe. Requires AWP + Taser + 5 Electronics + 10 Power?

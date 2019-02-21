@@ -94,7 +94,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 	}
 
 	private void drawCrafts(Graphics g) {
-		g.translate(0.0f, -sOff);
+		g.translate(0.0f, sOff);
 		crafts.stream().forEach(craft -> craft.render(g, 0L));
 		g.resetTransform();
 	}
@@ -165,8 +165,8 @@ public class CraftingState extends BasicGameState implements InputListener {
 				Iterator<CraftWindow> it = crafts.iterator();
 				while(it.hasNext()) {
 					CraftWindow craft = it.next();
-					if(craft.inBounds(x, y)) {
-						boolean crafted = craft.click(x, y);
+					if(craft.inBounds(x, (y - sOff))) {
+						boolean crafted = craft.click(x, (y - sOff));
 						if(crafted) {
 							it.remove();
 							break;

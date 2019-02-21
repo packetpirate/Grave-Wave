@@ -30,6 +30,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
+import com.gzsr.gfx.effects.VisualEffect;
 import com.gzsr.gfx.particles.Emitter;
 import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.StatusMessages;
@@ -95,26 +96,30 @@ public class GameState extends BasicGameState implements InputListener {
 					Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 					while(it.hasNext()) {
 						Map.Entry<String, Entity> pair = it.next();
-						pair.getValue().update(this, time, Globals.STEP_TIME);
-						if(pair.getValue() instanceof EnemyController) {
-							EnemyController ec = (EnemyController)pair.getValue();
+						Entity ent = pair.getValue();
+						ent.update(this, time, Globals.STEP_TIME);
+						if(ent instanceof EnemyController) {
+							EnemyController ec = (EnemyController)ent;
 							ec.updateEnemies(this, player, time, Globals.STEP_TIME);
-						} else if(pair.getValue() instanceof Item) {
-							Item item = (Item) pair.getValue();
+						} else if(ent instanceof Item) {
+							Item item = (Item) ent;
 							if(item.isActive(time)) {
 								player.checkItem(item, time);
 							} else it.remove();
-						} else if(pair.getValue() instanceof Particle) {
-							Particle p = (Particle) pair.getValue();
+						} else if(ent instanceof VisualEffect) {
+							VisualEffect visual = (VisualEffect) ent;
+							if(!visual.isActive(time)) it.remove();
+						} else if(ent instanceof Particle) {
+							Particle p = (Particle) ent;
 							if(!p.isActive(time)) {
 								p.onDestroy(this, time);
 								it.remove();
 							}
-						} else if(pair.getValue() instanceof Emitter) {
-							Emitter e = (Emitter) pair.getValue();
+						} else if(ent instanceof Emitter) {
+							Emitter e = (Emitter) ent;
 							if(!e.isAlive(time)) it.remove();
-						} else if(pair.getValue() instanceof Explosion) {
-							Explosion exp = (Explosion) pair.getValue();
+						} else if(ent instanceof Explosion) {
+							Explosion exp = (Explosion) ent;
 							if(!exp.isActive(time)) it.remove();
 						}
 					}

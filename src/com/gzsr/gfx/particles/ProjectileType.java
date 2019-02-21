@@ -21,26 +21,27 @@ public enum ProjectileType {
 	CLAYMORE(new Color(0x4D661A), 0.0f, 8.0f, 4.0f, 0L),
 	SHRAPNEL(new Color(0xF2F28C), 1.5f, 4.0f, 4.0f, 250L),
 	LASERNODE(new Color(0x313C4F), 0.0f, 8.0f, 8.0f, -1L),
+	ELECTRICNODE(new Color(0xAAAAAA), 0.8f, 8.0f, 8.0f, -1L),
 	TURRET(new Color(0x7A221A), 0.0f, 16.0f, 16.0f, 0L),
-	
+
 	// Enemy projectiles.
 	BILE(new Color(0x8BCE5E), 0.25f, 3.0f, 3.0f, 800);
-	
+
 	private Color color;
 	public Color getColor() { return color; }
-	
+
 	private float velocity;
 	public float getVelocity() { return velocity; }
-	
+
 	private float width;
 	public float getWidth() { return width; }
-	
+
 	private float height;
 	public float getHeight() { return height; }
-	
+
 	private long lifespan;
 	public long getLifespan() { return lifespan; }
-	
+
 	ProjectileType(Color color_, float velocity_, float width_, float height_, long lifespan_) {
 		this.color = color_;
 		this.velocity = velocity_;

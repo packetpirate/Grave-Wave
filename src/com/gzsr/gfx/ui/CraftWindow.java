@@ -153,7 +153,7 @@ public class CraftWindow implements Entity {
 		}
 	}
 
-	public boolean click(int x, int y) {
+	public boolean click(float x, float y) {
 		if(craft.inBounds(x, y) && recipe.hasIngredients()) {
 			recipe.craft();
 			return true;
@@ -162,7 +162,7 @@ public class CraftWindow implements Entity {
 		return false;
 	}
 
-	public boolean inBounds(int x, int y) {
+	public boolean inBounds(float x, float y) {
 		return ((x >= position.x) && (x <= (position.x + WIDTH)) &&
 				(y >= position.y) && (y <= (position.y + HEIGHT)));
 	}

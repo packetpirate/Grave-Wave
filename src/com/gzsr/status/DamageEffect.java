@@ -13,21 +13,27 @@ public class DamageEffect extends StatusEffect {
 	private DamageType type;
 	private Dice damage;
 	private int modifier;
-	
+
 	private long interval;
 	private long lastDamage;
-	
+
+	private boolean refreshes;
+	public void setCanRefresh(boolean val) { refreshes = val; }
+	public boolean canRefresh() { return refreshes; }
+
 	public DamageEffect(DamageType type_, Dice damage_, int modifier_, long interval_, long duration_, long created_) {
 		super(Status.DAMAGE, duration_, created_);
-		
+
 		this.type = type_;
 		this.damage = damage_;
 		this.modifier = modifier_;
-		
+
 		this.interval = interval_;
 		this.lastDamage = -interval_;
+
+		this.refreshes = false;
 	}
-	
+
 	@Override
 	public void onApply(Entity e, long cTime) {
 	}
