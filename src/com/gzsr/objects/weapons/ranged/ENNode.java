@@ -24,7 +24,7 @@ public class ENNode extends Projectile {
 	private static final long FLY_TIME = 250L;
 	private static final long DURATION = 3_000L;
 	private static final long DAMAGE_INTERVAL = 500L;
-	private static final float MAX_LIGHTNING_OFFSET = 30.0f;
+	private static final float MAX_LIGHTNING_OFFSET = 20.0f;
 
 	private static final Dice DAMAGE = new Dice(2, 4);
 	private static final int DAMAGE_MOD = 2;
@@ -34,6 +34,7 @@ public class ENNode extends Projectile {
 	private boolean electrified;
 
 	private boolean started;
+	public boolean hasStarted() { return started; }
 	private long startTime;
 	public void start(long cTime) {
 		started = true;
@@ -83,6 +84,9 @@ public class ENNode extends Projectile {
 					e.getStatusHandler().addStatus(para, cTime);
 				}
 			}
+		} else {
+			started = true;
+			startTime = cTime;
 		}
 	}
 
@@ -96,6 +100,8 @@ public class ENNode extends Projectile {
 			g.setLineWidth(1.0f);
 			g.drawLine(position.x, position.y, next.getPosition().x, next.getPosition().y);
 		}
+
+		super.render(g, cTime);
 	}
 
 	public void pair(ENNode next_) { this.next = next_; }
