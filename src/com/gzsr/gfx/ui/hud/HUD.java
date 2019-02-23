@@ -23,6 +23,7 @@ public class HUD {
 	public static final Color FADE = new Color(1.0f, 1.0f, 1.0f, 0.3f);
 
 	private static final Pair<Float> HEART_OFFSET = new Pair<Float>(15.0f, 10.0f);
+	private static final Pair<Float> ARMOR_OFFSET = new Pair<Float>(4.0f, 4.0f);
 	private static final Pair<Float> EXP_OFFSET = new Pair<Float>(66.0f, 6.0f);
 	private static final Pair<Float> EKG_OFFSET = new Pair<Float>(65.0f, 19.0f);
 	private static final Pair<Float> GEM_OFFSET = new Pair<Float>(98.0f, 46.0f);
@@ -31,6 +32,7 @@ public class HUD {
 	private Rectangle hudBounds;
 
 	private Heart heart;
+	private Armor armor;
 	private Lives lives;
 	private EKGBar ekg;
 	private ExperienceBar experience;
@@ -48,6 +50,7 @@ public class HUD {
 		hudBounds = new Rectangle(10.0f, 10.0f, hud.getWidth(), hud.getHeight());
 
 		heart = new Heart(new Pair<Float>((HEART_OFFSET.x + 10.0f), (HEART_OFFSET.y + 10.0f)), new Pair<Float>(34.0f, 44.0f));
+		armor = new Armor(new Pair<Float>((ARMOR_OFFSET.x + 10.0f), (ARMOR_OFFSET.y + 10.0f)), new Pair<Float>(56.0f, 56.0f));
 		lives = new Lives(new Pair<Float>((GEM_OFFSET.x + 10.0f), (GEM_OFFSET.y + 10.0f)));
 		ekg = new EKGBar(new Pair<Float>((EKG_OFFSET.x + 10.0f), (EKG_OFFSET.y + 10.0f)));
 		experience = new ExperienceBar(new Pair<Float>((EXP_OFFSET.x + 10.0f), (EXP_OFFSET.y + 10.0f)));
@@ -68,9 +71,11 @@ public class HUD {
 	public void render(Graphics g, GameState gs, long cTime) {
 		Player player = Player.getPlayer();
 		EnemyController ec = EnemyController.getInstance();
+		boolean touchingPlayer = intersects(player);
 
-		g.drawImage(hud, 10.0f, 10.0f);
+		g.drawImage(hud, 10.0f, 10.0f, getFilterColor(Color.white, touchingPlayer));
 
+		armor.render(g, cTime);
 		heart.render(g, cTime);
 		lives.render(g, cTime);
 		ekg.render(g, cTime);
@@ -121,20 +126,35 @@ public class HUD {
 			g.setColor(Color.white);
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 
-			// Draw the character portrait on the far right.
 			float w1 = g.getFont().getWidth(Controls.Layout.TALENTS_SCREEN.getDisplay());
+			float w2 = g.getFont().getWidth(Controls.Layout.SHOP_SCREEN.getDisplay());
+			float w3 = g.getFont().getWidth(Controls.Layout.CRAFT_SCREEN.getDisplay());
 			float h = g.getFont().getLineHeight();
-			g.drawString(Controls.Layout.TALENTS_SCREEN.getDisplay(), (Globals.WIDTH - w1 - 20.0f), (Globals.HEIGHT - h - 20.0f));
 
 			Image character = AssetManager.getManager().getImage("GZS_Joe-Portrait");
-			character.draw((Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f)), (Globals.HEIGHT - ((character.getHeight() / 2) + 20.0f)), 0.5f);
-
-			// Draw the backpack to the left of that.
-			float w2 = g.getFont().getWidth(Controls.Layout.SHOP_SCREEN.getDisplay());
-			g.drawString(Controls.Layout.SHOP_SCREEN.getDisplay(), (Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 40.0f)), (Globals.HEIGHT - h - 20.0f));
-
 			Image cash = AssetManager.getManager().getImage("GZS_Cash");
-			cash.draw((Globals.WIDTH - (w1 + w2 + (character.getWidth() / 2) + 35.0f) - ((cash.getWidth() / 2) + 20.0f)), (Globals.HEIGHT - ((cash.getHeight() / 2) + 15.0f)), 0.5f);
+			Image crafting = AssetManager.getManager().getImage("GZS_Crafting_Icon");
+
+			float tx = (Globals.WIDTH - (w1 + 20.0f));
+			float ty = (Globals.HEIGHT - h - 20.0f);
+			float ix = (Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f));
+			float iy = (Globals.HEIGHT - 20.0f);
+
+			// Draw the character icon to indicate the hotkey for the talents screen.
+			g.drawString(Controls.Layout.TALENTS_SCREEN.getDisplay(), tx, ty);
+			character.draw(ix, (iy - (character.getHeight() / 2)), 0.5f);
+
+			// Draw the cash icon to indicate the hotkey for the shop screen.
+			tx = (ix - w2 - 10.0f);
+			ix = (tx - (cash.getWidth() / 2) - 10.0f);
+			g.drawString(Controls.Layout.SHOP_SCREEN.getDisplay(), tx, ty);
+			cash.draw(ix, (iy - (cash.getHeight() / 2)), 0.5f);
+
+			// Draw the crafting icon to indicate the hotkey for the crafting screen.
+			tx = (ix - w3 - 10.0f);
+			ix = (tx - (crafting.getWidth() / 2) - 10.0f);
+			g.drawString(Controls.Layout.CRAFT_SCREEN.getDisplay(), tx, ty);
+			crafting.draw(ix, (iy - (crafting.getHeight() / 2)), 0.5f);
 		} // End drawing shop and training icons.
 
 		// If player is respawning, draw the countdown.
@@ -147,6 +167,10 @@ public class HUD {
 			float h = g.getFont().getLineHeight();
 			FontUtils.drawCenter(g.getFont(), respawnText, (int)((Globals.WIDTH / 2) - (w / 2)), (int)((Globals.HEIGHT / 2) - (h / 2)), (int)w);
 		}
+	}
+
+	private Color getFilterColor(Color c, boolean touchingPlayer) {
+		return (touchingPlayer ? c.multiply(HUD.FADE) : c);
 	}
 
 	private boolean intersects(Player player) {

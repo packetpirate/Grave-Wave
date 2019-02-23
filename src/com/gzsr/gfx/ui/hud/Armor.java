@@ -12,18 +12,16 @@ import com.gzsr.entities.Player;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
-public class Lives implements Entity {
-	private static final float GEM_OFFSET = 26.0f;
-
-	private Image gem;
+public class Armor implements Entity {
 	private Pair<Float> position;
+	private Pair<Float> size;
 	private Rectangle bounds;
 
-	public Lives(Pair<Float> position_) {
+	public Armor(Pair<Float> position_, Pair<Float> size_) {
 		this.position = position_;
+		this.size = size_;
 
-		this.gem = AssetManager.getManager().getImage("GZS_Life_Gem");
-		this.bounds = new Rectangle(position.x, position.y, ((gem.getWidth() * 5) + ((GEM_OFFSET - gem.getWidth()) * 4)), gem.getHeight());
+		this.bounds = new Rectangle(position.x, position.y, size.x, size.y);
 	}
 
 	@Override
@@ -35,10 +33,17 @@ public class Lives implements Entity {
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
-		int lives = player.getAttributes().getInt("lives");
-		for(int i = 0; i < lives; i++) {
-			float x = (position.x + (i * GEM_OFFSET));
-			g.drawImage(gem, x, position.y, getFilterColor(Color.white, touchingPlayer));
+		double currentArmor = player.getAttributes().getDouble("armor");
+		if(currentArmor > 0.0) {
+			Image armor = AssetManager.getManager().getImage("GZS_HUD_Armor");
+
+			double maxArmor = player.getAttributes().getDouble("maxArmor");
+			float ratio = (float)(currentArmor / maxArmor);
+			float h = (ratio * armor.getHeight());
+			float y = (position.y + (armor.getHeight() - h));
+
+			Image display = armor.getSubImage(0, (int)(armor.getHeight() - h), armor.getWidth(), (int)h);
+			display.draw(position.x, y, getFilterColor(Color.white, touchingPlayer));
 		}
 	}
 
@@ -51,17 +56,11 @@ public class Lives implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Lives";
-	}
+	public String getName() { return "Armor"; }
 
 	@Override
-	public String getDescription() {
-		return "Lives";
-	}
+	public String getDescription() { return "Armor Display"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public int getLayer() { return Layers.NONE.val(); }
 }

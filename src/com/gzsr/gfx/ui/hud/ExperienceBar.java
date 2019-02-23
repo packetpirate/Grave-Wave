@@ -40,40 +40,21 @@ public class ExperienceBar implements Entity {
 		float expToLevel = player.getAttributes().getInt("expToLevel");
 		float percentage = currentExp / expToLevel;
 
+		Color filter = getFilterColor(Color.white, touchingPlayer);
+
 		Image subImage = bar.getSubImage(0, 0, (int)(bar.getWidth() * percentage), bar.getHeight());
-		g.drawImage(subImage, position.x, position.y);
+		g.drawImage(subImage, position.x, position.y, filter);
 
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
-		FontUtils.drawCenter(f, String.format("%d%%", (int)(percentage * 100)), (int)position.x.floatValue(), (int)(position.y + (bar.getHeight() / 2) - (f.getLineHeight() / 2)), bar.getWidth(), Color.white);
+		FontUtils.drawCenter(f, String.format("%d%%", (int)(percentage * 100)), (int)position.x.floatValue(), (int)(position.y + (bar.getHeight() / 2) - (f.getLineHeight() / 2)), bar.getWidth(), filter);
 	}
 
-	/**
-	@Override
-	public void render(Graphics g, long cTime) {
-		Player player = Player.getPlayer();
-		boolean touchingPlayer = intersects(player);
-
-		float currentExp = player.getAttributes().getInt("experience");
-		float expToLevel = player.getAttributes().getInt("expToLevel");
-		float percentage = currentExp / expToLevel;
-
-		changeColor(g, Color.black, touchingPlayer);
-		g.fillRect(position.x, position.y, size.x, size.y);
-		changeColor(g, Color.lightGray, touchingPlayer);
-		g.drawRect(position.x, position.y, size.x, size.y);
-
-		if(percentage != 0.0f) {
-			changeColor(g, Color.green, touchingPlayer);
-			g.fillRect((position.x + 3.0f), (position.y + 3.0f),
-					   (percentage * (size.x - 6.0f)), (size.y - 6.0f));
-			changeColor(g, Color.lightGray, touchingPlayer);
-			g.drawRect((position.x + 3.0f), (position.y + 3.0f),
-					   (percentage * (size.x - 6.0f)), (size.y - 6.0f));
-		}
-	}**/
+	private Color getFilterColor(Color c, boolean touchingPlayer) {
+		return (touchingPlayer ? c.multiply(HUD.FADE) : c);
+	}
 
 	public boolean intersects(Player player) {
-		return bounds.intersects(player.getCollider());
+		return (bounds.intersects(player.getCollider()) || bounds.contains(player.getCollider()));
 	}
 
 	@Override

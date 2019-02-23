@@ -17,7 +17,6 @@ import com.gzsr.status.Status;
 
 public class Heart implements Entity {
 	private static final Color POISON_COLOR = new Color(0x5AAD5B);
-	private static final Color ARMOR_COLOR = new Color(0x43FBFD);
 
 	private Pair<Float> position;
 	private Pair<Float> size;

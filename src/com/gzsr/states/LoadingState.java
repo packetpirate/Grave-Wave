@@ -146,6 +146,7 @@ public class LoadingState extends BasicGameState {
 			// HUD Images
 			"images/GZS_HUD_01.png",
 			"images/GZS_Heart.png",
+			"images/GZS_HUD_Armor.png",
 			"images/GZS_Life_Gem.png",
 			"images/GZS_Experience_Bar.png",
 			// Heart Rate Sprite Sheets
@@ -290,6 +291,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Talent_Stasis.png",
 			// Misc Images
 			"images/GZS_Cash.png",
+			"images/GZS_Crafting_Icon.png",
 			"images/GZS_Talent_Locked.png",
 			"images/GZS_BuyButton2.png",
 			"images/GZS_SellButton2.png",
