@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.Globals;
+import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.effects.Lightning;
@@ -24,7 +25,7 @@ public class ENNode extends Projectile {
 	private static final long FLY_TIME = 250L;
 	private static final long DURATION = 3_000L;
 	private static final long DAMAGE_INTERVAL = 500L;
-	private static final float MAX_LIGHTNING_OFFSET = 20.0f;
+	private static final float MAX_LIGHTNING_OFFSET = 15.0f;
 
 	private static final Dice DAMAGE = new Dice(2, 4);
 	private static final int DAMAGE_MOD = 2;
@@ -84,6 +85,18 @@ public class ENNode extends Projectile {
 					e.getStatusHandler().addStatus(para, cTime);
 				}
 			}
+
+			// Also check the player... electricity doesn't have friends. :(
+			Player player = Player.getPlayer();
+			if(checkCollision(player)) {
+				DamageEffect dmg = new DamageEffect(DamageType.ELECTRIC, DAMAGE, DAMAGE_MOD, DAMAGE_INTERVAL, DURATION, cTime);
+				ParalysisEffect para = new ParalysisEffect(DURATION, cTime);
+
+				dmg.setCanRefresh(false);
+
+				player.getStatusHandler().addStatus(dmg, cTime);
+				player.getStatusHandler().addStatus(para, cTime);
+			}
 		} else {
 			started = true;
 			startTime = cTime;
@@ -122,5 +135,15 @@ public class ENNode extends Projectile {
 			boolean barrierCollision = barrier.intersects(enemy.getCollider());
 			return super.checkCollision(enemy) || barrierCollision;
 		} else return super.checkCollision(enemy);
+	}
+
+	@Override
+	public boolean checkCollision(Player player) {
+		if(next != null) {
+			Line barrier = new Line(position.x, position.y,
+									next.getPosition().x, next.getPosition().y);
+			boolean barrierCollision = barrier.intersects(player.getCollider());
+			return super.checkCollision(player) || barrierCollision;
+		} else return super.checkCollision(player);
 	}
 }
