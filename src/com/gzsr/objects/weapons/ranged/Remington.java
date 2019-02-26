@@ -111,7 +111,7 @@ public class Remington extends RangedWeapon {
 	public int getLevelRequirement() { return 8; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.REMINGTON; }
+	public Metrics getWeaponMetric() { return Metrics.REMINGTON; }
 
 	@Override
 	public String getName() {

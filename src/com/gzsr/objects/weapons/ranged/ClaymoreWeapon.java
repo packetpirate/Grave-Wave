@@ -192,7 +192,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 	public int getLevelRequirement() { return 10; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.CLAYMORE; }
+	public Metrics getWeaponMetric() { return Metrics.CLAYMORE; }
 
 	@Override
 	public String getName() {

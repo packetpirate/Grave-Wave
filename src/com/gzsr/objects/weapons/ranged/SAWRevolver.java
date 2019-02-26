@@ -111,7 +111,7 @@ public class SAWRevolver extends RangedWeapon {
 	public int getLevelRequirement() { return 3; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.SAW_REVOLVER; }
+	public Metrics getWeaponMetric() { return Metrics.SAW_REVOLVER; }
 
 	@Override
 	public String getName() {

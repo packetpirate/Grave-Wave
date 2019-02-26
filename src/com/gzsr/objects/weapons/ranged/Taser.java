@@ -107,7 +107,7 @@ public class Taser extends RangedWeapon {
 	public int getLevelRequirement() { return 8; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.TASER; }
+	public Metrics getWeaponMetric() { return Metrics.TASER; }
 
 	@Override
 	public String getName() {

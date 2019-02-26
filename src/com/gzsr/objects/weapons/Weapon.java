@@ -4,6 +4,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
 import com.gzsr.Globals;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.Layers;
@@ -56,7 +57,7 @@ public abstract class Weapon implements Entity {
 
 	public abstract WType getType();
 	public abstract int getLevelRequirement();
-	public abstract long getWeaponMetric();
+	public abstract Metrics getWeaponMetric();
 
 	@Override
 	public int getLayer() {

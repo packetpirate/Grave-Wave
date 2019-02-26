@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
@@ -155,7 +156,7 @@ public class LaserBarrier extends RangedWeapon {
 	public int getLevelRequirement() { return 10; }
 
 	@Override
-	public long getWeaponMetric() { return 0; }
+	public Metrics getWeaponMetric() { return Metrics.LASER_BARRIER; }
 
 	@Override
 	public String getName() {

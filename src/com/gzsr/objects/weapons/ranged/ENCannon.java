@@ -4,6 +4,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
+import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.Scorekeeper;
 import com.gzsr.entities.Player;
 import com.gzsr.gfx.particles.Particle;
@@ -112,7 +113,7 @@ public class ENCannon extends RangedWeapon {
 	public int getLevelRequirement() { return 15; }
 
 	@Override
-	public long getWeaponMetric() { return 0; }
+	public Metrics getWeaponMetric() { return Metrics.ELECTRIC_NET_CANNON; }
 
 	@Override
 	public String getName() {

@@ -279,15 +279,15 @@ public abstract class Enemy implements Entity {
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
 
-	public void takeDamage(DamageType dType, double amnt, float knockback, long sourceMetric, long cTime, int delta) {
+	public void takeDamage(DamageType dType, double amnt, float knockback, Metrics sourceMetric, long cTime, int delta) {
 		takeDamage(dType, amnt, knockback, (float)(theta + Math.PI), sourceMetric, cTime, delta, true);
 	}
 
-	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric,  long cTime, int delta, boolean flash) {
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, Metrics sourceMetric,  long cTime, int delta, boolean flash) {
 		takeDamage(dType, amnt, knockback, knockbackTheta, sourceMetric, cTime, delta, flash, false);
 	}
 
-	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, long sourceMetric, long cTime, int delta, boolean flash, boolean isCritical) {
+	public void takeDamage(DamageType dType, double amnt, float knockback, float knockbackTheta, Metrics sourceMetric, long cTime, int delta, boolean flash, boolean isCritical) {
 		if(!dead() && !damageImmunities.contains(dType)) {
 			health -= amnt;
 

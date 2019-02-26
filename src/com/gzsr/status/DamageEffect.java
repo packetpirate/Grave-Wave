@@ -2,6 +2,7 @@ package com.gzsr.status;
 
 import org.newdawn.slick.Graphics;
 
+import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
@@ -18,7 +19,9 @@ public class DamageEffect extends StatusEffect {
 	private long lastDamage;
 
 	private boolean refreshes;
+	@Override
 	public void setCanRefresh(boolean val) { refreshes = val; }
+	@Override
 	public boolean canRefresh() { return refreshes; }
 
 	public DamageEffect(DamageType type_, Dice damage_, int modifier_, long interval_, long duration_, long created_) {
@@ -49,7 +52,7 @@ public class DamageEffect extends StatusEffect {
 			if(elapsed >= interval) {
 				double amnt = damage.roll(modifier);
 				if(e instanceof Player) Player.getPlayer().takeDamage(amnt, cTime);
-				else if(e instanceof Enemy) ((Enemy)e).takeDamage(type, amnt, 0.0f, 0L, cTime, delta);
+				else if(e instanceof Enemy) ((Enemy)e).takeDamage(type, amnt, 0.0f, Metrics.STATUS, cTime, delta);
 				lastDamage = cTime;
 			}
 		}

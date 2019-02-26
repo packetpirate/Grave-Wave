@@ -181,7 +181,7 @@ public class BowAndArrow extends RangedWeapon {
 	public int getLevelRequirement() { return 5; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.BOW_AND_ARROW; }
+	public Metrics getWeaponMetric() { return Metrics.BOW_AND_ARROW; }
 
 	@Override
 	public String getName() {

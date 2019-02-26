@@ -114,7 +114,7 @@ public class Flamethrower extends RangedWeapon {
 	public int getLevelRequirement() { return 12; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.FLAMETHROWER; }
+	public Metrics getWeaponMetric() { return Metrics.FLAMETHROWER; }
 
 	@Override
 	public String getName() {

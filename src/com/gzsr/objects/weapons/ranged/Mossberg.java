@@ -119,7 +119,7 @@ public class Mossberg extends RangedWeapon {
 	public int getLevelRequirement() { return 5; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.MOSSBERG; }
+	public Metrics getWeaponMetric() { return Metrics.MOSSBERG; }
 
 	@Override
 	public String getName() {

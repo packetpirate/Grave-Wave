@@ -78,7 +78,7 @@ public class Machete extends MeleeWeapon {
 	public int getLevelRequirement() { return 1; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.MACHETE; }
+	public Metrics getWeaponMetric() { return Metrics.MACHETE; }
 
 	@Override
 	public String getName() {

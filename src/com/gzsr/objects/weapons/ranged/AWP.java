@@ -136,7 +136,7 @@ public class AWP extends RangedWeapon {
 	public int getLevelRequirement() { return 15; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.AWP; }
+	public Metrics getWeaponMetric() { return Metrics.AWP; }
 
 	@Override
 	public String getName() {

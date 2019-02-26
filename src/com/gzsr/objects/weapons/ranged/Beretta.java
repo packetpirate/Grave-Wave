@@ -108,7 +108,7 @@ public class Beretta extends RangedWeapon {
 	public int getLevelRequirement() { return 1; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.BERETTA; }
+	public Metrics getWeaponMetric() { return Metrics.BERETTA; }
 
 	@Override
 	public String getName() {

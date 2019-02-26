@@ -77,7 +77,7 @@ public class BaseballBat extends MeleeWeapon {
 	public int getLevelRequirement() { return 5; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.BASEBALL_BAT; }
+	public Metrics getWeaponMetric() { return Metrics.BASEBALL_BAT; }
 
 	@Override
 	public String getName() {

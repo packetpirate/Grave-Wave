@@ -105,7 +105,7 @@ public class NailGun extends RangedWeapon {
 	public int getLevelRequirement() { return 1; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.NAIL_GUN; }
+	public Metrics getWeaponMetric() { return Metrics.NAIL_GUN; }
 
 	@Override
 	public String getName() {

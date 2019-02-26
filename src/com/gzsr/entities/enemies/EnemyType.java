@@ -19,12 +19,12 @@ public enum EnemyType {
 	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200L, Metrics.STARFRIGHT, 200, 250, 750),
 	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200L, Metrics.EL_SALVO, 300, 500, 1_500),
 	PROWLER("GZS_Prowler", 48, 48, 4, 250L, Metrics.PROWLER, 400, 600, 2_500),
-	
+
 	// Bosses
-	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 2_000, 3_000, 5_000), 
+	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 2_000, 3_000, 5_000),
 	ZOMBAT_SWARM("GZS_Zombat", 64, 64, 4, 50L, Metrics.ZOMBAT, 2_000, 2_500, 1_000),
 	STITCHES("GZS_Stitches", 128, 128, 4, 150L, Metrics.STITCHES, 5_000, 7_500, 10_000);
-	
+
 	private String animationName;
 	private int frameWidth;
 	public int getFrameWidth() { return frameWidth; }
@@ -33,33 +33,33 @@ public enum EnemyType {
 	private int frameCount;
 	private long frameDelay;
 	public Animation getAnimation() { return new Animation(animationName, frameWidth, frameHeight, frameCount, frameDelay); }
-	
-	private long enemyMetric;
-	public long getEnemyMetric() { return enemyMetric; }
-	
+
+	private Metrics enemyMetric;
+	public Metrics getEnemyMetric() { return enemyMetric; }
+
 	private int cashMin, cashMax;
 	public int getCashValue() { return (Globals.rand.nextInt(cashMax - cashMin) + cashMin); }
-	
+
 	private int experience;
 	public int getExperience() { return experience; }
-	
+
 	public Animation createLayerAnimation(int layer, int count, long delay, long lifespan, long created) {
 		return new Animation(animationName, layer, frameWidth, frameHeight, frameCount, frameDelay, lifespan, created);
 	}
-	
-	EnemyType(String animationName_, int frameWidth_, int frameHeight_, int frameCount_, long frameDelay_, long enemyMetric_, int cashMin_, int cashMax_, int experience_) {
+
+	EnemyType(String animationName_, int frameWidth_, int frameHeight_, int frameCount_, long frameDelay_, Metrics enemyMetric_, int cashMin_, int cashMax_, int experience_) {
 		this.animationName = animationName_;
 		this.frameWidth = frameWidth_;
 		this.frameHeight = frameHeight_;
 		this.frameCount = frameCount_;
 		this.frameDelay = frameDelay_;
-		
+
 		this.enemyMetric = enemyMetric_;
 		this.cashMin = cashMin_;
 		this.cashMax = cashMax_;
 		this.experience = experience_;
 	}
-	
+
 	public static int appearsOnWave(EnemyType type_) {
 		switch(type_) {
 			case ZUMBY: return Zumby.appearsOnWave();
@@ -76,7 +76,7 @@ public enum EnemyType {
 			default: return -1;
 		}
 	}
-	
+
 	public static int spawnCost(EnemyType type_) {
 		switch(type_) {
 			case ZUMBY: return Zumby.getSpawnCost();
@@ -93,7 +93,7 @@ public enum EnemyType {
 			default: return 1;
 		}
 	}
-	
+
 	public static Enemy createInstance(EnemyType type_, Pair<Float> position_) {
 		switch(type_) {
 			case ZUMBY: return new Zumby(position_);

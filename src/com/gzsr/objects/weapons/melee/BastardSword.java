@@ -79,7 +79,7 @@ public class BastardSword extends MeleeWeapon {
 	public int getLevelRequirement() { return 10; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.BASTARD_SWORD; }
+	public Metrics getWeaponMetric() { return Metrics.BASTARD_SWORD; }
 
 	@Override
 	public String getName() {

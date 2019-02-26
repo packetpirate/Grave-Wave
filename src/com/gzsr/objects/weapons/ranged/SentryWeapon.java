@@ -120,7 +120,7 @@ public class SentryWeapon extends RangedWeapon {
 	public int getLevelRequirement() { return 15; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.SENTRY; }
+	public Metrics getWeaponMetric() { return Metrics.SENTRY; }
 
 	@Override
 	public String getName() {

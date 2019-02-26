@@ -188,7 +188,7 @@ public class BigRedButton extends RangedWeapon {
 	public int getLevelRequirement() { return 18; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.BIG_RED_BUTTON; }
+	public Metrics getWeaponMetric() { return Metrics.BIG_RED_BUTTON; }
 
 	@Override
 	public String getName() {

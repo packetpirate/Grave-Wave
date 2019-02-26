@@ -108,7 +108,7 @@ public class Lollipop extends MeleeWeapon {
 	public int getLevelRequirement() { return 18; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.LOLLIPOP; }
+	public Metrics getWeaponMetric() { return Metrics.LOLLIPOP; }
 
 	@Override
 	public String getName() {

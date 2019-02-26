@@ -74,15 +74,11 @@ public class SpikedBat extends BaseballBat {
 	public int getLevelRequirement() { return 5; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.SPIKED_BAT; }
+	public Metrics getWeaponMetric() { return Metrics.SPIKED_BAT; }
 
 	@Override
-	public String getName() {
-		return WType.SPIKED_BAT.getName();
-	}
+	public String getName() { return WType.SPIKED_BAT.getName(); }
 
 	@Override
-	public String getDescription() {
-		return WType.SPIKED_BAT.getDescription();
-	}
+	public String getDescription() { return WType.SPIKED_BAT.getDescription(); }
 }

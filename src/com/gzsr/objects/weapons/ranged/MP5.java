@@ -111,7 +111,7 @@ public class MP5 extends RangedWeapon {
 	public int getLevelRequirement() { return 3; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.MP5; }
+	public Metrics getWeaponMetric() { return Metrics.MP5; }
 
 	@Override
 	public String getName() {

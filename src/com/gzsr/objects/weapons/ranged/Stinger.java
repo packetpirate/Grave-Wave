@@ -115,7 +115,7 @@ public class Stinger extends RangedWeapon {
 	public int getLevelRequirement() { return 15; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.STINGER; }
+	public Metrics getWeaponMetric() { return Metrics.STINGER; }
 
 	@Override
 	public String getName() {

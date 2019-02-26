@@ -128,7 +128,7 @@ public class AK47 extends RangedWeapon {
 	public int getLevelRequirement() { return 8; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.AK47; }
+	public Metrics getWeaponMetric() { return Metrics.AK47; }
 
 	@Override
 	public String getName() {

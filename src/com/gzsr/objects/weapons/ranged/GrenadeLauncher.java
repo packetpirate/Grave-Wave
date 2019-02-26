@@ -111,7 +111,7 @@ public class GrenadeLauncher extends RangedWeapon {
 	public int getLevelRequirement() { return 12; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.GRENADE; }
+	public Metrics getWeaponMetric() { return Metrics.GRENADE; }
 
 	@Override
 	public String getName() {

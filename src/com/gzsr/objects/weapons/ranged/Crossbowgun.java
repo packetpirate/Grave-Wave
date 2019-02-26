@@ -2,6 +2,7 @@ package com.gzsr.objects.weapons.ranged;
 
 import org.newdawn.slick.Image;
 
+import com.gzsr.achievements.Metrics;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.weapons.WType;
@@ -57,12 +58,11 @@ public class Crossbowgun extends Crossbow {
 	public WType getType() { return WType.CROSSBOWGUN; }
 
 	@Override
-	public String getName() {
-		return WType.CROSSBOWGUN.getName();
-	}
+	public Metrics getWeaponMetric() { return Metrics.CROSSBOWGUN; }
 
 	@Override
-	public String getDescription() {
-		return WType.CROSSBOWGUN.getDescription();
-	}
+	public String getName() { return WType.CROSSBOWGUN.getName(); }
+
+	@Override
+	public String getDescription() { return WType.CROSSBOWGUN.getDescription(); }
 }

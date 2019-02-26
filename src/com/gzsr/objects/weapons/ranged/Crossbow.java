@@ -102,15 +102,11 @@ public class Crossbow extends RangedWeapon {
 	public int getLevelRequirement() { return 10; }
 
 	@Override
-	public long getWeaponMetric() { return Metrics.CROSSBOW; }
+	public Metrics getWeaponMetric() { return Metrics.CROSSBOW; }
 
 	@Override
-	public String getName() {
-		return WType.CROSSBOW.getName();
-	}
+	public String getName() { return WType.CROSSBOW.getName(); }
 
 	@Override
-	public String getDescription() {
-		return WType.CROSSBOW.getDescription();
-	}
+	public String getDescription() { return WType.CROSSBOW.getDescription(); }
 }
