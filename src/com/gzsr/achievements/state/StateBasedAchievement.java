@@ -77,24 +77,34 @@ public class StateBasedAchievement extends Achievement {
 		Pattern pattern = Pattern.compile("state\\((\\d+),(\\d+),?([a-zA-Z0-9\\(\\),]+)?\\)");
 		for(String token : tokens) {
 			Matcher matcher = pattern.matcher(token);
-			try {
-				int id = Integer.parseInt(matcher.group(1));
-				int cState = Integer.parseInt(matcher.group(2));
-				String body = matcher.group(3);
+			if(matcher.matches()) {
+				try {
+					int id = Integer.parseInt(matcher.group(1));
+					int cState = Integer.parseInt(matcher.group(2));
+					String body = matcher.group(3);
 
-				currentState = allStates.get(cState);
-				if((body != null) && !body.isEmpty()) {
-					AchievementState state = allStates.get(id);
-					if(state != null) {
-						state.parseSaveData(body);
-					} else {
-						System.err.println("Malformed achievement state format! Aborting...");
-						return;
+					currentState = allStates.get(cState);
+					if((body != null) && !body.isEmpty()) {
+						AchievementState state = allStates.get(id);
+						if(state != null) {
+							state.parseSaveData(body);
+						} else {
+							System.err.println("Malformed achievement state format! Aborting...");
+							return;
+						}
 					}
+				} catch(NumberFormatException nfe) {
+					System.err.println("Malformed achievement state! Aborting...");
+					nfe.printStackTrace();
+					return;
+				} catch(IllegalStateException ise) {
+					System.err.println("Malformed achievement state! Aborting...");
+					ise.printStackTrace();
+					return;
 				}
-			} catch(NumberFormatException nfe) {
-				System.err.println("Malformed achievement state! Aborting...");
-				nfe.printStackTrace();
+			} else {
+				System.out.printf("WARNING: Could not find a valid pattern for achievement: %s\n", name);
+				System.out.println("Aborting achievement loading...");
 				return;
 			}
 		}

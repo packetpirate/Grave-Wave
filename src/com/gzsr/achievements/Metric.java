@@ -1,5 +1,9 @@
 package com.gzsr.achievements;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Metric {
 	private static final int METRIC_COUNT = Metrics.values().length;
 	public static final Metric NONE = new Metric();
@@ -55,6 +59,46 @@ public class Metric {
 		return this;
 	}
 
+	public static Metric parse(String data) {
+		Metric metric = new Metric();
+
+		System.out.printf("Parsed Metric Data: %s\n", data);
+		String [] tokens = data.split(",");
+		for(String token : tokens) {
+			if(!token.isEmpty()) {
+				try {
+					int index = Integer.parseInt(token);
+					Metrics m = Metrics.getByIndex(index);
+					metric.add(m);
+				} catch(NumberFormatException nfe) {
+					System.err.println("ERROR: Could not parse metric index.");
+					continue;
+				}
+			}
+		}
+
+		return metric;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{");
+
+		List<Integer> vals = new ArrayList<Integer>();
+		for(int i = 0; i < metrics.length; i++) {
+			if(metrics[i]) vals.add(i);
+		}
+
+		for(int i = 0; i < vals.size(); i++) {
+			builder.append(Integer.toString(vals.get(i)));
+			if(i < (vals.size() - 1)) builder.append(",");
+		}
+
+		builder.append("}");
+		return builder.toString();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
@@ -72,6 +116,6 @@ public class Metric {
 
 	@Override
 	public int hashCode() {
-		return metrics.hashCode();
+		return Arrays.hashCode(metrics);
 	}
 }

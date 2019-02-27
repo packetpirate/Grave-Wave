@@ -81,8 +81,7 @@ public class MilestoneAchievement extends Achievement {
 			Metric metric = entry.getKey();
 			Pair<Integer> progress = entry.getValue();
 
-			// TODO: Correct formatting of Metric object so it's readable by MilestoneAchievement.parseSaveData().
-			String text = String.format("milestone(%d,%d,%d)", metric, progress.x, progress.y);
+			String text = String.format("milestone(%s,%d,%d)", metric, progress.x, progress.y);
 			builder.append(" ").append(text);
 		}
 
@@ -91,13 +90,12 @@ public class MilestoneAchievement extends Achievement {
 
 	@Override
 	public void parseSaveData(String [] tokens) {
-		// TODO: Correct parsing of Metric data.
-		Pattern pattern = Pattern.compile("milestone\\((\\d+),(\\d+),(\\d+)\\)");
+		Pattern pattern = Pattern.compile("milestone\\(\\{((?:\\d+,?)+)\\},(\\d+),(\\d+)\\)");
 		for(String token : tokens) {
 			Matcher matcher = pattern.matcher(token);
 			if(matcher.matches()) {
 				try {
-					long metric = Long.parseLong(matcher.group(1));
+					Metric metric = Metric.parse(matcher.group(1));
 					int x = Integer.parseInt(matcher.group(2));
 					int y = Integer.parseInt(matcher.group(3));
 

@@ -32,6 +32,16 @@ public enum Metrics {
 		this.index = index_;
 	}
 
+	public static Metrics getByIndex(int index) {
+		Metrics [] metrics = Metrics.values();
+		for(int i = 0; i < metrics.length; i++) {
+			Metrics metric = metrics[i];
+			if(metric.index == index) return metric;
+		}
+
+		return null;
+	}
+
 	public static Metric compose(Metrics... metrics) {
 		return new Metric(metrics);
 	}

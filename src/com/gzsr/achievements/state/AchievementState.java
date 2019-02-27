@@ -68,8 +68,7 @@ public class AchievementState {
 		}
 
 		public String format() {
-			// TODO: Correct formatting of Metric object.
-			return String.format("t(%d,%d,%d)", id, metric, count);
+			return String.format("t(%d,%d)", id, count);
 		}
 
 		public void parseSaveData(int count_) {
@@ -174,24 +173,27 @@ public class AchievementState {
 	}
 
 	public String formatTransitions() {
-		String format = ",";
-		for(int i = 0; i < transitions.size(); i++) {
-			Transition t = transitions.get(i);
-			format += t.format();
-			if(i < (transitions.size() - 1)) format += ",";
+		if(!transitions.isEmpty()) {
+			String format = ",";
+			for(int i = 0; i < transitions.size(); i++) {
+				Transition t = transitions.get(i);
+				format += t.format();
+				if(i < (transitions.size() - 1)) format += ",";
+			}
+
+			return format;
 		}
 
-		return format;
+		return "";
 	}
 
 	public void parseSaveData(String data) {
-		// TODO: Correct parsing to handle Metric object's new formatting.
-		Pattern pattern = Pattern.compile("t\\((\\d+),(\\d+),(\\d+)\\)");
+		Pattern pattern = Pattern.compile("t\\((\\d+),(\\d+)\\)");
 		Matcher matcher = pattern.matcher(data);
 		while(matcher.find()) {
 			try {
 				int id = Integer.parseInt(matcher.group(1));
-				int count = Integer.parseInt(matcher.group(3));
+				int count = Integer.parseInt(matcher.group(2));
 
 				for(Transition t : transitions) {
 					if(id == t.getID()) {

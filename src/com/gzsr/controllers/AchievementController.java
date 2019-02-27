@@ -114,6 +114,7 @@ public class AchievementController {
 			s1.createTransition(3, s0, (metric -> (metric.has(Metrics.ABERRATION, Metrics.ENEMY, Metrics.DAMAGE)) && !metric.has(Metrics.NAIL_GUN)));
 
 			StateBasedAchievement absoluteMadman = new StateBasedAchievement(9, "Absolute Madman", "Killed the Aberration using only the Nail Gun.", "", s0, false, true);
+			absoluteMadman.saveStates(s0, s1, s2);
 			achievements.add(absoluteMadman);
 		}
 
@@ -127,6 +128,7 @@ public class AchievementController {
 			s1.createTransition(3, Metrics.compose(Metrics.ABERRATION, Metrics.ENEMY, Metrics.KILL), s2);
 
 			StateBasedAchievement tentacleWrangler = new StateBasedAchievement(10, "Tentacle Wrangler", "Killed the Aberration without taking damage.", "", s0, false, true);
+			tentacleWrangler.saveStates(s0, s1, s2);
 			achievements.add(tentacleWrangler);
 		}
 
@@ -140,6 +142,7 @@ public class AchievementController {
 			s1.createTransition(3, Metrics.compose(Metrics.STITCHES, Metrics.ENEMY, Metrics.KILL), s2);
 
 			StateBasedAchievement offTheHook = new StateBasedAchievement(11, "Off The Hook", "Killed Stitches without taking damage.", "", s0, false, true);
+			offTheHook.saveStates(s0, s1, s2);
 			achievements.add(offTheHook);
 		}
 
@@ -162,6 +165,7 @@ public class AchievementController {
 			s3.createTransition(7, Metrics.compose(Metrics.ZOMBAT, Metrics.ENEMY, Metrics.KILL), s4);
 
 			StateBasedAchievement blindAsABat = new StateBasedAchievement(12, "Blind As A Bat", "Killed the Zombats without taking damage.", "", s0, false, true);
+			blindAsABat.saveStates(s0, s1, s2, s3, s4);
 			achievements.add(blindAsABat);
 		}
 	}

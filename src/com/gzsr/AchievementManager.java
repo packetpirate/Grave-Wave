@@ -18,7 +18,7 @@ import com.gzsr.controllers.AchievementController;
 
 public class AchievementManager {
 	private static OpenOption [] WRITE_OPTIONS = new OpenOption[] { StandardOpenOption.WRITE, StandardOpenOption.CREATE };
-	
+
 	public static void init() {
 		// Read achievement progress from the achievements data file.
 		Path filePath = FileSystems.getDefault().getPath("data", ".achievements");
@@ -42,7 +42,7 @@ public class AchievementManager {
 							}
 						}
 					}
-					
+
 					if(!match) System.err.println("Unknown achievement ID detected in data file!");
 				}
 			}
@@ -57,13 +57,13 @@ public class AchievementManager {
 			nfe.printStackTrace();
 		}
 	}
-	
+
 	public static void save() {
 		Path filePath = FileSystems.getDefault().getPath("data", ".achievements");
 		try (BufferedWriter writer = Files.newBufferedWriter(filePath, Charset.defaultCharset(), WRITE_OPTIONS)) {
 			List<Achievement> achievements = AchievementController.getInstance().getAchievements();
 			for(Achievement achievement : achievements) {
-				if(!achievement.resets()) {
+				if(achievement.isEarned() || !achievement.resets()) {
 					String format = achievement.saveFormat();
 					writer.write(format);
 					writer.newLine();
