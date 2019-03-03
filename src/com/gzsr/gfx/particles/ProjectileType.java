@@ -11,6 +11,7 @@ public enum ProjectileType {
 	SMG(new Color(0xF2F28C), 2.5f, 3.0f, 10.0f, 200L),
 	ASSAULT(new Color(0xF2F2BF), 2.5f, 3.0f, 12.0f, 240L),
 	SHOTGUN(new Color(0xF2F28C), 1.0f, 4.0f, 4.0f, 400L),
+	FLAK(new Color(0xEDA642), 1.2f, 4.0f, 4.0f, 500L),
 	RIFLE(new Color(0xF2F2BC), 4.0f, 3.0f, 12.0f, 200L),
 	ARROW(new Color(0xA58138), 3.0f, 30.0f, 4.0f, 150L),
 	BOLT(new Color(0xA58138), 3.5f, 30.0f, 4.0f, 200L),

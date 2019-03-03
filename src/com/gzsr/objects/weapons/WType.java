@@ -35,6 +35,7 @@ public enum WType {
 	// Crafted Weapons
 	SPIKED_BAT("Spiked Bat", "As if their faces weren't mangled enough already...", "GZS_Spiked_Bat_Icon"),
 	CROSSBOWGUN("Crossbowgun", "Why keep the bow part? Because it's cool, now shut up...", "GZS_Crossbowgun"),
+	FLAK_CANNON("Flak Cannon", "Turn your precious resources into molten flak to burn right through them.", "GZS_Flak_Cannon"),
 	ELECTRIC_NET_CANNON("Electric Net Cannon", "Get those undead extra crispy under a blanket of electric fury.", "GZS_Electric_Net_Cannon");
 
 	private String name;

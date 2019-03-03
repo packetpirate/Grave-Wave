@@ -17,23 +17,15 @@ public class Controls {
 		MOVE_LEFT(Input.KEY_A, "Move Left", "A"),
 		MOVE_RIGHT(Input.KEY_D, "Move Right", "D"),
 		RELOAD(Input.KEY_R, "Reload", "R"),
+		PREV_WEAPON(Input.KEY_Q ,"Prev Weapon","Q"),
+		NEXT_WEAPON(Input.KEY_E, "Next Weapon", "E"),
 		FLASHLIGHT(Input.KEY_F, "Flashlight", "F"),
 		NEXT_WAVE(Input.KEY_N, "Next Wave", "N"),
 		TALENTS_SCREEN(Input.KEY_T, "Train", "T"),
 		SHOP_SCREEN(Input.KEY_B, "Shop", "B"),
 		CRAFT_SCREEN(Input.KEY_C, "Craft", "C"),
 		PAUSE_GAME(Input.KEY_P, "Pause", "P"),
-		OPEN_CONSOLE(Input.KEY_GRAVE, "Console", "~"),
-		WEAPON_1(Input.KEY_1, "Weapon 1", "1"),
-		WEAPON_2(Input.KEY_2, "Weapon 2", "2"),
-		WEAPON_3(Input.KEY_3, "Weapon 3", "3"),
-		WEAPON_4(Input.KEY_4, "Weapon 4", "4"),
-		WEAPON_5(Input.KEY_5, "Weapon 5", "5"),
-		WEAPON_6(Input.KEY_6, "Weapon 6", "6"),
-		WEAPON_7(Input.KEY_7, "Weapon 7", "7"),
-		WEAPON_8(Input.KEY_8, "Weapon 8", "8"),
-		WEAPON_9(Input.KEY_9, "Weapon 9", "9"),
-		WEAPON_10(Input.KEY_0, "Weapon 10", "0");
+		OPEN_CONSOLE(Input.KEY_GRAVE, "Console", "~");
 
 		private int key;
 		public int getKey() { return key; }
@@ -69,19 +61,6 @@ public class Controls {
 			this.state = KeyState.NONE;
 		}
 
-		// To be used if game migrates to polled input.
-		/*
-		public void handle(boolean down) {
-			if(state == KeyState.PRESSED) {
-				if(!down) state = KeyState.RELEASED;
-			} else if(state == KeyState.RELEASED) {
-				if(down) state = KeyState.PRESSED;
-				else state = KeyState.NONE;
-			} else {
-				if(down) state = KeyState.PRESSED;
-			}
-		}*/
-
 		public static Layout identify(int key) {
 			for(int i = 0; i < values().length; i++) {
 				Layout control = values()[i];
@@ -106,22 +85,6 @@ public class Controls {
 		}
 
 		public static String findDisplay(int key, char c) {
-			/*
-			switch(key) {
-				case Input.KEY_SPACE: return "Space";
-				case Input.KEY_LCONTROL: return "Left Control";
-				case Input.KEY_RCONTROL: return "Right Control";
-				case Input.KEY_LSHIFT: return "Left Shift";
-				case Input.KEY_RSHIFT: return "Right Shift";
-				case Input.KEY_LALT: return "Left Alt";
-				case Input.KEY_RALT: return "Right Alt";
-				case Input.KEY_TAB: return "Tab";
-				case Input.KEY_CAPITAL: return "Caps Lock";
-				case Input.KEY_BACK: return "Backspace";
-				case Input.KEY_ENTER: return "Enter";
-				case Input.KEY_GRAVE: return "~";
-				default: return Character.toString(c);
-			}*/
 			return Input.getKeyName(key);
 		}
 	}
@@ -137,16 +100,6 @@ public class Controls {
 		if(instance == null) instance = new Controls();
 		return instance;
 	}
-
-	// To be used if the game migrates to polled input.
-	/*
-	public void poll(GameContainer gc) {
-		Input in = gc.getInput();
-		Layout [] keys = Layout.values();
-		for(Layout key : keys) {
-			key.handle(in.isKeyDown(key.getKey()));
-		}
-	}*/
 
 	public void press(int key) {
 		Layout control = Layout.identify(key);

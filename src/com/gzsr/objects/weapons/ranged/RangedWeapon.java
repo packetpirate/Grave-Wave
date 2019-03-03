@@ -149,7 +149,7 @@ public abstract class RangedWeapon extends Weapon {
 		Scorekeeper.getInstance().addShotFired();
 	}
 
-	private void reload() {
+	protected void reload() {
 		int takeFromInv = getClipCapacity() - ammoInClip;
 		int taken = Math.min(takeFromInv, ammoInInventory);
 		ammoInInventory -= taken;
@@ -159,7 +159,7 @@ public abstract class RangedWeapon extends Weapon {
 	}
 
 	public void reload(long cTime) {
-		if(ammoInInventory > 0) {
+		if(getInventoryAmmo() > 0) {
 			reloading = true;
 			reloadStart = cTime;
 			if(Talents.Munitions.HASTE.active()) {
@@ -259,8 +259,8 @@ public abstract class RangedWeapon extends Weapon {
 
 	public abstract int getClipSize();
 	public abstract int getStartClips();
-	public abstract int getMaxClips();
-	public abstract int getAmmoPrice();
+	public abstract int getMaxClips(); // Max clips of 0 means you cannont buy ammo for this weapon.
+	public abstract int getAmmoPrice(); // Price of -1 indicates you cannont buy ammo for this weapon.
 
 	public int getClipCapacity() {
 		int capacity = getClipSize();

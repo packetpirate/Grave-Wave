@@ -124,6 +124,4 @@ public class ENCannon extends RangedWeapon {
 	public String getDescription() {
 		return WType.ELECTRIC_NET_CANNON.getDescription();
 	}
-
-
 }

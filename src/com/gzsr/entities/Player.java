@@ -12,7 +12,6 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.Controls;
-import com.gzsr.Controls.Layout;
 import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.controllers.AchievementController;
@@ -118,6 +117,7 @@ public class Player implements Entity {
 	public int getRangedIndex() { return rangedIndex; }
 	private int meleeIndex;
 	public int getMeleeIndex() { return meleeIndex; }
+	private boolean canCycle; // Used to prevent rapid cycling with prev/next weapon keys.
 	public RangedWeapon getCurrentRanged() {
 		List<RangedWeapon> weapons = getRangedWeapons();
 		if(rangedIndex >= weapons.size()) return weapons.get(0);
@@ -158,8 +158,6 @@ public class Player implements Entity {
 		}
 	}
 	public void equip(Weapon w) {
-		w.equip();
-
 		if(w instanceof RangedWeapon) {
 			List<RangedWeapon> weapons = getRangedWeapons();
 			getCurrentRanged().unequip();
@@ -179,16 +177,15 @@ public class Player implements Entity {
 				}
 			}
 		}
+
+		w.equip();
 	}
 	public void weaponRotate(int direction) {
 		int wc = getRangedWeapons().size();
 		if(wc > 0) {
-			Weapon currentWeapon = getCurrentRanged();
-			currentWeapon.unequip(); // Notify the current weapon that we're switching.
 			// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 			int i = Math.floorMod((rangedIndex + direction), wc);
-			rangedIndex = i;
-			currentWeapon.equip(); // Notify new weapon that it is equipped.
+			setCurrentRanged(i);
 		}
 	}
 
@@ -298,15 +295,20 @@ public class Player implements Entity {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y + 4.0f);
 
-		// Check to see if the player is trying to change weapon by number.
-		Layout [] keys = new Layout[] { Controls.Layout.WEAPON_1, Controls.Layout.WEAPON_2, Controls.Layout.WEAPON_3, Controls.Layout.WEAPON_4,
-										Controls.Layout.WEAPON_5, Controls.Layout.WEAPON_6, Controls.Layout.WEAPON_7, Controls.Layout.WEAPON_8,
-										Controls.Layout.WEAPON_9, Controls.Layout.WEAPON_10 };
-		for(int i = 0; i < 10; i++) {
-			if(Controls.getInstance().isPressed(keys[i])) {
-				setCurrentRanged(i);
+		Controls controls = Controls.getInstance();
+		if(canCycle) {
+			if(controls.isPressed(Controls.Layout.PREV_WEAPON)) {
+				weaponRotate(1);
 				cRangedWeapon = getCurrentRanged();
-				break; // To avoid conflicts when holding multiple numerical keys.
+				canCycle = false;
+			} else if(controls.isPressed(Controls.Layout.NEXT_WEAPON)) {
+				weaponRotate(-1);
+				cRangedWeapon = getCurrentRanged();
+				canCycle = false;
+			}
+		} else {
+			if(!controls.isPressed(Controls.Layout.PREV_WEAPON) && !controls.isPressed(Controls.Layout.NEXT_WEAPON)) {
+				canCycle = true;
 			}
 		}
 
@@ -407,6 +409,7 @@ public class Player implements Entity {
 
 		rangedIndex = 0;
 		meleeIndex = 0;
+		canCycle = true;
 		inventory = new Inventory(Player.INVENTORY_SIZE);
 
 		Machete machete = new Machete();

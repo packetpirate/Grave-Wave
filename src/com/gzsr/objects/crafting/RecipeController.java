@@ -7,6 +7,7 @@ import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.melee.SpikedBat;
 import com.gzsr.objects.weapons.ranged.Crossbowgun;
 import com.gzsr.objects.weapons.ranged.ENCannon;
+import com.gzsr.objects.weapons.ranged.FlakCannon;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;
@@ -59,8 +60,16 @@ public class RecipeController {
 	}
 
 	private static void buildAdvancedRecipes() {
+		// Flak Cannon
+		Recipe flakCannon = new Recipe.Builder(new FlakCannon(), true)
+				.addResource(Resources.METAL, 10)
+				.addResource(Resources.ELECTRONICS, 1)
+				.addResource(Resources.POWER, 10)
+				.addWeapon(WType.MOSSBERG)
+				.build();
+		advancedRecipes.add(flakCannon);
+
 		// Electric Net Cannon
-		// TODO: Add electric net cannon and recipe. Requires Grenade Launcher + Laser Barrier + Taser + 10 Power?
 		Recipe enCannon = new Recipe.Builder(new ENCannon(), true)
 				.addResource(Resources.POWER, 10)
 				.addWeapon(WType.GRENADE_LAUNCHER)

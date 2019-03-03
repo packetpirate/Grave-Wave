@@ -423,54 +423,56 @@ public class ShopState extends BasicGameState implements InputListener {
 				// Draw the "buy ammo" and "max ammo" buttons and labels.
 				if(selection instanceof RangedWeapon) {
 					RangedWeapon w = (RangedWeapon) selection;
-					{ // Draw ammo button.
-						boolean modder = Talents.Munitions.MODDER.active();
-						boolean lessThanOne = ((w.getInventoryAmmo() == (w.getAmmoCapacity() - w.getClipCapacity())) && (w.getClipAmmo() < w.getClipCapacity()));
-						int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipCapacity() - w.getClipAmmo())) : (modder ? (int)(w.getAmmoPrice() * 1.5) : w.getAmmoPrice()));
-						if(Talents.Tactics.MERCANTILE.active()) ammoPrice = (int)(ammoPrice * (1.0 - (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
-						String text = "$" + NumberFormat.getInstance(Locale.US).format(ammoPrice);
-						FontUtils.drawCenter(g.getFont(), "One Clip", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)),
-											 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
-											 (int)ammoButton.getSize().x.floatValue(), Color.white);
-						ammoButton.render(g, 0L);
-						if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getAmmoPrice())) {
-							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
-							float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
-							float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
+					if(w.getAmmoPrice() > 0) {
+						{ // Draw ammo button.
+							boolean modder = Talents.Munitions.MODDER.active();
+							boolean lessThanOne = ((w.getInventoryAmmo() == (w.getAmmoCapacity() - w.getClipCapacity())) && (w.getClipAmmo() < w.getClipCapacity()));
+							int ammoPrice = (lessThanOne ? ((w.getAmmoPrice() / w.getClipSize()) * (w.getClipCapacity() - w.getClipAmmo())) : (modder ? (int)(w.getAmmoPrice() * 1.5) : w.getAmmoPrice()));
+							if(Talents.Tactics.MERCANTILE.active()) ammoPrice = (int)(ammoPrice * (1.0 - (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
+							String text = "$" + NumberFormat.getInstance(Locale.US).format(ammoPrice);
+							FontUtils.drawCenter(g.getFont(), "One Clip", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)),
+												 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
+												 (int)ammoButton.getSize().x.floatValue(), Color.white);
+							ammoButton.render(g, 0L);
+							if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getAmmoPrice())) {
+								// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
+								float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
+								float y = ammoButton.getPosition().y - (ammoButton.getSize().y / 2);
 
-							g.setColor(new Color(0xBB333333));
-							g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
-						}
-						FontUtils.drawCenter(g.getFont(), text, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)),
-											 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)),
-											 (int)ammoButton.getSize().x.floatValue(),
-											 Color.black);
-					} // End draw ammo button.
-					{ // Draw max ammo button.
-						int money = Player.getPlayer().getAttributes().getInt("money");
-						int maxAmmoAffordable = w.maxAmmoAffordable(money);
+								g.setColor(new Color(0xBB333333));
+								g.fillRect(x, y, ammoButton.getSize().x, ammoButton.getSize().y);
+							}
+							FontUtils.drawCenter(g.getFont(), text, (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x.floatValue() / 2)),
+												 (int)(ammoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)),
+												 (int)ammoButton.getSize().x.floatValue(),
+												 Color.black);
+						} // End draw ammo button.
+						{ // Draw max ammo button.
+							int money = Player.getPlayer().getAttributes().getInt("money");
+							int maxAmmoAffordable = w.maxAmmoAffordable(money);
 
-						int price = w.getCostForAmmo(maxAmmoAffordable);
-						if(Talents.Tactics.MERCANTILE.active()) price = (int)(price * (1.0 - (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
-						String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format(price);
-						FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)),
-											 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
-											 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
-						maxAmmoButton.render(g, 0L);
+							int price = w.getCostForAmmo(maxAmmoAffordable);
+							if(Talents.Tactics.MERCANTILE.active()) price = (int)(price * (1.0 - (Talents.Tactics.MERCANTILE.ranks() * 0.1)));
+							String ammoPrice = "$" + NumberFormat.getInstance(Locale.US).format(price);
+							FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)),
+												 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
+												 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
+							maxAmmoButton.render(g, 0L);
 
-						if(w.clipsMaxedOut() || (maxAmmoAffordable == 0)) {
-							// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
-							float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
-							float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
+							if(w.clipsMaxedOut() || (maxAmmoAffordable == 0)) {
+								// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
+								float x = maxAmmoButton.getPosition().x - (maxAmmoButton.getSize().x / 2);
+								float y = maxAmmoButton.getPosition().y - (maxAmmoButton.getSize().y / 2);
 
-							g.setColor(new Color(0xBB333333));
-							g.fillRect(x, y, maxAmmoButton.getSize().x, maxAmmoButton.getSize().y);
-						}
-						FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x.floatValue() / 2)),
-											 (int)(maxAmmoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)),
-											 (int)maxAmmoButton.getSize().x.floatValue(),
-											 Color.black);
-					} // End draw max ammo button.
+								g.setColor(new Color(0xBB333333));
+								g.fillRect(x, y, maxAmmoButton.getSize().x, maxAmmoButton.getSize().y);
+							}
+							FontUtils.drawCenter(g.getFont(), ammoPrice, (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x.floatValue() / 2)),
+												 (int)(maxAmmoButton.getPosition().y.floatValue() - (g.getFont().getLineHeight() / 2)),
+												 (int)maxAmmoButton.getSize().x.floatValue(),
+												 Color.black);
+						} // End draw max ammo button.
+					}
 				}
 			} else {
 				buyButton.render(g, 0L);
@@ -621,7 +623,8 @@ public class ShopState extends BasicGameState implements InputListener {
 				if(selection instanceof RangedWeapon) {
 					RangedWeapon rw = (RangedWeapon) selection;
 
-					if(!rw.clipsMaxedOut()) {
+					boolean canBuyAmmo = (rw.getAmmoPrice() > 0);
+					if(canBuyAmmo && !rw.clipsMaxedOut()) {
 						// If the player has less than a clip left and max ammo otherwise, only charge for difference.
 						boolean modder = Talents.Munitions.MODDER.active();
 						int minusOneClip = (rw.getAmmoCapacity() - rw.getClipCapacity()); // Full ammo capacity minus one clip.
@@ -639,17 +642,19 @@ public class ShopState extends BasicGameState implements InputListener {
 			} else if(maxAmmoButton.inBounds(x, y) && selectedInInventory) {
 				// Buy max ammo for the currently selected weapon.
 				if(selection instanceof RangedWeapon) {
-					RangedWeapon w = (RangedWeapon) selection;
+					RangedWeapon rw = (RangedWeapon) selection;
 
-					int money = Player.getPlayer().getAttributes().getInt("money");
-					int maxAmmoAffordable = w.maxAmmoAffordable(money);
-					if(maxAmmoAffordable > 0) {
-						int cost = w.getCostForAmmo(maxAmmoAffordable);
-						int moneyAfterPurchase = (money - cost);
+					if(rw.getAmmoPrice() > 0) {
+						int money = Player.getPlayer().getAttributes().getInt("money");
+						int maxAmmoAffordable = rw.maxAmmoAffordable(money);
+						if(maxAmmoAffordable > 0) {
+							int cost = rw.getCostForAmmo(maxAmmoAffordable);
+							int moneyAfterPurchase = (money - cost);
 
-						player.getAttributes().set("money", moneyAfterPurchase);
-						w.addInventoryAmmo(maxAmmoAffordable);
-						assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
+							player.getAttributes().set("money", moneyAfterPurchase);
+							rw.addInventoryAmmo(maxAmmoAffordable);
+							assets.getSound("buy_ammo2").play(1.0f, assets.getSoundVolume());
+						}
 					}
 				}
 			}
