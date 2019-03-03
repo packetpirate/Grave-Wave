@@ -27,14 +27,14 @@ public class BowAndArrow extends RangedWeapon {
 	private static final float KNOCKBACK = 5.0f;
 	private static final float CHARGE_RATE = 0.0015f;
 	private static final String PROJECTILE_NAME = "GZS_Arrow";
-	private static final String FIRE_SOUND = "bow_fire"; // TODO: Change this to a more appropriate sound.
-	private static final String RELOAD_SOUND = "buy_ammo2"; // TODO: Change this to a more appropriate sound.
+	private static final String FIRE_SOUND = "bow_fire";
+	private static final String RELOAD_SOUND = "buy_ammo2";
 
 	private static final Dice DAMAGE = new Dice(2, 10);
 	private static final int DAMAGE_MOD = 10;
 
-	private boolean charging;
-	private float charge;
+	protected boolean charging;
+	protected float charge;
 
 	public BowAndArrow() {
 		super(Size.MEDIUM, false);
@@ -55,7 +55,7 @@ public class BowAndArrow extends RangedWeapon {
 		if(equipped) {
 			if(charging) {
 				// If we're charging, increase charge up to max of 1.0f.
-				charge += (BowAndArrow.CHARGE_RATE * delta);
+				charge += (getChargeRate() * delta);
 				if(charge > 1.0f) charge = 1.0f;
 			}
 
@@ -101,7 +101,7 @@ public class BowAndArrow extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(BowAndArrow.PROJECTILE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -147,6 +147,8 @@ public class BowAndArrow extends RangedWeapon {
 	@Override
 	public Image getInventoryIcon() { return WType.BOW_AND_ARROW.getImage(); }
 
+	protected float getChargeRate() { return BowAndArrow.CHARGE_RATE; }
+
 	@Override
 	public boolean isChargedWeapon() { return true; }
 
@@ -169,6 +171,9 @@ public class BowAndArrow extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.ARROW; }
 
 	@Override
+	public String getProjectileName() { return BowAndArrow.PROJECTILE_NAME; }
+
+	@Override
 	public int getPrice() { return BowAndArrow.PRICE; }
 
 	@Override
@@ -184,12 +189,8 @@ public class BowAndArrow extends RangedWeapon {
 	public Metrics getWeaponMetric() { return Metrics.BOW_AND_ARROW; }
 
 	@Override
-	public String getName() {
-		return WType.BOW_AND_ARROW.getName();
-	}
+	public String getName() { return WType.BOW_AND_ARROW.getName(); }
 
 	@Override
-	public String getDescription() {
-		return WType.BOW_AND_ARROW.getDescription();
-	}
+	public String getDescription() { return WType.BOW_AND_ARROW.getDescription(); }
 }

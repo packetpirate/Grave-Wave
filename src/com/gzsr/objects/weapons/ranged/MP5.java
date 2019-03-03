@@ -99,6 +99,9 @@ public class MP5 extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.SMG; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return MP5.PRICE; }
 
 	@Override

@@ -124,6 +124,9 @@ public class AWP extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.RIFLE; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return AWP.PRICE; }
 
 	@Override

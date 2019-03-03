@@ -176,6 +176,9 @@ public class BigRedButton extends RangedWeapon {
 	public ProjectileType getProjectile() { return null; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return BigRedButton.PRICE; }
 
 	@Override

@@ -46,7 +46,7 @@ public class Crossbow extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(Crossbow.PROJECTILE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -82,6 +82,9 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.BOLT; }
+
+	@Override
+	public String getProjectileName() { return Crossbow.PROJECTILE_NAME; }
 
 	@Override
 	public Pair<Integer> getDamageRange() { return Crossbow.DAMAGE.getRange(Crossbow.DAMAGE_MOD); }

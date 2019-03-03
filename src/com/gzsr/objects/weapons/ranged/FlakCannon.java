@@ -117,6 +117,9 @@ public class FlakCannon extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.FLAK; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return FlakCannon.PRICE; }
 
 	@Override

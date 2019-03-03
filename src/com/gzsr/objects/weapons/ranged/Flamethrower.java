@@ -48,7 +48,6 @@ public class Flamethrower extends RangedWeapon {
 	@Override
 	public void use(Player player, Pair<Float> position, float theta, long cTime) {
 		for(int i = 0; i < Flamethrower.EMBER_COUNT; i++) {
-			//Color color = getProjectile().getColor();
 			Animation fire = AssetManager.getManager().getAnimation("GZS_FireAnimation1");
 
 			float velocity = getProjectile().getVelocity();
@@ -100,6 +99,9 @@ public class Flamethrower extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.FLAMETHROWER; }
+
+	@Override
+	public String getProjectileName() { return null; }
 
 	@Override
 	public int getPrice() { return Flamethrower.PRICE; }

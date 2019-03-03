@@ -103,6 +103,9 @@ public class Stinger extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.MISSILE; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return Stinger.PRICE; }
 
 	@Override

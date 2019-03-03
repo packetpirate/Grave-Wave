@@ -80,7 +80,7 @@ public class LaserBarrier extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(LaserBarrier.PARTICLE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -142,6 +142,9 @@ public class LaserBarrier extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.LASERNODE; }
+
+	@Override
+	public String getProjectileName() { return LaserBarrier.PARTICLE_NAME; }
 
 	@Override
 	public int getPrice() { return LaserBarrier.PRICE; }

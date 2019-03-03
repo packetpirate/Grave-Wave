@@ -116,7 +116,7 @@ public class MolotovWeapon extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = (long)(getProjectile().getLifespan() * charge);
-		Particle particle = new Particle(MolotovWeapon.PROJECTILE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -163,6 +163,9 @@ public class MolotovWeapon extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.MOLOTOV; }
+
+	@Override
+	public String getProjectileName() { return MolotovWeapon.PROJECTILE_NAME; }
 
 	@Override
 	public boolean isChargedWeapon() { return true; }

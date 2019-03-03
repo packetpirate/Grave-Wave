@@ -62,7 +62,6 @@ public class Metric {
 	public static Metric parse(String data) {
 		Metric metric = new Metric();
 
-		System.out.printf("Parsed Metric Data: %s\n", data);
 		String [] tokens = data.split(",");
 		for(String token : tokens) {
 			if(!token.isEmpty()) {

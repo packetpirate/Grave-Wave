@@ -14,6 +14,7 @@ public enum ProjectileType {
 	FLAK(new Color(0xEDA642), 1.2f, 4.0f, 4.0f, 500L),
 	RIFLE(new Color(0xF2F2BC), 4.0f, 3.0f, 12.0f, 200L),
 	ARROW(new Color(0xA58138), 3.0f, 30.0f, 4.0f, 150L),
+	ARROW2(new Color(0xB4B4B4), 3.5f, 30.0f, 4.0f, 150L),
 	BOLT(new Color(0xA58138), 3.5f, 30.0f, 4.0f, 200L),
 	FLAMETHROWER(new Color(0xEDA642), 0.25f, 4.0f, 4.0f, 1_200L),
 	GRENADE(new Color(0x4DAD1A), 0.4f, 16.0f, 16.0f, 1_000L),

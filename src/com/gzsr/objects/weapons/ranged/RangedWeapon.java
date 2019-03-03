@@ -313,6 +313,7 @@ public abstract class RangedWeapon extends Weapon {
 	}
 
 	public abstract ProjectileType getProjectile();
+	public abstract String getProjectileName();
 
 	@Override
 	public String getName() {

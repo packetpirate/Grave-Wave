@@ -99,6 +99,9 @@ public class Remington extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.RIFLE; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return Remington.PRICE; }
 
 	@Override

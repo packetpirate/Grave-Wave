@@ -107,6 +107,9 @@ public class Mossberg extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.SHOTGUN; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return Mossberg.PRICE; }
 
 	@Override

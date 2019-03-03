@@ -47,7 +47,7 @@ public class Taser extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(Taser.PROJECTILE_IMAGE, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -93,6 +93,9 @@ public class Taser extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.TASER; }
+
+	@Override
+	public String getProjectileName() { return Taser.PROJECTILE_IMAGE; }
 
 	@Override
 	public int getPrice() { return Taser.PRICE; }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.melee.SpikedBat;
+import com.gzsr.objects.weapons.ranged.CompositeBow;
 import com.gzsr.objects.weapons.ranged.Crossbowgun;
 import com.gzsr.objects.weapons.ranged.ENCannon;
 import com.gzsr.objects.weapons.ranged.FlakCannon;
@@ -46,7 +47,11 @@ public class RecipeController {
 		// TODO: Add spear and then add recipe for it. Requires Machete + 5 Wood?
 
 		// Composite Bow
-		// TODO: Add composite bow and recipe. Requires Bow + 5 Metal?
+		Recipe compositeBow = new Recipe.Builder(new CompositeBow(), false)
+				.addResource(Resources.METAL, 5)
+				.addWeapon(WType.BOW_AND_ARROW)
+				.build();
+		basicRecipes.add(compositeBow);
 
 		// Crossbow Gun
 		Recipe crossbowgun = new Recipe.Builder(new Crossbowgun(), false)

@@ -97,7 +97,7 @@ public class ClaymoreWeapon extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(ClaymoreWeapon.PARTICLE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -178,6 +178,9 @@ public class ClaymoreWeapon extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.CLAYMORE; }
+
+	@Override
+	public String getProjectileName() { return ClaymoreWeapon.PARTICLE_NAME; }
 
 	@Override
 	public int getPrice() { return ClaymoreWeapon.PRICE; }

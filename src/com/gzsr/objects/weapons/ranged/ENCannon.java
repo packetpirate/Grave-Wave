@@ -53,7 +53,7 @@ public class ENCannon extends RangedWeapon {
 		ENNode lastNode = null;
 		for(int i = 0; i < NODES; i++) {
 			float nTheta = ((pTheta - (ARC_SIZE / 2)) + (i * ARC_INC));
-			Particle particle = new Particle(ENCannon.PROJECTILE_NAME, color, position, velocity, nTheta,
+			Particle particle = new Particle(getProjectileName(), color, position, velocity, nTheta,
 											 0.0f, new Pair<Float>(width, height),
 											 lifespan, cTime);
 			ENNode node = new ENNode(particle);
@@ -99,6 +99,9 @@ public class ENCannon extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.ELECTRICNODE; }
+
+	@Override
+	public String getProjectileName() { return ENCannon.PROJECTILE_NAME; }
 
 	@Override
 	public int getPrice() { return ENCannon.PRICE; }

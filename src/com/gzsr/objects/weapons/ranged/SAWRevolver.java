@@ -99,6 +99,9 @@ public class SAWRevolver extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.MAGNUM; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return SAWRevolver.PRICE; }
 
 	@Override

@@ -50,7 +50,7 @@ public class GrenadeLauncher extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(GrenadeLauncher.PROJECTILE_NAME, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -97,6 +97,9 @@ public class GrenadeLauncher extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.GRENADE; }
+
+	@Override
+	public String getProjectileName() { return GrenadeLauncher.PROJECTILE_NAME; }
 
 	@Override
 	public int getPrice() { return GrenadeLauncher.PRICE; }

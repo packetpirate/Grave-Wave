@@ -288,6 +288,25 @@ public class Console implements Entity {
 								System.err.println("Error with console command: /" + command);
 							}
 						}
+					} else if(command.equals("trashman")) {
+						Player player = Player.getPlayer();
+
+						// Level Up 29 Times
+						for(int i = 0; i < 29; i++) {
+							int toLevel = player.getAttributes().getInt("expToLevel");
+							player.addExperience(gs, toLevel, pauseTime, false);
+						}
+
+						// Give $1,000,000
+						player.getAttributes().set("money", 1_000_000);
+
+						// Give 200 of each resource.
+						player.getResources().add(Resources.METAL, 200);
+						player.getResources().add(Resources.CLOTH, 200);
+						player.getResources().add(Resources.GLASS, 200);
+						player.getResources().add(Resources.WOOD, 200);
+						player.getResources().add(Resources.ELECTRONICS, 200);
+						player.getResources().add(Resources.POWER, 200);
 					} else if(command.equals("ec") && (args == 0)) {
 						// Print information about remaining enemies in each enemy controller list.
 						List<Enemy> alive = ec.getAliveEnemies();

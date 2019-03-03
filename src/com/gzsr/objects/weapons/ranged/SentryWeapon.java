@@ -108,6 +108,9 @@ public class SentryWeapon extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.TURRET; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return SentryWeapon.PRICE; }
 
 	@Override

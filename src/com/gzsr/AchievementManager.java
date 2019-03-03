@@ -36,7 +36,7 @@ public class AchievementManager {
 							if(id == achievement.getID()) {
 								// Pass the line to the achievement for parsing.
 								achievement.parseSaveData(Arrays.copyOfRange(tokens, 1, tokens.length));
-								System.out.printf("Achievement Loaded From Save: %s\n", achievement.getName());
+								//System.out.printf("Achievement Loaded From Save: %s\n", achievement.getName());
 								match = true;
 								break;
 							}

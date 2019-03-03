@@ -49,7 +49,7 @@ public class NailGun extends RangedWeapon {
 		float width = getProjectile().getWidth();
 		float height = getProjectile().getHeight();
 		long lifespan = getProjectile().getLifespan();
-		Particle particle = new Particle(NailGun.PROJECTILE_IMAGE, color, position, velocity, theta,
+		Particle particle = new Particle(getProjectileName(), color, position, velocity, theta,
 										 0.0f, new Pair<Float>(width, height),
 										 lifespan, cTime);
 
@@ -91,6 +91,9 @@ public class NailGun extends RangedWeapon {
 
 	@Override
 	public ProjectileType getProjectile() { return ProjectileType.NAIL; }
+
+	@Override
+	public String getProjectileName() { return NailGun.PROJECTILE_IMAGE; }
 
 	@Override
 	public int getPrice() { return NailGun.PRICE; }

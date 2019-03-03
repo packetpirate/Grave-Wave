@@ -93,6 +93,9 @@ public class Beretta extends RangedWeapon {
 	public ProjectileType getProjectile() { return ProjectileType.HANDGUN; }
 
 	@Override
+	public String getProjectileName() { return null; }
+
+	@Override
 	public int getPrice() { return 0; }
 
 	@Override
