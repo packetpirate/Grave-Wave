@@ -40,6 +40,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 	private static final Pair<Float> CRAFT_WINDOW_POS = new Pair<Float>(((Globals.WIDTH / 2) - (CRAFT_WINDOW_SIZE.x / 2)), 150.0f);
 	private static final float SCROLL_SPEED = 20.0f;
 
+	private Pair<Float> craftWindowOrigin;
 	private MenuButton back;
 
 	private List<CraftWindow> crafts;
@@ -50,6 +51,8 @@ public class CraftingState extends BasicGameState implements InputListener {
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game) throws SlickException {
+		craftWindowOrigin = new Pair<Float>(CRAFT_WINDOW_POS.x, CRAFT_WINDOW_POS.y);
+
 		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		float fh = large.getLineHeight();
 		back = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Exit") - 100.0f), (Globals.HEIGHT - fh - 40.0f)), "Exit");
@@ -144,6 +147,22 @@ public class CraftingState extends BasicGameState implements InputListener {
 		MusicPlayer.getInstance().update(false);
 	}
 
+	private void rebuildCraftsList() {
+		// Determine which recipes the player has unlocked.
+		crafts.clear();
+
+		List<Recipe> recipes = new ArrayList<Recipe>();
+		if(Talents.Munitions.INVENTOR.active()) recipes.addAll(RecipeController.getBasicRecipes().stream().filter(recipe -> (recipe.isRepeatable() || !recipe.isCrafted())).collect(Collectors.toList()));
+		if(Talents.Munitions.ENGINEER.active()) recipes.addAll(RecipeController.getAdvancedRecipes().stream().filter(recipe -> (recipe.isRepeatable() || !recipe.isCrafted())).collect(Collectors.toList()));
+
+		if(!recipes.isEmpty()) {
+			for(int i = 0; i < recipes.size(); i++) {
+				CraftWindow craft = new CraftWindow(new Pair<Float>((CRAFT_WINDOW_POS.x + 20.0f), (CRAFT_WINDOW_POS.y + (i * CraftWindow.HEIGHT) + ((i + 1) * 20.0f))), recipes.get(i));
+				crafts.add(craft);
+			}
+		}
+	}
+
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		Controls.getInstance().getMouse().setPosition(newx, newy);
@@ -162,6 +181,8 @@ public class CraftingState extends BasicGameState implements InputListener {
 			// Dispatch click if mouse is over a crafting window.
 			if((x >= CRAFT_WINDOW_POS.x) && (x <= (CRAFT_WINDOW_POS.x + CRAFT_WINDOW_SIZE.x)) &&
 			   (y >= CRAFT_WINDOW_POS.y) && (y <= (CRAFT_WINDOW_POS.y + CRAFT_WINDOW_SIZE.y))) {
+				boolean rebuild = false;
+
 				Iterator<CraftWindow> it = crafts.iterator();
 				while(it.hasNext()) {
 					CraftWindow craft = it.next();
@@ -169,19 +190,24 @@ public class CraftingState extends BasicGameState implements InputListener {
 						boolean crafted = craft.click(x, (y - sOff));
 						if(crafted) {
 							it.remove();
+							rebuild = true;
 							break;
 						}
 					}
 				}
+
+				if(rebuild) rebuildCraftsList();
 			}
 		}
 	}
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		MouseInfo mouse = Controls.getInstance().getMouse();
 		float scrollAmount = ((change > 0) ? SCROLL_SPEED : -SCROLL_SPEED);
-		sOff += scrollAmount;
+		if((craftWindowOrigin.y + scrollAmount) <= CRAFT_WINDOW_POS.y) {
+			sOff += scrollAmount;
+			craftWindowOrigin.y += scrollAmount;
+		}
 	}
 
 	@Override
@@ -195,19 +221,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 		Controls.getInstance().resetAll();
 		exit = false;
 
-		// Determine which recipes the player has unlocked.
-		crafts.clear();
-
-		List<Recipe> recipes = new ArrayList<Recipe>();
-		if(Talents.Munitions.INVENTOR.active()) recipes.addAll(RecipeController.getBasicRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
-		if(Talents.Munitions.ENGINEER.active()) recipes.addAll(RecipeController.getAdvancedRecipes().stream().filter(recipe -> !recipe.isCrafted()).collect(Collectors.toList()));
-
-		if(!recipes.isEmpty()) {
-			for(int i = 0; i < recipes.size(); i++) {
-				CraftWindow craft = new CraftWindow(new Pair<Float>((CRAFT_WINDOW_POS.x + 20.0f), (CRAFT_WINDOW_POS.y + (i * CraftWindow.HEIGHT) + ((i + 1) * 20.0f))), recipes.get(i));
-				crafts.add(craft);
-			}
-		}
+		rebuildCraftsList();
 	}
 
 	@Override

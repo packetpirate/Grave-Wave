@@ -28,7 +28,7 @@ public class Particle implements Entity {
 	public Color getColor() { return color; }
 	protected ColorGenerator colorGenerator;
 	public ColorGenerator getColorGenerator() { return colorGenerator; }
-	
+
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -37,7 +37,7 @@ public class Particle implements Entity {
 	}
 	protected Shape bounds;
 	public Shape getCollider() { return bounds; }
-	
+
 	protected float velocity;
 	public float getVelocity() { return velocity; }
 	public void setVelocity(float velocity_) { velocity = velocity_; }
@@ -51,7 +51,7 @@ public class Particle implements Entity {
 	public float getAngularVelocity() { return angularVelocity; }
 	protected Pair<Float> size;
 	public Pair<Float> getSize() { return size; }
-	
+
 	protected long lifespan;
 	public long getLifespan() { return lifespan; }
 	public boolean isActive(long cTime) { return (isAlive(cTime) || shouldDraw(cTime)); }
@@ -66,91 +66,96 @@ public class Particle implements Entity {
 	protected long created;
 	public long getCreated() { return created; }
 	public void setCreated(long created_) { created = created_; }
-	
+	protected boolean destroyed;
+	public boolean isDestroyed() { return destroyed; }
+
 	protected boolean collision;
-	public boolean collide(GameState gs, Entity e, long cTime) { 
+	public boolean collide(GameState gs, Entity e, long cTime) {
 		collision = true;
 		return true;
 	}
-	
-	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_, 
+
+	public Particle(Color color_, Pair<Float> position_, float velocity_, float theta_,
 					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
-		this(null, color_, position_, velocity_, theta_, 
+		this(null, color_, position_, velocity_, theta_,
 			 angularVelocity_, size_, lifespan_, created_);
 	}
-	
+
 	public Particle(String image_, Color color_, Pair<Float> position_, float velocity_,
 					float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
 					long created_) {
 		this.animation = null;
 		this.image = image_;
 		this.color = color_;
-		
+
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
 		this.rotation = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
-		
+
 		this.lifespan = lifespan_;
 		this.drawTime = lifespan_;
 		this.created = created_;
 		this.collision = false;
-		
+		this.destroyed = false;
+
 		resetBounds();
 	}
-	
-	public Particle(ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_, float theta_, 
+
+	public Particle(ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_, float theta_,
 				float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
-		this(null, colorGenerator_, position_, velocity_, theta_, 
+		this(null, colorGenerator_, position_, velocity_, theta_,
 			 angularVelocity_, size_, lifespan_, created_);
 	}
-	
+
 	public Particle(String image_, ColorGenerator colorGenerator_, Pair<Float> position_, float velocity_,
 				float theta_, float angularVelocity_, Pair<Float> size_, long lifespan_,
 				long created_) {
 		this.animation = null;
 		this.image = image_;
 		this.colorGenerator = colorGenerator_;
-		
+
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
 		this.rotation = theta_;
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
-		
+
 		this.lifespan = lifespan_;
 		this.drawTime = lifespan_;
 		this.created = created_;
 		this.collision = false;
-		
+		this.destroyed = false;
+
 		resetBounds();
 	}
-	
+
 	public Particle(Animation animation_, Pair<Float> position_, float velocity_, float theta_,
 					float angularVelocity_, Pair<Float> size_, long lifespan_, long created_) {
 		this.animation = animation_;
 		this.image = null;
 		this.color = null;
 		this.colorGenerator = null;
-		
+
 		this.position = position_;
 		this.velocity = velocity_;
 		this.theta = theta_;
 		this.rotation = (theta_ - (float)(Math.PI / 2)); // Need to subtract 90 degrees because render call doesn't rotate when rendering an animation.
 		this.angularVelocity = angularVelocity_;
 		this.size = size_;
-		
+
 		this.lifespan = lifespan_;
 		this.drawTime = lifespan_;
 		this.created = created_;
 		this.collision = false;
-		
+		this.destroyed = false;
+
 		resetBounds();
 	}
-	
+
 	public Particle(Particle p) {
 		// Copy constructor.
 		this.animation = ((p.getAnimation() != null) ? new Animation(p.getAnimation()) : null);
@@ -167,11 +172,13 @@ public class Particle implements Entity {
 		this.drawTime = p.getDrawTime();
 		this.created = p.getCreated();
 		this.collision = false;
+		this.destroyed = false;
 		this.bounds = p.getCollider();
 	}
-	
+
 	public void onDestroy(GameState gs, long cTime) {
 		// To be overridden.
+		destroyed = true;
 	}
 
 	@Override
@@ -189,29 +196,29 @@ public class Particle implements Entity {
 	public void render(Graphics g, long cTime) {
 		if(shouldDraw(cTime)) {
 			float a = (float)Math.toDegrees(rotation);
-			
-			
+
+
 			Image img = getImage();
 			if(animation != null) {
 				animation.render(g, position, rotation);
 			} else if(img != null) {
 				g.rotate(position.x, position.y, a);
-				g.drawImage(img, (position.x - (img.getWidth() / 2)), 
+				g.drawImage(img, (position.x - (img.getWidth() / 2)),
 								 (position.y - (img.getHeight() / 2)));
 				g.rotate(position.x, position.y, -a);
 			} else {
 				g.rotate(position.x, position.y, a);
-				
+
 				float x = position.x - (size.x / 2);
 				float y = position.y - (size.y / 2);
-				
+
 				if(colorGenerator == null) g.setColor(color);
 				else g.setColor(colorGenerator.generate());
 				g.fillRect(x, y, size.x, size.y);
-				
+
 				g.rotate(position.x, position.y, -a);
 			}
-			
+
 			if(Globals.SHOW_COLLIDERS) {
 				g.rotate(position.x, position.y, a);
 				g.setColor(Color.red);
@@ -220,29 +227,29 @@ public class Particle implements Entity {
 			}
 		}
 	}
-	
+
 	public void resetBounds() {
 		bounds = new Rectangle((position.x - (size.x / 2)), (position.y - (size.y / 2)), size.x, size.y);
 	}
-	
+
 	public boolean checkCollision(Enemy enemy) {
-		return enemy.getCollider().intersects(bounds);
+		return (enemy.getCollider().intersects(bounds) || enemy.getCollider().contains(bounds));
 	}
-	
+
 	public boolean checkCollision(Player player) {
-		return player.getCollider().intersects(bounds);
+		return (player.getCollider().intersects(bounds) || player.getCollider().contains(bounds));
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Particle";
 	}
-	
+
 	@Override
 	public String getDescription() {
 		return "Particle";
 	}
-	
+
 	@Override
 	public int getLayer() {
 		return Layers.PARTICLES.val();

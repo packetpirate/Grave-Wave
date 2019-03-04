@@ -32,6 +32,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Item;
+import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.Machete;
 import com.gzsr.objects.weapons.melee.MeleeWeapon;
@@ -129,6 +130,15 @@ public class Player implements Entity {
 		if(meleeIndex >= weapons.size()) return weapons.get(0);
 		if(!weapons.isEmpty()) return weapons.get(meleeIndex);
 		else return null;
+	}
+	public Weapon getWeaponByType(WType type) {
+		List<Weapon> weapons = inventory.getWeapons();
+
+		for(Weapon w : weapons) {
+			if(w.getType().equals(type)) return w;
+		}
+
+		return null;
 	}
 	public void resetCurrentRanged() {
 		List<RangedWeapon> weapons = getRangedWeapons();

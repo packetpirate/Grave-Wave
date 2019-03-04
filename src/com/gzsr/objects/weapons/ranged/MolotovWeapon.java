@@ -21,15 +21,15 @@ import com.gzsr.states.GameState;
 import com.gzsr.status.BurningEffect;
 
 public class MolotovWeapon extends RangedWeapon {
-	private static final int PRICE = 2_000;
-	private static final int AMMO_PRICE = 500;
+	private static final int PRICE = 0;
+	private static final int AMMO_PRICE = -1;
 	private static final long COOLDOWN = 0L;
 	private static final int CLIP_SIZE = 1;
-	private static final int START_CLIPS = 4;
-	private static final int MAX_CLIPS = 8;
+	private static final int START_CLIPS = 1;
+	private static final int MAX_CLIPS = 4;
 	private static final float CHARGE_RATE = 0.0015f;
 	private static final long RELOAD_TIME = 1_000L;
-	private static final String PROJECTILE_NAME = "GZS_Molotov";
+	private static final String PROJECTILE_NAME = "GZS_Pipe_Bomb";
 	private static final String FIRE_SOUND = "throw2";
 
 	private boolean charging;
@@ -195,12 +195,8 @@ public class MolotovWeapon extends RangedWeapon {
 	public Metrics getWeaponMetric() { return Metrics.MOLOTOV; }
 
 	@Override
-	public String getName() {
-		return WType.MOLOTOV.getName();
-	}
+	public String getName() { return WType.MOLOTOV.getName(); }
 
 	@Override
-	public String getDescription() {
-		return WType.MOLOTOV.getDescription();
-	}
+	public String getDescription() { return WType.MOLOTOV.getDescription(); }
 }

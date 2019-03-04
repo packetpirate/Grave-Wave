@@ -22,7 +22,6 @@ public enum WType {
 	FLAMETHROWER("Flamethrower", "A long-barreled, gas-powered weapon that emits a stream of hellfire to roast your enemies.", "GZS_Flammenwerfer"),
 	GRENADE_LAUNCHER("M32 MGL-140", "A tube-barreled weapon with a revolving chamber full of grenades so you can rain concussive blasts of fire upon the undead horde.", "GZS_HandEgg"),
 	LASER_BARRIER("Laser Barrier", "For those who need a break from fighting zombies to recuperate. Stops the enemies in their tracks.", "GZS_LaserWire"),
-	MOLOTOV("Molotov Cocktail", "Start an undead barbecue with these flaming bottles of gas!", "GZS_Molotov_Icon"),
 	MOSSBERG("Mossberg 500", "It was meant for hunting turkeys, but... well... it'll have to do.", "GZS_Boomstick"),
 	MP5("MP5", "A standard military issue MP5.", "GZS_Mp5"),
 	NAIL_GUN("Nail Gun", "Well it's not a gun, but it'll do... I guess.", "GZS_NailGun"),
@@ -34,6 +33,8 @@ public enum WType {
 
 	// Crafted Weapons
 	SPIKED_BAT("Spiked Bat", "As if their faces weren't mangled enough already...", "GZS_Spiked_Bat_Icon"),
+	MOLOTOV("Molotov Cocktail", "Start an undead barbecue with these flaming bottles of gas!", "GZS_Molotov_Icon"),
+	PIPE_BOMB("Pipe Bomb", "A homemade explosive that will rip apart anything near the blast.", "GZS_Pipe_Bomb_Icon"),
 	COMPOSITE_BOW("Composite Bow", "A bow powerful enough to pin the undead to whatever is behind them.", "GZS_Composite_Bow"),
 	CROSSBOWGUN("Crossbowgun", "Why keep the bow part? Because it's cool, now shut up...", "GZS_Crossbowgun"),
 	FLAK_CANNON("Flak Cannon", "Turn your precious resources into molten flak to burn right through them.", "GZS_Flak_Cannon"),

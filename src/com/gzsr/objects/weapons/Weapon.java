@@ -60,7 +60,5 @@ public abstract class Weapon implements Entity {
 	public abstract Metrics getWeaponMetric();
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public int getLayer() { return Layers.NONE.val(); }
 }

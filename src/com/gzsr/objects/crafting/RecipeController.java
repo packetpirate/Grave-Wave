@@ -9,6 +9,8 @@ import com.gzsr.objects.weapons.ranged.CompositeBow;
 import com.gzsr.objects.weapons.ranged.Crossbowgun;
 import com.gzsr.objects.weapons.ranged.ENCannon;
 import com.gzsr.objects.weapons.ranged.FlakCannon;
+import com.gzsr.objects.weapons.ranged.MolotovWeapon;
+import com.gzsr.objects.weapons.ranged.PipeBombWeapon;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;
@@ -38,13 +40,27 @@ public class RecipeController {
 	private static void buildBasicRecipes() {
 		// Spiked Bat
 		Recipe spikedBat = new Recipe.Builder(new SpikedBat(), false)
-				.addResource(Resources.METAL, 5)
+				.addResource(Resources.METAL, 2)
 				.addWeapon(WType.BASEBALL_BAT)
 				.build();
 		basicRecipes.add(spikedBat);
 
 		// Spear
-		// TODO: Add spear and then add recipe for it. Requires Machete + 5 Wood?
+		// TODO: Add spear and then add recipe for it. Requires Machete + 5 Metal?
+
+		// Molotov
+		Recipe molotov = new Recipe.Builder(new MolotovWeapon(), false, true)
+				.addResource(Resources.GLASS, 2)
+				.addResource(Resources.CLOTH, 1)
+				.build();
+		basicRecipes.add(molotov);
+
+		// Pipe Bomb
+		Recipe pipeBomb = new Recipe.Builder(new PipeBombWeapon(), false, true)
+				.addResource(Resources.METAL, 4)
+				.addResource(Resources.ELECTRONICS, 1)
+				.build();
+		basicRecipes.add(pipeBomb);
 
 		// Composite Bow
 		Recipe compositeBow = new Recipe.Builder(new CompositeBow(), false)

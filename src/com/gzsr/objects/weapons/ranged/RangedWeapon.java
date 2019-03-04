@@ -87,8 +87,9 @@ public abstract class RangedWeapon extends Weapon {
 		if(reloading && !isReloading(cTime)) reload();
 
 		// Update all projectiles.
-		if(!getProjectiles().isEmpty()) {
-			Iterator<Projectile> it = getProjectiles().iterator();
+		List<Projectile> proj = getProjectiles();
+		if(!proj.isEmpty()) {
+			Iterator<Projectile> it = proj.iterator();
 			while(it.hasNext()) {
 				Particle p = it.next();
 				if(p.isAlive(cTime)) {

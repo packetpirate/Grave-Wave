@@ -7,6 +7,7 @@ import com.gzsr.entities.Player;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 
 public class Recipe {
 	private static int rNum = 0;
@@ -20,13 +21,19 @@ public class Recipe {
 		private Weapon result;
 
 		private boolean advanced;
+		private boolean repeatable;
 
 		public Builder(Weapon result_, boolean advanced_) {
+			this(result_, advanced_, false);
+		}
+
+		public Builder(Weapon result_, boolean advanced_, boolean repeatable_) {
 			weaponCost = new ArrayList<WType>();
 			resourceCosts = new Resources();
 
 			result = result_;
 			advanced = advanced_;
+			repeatable = repeatable_;
 		}
 
 		public Builder addWeapon(WType weapon) {
@@ -40,7 +47,7 @@ public class Recipe {
 		}
 
 		public Recipe build() {
-			return new Recipe(weaponCost.toArray(new WType[weaponCost.size()]), resourceCosts, result, advanced);
+			return new Recipe(weaponCost.toArray(new WType[weaponCost.size()]), resourceCosts, result, advanced, repeatable);
 		}
 	}
 
@@ -57,10 +64,12 @@ public class Recipe {
 
 	private boolean advanced;
 	public boolean isAdvanced() { return advanced; }
+	private boolean repeatable;
+	public boolean isRepeatable() { return repeatable; }
 	private boolean crafted;
 	public boolean isCrafted() { return crafted; }
 
-	private Recipe(WType [] weaponCosts, Resources resourceCosts, Weapon result_, boolean advanced_) {
+	private Recipe(WType [] weaponCosts, Resources resourceCosts, Weapon result_, boolean advanced_, boolean repeatable_) {
 		this.id = Recipe.generateRecipeID();
 
 		this.wCost = weaponCosts;
@@ -69,12 +78,14 @@ public class Recipe {
 		this.result = result_;
 
 		this.advanced = advanced_;
+		this.repeatable = repeatable_;
 		this.crafted = false;
 	}
 
 	public void craft() {
-		Inventory playerInventory = Player.getPlayer().getInventory();
-		Resources playerResources = Player.getPlayer().getResources();
+		Player player = Player.getPlayer();
+		Inventory playerInventory = player.getInventory();
+		Resources playerResources = player.getResources();
 
 		// Subtract resources first.
 		for(int i = 0; i < 6; i++) {
@@ -89,12 +100,22 @@ public class Recipe {
 			}
 		}
 
-		// Add the new item to the player's inventory.
-		playerInventory.addItem(result);
-		Player.getPlayer().equip(result);
+		Weapon pw = player.getWeaponByType(result.getType());
+		if(pw != null) {
+			// Add a clip of ammo to the existing weapon.
+			if(pw instanceof RangedWeapon) {
+				RangedWeapon rw = (RangedWeapon) pw;
+				rw.addInventoryAmmo(rw.getClipSize());
+			}
+		} else {
+			// Add the new item to the player's inventory.
+			playerInventory.addItem(result);
+			player.equip(result);
+		}
+
 		crafted = true;
 
-		RecipeController.removeRecipe(this, advanced);
+		if(!repeatable) RecipeController.removeRecipe(this, advanced);
 	}
 
 	public boolean hasIngredients() {

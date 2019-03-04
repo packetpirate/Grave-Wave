@@ -47,6 +47,18 @@ public class Inventory {
 					 .count() > 0);
 	}
 
+	public List<Weapon> getWeapons() {
+		List<Weapon> weapons = new ArrayList<Weapon>();
+
+		for(Entity e : items) {
+			if(e instanceof Weapon) {
+				weapons.add((Weapon)e);
+			}
+		}
+
+		return weapons;
+	}
+
 	public List<RangedWeapon> getRangedWeapons() {
 		List<RangedWeapon> weapons = new ArrayList<RangedWeapon>();
 
