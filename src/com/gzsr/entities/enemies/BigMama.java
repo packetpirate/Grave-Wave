@@ -104,10 +104,7 @@ public class BigMama extends Enemy {
 				statusHandler.update((GameState)gs, cTime, delta);
 
 				// If there are any damage texts recently added, add them to the entities list.
-				if(!damageTexts.isEmpty()) {
-					damageTexts.stream().forEach(dt -> ((GameState)gs).addEntity(String.format("dt%d", Globals.generateEntityID()), dt));
-					damageTexts.clear();
-				}
+				postDamageTexts();
 
 				updateFlash(cTime);
 				animation.getCurrentAnimation().update(cTime);

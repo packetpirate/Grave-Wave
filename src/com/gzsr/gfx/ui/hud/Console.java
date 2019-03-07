@@ -21,6 +21,7 @@ import com.gzsr.entities.enemies.ElSalvo;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.entities.enemies.Gasbag;
+import com.gzsr.entities.enemies.Glorp;
 import com.gzsr.entities.enemies.Prowler;
 import com.gzsr.entities.enemies.Rotdog;
 import com.gzsr.entities.enemies.Starfright;
@@ -407,6 +408,9 @@ public class Console implements Entity {
 			} else if(entityType.equals("prowler")) {
 				Prowler pr = new Prowler(position);
 				ec.addAlive(pr);
+			} else if(entityType.equals("glorp")) {
+				Glorp gl = new Glorp(position);
+				ec.addAlive(gl);
 			} else if(entityType.equals("aberration")) {
 				Aberration ab = new Aberration(position);
 				ec.addAlive(ab);

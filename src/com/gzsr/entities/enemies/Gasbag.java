@@ -73,10 +73,7 @@ public class Gasbag extends Enemy {
 			} else explode((GameState)gs, cTime);
 		}
 
-		if(!damageTexts.isEmpty()) {
-			damageTexts.stream().forEach(dt -> ((GameState)gs).addEntity(String.format("dt%d", Globals.generateEntityID()), dt));
-			damageTexts.clear();
-		}
+		postDamageTexts();
 	}
 
 	private void explode(GameState gs, long cTime) {

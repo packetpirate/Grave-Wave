@@ -113,10 +113,7 @@ public class Upchuck extends Enemy {
 			if(attacking) attacking = false;
 		}
 
-		if(!damageTexts.isEmpty()) {
-			damageTexts.stream().forEach(dt -> ((GameState)gs).addEntity(String.format("dt%d", Globals.generateEntityID()), dt));
-			damageTexts.clear();
-		}
+		postDamageTexts();
 
 		// Update bile projectiles.
 		Iterator<StatusProjectile> it = bile.iterator();

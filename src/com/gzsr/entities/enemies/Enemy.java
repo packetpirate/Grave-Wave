@@ -310,11 +310,15 @@ public abstract class Enemy implements Entity {
 	}
 
 	protected void createDamageText(double amnt, float dist, float knockbackTheta, long cTime, boolean isCritical) {
+		createDamageText(amnt, dist, knockbackTheta, cTime, (isCritical ? Color.red : Color.white));
+	}
+
+	protected void createDamageText(double amnt, float dist, float knockbackTheta, long cTime, Color color) {
 		float tOff = Globals.rand.nextFloat() * (Globals.rand.nextBoolean() ? 1 : -1) * (float)(Math.PI / 9);
 		float x = position.x + (float)(Math.cos(knockbackTheta + tOff) * (dist + (Globals.rand.nextFloat() * 10.0f)));
 		float y = position.y + (float)(Math.sin(knockbackTheta + tOff) * dist + (Globals.rand.nextFloat() * 10.0f));
 		Pair<Float> dtPos = new Pair<Float>(x, y);
-		DamageText dt = new DamageText(Integer.toString((int)amnt), dtPos, (knockbackTheta + tOff), cTime, 500L, isCritical);
+		DamageText dt = new DamageText(Integer.toString((int)amnt), dtPos, (knockbackTheta + tOff), cTime, 500L, color);
 		damageTexts.add(dt);
 	}
 

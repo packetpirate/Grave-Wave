@@ -19,6 +19,7 @@ public enum EnemyType {
 	STARFRIGHT("GZS_Starfright", 48, 48, 4, 200L, Metrics.STARFRIGHT, 200, 250, 750),
 	ELSALVO("GZS_ElSalvo", 64, 64, 4, 200L, Metrics.EL_SALVO, 300, 500, 1_500),
 	PROWLER("GZS_Prowler", 48, 48, 4, 250L, Metrics.PROWLER, 400, 600, 2_500),
+	GLORP("GZS_Glorp", 48, 48, 4, 200L, Metrics.GLORP, 750, 1_000, 4_000),
 
 	// Bosses
 	ABERRATION("GZS_Aberration2", 128, 128, 4, 150L, Metrics.ABERRATION, 2_000, 3_000, 5_000),
@@ -70,6 +71,7 @@ public enum EnemyType {
 			case STARFRIGHT: return Starfright.appearsOnWave();
 			case ELSALVO: return ElSalvo.appearsOnWave();
 			case PROWLER: return Prowler.appearsOnWave();
+			case GLORP: return Glorp.appearsOnWave();
 			case ABERRATION: return Aberration.appearsOnWave();
 			case ZOMBAT_SWARM: return Zombat.appearsOnWave();
 			case STITCHES: return Stitches.appearsOnWave();
@@ -87,6 +89,7 @@ public enum EnemyType {
 			case STARFRIGHT: return Starfright.getSpawnCost();
 			case ELSALVO: return ElSalvo.getSpawnCost();
 			case PROWLER: return Prowler.getSpawnCost();
+			case GLORP: return Glorp.getSpawnCost();
 			case ABERRATION: return Aberration.getSpawnCost();
 			case ZOMBAT_SWARM: return Zombat.getSpawnCost();
 			case STITCHES: return Stitches.getSpawnCost();
@@ -104,6 +107,7 @@ public enum EnemyType {
 			case STARFRIGHT: return new Starfright(position_);
 			case ELSALVO: return new ElSalvo(position_);
 			case PROWLER: return new Prowler(position_);
+			case GLORP: return new Glorp(position_);
 			case ABERRATION: return new Aberration(position_);
 			case ZOMBAT_SWARM: return new Zombat(position_);
 			case STITCHES: return new Stitches(position_);

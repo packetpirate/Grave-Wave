@@ -115,11 +115,6 @@ public class Prowler extends Enemy {
 			}
 		}
 
-		if(!damageTexts.isEmpty()) {
-			damageTexts.stream().forEach(dt -> ((GameState)gs).addEntity(String.format("dt%d", Globals.generateEntityID()), dt));
-			damageTexts.clear();
-		}
-
 		postDamageTexts();
 	}
 

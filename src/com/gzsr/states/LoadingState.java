@@ -191,6 +191,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Starfright.png",
 			"images/GZS_ElSalvo.png",
 			"images/GZS_Prowler.png",
+			"images/GZS_Glorp.png",
 			// Boss Images
 			"images/GZS_Aberration2.png",
 			"images/GZS_Aberration_Tentacle.png",
