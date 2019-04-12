@@ -58,7 +58,7 @@ public class HUD {
 
 		bossHealth = new BossHealthBar(new Pair<Float>(((Globals.WIDTH / 2) - 150.0f), 20.0f), new Pair<Float>(300.0f, 26.0f));
 
-		weaponDisplay = new WeaponDisplay(new Pair<Float>(10.0f, (Globals.HEIGHT - 64.0f)));
+		weaponDisplay = new WeaponDisplay(new Pair<Float>(10.0f, (Globals.HEIGHT - 84.0f)));
 
 		achievementDisplay = new AchievementDisplay();
 	}

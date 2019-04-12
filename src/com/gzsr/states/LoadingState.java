@@ -147,6 +147,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_HUD_01.png",
 			"images/GZS_Heart.png",
 			"images/GZS_HUD_Armor.png",
+			"images/GZS_HUD_Weapon.png",
+			"images/GZS_HUD_Weapon_Ammo.png",
 			"images/GZS_Life_Gem.png",
 			"images/GZS_Experience_Bar.png",
 			// Heart Rate Sprite Sheets
