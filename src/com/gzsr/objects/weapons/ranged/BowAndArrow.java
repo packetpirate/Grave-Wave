@@ -37,7 +37,7 @@ public class BowAndArrow extends RangedWeapon {
 	protected float charge;
 
 	public BowAndArrow() {
-		super(Size.MEDIUM, false);
+		super(Size.SMALL, false);
 
 		AssetManager assets = AssetManager.getManager();
 

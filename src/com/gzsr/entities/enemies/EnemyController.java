@@ -43,6 +43,7 @@ public class EnemyController implements Entity {
 		add(EnemyType.STARFRIGHT);
 		add(EnemyType.ELSALVO);
 		add(EnemyType.PROWLER);
+		add(EnemyType.GLORP);
 	}};
 
 	private static EnemyController instance;
@@ -235,12 +236,11 @@ public class EnemyController implements Entity {
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
-		// Add all enemies that need to be immediately added.
-		if(addImmediately.size() > 0) alive.addAll(addImmediately);
-		addImmediately.clear();
-
 		// If there are enemies left to spawn and the spawn time has elapsed, spawn the next enemy.
 		if(!breakTime) {
+			if(addImmediately.size() > 0) alive.addAll(addImmediately);
+			addImmediately.clear();
+
 			long elapsed = (cTime - lastEnemy);
 			if(!spawnQueue.isEmpty() && (elapsed > nextSpawn)) {
 				lastEnemy = cTime;

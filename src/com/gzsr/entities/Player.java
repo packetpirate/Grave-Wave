@@ -585,37 +585,41 @@ public class Player implements Entity {
 		int expToLevel = attributes.getInt("expToLevel");
 		int newLevel = attributes.getInt("level") + 1;
 
-		attributes.set("experience", adjusted);
+		boolean maxedOut = (attributes.getInt("level") >= 31);
+
+		if(!maxedOut) attributes.set("experience", adjusted);
 
 		if(adjusted >= expToLevel) {
 			// Level up!
 			int carryOver = adjusted % expToLevel;
-			attributes.set("experience", carryOver);
-			attributes.set("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
-			attributes.set("level", newLevel);
-			attributes.addTo("skillPoints", (newLevel + 10) / 10);
+			if(!maxedOut) {
+				attributes.set("experience", carryOver);
+				attributes.set("expToLevel", (expToLevel + (((newLevel / 2) * 100) + 50)));
+				attributes.set("level", newLevel);
+				attributes.addTo("skillPoints", (newLevel + 10) / 10);
 
-			{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
-				String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TALENTS_SCREEN.getDisplay());
-				StatusMessages.getInstance().addMessage("Ding!", this, Player.ABOVE_1, cTime, 2_000L);
-				StatusMessages.getInstance().addMessage(reminder, this, Player.BELOW_1, cTime, 2_000L);
-			}
+				{ // Make the player say "Ding!" and have chance for enemies to say "Gratz!"
+					String reminder = String.format("Press \'%s\' to Level Up!", Controls.Layout.TALENTS_SCREEN.getDisplay());
+					StatusMessages.getInstance().addMessage("Ding!", this, Player.ABOVE_1, cTime, 2_000L);
+					StatusMessages.getInstance().addMessage(reminder, this, Player.BELOW_1, cTime, 2_000L);
+				}
 
-			{ // Random chance for the enemies to say "Gratz!".
-				float chance = Globals.rand.nextFloat();
-				if(chance <= 0.02f) {
-					Iterator<Enemy> it = EnemyController.getInstance().getAliveEnemies().iterator();
-					while(it.hasNext()) {
-						Enemy e = it.next();
-						if(e.isAlive(cTime)) {
-							StatusMessages.getInstance().addMessage("Gratz!", e, Player.ABOVE_1, cTime, 2_000L);
+				{ // Random chance for the enemies to say "Gratz!".
+					float chance = Globals.rand.nextFloat();
+					if(chance <= 0.02f) {
+						Iterator<Enemy> it = EnemyController.getInstance().getAliveEnemies().iterator();
+						while(it.hasNext()) {
+							Enemy e = it.next();
+							if(e.isAlive(cTime)) {
+								StatusMessages.getInstance().addMessage("Gratz!", e, Player.ABOVE_1, cTime, 2_000L);
+							}
 						}
 					}
 				}
 			}
 
 			ShopController.getInstance().release(ShopState.getShop(), cTime); // Add new weapons to the shop!
-			if(playSound) AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
+			if(!maxedOut && playSound) AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
 		}
 	}
 

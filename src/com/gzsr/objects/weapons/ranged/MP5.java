@@ -33,7 +33,7 @@ public class MP5 extends RangedWeapon {
 	private static final int DAMAGE_MOD = 2;
 
 	public MP5() {
-		super(Size.SMALL);
+		super(Size.MEDIUM);
 
 		AssetManager assets = AssetManager.getManager();
 

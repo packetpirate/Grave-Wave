@@ -168,5 +168,9 @@ public class AchievementController {
 			blindAsABat.saveStates(s0, s1, s2, s3, s4);
 			achievements.add(blindAsABat);
 		}
+
+		{ // Stop Breaking Things! - Reach wave 30 using only the Pistol.
+
+		}
 	}
 }
