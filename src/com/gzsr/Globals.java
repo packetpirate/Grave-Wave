@@ -28,6 +28,7 @@ public class Globals {
 	public static boolean gameOver = false;
 	public static boolean inGame = false; // Used to return to a different place from certain screens depending on whether the screen was accessed during gameplay.
 
+	public static boolean debug = false;
 	public static boolean firstTimeGamma = true; // If true, show the gamma settings screen at launch and then set this to false. Save in config file.
 
 	private static int entityNum = 0;

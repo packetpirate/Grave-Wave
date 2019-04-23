@@ -17,6 +17,7 @@ import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ranged.RangedWeapon;
 import com.gzsr.states.GameState;
 
 public class HUD {
@@ -87,9 +88,9 @@ public class HUD {
 		weaponDisplay.render(g, cTime);
 		achievementDisplay.render(g, cTime);
 
+		UnicodeFont fs = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 		{ // Begin Wave Counter rendering.
 			UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular");
-			UnicodeFont fs = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 
 			if(ec.isRestarting()) {
 				// Render the countdown to the next wave.
@@ -156,6 +157,29 @@ public class HUD {
 			g.drawString(Controls.Layout.CRAFT_SCREEN.getDisplay(), tx, ty);
 			crafting.draw(ix, (iy - (crafting.getHeight() / 2)), 0.5f);
 		} // End drawing shop and training icons.
+
+		// Show debug information.
+		if(Globals.debug) {
+			// Show weapon state info.
+			RangedWeapon rw = Player.getPlayer().getCurrentRanged();
+			String weaponName = ("Name: " + rw.getName());
+			String equipped = ("Equipped: " + Boolean.toString(rw.isEquipped()));
+			String reloading = ("Reloading: " + Boolean.toString(rw.isReloading(cTime)));
+
+			float width = (Math.max(fs.getWidth(weaponName), Math.max(fs.getWidth(equipped), fs.getWidth(reloading))) + 10.0f);
+			float height = ((fs.getLineHeight() * 3) + 20.0f);
+
+			g.setColor(new Color(0x444444AA));
+			g.fillRect(10.0f, 100.0f, width, height);
+			g.setColor(Color.white);
+			g.drawRect(10.0f, 100.0f, width, height);
+
+			float lh = fs.getLineHeight();
+			g.setFont(fs);
+			g.drawString(weaponName, 15.0f, 105.0f);
+			g.drawString(equipped, 15.0f, (lh + 110.0f));
+			g.drawString(reloading, 15.0f, ((lh * 2) + 115.0f));
+		}
 
 		// If player is respawning, draw the countdown.
 		if(player.isRespawning()) {

@@ -308,6 +308,12 @@ public class Console implements Entity {
 						player.getResources().add(Resources.WOOD, 200);
 						player.getResources().add(Resources.ELECTRONICS, 200);
 						player.getResources().add(Resources.POWER, 200);
+					} else if(command.equals("debug") && (args == 0)) {
+						// Toggle Debug Mode
+						Globals.debug = !Globals.debug;
+
+						// Print message telling the user if debug mode is now on or off.
+						consoleLines.add(String.format("DEBUG Mode: %s", (Globals.debug ? "ON" : "OFF")));
 					} else if(command.equals("ec") && (args == 0)) {
 						// Print information about remaining enemies in each enemy controller list.
 						List<Enemy> alive = ec.getAliveEnemies();
