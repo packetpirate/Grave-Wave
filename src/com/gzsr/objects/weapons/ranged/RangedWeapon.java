@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
@@ -50,6 +51,8 @@ public abstract class RangedWeapon extends Weapon {
 	public void addMuzzleFlash() {
 		if(muzzleFlash == null) muzzleFlash = AssetManager.getManager().getAnimation("GZS_MuzzleFlash");
 	}
+
+	public Image getHandImage() { return null; }
 
 	private Size size;
 	protected enum Size {
@@ -113,7 +116,7 @@ public abstract class RangedWeapon extends Weapon {
 
 		if(muzzleFlash != null) {
 			Player player = Player.getPlayer();
-			Pair<Float> mp = new Pair<Float>((player.getPosition().x + 5.0f), (player.getPosition().y - 28.0f));
+			Pair<Float> mp = new Pair<Float>((player.getPosition().x + 16.0f), (player.getPosition().y - 36.0f));
 			if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), (player.getRotation() - (float)(Math.PI / 2)));
 		}
 	}
@@ -157,9 +160,12 @@ public abstract class RangedWeapon extends Weapon {
 		ammoInClip += taken;
 
 		reloading = false;
+
+		if(Globals.debug) System.out.printf("Reload for %s complete!\n", getName());
 	}
 
 	public void reload(long cTime) {
+		if(Globals.debug) System.out.printf("Begin reloading for %s!\n", getName());
 		if(getInventoryAmmo() > 0) {
 			reloading = true;
 			reloadStart = cTime;

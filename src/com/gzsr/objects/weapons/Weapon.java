@@ -38,8 +38,14 @@ public abstract class Weapon implements Entity {
 	}
 
 	public boolean isEquipped() { return equipped; }
-	public void equip() { equipped = true; }
-	public void unequip() { equipped = false; }
+	public void equip() {
+		equipped = true;
+		if(Globals.debug) System.out.printf("%s equipped!\n\n", getName());
+	}
+	public void unequip() {
+		equipped = false;
+		if(Globals.debug) System.out.printf("%s un-equipped!\n\n", getName());
+	}
 	public boolean isChargedWeapon() { return false; };
 	public boolean isCharging() { return false; }
 

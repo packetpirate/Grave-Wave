@@ -141,7 +141,8 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Background02.png",
 			"images/GZS_DeathScreen.png",
 			"images/GZS_Joe-Portrait.png",
-			"images/GZS_Player.png",
+			"images/new/GZS_Player2.png",
+			"images/new/GZS_Player_Feet.png",
 			"images/GZS_Crosshair2.png",
 			// HUD Images
 			"images/GZS_HUD_01.png",
@@ -217,6 +218,7 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Taser.png",
 			"images/GZS_Taser_Dart.png",
 			"images/GZS_Beretta.png",
+			"images/new/GZS_Beretta_W.png",
 			"images/GZS_SmithAndWesson.png",
 			"images/GZS_Mp5.png",
 			"images/GZS_RTPS.png",
@@ -308,7 +310,7 @@ public class LoadingState extends BasicGameState {
 		};
 
 		for(String asset : assetList) {
-			String key = asset.substring((asset.indexOf('/') + 1),
+			String key = asset.substring((asset.lastIndexOf('/') + 1),
 										  asset.lastIndexOf('.'));
 			assets.addImage(key, asset);
 		}
@@ -331,6 +333,9 @@ public class LoadingState extends BasicGameState {
 			Animation supraVentricularTachycardia = new Animation("GZS_Heart_SVT", 181, 22, 36, 67L, 1_000L, 1_000L);
 			assets.addAnimation("GZS_Heart_SVT", supraVentricularTachycardia);
 		} // End Heart Rate Animations
+
+		Animation ft = new Animation("GZS_Player_Feet", 64, 64, 12, 100L, 1200L, 1200L);
+		assets.addAnimation("GZS_Player_Feet", ft);
 
 		Animation mf = new Animation("GZS_MuzzleFlash", 4, 8, 4, 25L, 100L, 100L);
 		assets.addAnimation("GZS_MuzzleFlash", mf);

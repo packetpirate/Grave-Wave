@@ -20,6 +20,7 @@ import com.gzsr.controllers.ShopController;
 import com.gzsr.entities.components.HeartMonitor;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
+import com.gzsr.gfx.Animation;
 import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Flashlight;
 import com.gzsr.gfx.Layers;
@@ -53,18 +54,21 @@ public class Player implements Entity {
 	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
 
-	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -32.0f);
-	public static final Pair<Float> BELOW_1 = new Pair<Float>(0.0f, 32.0f);
-	public static final Pair<Float> BELOW_2 = new Pair<Float>(0.0f, 47.0f);
+	private static final Pair<Float> HAND_OFFSET = new Pair<Float>(16.0f, -5.0f);
+	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -64.0f);
+	public static final Pair<Float> BELOW_1 = new Pair<Float>(0.0f, 64.0f);
+	public static final Pair<Float> BELOW_2 = new Pair<Float>(0.0f, 79.0f);
 
 	private static Player instance = null;
 
+	private boolean moving;
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	private Pair<Float> velocity;
 	public Pair<Float> getVelocity() { return velocity; }
 	public void move(float xOff, float yOff) {
 		if(isAlive()) {
+			moving = true;
 			velocity.x = xOff;
 			velocity.y = yOff;
 
@@ -77,6 +81,8 @@ public class Player implements Entity {
 			}
 		}
 	}
+
+	private Animation feet;
 
 	private Ellipse bounds;
 	public Ellipse getCollider() { return bounds; }
@@ -195,7 +201,17 @@ public class Player implements Entity {
 		if(wc > 0) {
 			// have to use floorMod because apparently Java % is remainder only, not modulus... -_-
 			int i = Math.floorMod((rangedIndex + direction), wc);
+			String prev = getCurrentRanged().getName();
 			setCurrentRanged(i);
+			if(Globals.debug) {
+				System.out.printf("Weapon changed from %s to %s!\n", prev, getCurrentRanged().getName());
+				int ec = 0;
+				List<RangedWeapon> rws = getRangedWeapons();
+				for(RangedWeapon rw : rws) {
+					if(rw.isEquipped()) ec++;
+				}
+				System.out.printf("Equipped Ranged Weapons: %d\n\n", ec);
+			}
 		}
 	}
 
@@ -206,7 +222,7 @@ public class Player implements Entity {
 	private StatusHandler statusHandler;
 	public StatusHandler getStatusHandler() { return statusHandler; }
 
-	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player"); }
+	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player2"); }
 
 	private Flashlight flashlight;
 	public Flashlight getFlashlight() { return flashlight; }
@@ -214,6 +230,8 @@ public class Player implements Entity {
 	public Player() {
 		position = new Pair<Float>(0.0f, 0.0f);
 		velocity = new Pair<Float>(0.0f, 0.0f);
+
+		feet = AssetManager.getManager().getAnimation("GZS_Player_Feet");
 
 		attributes = new Attributes();
 		resources = new Resources();
@@ -287,6 +305,7 @@ public class Player implements Entity {
 		if(cRangedWeapon != null) canMove = (canMove && !cRangedWeapon.blockingMovement());
 
 		if(canMove) {
+			moving = false;
 			velocity.x = 0.0f;
 			velocity.y = 0.0f;
 
@@ -344,7 +363,8 @@ public class Player implements Entity {
 							StatusMessages.getInstance().addMessage("Reload!", this, Player.ABOVE_1, cTime, 1_000L);
 						}
 					} else if(!cRangedWeapon.isChargedWeapon() && cRangedWeapon.canUse(cTime)) {
-						cRangedWeapon.use(this, new Pair<Float>(position), theta, cTime);
+						Pair<Float> origin = Calculate.rotateAboutPoint(position, new Pair<Float>((position.x + HAND_OFFSET.x), (position.y + HAND_OFFSET.y)), theta);
+						cRangedWeapon.use(this, origin, theta, cTime);
 					}
 				} else {
 					StatusMessages.getInstance().addMessage("Reloading...", this, Player.ABOVE_1, cTime, 1_000L);
@@ -365,6 +385,9 @@ public class Player implements Entity {
 			theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
 			flashlight.update(this, cTime);
 		}
+
+		if(moving) feet.update(cTime);
+		else feet.restart(cTime);
 	}
 
 	@Override
@@ -376,9 +399,15 @@ public class Player implements Entity {
 		if(isAlive()) {
 			Image image = getImage();
 			if(image != null) {
+				feet.render(g, position, (float)(theta - (Math.PI / 2)));
 				g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-				g.drawImage(image, (position.x - (image.getWidth() / 2)),
-								   (position.y - (image.getHeight() / 2)));
+				image.draw((position.x - (image.getWidth() / 2)), (position.y - (image.getHeight() / 2)), 1f);
+
+				RangedWeapon rw = getCurrentRanged();
+				if(rw != null) {
+					Image weapon = rw.getHandImage();
+					if(weapon != null) weapon.draw((position.x + 5.0f), (position.y - 37.0f));
+				}
 
 				if(Globals.SHOW_COLLIDERS) {
 					g.setColor(Color.red);
@@ -401,6 +430,8 @@ public class Player implements Entity {
 	 * Reset all dAttributes and iAttributes members.
 	 */
 	public void reset() {
+		moving = false;
+
 		position.x = (float)(Globals.WIDTH / 2);
 		position.y = (float)(Globals.HEIGHT / 2);
 

@@ -78,6 +78,9 @@ public class Beretta extends RangedWeapon {
 	public Image getInventoryIcon() { return WType.BERETTA.getImage(); }
 
 	@Override
+	public Image getHandImage() { return AssetManager.getManager().getImage("GZS_Beretta_W"); }
+
+	@Override
 	public int getClipSize() { return Beretta.CLIP_SIZE; }
 
 	@Override
