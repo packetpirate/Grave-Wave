@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class ENCannon extends RangedWeapon {
@@ -78,6 +79,9 @@ public class ENCannon extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return ENCannon.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.ELECTRIC_NET_CANNON; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.ELECTRIC_NET_CANNON.getImage(); }

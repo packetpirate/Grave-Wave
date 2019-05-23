@@ -19,6 +19,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.states.GameState;
 
@@ -216,6 +217,9 @@ public class PipeBombWeapon extends RangedWeapon {
 
 	@Override
 	public float getKnockback() { return 4.0f; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.PIPE_BOMB; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.PIPE_BOMB.getImage(); }

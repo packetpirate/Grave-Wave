@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class NailGun extends RangedWeapon {
@@ -73,6 +74,9 @@ public class NailGun extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return NailGun.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.NAIL_GUN; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.NAIL_GUN.getImage(); }

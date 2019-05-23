@@ -15,6 +15,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class LaserBarrier extends RangedWeapon {
@@ -121,6 +122,9 @@ public class LaserBarrier extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return LaserBarrier.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.LASER_BARRIER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.LASER_BARRIER.getImage(); }

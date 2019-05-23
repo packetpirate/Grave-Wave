@@ -12,6 +12,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class Crossbow extends RangedWeapon {
@@ -94,6 +95,9 @@ public class Crossbow extends RangedWeapon {
 
 	@Override
 	public float getKnockback() { return Crossbow.KNOCKBACK; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.CROSSBOW; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.CROSSBOW.getImage(); }

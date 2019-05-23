@@ -15,6 +15,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class BowAndArrow extends RangedWeapon {
@@ -143,6 +144,9 @@ public class BowAndArrow extends RangedWeapon {
 
 	@Override
 	public double getReloadTime(long cTime) { return 0.0; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.BOW_AND_ARROW; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.BOW_AND_ARROW.getImage(); }

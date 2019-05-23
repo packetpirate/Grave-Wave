@@ -33,6 +33,7 @@ import com.gzsr.misc.Pair;
 import com.gzsr.objects.Inventory;
 import com.gzsr.objects.crafting.Resources;
 import com.gzsr.objects.items.Item;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.objects.weapons.melee.Machete;
@@ -54,7 +55,7 @@ public class Player implements Entity {
 	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
 
-	private static final Pair<Float> HAND_OFFSET = new Pair<Float>(16.0f, -5.0f);
+	//private static final Pair<Float> HAND_OFFSET = new Pair<Float>(16.0f, -5.0f);
 	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -64.0f);
 	public static final Pair<Float> BELOW_1 = new Pair<Float>(0.0f, 64.0f);
 	public static final Pair<Float> BELOW_2 = new Pair<Float>(0.0f, 79.0f);
@@ -82,6 +83,7 @@ public class Player implements Entity {
 		}
 	}
 
+	private Animation body;
 	private Animation feet;
 
 	private Ellipse bounds;
@@ -222,8 +224,6 @@ public class Player implements Entity {
 	private StatusHandler statusHandler;
 	public StatusHandler getStatusHandler() { return statusHandler; }
 
-	public Image getImage() { return AssetManager.getManager().getImage("GZS_Player2"); }
-
 	private Flashlight flashlight;
 	public Flashlight getFlashlight() { return flashlight; }
 
@@ -231,6 +231,7 @@ public class Player implements Entity {
 		position = new Pair<Float>(0.0f, 0.0f);
 		velocity = new Pair<Float>(0.0f, 0.0f);
 
+		body = AssetManager.getManager().getAnimation("GZS_Player_Body");
 		feet = AssetManager.getManager().getAnimation("GZS_Player_Feet");
 
 		attributes = new Attributes();
@@ -363,7 +364,8 @@ public class Player implements Entity {
 							StatusMessages.getInstance().addMessage("Reload!", this, Player.ABOVE_1, cTime, 1_000L);
 						}
 					} else if(!cRangedWeapon.isChargedWeapon() && cRangedWeapon.canUse(cTime)) {
-						Pair<Float> origin = Calculate.rotateAboutPoint(position, new Pair<Float>((position.x + HAND_OFFSET.x), (position.y + HAND_OFFSET.y)), theta);
+						ArmConfig ac = cRangedWeapon.getArmConfig();
+						Pair<Float> origin = Calculate.rotateAboutPoint(position, new Pair<Float>((position.x + ac.getMuzzle().x), (position.y + ac.getMuzzle().y)), theta);
 						cRangedWeapon.use(this, origin, theta, cTime);
 					}
 				} else {
@@ -386,8 +388,13 @@ public class Player implements Entity {
 			flashlight.update(this, cTime);
 		}
 
-		if(moving) feet.update(cTime);
-		else feet.restart(cTime);
+		if(moving) {
+			body.update(cTime);
+			feet.update(cTime);
+		} else {
+			body.restart(cTime);
+			feet.restart(cTime);
+		}
 	}
 
 	@Override
@@ -397,28 +404,40 @@ public class Player implements Entity {
 		getMeleeWeapons().stream().forEach(w -> w.render(g, cTime));
 
 		if(isAlive()) {
-			Image image = getImage();
-			if(image != null) {
-				feet.render(g, position, (float)(theta - (Math.PI / 2)));
-				g.rotate(position.x, position.y, (float)Math.toDegrees(theta));
-				image.draw((position.x - (image.getWidth() / 2)), (position.y - (image.getHeight() / 2)), 1f);
+			AssetManager assets = AssetManager.getManager();
 
-				RangedWeapon rw = getCurrentRanged();
-				if(rw != null) {
-					Image weapon = rw.getHandImage();
-					if(weapon != null) weapon.draw((position.x + 5.0f), (position.y - 37.0f));
-				}
+			Image head = assets.getImage("GZS_Player2_Head");
+			//Image arm1 = assets.getImage("GZS_Player2_Arm1");
 
-				if(Globals.SHOW_COLLIDERS) {
-					g.setColor(Color.red);
-					g.draw(bounds);
-				}
+			float deg = (float)Math.toDegrees(theta);
 
-				g.rotate(position.x, position.y, -(float)Math.toDegrees(theta));
-			} else {
-				// Draw a shape to represent the missing player image.
+			// Draw the feet.
+			feet.render(g, position, (float)(theta - (Math.PI / 2)));
+
+			// Draw the arm and weapon.
+			g.rotate(position.x, position.y, deg);
+			//arm1.draw((position.x - (arm1.getWidth() / 2)), (position.y - (arm1.getHeight() / 2)));
+			RangedWeapon rw = getCurrentRanged();
+			if(rw != null) {
+				ArmConfig ac = rw.getArmConfig();
+				Image arm = ac.getArmImage();
+				Image weapon = ac.getWeaponImage();
+				if(arm != null) arm.draw((position.x - (arm.getWidth() / 2)), (position.y - (arm.getHeight() / 2)));
+				if(weapon != null) weapon.draw((position.x + ac.getOffset().x), (position.y + ac.getOffset().y));
+			}
+			g.rotate(position.x, position.y, -deg);
+
+			// Draw the body.
+			body.render(g, position, (float)(theta - (Math.PI / 2)));
+
+			// Draw the head.
+			g.rotate(position.x, position.y, deg);
+			head.draw((position.x - (head.getWidth() / 2)), (position.y - (head.getHeight() / 2)));
+			g.rotate(position.x, position.y, -deg);
+
+			if(Globals.SHOW_COLLIDERS) {
 				g.setColor(Color.red);
-				g.fillOval((position.x - 20), (position.y - 20), 40, 40);
+				g.draw(bounds);
 			}
 		}
 
@@ -439,6 +458,9 @@ public class Player implements Entity {
 		velocity.y = 0.0f;
 
 		bounds = new Ellipse(position.x, (position.y + 4.0f), 16.0f, 16.0f);
+
+		body.restart(0L);
+		feet.restart(0L);
 
 		speed = Player.DEFAULT_SPEED;
 		theta = 0.0f;

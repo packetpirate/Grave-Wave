@@ -17,6 +17,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class ClaymoreWeapon extends RangedWeapon {
@@ -138,6 +139,9 @@ public class ClaymoreWeapon extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return ClaymoreWeapon.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.CLAYMORE; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.CLAYMORE.getImage(); }

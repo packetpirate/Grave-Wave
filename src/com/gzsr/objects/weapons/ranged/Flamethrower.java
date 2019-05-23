@@ -14,6 +14,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.status.BurningEffect;
 
@@ -81,6 +82,9 @@ public class Flamethrower extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return Flamethrower.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.FLAMETHROWER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.FLAMETHROWER.getImage(); }

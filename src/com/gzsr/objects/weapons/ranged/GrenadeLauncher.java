@@ -10,6 +10,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.talents.Talents;
@@ -79,6 +80,9 @@ public class GrenadeLauncher extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return GrenadeLauncher.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.GRENADE_LAUNCHER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.GRENADE_LAUNCHER.getImage(); }

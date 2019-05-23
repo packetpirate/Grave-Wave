@@ -14,6 +14,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class Mossberg extends RangedWeapon {
@@ -87,6 +88,9 @@ public class Mossberg extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return Mossberg.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.MOSSBERG; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.MOSSBERG.getImage(); }

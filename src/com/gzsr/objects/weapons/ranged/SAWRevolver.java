@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.WType;
 
@@ -79,6 +80,9 @@ public class SAWRevolver extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return SAWRevolver.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.SAW_REVOLVER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.SAW_REVOLVER.getImage(); }

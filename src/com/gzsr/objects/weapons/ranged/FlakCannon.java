@@ -15,6 +15,7 @@ import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
 import com.gzsr.objects.crafting.Resources;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.status.BurningEffect;
 
@@ -91,6 +92,9 @@ public class FlakCannon extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return FlakCannon.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.FLAK_CANNON; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.FLAK_CANNON.getImage(); }

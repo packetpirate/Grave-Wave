@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class SentryWeapon extends RangedWeapon {
@@ -72,6 +73,9 @@ public class SentryWeapon extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return SentryWeapon.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.SENTRY_GUN; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.SENTRY_GUN.getImage(); }

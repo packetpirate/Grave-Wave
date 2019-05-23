@@ -141,7 +141,10 @@ public class LoadingState extends BasicGameState {
 			"images/GZS_Background02.png",
 			"images/GZS_DeathScreen.png",
 			"images/GZS_Joe-Portrait.png",
-			"images/new/GZS_Player2.png",
+			"images/new/GZS_Player2_Head.png",
+			"images/new/GZS_Player_Body.png",
+			"images/new/GZS_Player2_Arm1.png",
+			"images/new/GZS_Player2_Arm2.png",
 			"images/new/GZS_Player_Feet.png",
 			"images/GZS_Crosshair2.png",
 			// HUD Images
@@ -221,6 +224,7 @@ public class LoadingState extends BasicGameState {
 			"images/new/GZS_Beretta_W.png",
 			"images/GZS_SmithAndWesson.png",
 			"images/GZS_Mp5.png",
+			"images/new/GZS_MP5_W.png",
 			"images/GZS_RTPS.png",
 			"images/GZS_Boomstick.png",
 			"images/GZS_Bow.png",
@@ -333,6 +337,9 @@ public class LoadingState extends BasicGameState {
 			Animation supraVentricularTachycardia = new Animation("GZS_Heart_SVT", 181, 22, 36, 67L, 1_000L, 1_000L);
 			assets.addAnimation("GZS_Heart_SVT", supraVentricularTachycardia);
 		} // End Heart Rate Animations
+
+		Animation pbod = new Animation("GZS_Player_Body", 64, 64, 12, 100L, 1200L, 1200L);
+		assets.addAnimation("GZS_Player_Body", pbod);
 
 		Animation ft = new Animation("GZS_Player_Feet", 64, 64, 12, 100L, 1200L, 1200L);
 		assets.addAnimation("GZS_Player_Feet", ft);

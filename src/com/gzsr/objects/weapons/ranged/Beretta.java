@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class Beretta extends RangedWeapon {
@@ -78,7 +79,7 @@ public class Beretta extends RangedWeapon {
 	public Image getInventoryIcon() { return WType.BERETTA.getImage(); }
 
 	@Override
-	public Image getHandImage() { return AssetManager.getManager().getImage("GZS_Beretta_W"); }
+	public ArmConfig getArmConfig() { return ArmConfig.BERETTA; }
 
 	@Override
 	public int getClipSize() { return Beretta.CLIP_SIZE; }

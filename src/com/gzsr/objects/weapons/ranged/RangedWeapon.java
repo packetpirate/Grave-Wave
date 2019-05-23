@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
@@ -21,6 +20,7 @@ import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.Weapon;
 import com.gzsr.states.GameState;
 import com.gzsr.status.Status;
@@ -52,7 +52,7 @@ public abstract class RangedWeapon extends Weapon {
 		if(muzzleFlash == null) muzzleFlash = AssetManager.getManager().getAnimation("GZS_MuzzleFlash");
 	}
 
-	public Image getHandImage() { return null; }
+	public abstract ArmConfig getArmConfig();
 
 	private Size size;
 	protected enum Size {
@@ -116,7 +116,8 @@ public abstract class RangedWeapon extends Weapon {
 
 		if(muzzleFlash != null) {
 			Player player = Player.getPlayer();
-			Pair<Float> mp = new Pair<Float>((player.getPosition().x + 16.0f), (player.getPosition().y - 36.0f));
+			Pair<Float> muzzle = getArmConfig().getMuzzle();
+			Pair<Float> mp = new Pair<Float>((player.getPosition().x + muzzle.x), (player.getPosition().y + muzzle.y));
 			if(muzzleFlash.isActive(cTime)) muzzleFlash.render(g, mp, player.getPosition(), (player.getRotation() - (float)(Math.PI / 2)));
 		}
 	}

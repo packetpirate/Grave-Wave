@@ -19,6 +19,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.states.GameState;
@@ -153,6 +154,9 @@ public class BigRedButton extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return BigRedButton.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.BIG_RED_BUTTON; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.BIG_RED_BUTTON.getImage(); }

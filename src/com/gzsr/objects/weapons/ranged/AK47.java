@@ -16,6 +16,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 
 public class AK47 extends RangedWeapon {
@@ -96,6 +97,9 @@ public class AK47 extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return AK47.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.AK47; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.AK47.getImage(); }

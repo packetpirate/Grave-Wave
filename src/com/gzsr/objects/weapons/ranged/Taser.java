@@ -11,6 +11,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.StatusProjectile;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.status.ParalysisEffect;
 
@@ -72,6 +73,9 @@ public class Taser extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return Taser.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.TASER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.TASER.getImage(); }

@@ -16,6 +16,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.Projectile;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.states.GameState;
 import com.gzsr.status.BurningEffect;
@@ -181,6 +182,9 @@ public class MolotovWeapon extends RangedWeapon {
 
 	@Override
 	public float getKnockback() { return 0.0f; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.MOLOTOV; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.MOLOTOV.getImage(); }

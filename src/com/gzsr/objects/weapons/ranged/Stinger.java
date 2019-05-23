@@ -10,6 +10,7 @@ import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.objects.weapons.WType;
 import com.gzsr.talents.Talents;
@@ -80,6 +81,9 @@ public class Stinger extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return Stinger.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.STINGER; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.STINGER.getImage(); }

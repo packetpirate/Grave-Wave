@@ -13,6 +13,7 @@ import com.gzsr.gfx.particles.ProjectileType;
 import com.gzsr.gfx.particles.emitters.BloodGenerator;
 import com.gzsr.math.Dice;
 import com.gzsr.misc.Pair;
+import com.gzsr.objects.weapons.ArmConfig;
 import com.gzsr.objects.weapons.DamageType;
 import com.gzsr.objects.weapons.WType;
 
@@ -79,6 +80,9 @@ public class Remington extends RangedWeapon {
 
 	@Override
 	public long getReloadTime() { return Remington.RELOAD_TIME; }
+
+	@Override
+	public ArmConfig getArmConfig() { return ArmConfig.REMINGTON; }
 
 	@Override
 	public Image getInventoryIcon() { return WType.REMINGTON.getImage(); }
