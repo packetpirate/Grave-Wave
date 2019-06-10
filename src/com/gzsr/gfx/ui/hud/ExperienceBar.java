@@ -11,6 +11,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
@@ -33,6 +34,7 @@ public class ExperienceBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
@@ -42,11 +44,13 @@ public class ExperienceBar implements Entity {
 
 		Color filter = getFilterColor(Color.white, touchingPlayer);
 
+		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+
 		Image subImage = bar.getSubImage(0, 0, (int)(bar.getWidth() * percentage), bar.getHeight());
-		g.drawImage(subImage, position.x, position.y, filter);
+		g.drawImage(subImage, dPos.x, dPos.y, filter);
 
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
-		FontUtils.drawCenter(f, String.format("%d%%", (int)(percentage * 100)), (int)position.x.floatValue(), (int)(position.y + (bar.getHeight() / 2) - (f.getLineHeight() / 2)), bar.getWidth(), filter);
+		FontUtils.drawCenter(f, String.format("%d%%", (int)(percentage * 100)), (int)dPos.x.floatValue(), (int)(dPos.y + (bar.getHeight() / 2) - (f.getLineHeight() / 2)), bar.getWidth(), filter);
 	}
 
 	private Color getFilterColor(Color c, boolean touchingPlayer) {

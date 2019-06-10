@@ -190,9 +190,11 @@ public class GameState extends BasicGameState implements InputListener {
 
 		Camera.getCamera().translate(g);
 
-		Image background = assets.getImage("GZS_Background6");
-		g.drawImage(background, -Camera.MAX_OFFSET, -Camera.MAX_OFFSET, (Globals.WIDTH + Camera.MAX_OFFSET), (Globals.HEIGHT + Camera.MAX_OFFSET),
-					0.0f, 0.0f, background.getWidth(), background.getHeight());
+		Image background = assets.getImage("GWB");
+		//Image background = assets.getImage("GZS_Background6");
+		/*g.drawImage(background, -Camera.MAX_OFFSET, -Camera.MAX_OFFSET, (Globals.WIDTH + Camera.MAX_OFFSET), (Globals.HEIGHT + Camera.MAX_OFFSET),
+					0.0f, 0.0f, background.getWidth(), background.getHeight());*/
+		g.drawImage(background, 0.0f, 0.0f);
 
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 

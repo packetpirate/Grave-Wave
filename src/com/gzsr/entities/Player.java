@@ -73,13 +73,18 @@ public class Player implements Entity {
 			velocity.x = xOff;
 			velocity.y = yOff;
 
+			/**
 			float tx = position.x + velocity.x;
 			float ty = position.y + velocity.y;
 			if((tx >= 0) && (tx < Globals.WIDTH) &&
 			   (ty >= 0) && (ty < Globals.HEIGHT)) {
 				position.x += velocity.x;
 				position.y += velocity.y;
-			}
+			}**/
+			position.x += velocity.x;
+			position.y += velocity.y;
+
+			Camera.getCamera().addOffset(velocity.x, velocity.y);
 		}
 	}
 
@@ -283,6 +288,9 @@ public class Player implements Entity {
 
 					// Reset the EKG.
 					monitor.reset(cTime);
+
+					// Reset the camera position.
+					Camera.getCamera().reset();
 				}
 			}
 		}

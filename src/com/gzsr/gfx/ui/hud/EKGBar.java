@@ -8,6 +8,7 @@ import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.components.HeartMonitor;
 import com.gzsr.gfx.Animation;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
@@ -33,11 +34,14 @@ public class EKGBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		HeartMonitor monitor = player.getHeartMonitor();
 		Animation animation = monitor.getState().getAnimation();
 
-		animation.render(g, position, SIZE);
+		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+
+		animation.render(g, dPos, SIZE);
 	}
 
 	@Override

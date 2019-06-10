@@ -11,6 +11,7 @@ import org.newdawn.slick.util.FontUtils;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 import com.gzsr.status.Status;
@@ -35,19 +36,22 @@ public class Heart implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
+
+		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
 
 		// Draw the Heart
 		double currentHealth = player.getAttributes().getDouble("health");
 		Image heart = AssetManager.getManager().getImage("GZS_Heart");
 
 		Color filter = changeColor(g, (player.getStatusHandler().hasStatus(Status.POISON) ? POISON_COLOR : Color.white), touchingPlayer);
-		g.drawImage(heart, position.x, position.y, filter);
+		g.drawImage(heart, dPos.x, dPos.y, filter);
 
 		Color textColor = player.getHeartMonitor().getState().getColor();
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_xs");
-		FontUtils.drawCenter(f, String.format("%d", (int)currentHealth), (int)position.x.floatValue(), (int)(position.y + (size.y / 2) - (f.getLineHeight() / 2)), (int)size.x.floatValue(), textColor);
+		FontUtils.drawCenter(f, String.format("%d", (int)currentHealth), (int)dPos.x.floatValue(), (int)(dPos.y + (size.y / 2) - (f.getLineHeight() / 2)), (int)size.x.floatValue(), textColor);
 	}
 
 	private Color changeColor(Graphics g, Color c, boolean touchingPlayer) {

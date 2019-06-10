@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
+import com.gzsr.gfx.Camera;
 import com.gzsr.gfx.Layers;
 import com.gzsr.misc.Pair;
 
@@ -30,6 +31,7 @@ public class Armor implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
+		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
@@ -40,10 +42,10 @@ public class Armor implements Entity {
 			double maxArmor = player.getAttributes().getDouble("maxArmor");
 			float ratio = (float)(currentArmor / maxArmor);
 			float h = (ratio * armor.getHeight());
-			float y = (position.y + (armor.getHeight() - h));
+			float y = ((position.y + camera.getOffset().y) + (armor.getHeight() - h));
 
 			Image display = armor.getSubImage(0, (int)(armor.getHeight() - h), armor.getWidth(), (int)h);
-			display.draw(position.x, y, getFilterColor(Color.white, touchingPlayer));
+			display.draw((position.x + camera.getOffset().x), y, getFilterColor(Color.white, touchingPlayer));
 		}
 	}
 
