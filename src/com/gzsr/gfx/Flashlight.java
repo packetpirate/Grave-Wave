@@ -74,6 +74,7 @@ public class Flashlight {
 
 		g.clearAlphaMap();
 
+		// TODO: Fix the fucking rectangle so it doesn't shrink as move towards the top-left.
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		g.setColor((player.getStatusHandler().hasStatus(Status.NIGHT_VISION)) ? NIGHT_VISION : SHADOW);
 		g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
@@ -83,7 +84,7 @@ public class Flashlight {
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		if(isEnabled() && player.isAlive()) {
-			if(lightMap != null) g.drawImage(lightMap, (camera.getOffset().x + origin.x - (lightMap.getWidth() / 2)), (camera.getOffset().y + origin.y - (lightMap.getHeight() / 2)));
+			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
 			if(flashlight != null) {
 				float a = (float)Math.toDegrees(theta - (Math.PI / 2));
 				g.rotate(origin.x, origin.y, a);

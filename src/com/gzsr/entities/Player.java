@@ -73,14 +73,6 @@ public class Player implements Entity {
 			velocity.x = xOff;
 			velocity.y = yOff;
 
-			/**
-			float tx = position.x + velocity.x;
-			float ty = position.y + velocity.y;
-			if((tx >= 0) && (tx < Globals.WIDTH) &&
-			   (ty >= 0) && (ty < Globals.HEIGHT)) {
-				position.x += velocity.x;
-				position.y += velocity.y;
-			}**/
 			position.x += velocity.x;
 			position.y += velocity.y;
 
@@ -255,6 +247,7 @@ public class Player implements Entity {
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		Camera camera = Camera.getCamera();
 		if(!isAlive()) {
 			if(!respawning) {
 				int lives = attributes.getInt("lives") - 1;
@@ -290,7 +283,7 @@ public class Player implements Entity {
 					monitor.reset(cTime);
 
 					// Reset the camera position.
-					Camera.getCamera().reset();
+					camera.reset();
 				}
 			}
 		}
@@ -392,7 +385,9 @@ public class Player implements Entity {
 
 		// Calculate the player's rotation based on mouse position.
 		if(canMove) {
-			theta = Calculate.Hypotenuse(position, mouse.getPosition()) + (float)(Math.PI / 2);
+			float x = (position.x - camera.getOffset().x);
+			float y = (position.y - camera.getOffset().y);
+			theta = Calculate.Hypotenuse(new Pair<Float>(x, y), mouse.getPosition()) + (float)(Math.PI / 2);
 			flashlight.update(this, cTime);
 		}
 
