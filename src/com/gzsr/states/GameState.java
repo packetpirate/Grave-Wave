@@ -188,12 +188,10 @@ public class GameState extends BasicGameState implements InputListener {
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		g.clear();
 
-		Camera.getCamera().translate(g);
+		Camera camera = Camera.getCamera();
+		camera.translate(g);
 
 		Image background = assets.getImage("GWB");
-		//Image background = assets.getImage("GZS_Background6");
-		/*g.drawImage(background, -Camera.MAX_OFFSET, -Camera.MAX_OFFSET, (Globals.WIDTH + Camera.MAX_OFFSET), (Globals.HEIGHT + Camera.MAX_OFFSET),
-					0.0f, 0.0f, background.getWidth(), background.getHeight());*/
 		g.drawImage(background, 0.0f, 0.0f);
 
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
@@ -208,10 +206,12 @@ public class GameState extends BasicGameState implements InputListener {
 			float p = flash.getPercentageTimeLeft(time);
 			Color color = new Color(1.0f, 1.0f, 1.0f, p);
 			g.setColor(color);
-			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+			g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
+					   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
 		} else if(Camera.getCamera().displayVignette()) {
 			g.setColor(Camera.VIGNETTE_COLOR);
-			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+			g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
+					   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
 		}
 
 		if(paused) {

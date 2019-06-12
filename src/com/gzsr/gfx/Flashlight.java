@@ -74,11 +74,10 @@ public class Flashlight {
 
 		g.clearAlphaMap();
 
-		// TODO: Fix the fucking rectangle so it doesn't shrink as move towards the top-left.
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		g.setColor((player.getStatusHandler().hasStatus(Status.NIGHT_VISION)) ? NIGHT_VISION : SHADOW);
 		g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
-				   (camera.getOffset().x + Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (camera.getOffset().y + Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
+				   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
