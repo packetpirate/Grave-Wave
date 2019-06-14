@@ -20,10 +20,10 @@ public class TLayer {
 
 	public TLayer(int width, int height) {
 		tiles = new TTile[height][width];
-		for(int row = 0; row < height; row++) {
-			for(int col = 0; col < width; col++) {
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
 				// Set a default tile in case something goes wrong during the load process.
-				tiles[row][col] = new TTile(0, col, row);
+				tiles[y][x] = new TTile(0, x, y);
 			}
 		}
 	}

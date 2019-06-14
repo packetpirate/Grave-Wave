@@ -28,12 +28,11 @@ public class TTile {
 	private boolean walkable;
 	public boolean isWalkable() { return walkable; }
 
-	public TTile(int tid_, int x_, int y_) {
+	public TTile(long tid_, int x_, int y_) {
 		this(tid_, x_, y_, true);
 	}
 
-	public TTile(int tid_, int x_, int y_, boolean walkable_) {
-		this.tid = tid_;
+	public TTile(long tid_, int x_, int y_, boolean walkable_) {
 		this.x = x_;
 		this.y = y_;
 
@@ -44,12 +43,14 @@ public class TTile {
 		this.walkable = walkable_;
 
 		// If any of the flip bits are set, toggle the relevant flag.
-		if((tid & FLIP_HORIZONTAL) == FLIP_HORIZONTAL) fh = true;
-		if((tid & FLIP_VERTICAL) == FLIP_VERTICAL) fv = true;
-		if((tid & FLIP_DIAGONAL) == FLIP_DIAGONAL) fd = true;
+		if((tid_ & FLIP_HORIZONTAL) == FLIP_HORIZONTAL) fh = true;
+		if((tid_ & FLIP_VERTICAL) == FLIP_VERTICAL) fv = true;
+		if((tid_ & FLIP_DIAGONAL) == FLIP_DIAGONAL) fd = true;
 
 		// Clear the flip flags from the TID.
-		tid = (tid & ~(FLIP_HORIZONTAL | FLIP_VERTICAL | FLIP_DIAGONAL));
+		tid_ = (tid_ & ~(FLIP_HORIZONTAL | FLIP_VERTICAL | FLIP_DIAGONAL));
+
+		this.tid = (int) tid_;
 	}
 
 	/**
@@ -60,11 +61,13 @@ public class TTile {
 	 * @return A sub-image containing the tile matching the TID.
 	 */
 	public Image getImage(Image tileset, int w, int h) {
+		if(tid == 0) return null;
+
 		int nh = tileset.getWidth() / w; // Number of tiles in this tileset horizontally.
 
 		// Offsets to be multiplied by tile width and height to get origin point of tile.
-		int ox = ((tid % nh) - 1); // Subtract 1 because the TID numbers are 1-indexed (why use 0 to indicate nothing? why not -1? stupid Tiled...)
-		int oy = (tid / nh);
+		int ox = ((tid - 1) % nh); // Subtract 1 because the TID numbers are 1-indexed (why use 0 to indicate nothing? why not -1? stupid Tiled...)
+		int oy = ((tid - 1) / nh);
 
 		Image sub = tileset.getSubImage((ox * w), (oy * h), w, h);
 
@@ -72,7 +75,7 @@ public class TTile {
 		if(fh || fv) sub = sub.getFlippedCopy(fh, fv);
 		if(fd) {
 			// To flip diagonally, rotate counter-clockwise, then flip it horizontally.
-			sub.rotate(-90);
+			sub.setRotation(90);
 			sub = sub.getFlippedCopy(true, false);
 		}
 

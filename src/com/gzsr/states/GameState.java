@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
@@ -42,6 +41,8 @@ import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
+import com.gzsr.tmx.TMap;
+import com.gzsr.tmx.TParser;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
@@ -68,6 +69,8 @@ public class GameState extends BasicGameState implements InputListener {
 
 	private EscapeMenu escapeMenu;
 
+	private TMap map;
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
@@ -76,6 +79,9 @@ public class GameState extends BasicGameState implements InputListener {
 
 		entities = new ConcurrentHashMap<String, Entity>();
 		escapeMenu = new EscapeMenu();
+
+		map = TParser.load("res/maps/GWB.tmx");
+		map.constructMap();
 
 		reset(gc);
 	}
@@ -191,8 +197,9 @@ public class GameState extends BasicGameState implements InputListener {
 		Camera camera = Camera.getCamera();
 		camera.translate(g);
 
-		Image background = assets.getImage("GWB");
-		g.drawImage(background, 0.0f, 0.0f);
+		//Image background = assets.getImage("GWB");
+		//g.drawImage(background, 0.0f, 0.0f);
+		map.render(g, time);
 
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 
@@ -216,13 +223,14 @@ public class GameState extends BasicGameState implements InputListener {
 
 		if(paused) {
 			g.setColor(PAUSE_OVERLAY);
-			g.fillRect(0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT);
+			g.fillRect(camera.getOffset().x, camera.getOffset().y, Globals.WIDTH, Globals.HEIGHT);
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 			g.setColor(Color.white);
 			int w = g.getFont().getWidth("Paused");
 			int h = g.getFont().getLineHeight();
 			FontUtils.drawCenter(g.getFont(), "Paused",
-								 ((Globals.WIDTH / 2) - (w / 2)), ((Globals.HEIGHT / 2) - (h / 2)), w);
+								 (int)(camera.getOffset().x + (Globals.WIDTH / 2) - (w / 2)),
+								 (int)(camera.getOffset().y + (Globals.HEIGHT / 2) - (h / 2)), w);
 		}
 
 		if(escapeMenu.isOpen()) {

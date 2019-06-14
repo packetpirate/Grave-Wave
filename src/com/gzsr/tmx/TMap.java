@@ -3,11 +3,13 @@ package com.gzsr.tmx;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
 
 public class TMap implements Entity {
@@ -34,6 +36,7 @@ public class TMap implements Entity {
 	public int getMapHeight() { return mapHeight; }
 
 	private Image map;
+	private Graphics context;
 
 	public TMap(int tw, int th, int mw, int mh) {
 		layers = new ArrayList<TLayer>();
@@ -56,14 +59,35 @@ public class TMap implements Entity {
 	}
 	@Override
 	public void render(Graphics g, long cTime) {
-		if(map != null) map.draw(0.0f, 0.0f);
+		if(map != null) g.drawImage(map, 0.0f, 0.0f);
 	}
 
 	/**
 	 * Constructs the map image from available map data loaded from the TMX file.
 	 */
 	public void constructMap() {
+		try {
+			Image tileset = AssetManager.getManager().getImage("grave_wave_tiles");
+			context = map.getGraphics();
+			context.setBackground(Color.black);
+			context.clear();
 
+			for(int i = 0; i < layers.size(); i++) {
+				TLayer layer = layers.get(i);
+				for(int y = 0; y < mapHeight; y++) {
+					for(int x = 0; x < mapWidth; x++) {
+						TTile tile = layer.getTile(x, y);
+						Image img = tile.getImage(tileset, tileWidth, tileHeight);
+						if(img != null) context.drawImage(img, (x * tileWidth), (y * tileHeight));
+					}
+				}
+			}
+
+			context.flush();
+		} catch(SlickException se) {
+			System.err.println("ERROR: Could not construct map!");
+			se.printStackTrace();
+		}
 	}
 
 	/**
