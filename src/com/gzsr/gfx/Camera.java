@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.misc.Pair;
+import com.gzsr.tmx.TMap;
 
 public class Camera {
 	private static final long VIGNETTE_DURATION = 500L;
@@ -191,10 +192,20 @@ public class Camera {
 		offset.y += y;
 	}
 
-	public void focusOnPlayer() {
+	public void focusOnPlayer(TMap map) {
 		Player player = Player.getPlayer();
 		offset.x = (player.getPosition().x - (Globals.WIDTH / 2));
 		offset.y = (player.getPosition().y - (Globals.HEIGHT / 2));
+
+		// Constrain the camera to the size of the map.
+		float w = map.getMapWidthTotal();
+		float h = map.getMapHeightTotal();
+
+		if(offset.x < 0.0f) offset.x = 0.0f;
+		else if((offset.x + Globals.WIDTH) >= w) offset.x = (w - Globals.WIDTH);
+
+		if(offset.y < 0.0f) offset.y = 0.0f;
+		else if((offset.y + Globals.HEIGHT) >= h) offset.y = (h - Globals.HEIGHT);
 	}
 
 	public void reset() {

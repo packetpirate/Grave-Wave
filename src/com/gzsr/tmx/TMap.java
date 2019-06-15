@@ -35,6 +35,9 @@ public class TMap implements Entity {
 	public int getMapWidth() { return mapWidth; }
 	public int getMapHeight() { return mapHeight; }
 
+	public int getMapWidthTotal() { return (tileWidth * mapWidth); }
+	public int getMapHeightTotal() { return (tileHeight * mapHeight); }
+
 	private Image map;
 	private Graphics context;
 

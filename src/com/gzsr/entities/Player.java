@@ -47,6 +47,7 @@ import com.gzsr.status.InvulnerableEffect;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusHandler;
 import com.gzsr.talents.Talents;
+import com.gzsr.tmx.TMap;
 
 public class Player implements Entity {
 	private static final float DEFAULT_SPEED = 0.15f;
@@ -67,7 +68,7 @@ public class Player implements Entity {
 	public Pair<Float> getPosition() { return position; }
 	private Pair<Float> velocity;
 	public Pair<Float> getVelocity() { return velocity; }
-	public void move(float xOff, float yOff) {
+	public void move(TMap map, float xOff, float yOff) {
 		if(isAlive()) {
 			moving = true;
 			velocity.x = xOff;
@@ -76,7 +77,17 @@ public class Player implements Entity {
 			position.x += velocity.x;
 			position.y += velocity.y;
 
-			Camera.getCamera().addOffset(velocity.x, velocity.y);
+			// Constrain the player to the level.
+			float w = map.getMapWidthTotal();
+			float h = map.getMapHeightTotal();
+
+			if((position.x - 32.0f) < 0.0f) position.x = 32.0f;
+			else if((position.x + 32.0f) >= w) position.x = (w - 32.0f);
+
+			if((position.y - 32.0f) < 0.0f) position.y = 32.0f;
+			else if((position.y + 32.0f) >= h) position.y = (h - 32.0f);
+
+			Camera.getCamera().focusOnPlayer(map);
 		}
 	}
 
@@ -248,6 +259,8 @@ public class Player implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		Camera camera = Camera.getCamera();
+		TMap map = ((GameState) gs).getMap();
+
 		if(!isAlive()) {
 			if(!respawning) {
 				int lives = attributes.getInt("lives") - 1;
@@ -283,7 +296,7 @@ public class Player implements Entity {
 					monitor.reset(cTime);
 
 					// Reset the camera position.
-					camera.focusOnPlayer();
+					camera.focusOnPlayer(map);
 				}
 			}
 		}
@@ -312,10 +325,10 @@ public class Player implements Entity {
 			velocity.y = 0.0f;
 
 			float adjSpeed = ((getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(0.0f, -adjSpeed);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(-adjSpeed, 0.0f);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(0.0f, adjSpeed);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(adjSpeed, 0.0f);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(map, 0.0f, -adjSpeed);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(map, -adjSpeed, 0.0f);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(map, 0.0f, adjSpeed);
+			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(map, adjSpeed, 0.0f);
 		}
 
 		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();

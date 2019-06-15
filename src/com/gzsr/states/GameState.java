@@ -70,6 +70,7 @@ public class GameState extends BasicGameState implements InputListener {
 	private EscapeMenu escapeMenu;
 
 	private TMap map;
+	public TMap getMap() { return map; }
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {

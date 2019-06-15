@@ -128,7 +128,7 @@ public class Stitches extends Boss {
 
 					float xOff = (float)(Math.cos(theta) * -(reelSpeed * delta));
 					float yOff = (float)(Math.sin(theta) * -(reelSpeed * delta));
-					player.move(xOff, yOff);
+					player.move((((GameState)gs).getMap()), xOff, yOff);
 					hook.setPosition(new Pair<Float>(player.getPosition().x, player.getPosition().y));
 
 					// Make the player take bleed damage.
