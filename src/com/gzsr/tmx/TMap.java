@@ -78,7 +78,19 @@ public class TMap implements Entity {
 					for(int x = 0; x < mapWidth; x++) {
 						TTile tile = layer.getTile(x, y);
 						Image img = tile.getImage(tileset, tileWidth, tileHeight);
-						if(img != null) context.drawImage(img, (x * tileWidth), (y * tileHeight));
+						if(img != null) {
+							if(tile.isFlipped(TTile.FLIP_DIAGONAL)) {
+								// If we should flip this diagonally, first rotate by 90 degrees.
+								context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), 90);
+								// Then flip the image horizontally...
+								Image flipped = img.getFlippedCopy(true, false);
+								context.drawImage(flipped, (x * tileWidth), (y * tileHeight));
+								// Reset the rotation of the canvas.
+								context.resetTransform();
+							} else {
+								context.drawImage(img, (x * tileWidth), (y * tileHeight));
+							}
+						}
 					}
 				}
 			}

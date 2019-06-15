@@ -73,11 +73,12 @@ public class TTile {
 
 		// If any of the flip bits are set, flip the image.
 		if(fh || fv) sub = sub.getFlippedCopy(fh, fv);
+		/**
 		if(fd) {
 			// To flip diagonally, rotate counter-clockwise, then flip it horizontally.
 			sub.setRotation(90);
 			sub = sub.getFlippedCopy(true, false);
-		}
+		}**/
 
 		return sub;
 	}
