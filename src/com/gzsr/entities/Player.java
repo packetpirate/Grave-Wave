@@ -276,14 +276,14 @@ public class Player implements Entity {
 					statusHandler.addStatus(new InvulnerableEffect(Player.RESPAWN_TIME, cTime), cTime);
 
 					// Reset the player's position.
-					position.x = (float)(Globals.WIDTH / 2);
-					position.y = (float)(Globals.HEIGHT / 2);
+					//position.x = (float)(Globals.WIDTH / 2);
+					//position.y = (float)(Globals.HEIGHT / 2);
 
 					// Reset the EKG.
 					monitor.reset(cTime);
 
 					// Reset the camera position.
-					camera.reset();
+					camera.focusOnPlayer();
 				}
 			}
 		}

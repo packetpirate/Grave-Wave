@@ -81,9 +81,14 @@ public class TMap implements Entity {
 						if(img != null) {
 							if(tile.isFlipped(TTile.FLIP_DIAGONAL)) {
 								// If we should flip this diagonally, first rotate by 90 degrees.
-								context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), 90);
+								boolean fh = tile.isFlipped(TTile.FLIP_HORIZONTAL);
+								boolean fv = tile.isFlipped(TTile.FLIP_VERTICAL);
+								int angle = 270; // Default to -90 for vertically flipped tiles.
+								if(fh) angle = 90;
+
+								context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), angle);
 								// Then flip the image horizontally...
-								Image flipped = img.getFlippedCopy(true, false);
+								Image flipped = img.getFlippedCopy(!fh, !fv);
 								context.drawImage(flipped, (x * tileWidth), (y * tileHeight));
 								// Reset the rotation of the canvas.
 								context.resetTransform();
