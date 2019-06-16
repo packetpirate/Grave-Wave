@@ -458,7 +458,7 @@ public class Player implements Entity {
 		}
 
 		statusHandler.render(g, cTime);
-		flashlight.render(g, cTime);
+		//flashlight.render(g, cTime);
 	}
 
 	/**

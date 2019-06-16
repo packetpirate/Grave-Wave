@@ -1,7 +1,5 @@
 package com.gzsr.states.settings;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.newdawn.slick.Color;
@@ -35,14 +33,7 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 
 	private static final String EXPLANATION = "Adjust the slider until you can just barely see the zombies outside the flashlight area.";
 
-	private static final Pair<Float> playerPos = new Pair<Float>(150.0f, 150.0f);
-	private static final List<Pair<Float>> positions = new ArrayList<Pair<Float>>() {{
-		add(new Pair<Float>(300.0f, 150.0f));
-		add(new Pair<Float>(450.0f, 150.0f));
-		add(new Pair<Float>(600.0f, 150.0f));
-		add(new Pair<Float>(750.0f, 150.0f));
-		add(new Pair<Float>(900.0f, 150.0f));
-	}};
+	private static final Pair<Float> playerPos = new Pair<Float>(437.0f, 176.0f);
 
 	private Flashlight flashlight;
 
@@ -110,31 +101,12 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
 		// Render the "scene" to simulate how the flashlight looks in-game.
 		AssetManager assets = AssetManager.getManager();
-		Image background = assets.getImage("GZS_Background6");
+		Image background = assets.getImage("GZSR_Gamma_Background");
 
 		g.resetTransform();
 		g.clear();
 
-		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
-
-		// Draw the player.
-		Image player = assets.getImage("GZS_Player");
-		if(player != null) {
-			g.rotate(playerPos.x, playerPos.y, (float)Math.toDegrees(Math.PI / 2));
-			g.drawImage(player, (playerPos.x - (player.getWidth() / 2)), (playerPos.y - (player.getHeight() / 2)));
-			g.resetTransform();
-		}
-
-		// Draw a couple enemies both in and outside the flashlight area.
-		Image zombie = assets.getImage("GZS_Zumby3").getSubImage(0, 0, 48, 48);
-		if(zombie != null) {
-			for(Pair<Float> pos : positions) {
-				float theta = Calculate.Hypotenuse(playerPos, pos) - (float)(Math.PI / 2);
-				g.rotate(pos.x, pos.y, (float)Math.toDegrees(theta));
-				g.drawImage(zombie, (pos.x - (zombie.getWidth() / 2)), (pos.y - (zombie.getHeight() / 2)));
-				g.resetTransform();
-			}
-		}
+		if(background != null) g.drawImage(background, 0.0f, 0.0f);
 
 		// Draw the flashlight.
 		flashlight.render(g, 0L);

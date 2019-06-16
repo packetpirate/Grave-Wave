@@ -82,22 +82,18 @@ public class TMap implements Entity {
 						TTile tile = layer.getTile(x, y);
 						Image img = tile.getImage(tileset, tileWidth, tileHeight);
 						if(img != null) {
-							if(tile.isFlipped(TTile.FLIP_DIAGONAL)) {
-								// If we should flip this diagonally, first rotate by 90 degrees.
-								boolean fh = tile.isFlipped(TTile.FLIP_HORIZONTAL);
-								boolean fv = tile.isFlipped(TTile.FLIP_VERTICAL);
-								int angle = 270; // Default to -90 for vertically flipped tiles.
-								if(fh) angle = 90;
+							boolean fh = tile.isFlipped(TTile.FLIP_HORIZONTAL);
+							boolean fv = tile.isFlipped(TTile.FLIP_VERTICAL);
+							boolean fd = tile.isFlipped(TTile.FLIP_DIAGONAL);
 
-								context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), angle);
-								// Then flip the image horizontally...
-								Image flipped = img.getFlippedCopy(!fh, !fv);
-								context.drawImage(flipped, (x * tileWidth), (y * tileHeight));
-								// Reset the rotation of the canvas.
-								context.resetTransform();
-							} else {
-								context.drawImage(img, (x * tileWidth), (y * tileHeight));
-							}
+							int angle = 0;
+							if(fh && fd) angle = 90;
+							else if(fh && fv) angle = 180;
+							else if(fv && fd) angle = 270;
+
+							if(angle != 0) context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), angle);
+							context.drawImage(img, (x * tileWidth), (y * tileHeight));
+							if(angle != 0) context.resetTransform();
 						}
 					}
 				}

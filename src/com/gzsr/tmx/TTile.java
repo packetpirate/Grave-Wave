@@ -3,9 +3,9 @@ package com.gzsr.tmx;
 import org.newdawn.slick.Image;
 
 public class TTile {
-	public static final int FLIP_HORIZONTAL = 0x80000000;
-	public static final int FLIP_VERTICAL = 0x40000000;
-	public static final int FLIP_DIAGONAL = 0x20000000;
+	public static final long FLIP_HORIZONTAL = 0x80000000L;
+	public static final long FLIP_VERTICAL   = 0x40000000L;
+	public static final long FLIP_DIAGONAL   = 0x20000000L;
 
 	// The index of the tile in the tileset corresponding to this tile.
 	private int tid;
@@ -18,7 +18,7 @@ public class TTile {
 
 	// Flip flags. Tells us if this tile should be flipped horizontally, vertically, diagonally, or some combination of the three.
 	private boolean fh, fv, fd;
-	public boolean isFlipped(int flag) {
+	public boolean isFlipped(long flag) {
 		if(flag == FLIP_HORIZONTAL) return fh;
 		else if(flag == FLIP_VERTICAL) return fv;
 		else if(flag == FLIP_DIAGONAL) return fd;
@@ -70,16 +70,6 @@ public class TTile {
 		int oy = ((tid - 1) / nh);
 
 		Image sub = tileset.getSubImage((ox * w), (oy * h), w, h);
-
-		// If any of the flip bits are set, flip the image.
-		if(fh || fv) sub = sub.getFlippedCopy(fh, fv);
-		/**
-		if(fd) {
-			// To flip diagonally, rotate counter-clockwise, then flip it horizontally.
-			sub.setRotation(90);
-			sub = sub.getFlippedCopy(true, false);
-		}**/
-
 		return sub;
 	}
 }
