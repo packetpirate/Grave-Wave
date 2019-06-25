@@ -241,17 +241,14 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Particle";
-	}
+	public String getName() { return "Particle"; }
 
 	@Override
-	public String getDescription() {
-		return "Particle";
-	}
+	public String getTag() { return "particle"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.PARTICLES.val();
-	}
+	public String getDescription() { return "Particle"; }
+
+	@Override
+	public int getLayer() { return Layers.PARTICLES.val(); }
 }

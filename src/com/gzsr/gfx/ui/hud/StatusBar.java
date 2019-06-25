@@ -57,17 +57,14 @@ public class StatusBar implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Status Bar";
-	}
+	public String getName() { return "Status Bar"; }
 
 	@Override
-	public String getDescription() {
-		return "Status Bar";
-	}
+	public String getTag() { return "statusBar"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Status Bar"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

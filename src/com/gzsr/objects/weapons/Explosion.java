@@ -22,23 +22,23 @@ import com.gzsr.status.StatusEffect;
 
 public class Explosion implements Entity {
 	public enum Type {
-		NORMAL(250L), 
-		POISON(1_000L), 
+		NORMAL(250L),
+		POISON(1_000L),
 		BLOOD(250L);
-		
+
 		private long damageWindow;
 		public long getDamageWindow() { return damageWindow; }
-		
+
 		Type(long damageWindow_) {
 			this.damageWindow = damageWindow_;
 		}
 	}
-	
+
 	private Animation anim;
-	
+
 	private Type type;
 	public Type getType() { return type; }
-	
+
 	private Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	public void setPosition(Pair<Float> newPos) {
@@ -47,10 +47,10 @@ public class Explosion implements Entity {
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y);
 	}
-	
+
 	private Shape bounds;
 	public Shape getCollider() { return bounds; }
-	
+
 	private StatusEffect status;
 	private double damage;
 	private boolean critical;
@@ -59,47 +59,47 @@ public class Explosion implements Entity {
 	private boolean started;
 	private long created;
 	public void setCreatedTime(long created_) { this.created = created_; }
-	
+
 	private List<Entity> entitiesAffected;
-	
+
 	public Explosion(Type type_, String animName_, Pair<Float> position_, double damage_, boolean critical_, float knockback_, float radius_, long cTime) {
 		this(type_, animName_, position_, null, damage_, critical_, knockback_, radius_, cTime);
 	}
-	
+
 	public Explosion(Type type_, String animName_, Pair<Float> position_, StatusEffect status_, double damage_, boolean critical_, float knockback_, float radius_, long cTime) {
 		this.type = type_;
 		this.anim = AssetManager.getManager().getAnimation(animName_);
 		this.position = position_;
 		this.radius = radius_;
-		
+
 		this.bounds = new Rectangle((position.x - radius_), (position.y - radius_), (radius_ * 2), (radius_ * 2));
-		
+
 		this.status = status_;
 		this.damage = damage_;
 		this.critical = critical_;
 		this.knockback = knockback_;
 		this.started = false;
 		this.created = cTime;
-		
+
 		this.entitiesAffected = new ArrayList<Entity>();
 	}
-	
+
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!started) {
 			anim.restart(cTime);
-			started = true; 
+			started = true;
 		}
-		
+
 		// Update the animation.
 		if(anim != null) anim.update(cTime);
-		
+
 		long elapsed = (cTime - created);
 		if(isActive(cTime) && (elapsed <= type.getDamageWindow())) {
 			// TODO: In future, will have to also check for collision with player structures (turret, barrier, etc).
 			// Check for collision with player.
 			checkCollision(Player.getPlayer(), cTime, delta);
-			
+
 			// Check for collisions with enemies.
 			EnemyController ec = EnemyController.getInstance();
 			ec.getAliveEnemies().stream().forEach(e -> checkCollision(e, cTime, delta));
@@ -112,9 +112,9 @@ public class Explosion implements Entity {
 			anim.render(g, position, new Pair<Float>((radius * 2), (radius * 2)));
 		}
 	}
-	
+
 	public boolean isActive(long cTime) { return anim.isActive(cTime); }
-	
+
 	/**
 	 * Checks for collision with given entity and deals damage if a collision is detected.
 	 * @param e The entity to check for a collision against.
@@ -128,7 +128,7 @@ public class Explosion implements Entity {
 				Player player = Player.getPlayer();
 				Shape pCollider = player.getCollider();
 				Shape eCollider = getCollider();
-				
+
 				boolean intersects = pCollider.intersects(eCollider);
 				boolean contains = eCollider.contains(pCollider);
 				if(intersects || contains) {
@@ -143,7 +143,7 @@ public class Explosion implements Entity {
 					Enemy en = (Enemy)e;
 					Shape eCollider = en.getCollider();
 					Shape expCollider = getCollider();
-					
+
 					boolean intersects = eCollider.intersects(expCollider);
 					boolean contains = expCollider.contains(eCollider);
 					if(intersects || contains) {
@@ -154,22 +154,19 @@ public class Explosion implements Entity {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
-	public String getName() {
-		return "Explosion";
-	}
-	
+	public String getName() { return "Explosion"; }
+
 	@Override
-	public String getDescription() {
-		return "Explosion";
-	}
-	
+	public String getTag() { return "explosion"; }
+
 	@Override
-	public int getLayer() {
-		return Layers.PARTICLES.val();
-	}
+	public String getDescription() { return "Explosion"; }
+
+	@Override
+	public int getLayer() { return Layers.PARTICLES.val(); }
 }

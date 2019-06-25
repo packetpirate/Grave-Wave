@@ -324,12 +324,11 @@ public abstract class RangedWeapon extends Weapon {
 	public abstract String getProjectileName();
 
 	@Override
-	public String getName() {
-		return "Ranged Weapon";
-	}
+	public String getName() { return "Ranged Weapon"; }
 
 	@Override
-	public String getDescription() {
-		return "Ranged Weapon";
-	}
+	public String getTag() { return "rangedWeapon"; }
+
+	@Override
+	public String getDescription() { return "Ranged Weapon"; }
 }

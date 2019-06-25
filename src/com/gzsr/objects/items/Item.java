@@ -15,22 +15,22 @@ public abstract class Item implements Entity {
 	private static final long BLINK_START = 3000L;
 	private static final long BLINK_INTERVAL = 500L;
 	private static final long BLINK_DURATION = 250L;
-	
+
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 	protected String iconName;
 	public Image getIcon() {
 		return AssetManager.getManager().getImage(iconName);
 	}
-	
+
 	protected Sound pickup;
-	
+
 	protected long duration;
 	protected long created;
-	
+
 	protected boolean blinking;
 	protected long lastBlink;
-	
+
 	public Item(Pair<Float> pos, long cTime) {
 		// If you do not use a custom constructor, the item will die instantly.
 		position = pos;
@@ -42,7 +42,7 @@ public abstract class Item implements Entity {
 		blinking = false;
 		lastBlink = 0L;
 	}
-	
+
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!blinking && ((cTime - created) >= (duration - BLINK_START))) {
@@ -51,7 +51,7 @@ public abstract class Item implements Entity {
 		} else if(blinking && ((cTime - lastBlink) >= BLINK_INTERVAL)) {
 			lastBlink = cTime;
 		}
-		
+
 	}
 
 	@Override
@@ -66,12 +66,12 @@ public abstract class Item implements Entity {
 			}
 		}
 	}
-	
+
 	public boolean isActive(long cTime) {
 		long elapsed = cTime - created;
 		return (elapsed <= duration);
 	}
-	
+
 	public boolean isTouching(double distance) {
 		Image icon = getIcon();
 		if(icon != null) {
@@ -80,12 +80,13 @@ public abstract class Item implements Entity {
 			return (distance <= ((width + height) / 2));
 		} else return false;
 	}
-	
+
 	public abstract void apply(Player player, long cTime);
 	public abstract int getCost();
-	
+
 	@Override
-	public int getLayer() {
-		return Layers.ITEMS.val();
-	}
+	public String getTag() { return "item"; }
+
+	@Override
+	public int getLayer() { return Layers.ITEMS.val(); }
 }

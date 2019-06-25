@@ -233,12 +233,11 @@ public abstract class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	public String getName() {
-		return "Melee Weapon";
-	}
+	public String getName() { return "Melee Weapon"; }
 
 	@Override
-	public String getDescription() {
-		return "Melee Weapon";
-	}
+	public String getTag() { return "meleeWeapon"; }
+
+	@Override
+	public String getDescription() { return "Melee Weapon"; }
 }

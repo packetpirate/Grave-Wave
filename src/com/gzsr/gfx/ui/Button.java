@@ -11,20 +11,20 @@ public abstract class Button implements Entity {
 	protected String image;
 	protected Pair<Float> position;
 	protected Pair<Float> size;
-	
+
 	protected String text;
 	public String getText() { return text; }
 	public void setText(String text_) { this.text = text_; }
-	
+
 	private boolean mouseIn;
 	public boolean mouseOver() { return mouseIn; }
 	public void mouseEnter() { mouseIn = true; }
 	public void mouseExit() { mouseIn = false; }
-	
+
 	public Button() {
 		image = null;
 		text = null;
-		
+
 		mouseIn = false;
 	}
 
@@ -45,19 +45,16 @@ public abstract class Button implements Entity {
 	public abstract void click();
 	public abstract void click(boolean left);
 	public abstract boolean inBounds(float x, float y);
-	
+
 	@Override
-	public String getName() {
-		return "Button";
-	}
-	
+	public String getName() { return "Button"; }
+
 	@Override
-	public String getDescription() {
-		return "Button";
-	}
-	
+	public String getTag() { return "button"; }
+
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Button"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

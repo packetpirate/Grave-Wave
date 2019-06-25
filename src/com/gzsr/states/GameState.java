@@ -43,6 +43,7 @@ import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 import com.gzsr.tmx.TMap;
 import com.gzsr.tmx.TParser;
+import com.gzsr.world.Level;
 
 public class GameState extends BasicGameState implements InputListener {
 	public static final int ID = 1;
@@ -69,8 +70,8 @@ public class GameState extends BasicGameState implements InputListener {
 
 	private EscapeMenu escapeMenu;
 
-	private TMap map;
-	public TMap getMap() { return map; }
+	private Level level;
+	public Level getLevel() { return level; }
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -81,8 +82,10 @@ public class GameState extends BasicGameState implements InputListener {
 		entities = new ConcurrentHashMap<String, Entity>();
 		escapeMenu = new EscapeMenu();
 
-		map = TParser.load("res/maps/GWB.tmx");
+		// TODO: Remove this initial map creation once a proper level loader is created.
+		TMap map = TParser.load("res/maps/GWB.tmx");
 		map.constructMap();
+		level = new Level(map);
 
 		reset(gc);
 	}
@@ -100,6 +103,9 @@ public class GameState extends BasicGameState implements InputListener {
 
 					Player player = Player.getPlayer();
 
+					level.update(this, time, delta);
+
+					// TODO: Remove this once Level class has update() method implementation.
 					Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
 					while(it.hasNext()) {
 						Map.Entry<String, Entity> pair = it.next();
@@ -198,9 +204,7 @@ public class GameState extends BasicGameState implements InputListener {
 		Camera camera = Camera.getCamera();
 		camera.translate(g);
 
-		//Image background = assets.getImage("GWB");
-		//g.drawImage(background, 0.0f, 0.0f);
-		map.render(g, time);
+		level.render(g, time);
 
 		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
 

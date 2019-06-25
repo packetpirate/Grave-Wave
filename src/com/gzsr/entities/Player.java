@@ -259,7 +259,7 @@ public class Player implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		Camera camera = Camera.getCamera();
-		TMap map = ((GameState) gs).getMap();
+		TMap map = ((GameState) gs).getLevel().getMap();
 
 		if(!isAlive()) {
 			if(!respawning) {
@@ -312,6 +312,7 @@ public class Player implements Entity {
 		// Need to make sure to update the status effects first.
 		statusHandler.update((GameState)gs, cTime, delta);
 
+		Controls controls = Controls.getInstance();
 		boolean canMove = !statusHandler.hasStatus(Status.PARALYSIS);
 		MeleeWeapon cMeleeWeapon = getCurrentMelee();
 		RangedWeapon cRangedWeapon = getCurrentRanged();
@@ -325,21 +326,25 @@ public class Player implements Entity {
 			velocity.y = 0.0f;
 
 			float adjSpeed = ((getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_UP)) move(map, 0.0f, -adjSpeed);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_LEFT)) move(map, -adjSpeed, 0.0f);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_DOWN)) move(map, 0.0f, adjSpeed);
-			if(Controls.getInstance().isPressed(Controls.Layout.MOVE_RIGHT)) move(map, adjSpeed, 0.0f);
+			if(controls.isPressed(Controls.Layout.MOVE_UP)) move(map, 0.0f, -adjSpeed);
+			if(controls.isPressed(Controls.Layout.MOVE_LEFT)) move(map, -adjSpeed, 0.0f);
+			if(controls.isPressed(Controls.Layout.MOVE_DOWN)) move(map, 0.0f, adjSpeed);
+			if(controls.isPressed(Controls.Layout.MOVE_RIGHT)) move(map, adjSpeed, 0.0f);
 		}
 
-		if(Controls.getInstance().isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
-		if(Controls.getInstance().isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
+		if(controls.isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
+		if(controls.isPressed(Controls.Layout.RELOAD) && (cRangedWeapon != null)) {
 			if(!cRangedWeapon.isReloading(cTime) && (cRangedWeapon.getClipAmmo() != cRangedWeapon.getClipCapacity())) cRangedWeapon.reload(cTime);
+		}
+
+		// If the interact button has been pressed, check for game object interactions.
+		if(controls.isReleased(Controls.Layout.INTERACT)) {
+
 		}
 
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y + 4.0f);
 
-		Controls controls = Controls.getInstance();
 		if(canCycle) {
 			if(controls.isPressed(Controls.Layout.PREV_WEAPON)) {
 				weaponRotate(1);
@@ -356,7 +361,7 @@ public class Player implements Entity {
 			}
 		}
 
-		MouseInfo mouse = Controls.getInstance().getMouse();
+		MouseInfo mouse = controls.getMouse();
 
 		if(canMove) {
 			if(mouse.isLeftDown() && (cRangedWeapon != null)) {boolean clipEmpty = (cRangedWeapon.getClipAmmo() == 0);
@@ -423,7 +428,6 @@ public class Player implements Entity {
 			AssetManager assets = AssetManager.getManager();
 
 			Image head = assets.getImage("GZS_Player2_Head");
-			//Image arm1 = assets.getImage("GZS_Player2_Arm1");
 
 			float deg = (float)Math.toDegrees(theta);
 
@@ -432,7 +436,6 @@ public class Player implements Entity {
 
 			// Draw the arm and weapon.
 			g.rotate(position.x, position.y, deg);
-			//arm1.draw((position.x - (arm1.getWidth() / 2)), (position.y - (arm1.getHeight() / 2)));
 			RangedWeapon rw = getCurrentRanged();
 			if(rw != null) {
 				ArmConfig ac = rw.getArmConfig();
@@ -458,7 +461,7 @@ public class Player implements Entity {
 		}
 
 		statusHandler.render(g, cTime);
-		//flashlight.render(g, cTime);
+		flashlight.render(g, cTime);
 	}
 
 	/**
@@ -773,17 +776,14 @@ public class Player implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Player";
-	}
+	public String getName() { return "Player"; }
 
 	@Override
-	public String getDescription() {
-		return "Player";
-	}
+	public String getTag() { return "player"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.PLAYER.val();
-	}
+	public String getDescription() { return "Player"; }
+
+	@Override
+	public int getLayer() { return Layers.PLAYER.val(); }
 }

@@ -48,6 +48,9 @@ public class EKGBar implements Entity {
 	public String getName() { return "EKG Bar"; }
 
 	@Override
+	public String getTag() { return "ekg"; }
+
+	@Override
 	public String getDescription() { return "EKG Bar"; }
 
 	@Override

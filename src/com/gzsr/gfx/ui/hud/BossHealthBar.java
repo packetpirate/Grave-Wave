@@ -71,17 +71,14 @@ public class BossHealthBar implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Boss Health Bar";
-	}
+	public String getName() { return "Boss Health Bar"; }
 
 	@Override
-	public String getDescription() {
-		return "Displays boss wave health.";
-	}
+	public String getTag() { return "bossHealthBar"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.HUD.val();
-	}
+	public String getDescription() { return "Displays boss wave health."; }
+
+	@Override
+	public int getLayer() { return Layers.HUD.val(); }
 }

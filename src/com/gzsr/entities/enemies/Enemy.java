@@ -340,7 +340,8 @@ public abstract class Enemy implements Entity {
 	public abstract LootTable getLootTable();
 
 	@Override
-	public int getLayer() {
-		return Layers.ENEMIES.val();
-	}
+	public String getTag() { return "enemy"; }
+
+	@Override
+	public int getLayer() { return Layers.ENEMIES.val(); }
 }

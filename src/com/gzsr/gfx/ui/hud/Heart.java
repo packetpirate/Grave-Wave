@@ -63,17 +63,14 @@ public class Heart implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Heart";
-	}
+	public String getName() { return "Heart"; }
 
 	@Override
-	public String getDescription() {
-		return "Heart";
-	}
+	public String getTag() { return "heartDisplay"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Heart"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

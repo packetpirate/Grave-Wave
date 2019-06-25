@@ -10,12 +10,11 @@ public abstract class Boss extends Enemy {
 	}
 
 	@Override
-	public String getName() {
-		return "Boss";
-	}
+	public String getName() { return "Boss"; }
 
 	@Override
-	public String getDescription() {
-		return "Stronger than the average enemy. This thing means business.";
-	}
+	public String getTag() { return "boss"; }
+
+	@Override
+	public String getDescription() { return "Stronger than the average enemy. This thing means business."; }
 }

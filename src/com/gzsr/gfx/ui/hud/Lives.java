@@ -53,17 +53,14 @@ public class Lives implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Lives";
-	}
+	public String getName() { return "Lives"; }
 
 	@Override
-	public String getDescription() {
-		return "Lives";
-	}
+	public String getTag() { return "lives"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Lives"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

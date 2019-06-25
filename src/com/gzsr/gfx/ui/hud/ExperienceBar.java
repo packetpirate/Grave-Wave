@@ -62,17 +62,14 @@ public class ExperienceBar implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Experience Bar";
-	}
+	public String getName() { return "Experience Bar"; }
 
 	@Override
-	public String getDescription() {
-		return "Experience Bar";
-	}
+	public String getTag() { return "expBar"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Experience Bar"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

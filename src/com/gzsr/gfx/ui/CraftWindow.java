@@ -171,6 +171,9 @@ public class CraftWindow implements Entity {
 	public String getName() { return "Craft Window"; }
 
 	@Override
+	public String getTag() { return "craftWindow"; }
+
+	@Override
 	public String getDescription() { return "Craft Window"; }
 
 	@Override

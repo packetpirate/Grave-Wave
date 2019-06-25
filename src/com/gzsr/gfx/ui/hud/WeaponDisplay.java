@@ -111,17 +111,14 @@ public class WeaponDisplay implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Weapon Display";
-	}
+	public String getName() { return "Weapon Display"; }
 
 	@Override
-	public String getDescription() {
-		return "Weapon Display";
-	}
+	public String getTag() { return "weaponDisplay"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Weapon Display"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

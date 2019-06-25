@@ -482,17 +482,14 @@ public class Console implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Console";
-	}
+	public String getName() { return "Console"; }
 
 	@Override
-	public String getDescription() {
-		return "Console";
-	}
+	public String getTag() { return "console"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.HUD.val();
-	}
+	public String getDescription() { return "Console"; }
+
+	@Override
+	public int getLayer() { return Layers.HUD.val(); }
 }

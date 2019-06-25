@@ -17,6 +17,7 @@ public class Controls {
 		MOVE_LEFT(Input.KEY_A, "Move Left", "A"),
 		MOVE_RIGHT(Input.KEY_D, "Move Right", "D"),
 		RELOAD(Input.KEY_R, "Reload", "R"),
+		INTERACT(Input.KEY_SPACE, "Interact", "Space"),
 		PREV_WEAPON(Input.KEY_Q ,"Prev Weapon","Q"),
 		NEXT_WEAPON(Input.KEY_E, "Next Weapon", "E"),
 		FLASHLIGHT(Input.KEY_F, "Flashlight", "F"),

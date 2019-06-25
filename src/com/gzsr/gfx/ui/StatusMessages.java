@@ -18,28 +18,28 @@ public class StatusMessages implements Entity {
 		if(instance == null) instance = new StatusMessages();
 		return instance;
 	}
-	
+
 	private List<VanishingText> messages;
 	public List<VanishingText> getMessages() { return messages; }
 	public void clear() { messages.clear(); }
-	
+
 	private StatusMessages() {
 		messages = new ArrayList<VanishingText>();
 	}
-	
+
 	public void addMessage(String message, Pair<Float> position, long cTime, long duration) {
 		VanishingText vt = new VanishingText(message, "PressStart2P-Regular_small",
 											 position, Color.white, cTime, duration);
 		messages.add(vt);
 	}
-	
+
 	public void addMessage(String message, Entity tether, Pair<Float> offset, long cTime, long duration) {
 		clearOtherByEntity(tether, offset);
-		VanishingText vt = new VanishingText(message, "PressStart2P-Regular_small", 
+		VanishingText vt = new VanishingText(message, "PressStart2P-Regular_small",
 											 tether, offset, Color.white, cTime, duration);
 		messages.add(vt);
 	}
-	
+
 	public void addMessage(VanishingText vt) {
 		if(vt.getTether() != null) clearOtherByEntity(vt.getTether(), vt.getOffset());
 		messages.add(vt);
@@ -57,11 +57,11 @@ public class StatusMessages implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		messages.stream().forEach(message -> { 
-			if(message.isActive()) message.render(g, cTime); 
+		messages.stream().forEach(message -> {
+			if(message.isActive()) message.render(g, cTime);
 		});
 	}
-	
+
 	/**
 	 * Clears other vanishing texts tether to this entity. Does not clear damage text.
 	 * @param tether The entity to clear vanishing texts from.
@@ -74,19 +74,16 @@ public class StatusMessages implements Entity {
 			if(!(vt instanceof DamageText) && (vt.getTether() == tether) && samePosition) it.remove();
 		}
 	}
-	
-	@Override
-	public String getName() {
-		return "Status Text";
-	}
 
 	@Override
-	public String getDescription() {
-		return "Status Text";
-	}
+	public String getName() { return "Status Text"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.TEXT.val();
-	}
+	public String getTag() { return "statusText"; }
+
+	@Override
+	public String getDescription() { return "Status Text"; }
+
+	@Override
+	public int getLayer() { return Layers.TEXT.val(); }
 }

@@ -33,6 +33,9 @@ public class VisualEffect implements Entity {
 	public String getName() { return "Visual Effect"; }
 
 	@Override
+	public String getTag() { return "effect"; }
+
+	@Override
 	public String getDescription() { return "Visual Effect"; }
 
 	@Override

@@ -305,6 +305,11 @@ public class EnemyController implements Entity {
 	}
 
 	@Override
+	public String getTag() {
+		return "enemyController";
+	}
+
+	@Override
 	public String getDescription() {
 		return "Enemy Controller";
 	}

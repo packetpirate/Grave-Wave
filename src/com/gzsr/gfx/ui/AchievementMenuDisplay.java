@@ -165,17 +165,14 @@ public class AchievementMenuDisplay implements Entity {
 	}
 
 	@Override
-	public String getName() {
-		return "Achievement Display";
-	}
+	public String getName() { return "Achievement Display"; }
 
 	@Override
-	public String getDescription() {
-		return "Achievement Display";
-	}
+	public String getTag() { return "achievementDisplay"; }
 
 	@Override
-	public int getLayer() {
-		return Layers.NONE.val();
-	}
+	public String getDescription() { return "Achievement Display"; }
+
+	@Override
+	public int getLayer() { return Layers.NONE.val(); }
 }

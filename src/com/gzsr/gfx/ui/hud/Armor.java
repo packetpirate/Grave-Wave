@@ -61,6 +61,9 @@ public class Armor implements Entity {
 	public String getName() { return "Armor"; }
 
 	@Override
+	public String getTag() { return "armorDisplay"; }
+
+	@Override
 	public String getDescription() { return "Armor Display"; }
 
 	@Override

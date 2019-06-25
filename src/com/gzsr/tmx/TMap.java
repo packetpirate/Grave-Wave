@@ -126,6 +126,9 @@ public class TMap implements Entity {
 	public String getName() { return "Tiled Map"; }
 
 	@Override
+	public String getTag() { return "tmap"; }
+
+	@Override
 	public String getDescription() { return "Tiled Map"; }
 
 	@Override
