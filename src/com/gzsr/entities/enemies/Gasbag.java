@@ -4,7 +4,6 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.math.Calculate;
 import com.gzsr.math.Dice;
@@ -77,13 +76,12 @@ public class Gasbag extends Enemy {
 	}
 
 	private void explode(GameState gs, long cTime) {
-		int id = Globals.generateEntityID();
 		PoisonEffect pe = new PoisonEffect(Gasbag.POISON_DURATION, cTime);
 		Explosion poison = new Explosion(Explosion.Type.POISON, "GZS_PoisonExplosion",
 										 new Pair<Float>(position.x, position.y), pe,
 										 0.0, false, Gasbag.POISON_KNOCKBACK,
 										 Gasbag.EXPLODE_RADIUS, cTime);
-		gs.addEntity(String.format("poisonExplosion%d", id), poison);
+		gs.getLevel().addEntity("poisonExplosion", poison);
 
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;

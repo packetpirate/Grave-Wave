@@ -115,12 +115,11 @@ public class ElSalvo extends Enemy {
 	}
 
 	private void explode(GameState gs, long cTime) {
-		int id = Globals.generateEntityID();
 		Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion",
 									  new Pair<Float>(position.x, position.y),
 									  ElSalvo.EXPLODE_DAMAGE, false, 0.0f,
 									  ElSalvo.EXPLODE_RADIUS, cTime);
-		gs.addEntity(String.format("explosion%d", id), exp);
+		gs.getLevel().addEntity("explosion", exp);
 
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;

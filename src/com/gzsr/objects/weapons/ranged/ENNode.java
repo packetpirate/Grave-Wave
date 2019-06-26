@@ -7,7 +7,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.Globals;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
@@ -66,8 +65,7 @@ public class ENNode extends Projectile {
 		} else if(started) {
 			if(!electrified && (next != null)) {
 				Lightning lightning = new Lightning(new Pair<Float>(position), new Pair<Float>(next.getPosition()), MAX_LIGHTNING_OFFSET, DURATION, cTime);
-				GameState game = (GameState) gs;
-				game.addEntity(String.format("lightning%d", Globals.generateEntityID()), lightning);
+				((GameState)gs).getLevel().addEntity("lightning", lightning);
 				electrified = true;
 			}
 

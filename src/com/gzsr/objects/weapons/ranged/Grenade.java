@@ -6,7 +6,6 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
@@ -19,14 +18,14 @@ import com.gzsr.states.GameState;
 public class Grenade extends Projectile {
 	public static final float SPEED = ProjectileType.GRENADE.getVelocity();
 	public static final long LIFESPAN = ProjectileType.GRENADE.getLifespan();
-	
+
 	private Sound explode;
 	private Explosion exp;
 	private boolean exploded;
-	
+
 	public Grenade(Particle p_, Explosion exp_) {
 		super(p_, 0.0, false);
-		
+
 		this.explode = AssetManager.getManager().getSound("explosion2");
 		this.exp = exp_;
 		this.exploded = false;
@@ -39,7 +38,7 @@ public class Grenade extends Projectile {
 			position.x += (float)Math.cos(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
 			position.y += (float)Math.sin(theta - (Math.PI / 2)) * Grenade.SPEED * delta;
 			bounds.setLocation((position.x - (size.x / 2)), (position.y - (size.y / 2)));
-			
+
 			// Check to see if the grenade has collided with an enemy. If so, explode.
 			EnemyController ec = EnemyController.getInstance();
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
@@ -49,26 +48,26 @@ public class Grenade extends Projectile {
 			}
 		}
 	}
-	
+
 	private void explode(GameState gs, long cTime) {
-		int id = Globals.generateEntityID();
-		
+		//int id = Globals.generateEntityID();
+
 		exp.setCreatedTime(cTime);
 		exp.setPosition(position);
-		gs.addEntity(String.format("explosion%d", id), exp);
-		
+		gs.getLevel().addEntity("explosion", exp);
+
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;
-		
+
 		if(!Camera.getCamera().isShaking()) Camera.getCamera().shake(cTime, 200L, 20L, 15.0f);
 		else Camera.getCamera().refreshShake(cTime);
 	}
-	
+
 	@Override
 	public void onDestroy(GameState gs, long cTime) {
 		if(!exploded) explode(gs, cTime);
 	}
-	
+
 	@Override
 	public boolean isAlive(long cTime) {
 		return (!exploded && super.isAlive(cTime));

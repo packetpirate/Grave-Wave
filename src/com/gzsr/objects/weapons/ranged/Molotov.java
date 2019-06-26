@@ -6,7 +6,6 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
@@ -53,12 +52,10 @@ public class Molotov extends Projectile {
 	}
 
 	private void explode(GameState gs, long cTime) {
-		int id = Globals.generateEntityID();
-
 		FireFieldEmitter emitter = new FireFieldEmitter(new Pair<Float>(position), Molotov.BURN_TIME, cTime);
 		emitter.setBurnRadius(Molotov.BURN_RADIUS);
 		emitter.enable(cTime);
-		gs.addEntity(String.format("fire%d", id), emitter);
+		gs.getLevel().addEntity("fire", emitter);
 
 		explosion.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;

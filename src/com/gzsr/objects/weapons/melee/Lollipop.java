@@ -5,7 +5,6 @@ import java.util.List;
 import org.newdawn.slick.Image;
 
 import com.gzsr.AssetManager;
-import com.gzsr.Globals;
 import com.gzsr.achievements.Metrics;
 import com.gzsr.entities.enemies.Enemy;
 import com.gzsr.gfx.particles.Particle;
@@ -56,7 +55,7 @@ public class Lollipop extends MeleeWeapon {
 
 			if(bloodGenerator != null) {
 				List<Particle> particles = bloodGenerator.apply(enemy, cTime);
-				particles.stream().forEach(p -> gs.addEntity(String.format("blood%d", Globals.generateEntityID()),  p));
+				particles.stream().forEach(p -> gs.getLevel().addEntity("blood", p));
 			}
 
 			AssetManager.getManager().getSound("party_horn").play(1.0f, AssetManager.getManager().getSoundVolume());

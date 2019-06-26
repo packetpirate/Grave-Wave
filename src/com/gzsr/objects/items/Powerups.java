@@ -18,15 +18,15 @@ public class Powerups {
 		NIGHT_VISION("nightvision"),
 		SPEED("speed"),
 		UNLIMITED_AMMO("unlimitedammo");
-		
+
 		private String name;
 		public String getName() { return name; }
-		
+
 		Type(String name_) {
 			this.name = name_;
 		}
 	}
-	
+
 	public static void spawnRandomPowerup(GameState gs, Enemy enemy, Pair<Float> position, long cTime) {
 		float roll = Globals.rand.nextFloat();
 		List<Type> possibleItems = enemy.getLootTable().possibleItems(roll);
@@ -65,10 +65,10 @@ public class Powerups {
 					default:
 						break;
 				}
-				
+
 				if(item != null) {
-					String id = String.format("%s%d", type.getName(), Globals.generateEntityID());
-					gs.addEntity(id, item);
+					//String id = String.format("%s%d", type.getName(), Globals.generateEntityID());
+					gs.getLevel().addEntity(type.getName(), item);
 				}
 			}
 		}

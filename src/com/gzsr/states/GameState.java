@@ -1,10 +1,5 @@
 package com.gzsr.states;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,20 +20,14 @@ import com.gzsr.Globals;
 import com.gzsr.MusicPlayer;
 import com.gzsr.controllers.AchievementController;
 import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Entity;
 import com.gzsr.entities.Player;
 import com.gzsr.entities.enemies.EnemyController;
 import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.effects.VisualEffect;
-import com.gzsr.gfx.particles.Emitter;
-import com.gzsr.gfx.particles.Particle;
 import com.gzsr.gfx.ui.StatusMessages;
 import com.gzsr.gfx.ui.hud.Console;
 import com.gzsr.gfx.ui.hud.EscapeMenu;
 import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.objects.crafting.RecipeController;
-import com.gzsr.objects.items.Item;
-import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
 import com.gzsr.tmx.TMap;
@@ -59,10 +48,6 @@ public class GameState extends BasicGameState implements InputListener {
 	private HUD hud;
 	public HUD getHUD() { return hud; }
 
-	private ConcurrentHashMap<String, Entity> entities;
-	public Entity getEntity(String key) { return entities.get(key); }
-	public void addEntity(String key, Entity e) { entities.put(key, e); }
-
 	private boolean gameStarted, paused, consoleOpen;
 	public boolean isConsoleOpen() { return consoleOpen; }
 
@@ -79,7 +64,6 @@ public class GameState extends BasicGameState implements InputListener {
 
 		gc.setMouseCursor(assets.getImage("GZS_Crosshair2").getScaledCopy(0.5f), 16, 16);
 
-		entities = new ConcurrentHashMap<String, Entity>();
 		escapeMenu = new EscapeMenu();
 
 		// TODO: Remove this initial map creation once a proper level loader is created.
@@ -104,38 +88,6 @@ public class GameState extends BasicGameState implements InputListener {
 					Player player = Player.getPlayer();
 
 					level.update(this, time, delta);
-
-					// TODO: Remove this once Level class has update() method implementation.
-					Iterator<Entry<String, Entity>> it = entities.entrySet().iterator();
-					while(it.hasNext()) {
-						Map.Entry<String, Entity> pair = it.next();
-						Entity ent = pair.getValue();
-						ent.update(this, time, Globals.STEP_TIME);
-						if(ent instanceof EnemyController) {
-							EnemyController ec = (EnemyController)ent;
-							ec.updateEnemies(this, player, time, Globals.STEP_TIME);
-						} else if(ent instanceof Item) {
-							Item item = (Item) ent;
-							if(item.isActive(time)) {
-								player.checkItem(item, time);
-							} else it.remove();
-						} else if(ent instanceof VisualEffect) {
-							VisualEffect visual = (VisualEffect) ent;
-							if(!visual.isActive(time)) it.remove();
-						} else if(ent instanceof Particle) {
-							Particle p = (Particle) ent;
-							if(!p.isActive(time)) {
-								p.onDestroy(this, time);
-								it.remove();
-							}
-						} else if(ent instanceof Emitter) {
-							Emitter e = (Emitter) ent;
-							if(!e.isAlive(time)) it.remove();
-						} else if(ent instanceof Explosion) {
-							Explosion exp = (Explosion) ent;
-							if(!exp.isActive(time)) it.remove();
-						}
-					}
 
 					Controls controls = Controls.getInstance();
 
@@ -206,8 +158,6 @@ public class GameState extends BasicGameState implements InputListener {
 
 		level.render(g, time);
 
-		entities.values().stream().sorted(Entity.COMPARE).forEach(entity -> entity.render(g, time));
-
 		StatusMessages.getInstance().render(g, time);
 
 		hud.render(g, this, time);
@@ -259,9 +209,9 @@ public class GameState extends BasicGameState implements InputListener {
 
 		player.reset();
 
-		entities.clear();
-		entities.put("enemyController", ec);
-		entities.put("player", player);
+		level.reset();
+		level.addEntity("player", player);
+		level.addEntity("enemyController", ec);
 
 		StatusMessages.getInstance().clear();
 

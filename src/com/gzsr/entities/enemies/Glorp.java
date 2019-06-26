@@ -174,7 +174,7 @@ public class Glorp extends Enemy {
 			Pair<Float> pos = new Pair<Float>(position);
 			Powerups.spawnRandomPowerup(gs, this, pos, cTime);
 			ResourceDrop drop = getResourceTable().getDrop(pos, cTime);
-			if(drop != null) gs.addEntity(String.format("resource%d", Globals.generateEntityID()), drop);
+			if(drop != null) gs.getLevel().addEntity("resource", drop);
 
 			Scorekeeper.getInstance().addKill();
 			postDamageTexts();

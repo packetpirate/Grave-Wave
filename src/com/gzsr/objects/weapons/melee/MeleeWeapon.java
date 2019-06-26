@@ -147,7 +147,7 @@ public abstract class MeleeWeapon extends Weapon {
 
 			if(bloodGenerator != null) {
 				List<Particle> particles = bloodGenerator.apply(enemy, cTime);
-				particles.stream().forEach(p -> gs.addEntity(String.format("blood%d", Globals.generateEntityID()),  p));
+				particles.stream().forEach(p -> gs.getLevel().addEntity("blood", p));
 			}
 		}
 

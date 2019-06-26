@@ -186,38 +186,38 @@ public class Console implements Entity {
 						String itemName = tokens[1];
 						Pair<Float> pos = new Pair<Float>(Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]));
 						long cTime = gs.getTime();
-						int id = Globals.generateEntityID();
+						//int id = Globals.generateEntityID();
 
 						if(itemName.equals("ammo")) {
 							AmmoCrate ac = new AmmoCrate(pos, cTime);
-							gs.addEntity(String.format("ammo%d", id), ac);
+							gs.getLevel().addEntity("ammo", ac);
 						} else if(itemName.equals("health")) {
 							HealthKit hk = new HealthKit(pos, cTime);
-							gs.addEntity(String.format("health%d", id), hk);
+							gs.getLevel().addEntity("health", hk);
 						} else if(itemName.equals("armor")) {
 							Armor ar = new Armor(Armor.Type.REINFORCED, pos, cTime);
-							gs.addEntity(String.format("armor%d", id), ar);
+							gs.getLevel().addEntity("armor", ar);
 						} else if(itemName.equals("life")) {
 							ExtraLife el = new ExtraLife(pos, cTime);
-							gs.addEntity(String.format("life%d", id), el);
+							gs.getLevel().addEntity("life", el);
 						} else if(itemName.equals("critchance")) {
 							CritChanceItem crit = new CritChanceItem(pos, cTime);
-							gs.addEntity(String.format("crit%d", id), crit);
+							gs.getLevel().addEntity("crit", crit);
 						} else if(itemName.equals("expmult")) {
 							ExpMultiplierItem exp = new ExpMultiplierItem(pos, cTime);
-							gs.addEntity(String.format("exp%d", id), exp);
+							gs.getLevel().addEntity("exp", exp);
 						} else if(itemName.equals("invulnerability")) {
 							InvulnerableItem inv = new InvulnerableItem(pos, cTime);
-							gs.addEntity(String.format("invuln%d", id), inv);
+							gs.getLevel().addEntity("invulnerability", inv);
 						} else if(itemName.equals("nightvision")) {
 							NightVisionItem night = new NightVisionItem(pos, cTime);
-							gs.addEntity(String.format("nightvision%d", id), night);
+							gs.getLevel().addEntity("nightvision", night);
 						} else if(itemName.equals("speed")) {
 							SpeedItem spd = new SpeedItem(pos, cTime);
-							gs.addEntity(String.format("speed%d", id), spd);
+							gs.getLevel().addEntity("speed", spd);
 						} else if(itemName.equals("unlimitedammo")) {
 							UnlimitedAmmoItem una = new UnlimitedAmmoItem(pos, cTime);
-							gs.addEntity(String.format("unlimAmmo%d", args), una);
+							gs.getLevel().addEntity("unlimAmmo", una);
 						} else {
 							consoleLines.add("  ERROR: Invalid item name specified.");
 						}
@@ -259,12 +259,12 @@ public class Console implements Entity {
 							float y = Float.parseFloat(tokens[2]);
 							double damage = Double.parseDouble(tokens[3]);
 							float radius = Float.parseFloat(tokens[4]);
-							int id = Globals.generateEntityID();
+							//int id = Globals.generateEntityID();
 
 							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion",
 														  new Pair<Float>(x, y), damage, false,
 														  10.0f, radius, pauseTime);
-							gs.addEntity(String.format("explosion%d", id), exp);
+							gs.getLevel().addEntity("explosion", exp);
 						} catch(NumberFormatException nfe) {
 							consoleLines.add("  ERROR: Invalid parameters specified for /explode command.");
 						}
