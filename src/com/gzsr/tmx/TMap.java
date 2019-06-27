@@ -11,6 +11,8 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.gzsr.AssetManager;
 import com.gzsr.entities.Entity;
+import com.gzsr.world.GameObject;
+import com.gzsr.world.Level;
 
 public class TMap implements Entity {
 	private List<TLayer> layers;
@@ -22,6 +24,14 @@ public class TMap implements Entity {
 		} catch(IndexOutOfBoundsException ioo) {
 			return null;
 		}
+	}
+	public TLayer getLayerByName(String name) {
+		for(int i = 0; i < layers.size(); i++) {
+			TLayer layer = layers.get(i);
+			if(layer.getLayerName().equals(name)) return layer;
+		}
+
+		return null;
 	}
 	public void addLayer(TLayer layer) { layers.add(layer); }
 
@@ -103,6 +113,27 @@ public class TMap implements Entity {
 		} catch(SlickException se) {
 			System.err.println("ERROR: Could not construct map!");
 			se.printStackTrace();
+		}
+	}
+
+	/**
+	 * Iterate through all tiles on the objects layer and match TIDs to game objects to be placed in the level.
+	 * @param level The level to place the objects in.
+	 */
+	public void placeObjects(Level level) {
+		TLayer objects = getLayerByName("Objects");
+		if(objects != null) {
+			TTile [][] tiles = objects.getTiles();
+			for(int y = 0; y < mapHeight; y++) {
+				for(int x = 0; x < mapWidth; x++) {
+					TTile tile = tiles[y][x];
+					GameObject.Type type = GameObject.getTypeByTID(tile.getTID());
+					if(type != GameObject.Type.NONE) {
+						// Place game object at this position according to the found type.
+						// TODO: Implement this.
+					}
+				}
+			}
 		}
 	}
 

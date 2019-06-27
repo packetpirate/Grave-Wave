@@ -20,6 +20,7 @@ import com.gzsr.objects.items.Item;
 import com.gzsr.objects.weapons.Explosion;
 import com.gzsr.states.GameState;
 import com.gzsr.tmx.TMap;
+import com.gzsr.tmx.TParser;
 
 public class Level {
 	private TMap map;
@@ -36,8 +37,11 @@ public class Level {
 		} else tagged.add(entity);
 	}
 
-	public Level(TMap map_) {
-		this.map = map_;
+	public Level(String mapName_) {
+		this.map = TParser.load(mapName_);
+		this.map.constructMap();
+		this.map.placeObjects(this);
+
 		this.entities = new ConcurrentHashMap<String, List<Entity>>();
 	}
 

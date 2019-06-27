@@ -34,6 +34,7 @@ public class TParser {
 				Node layer = layers.item(i);
 				if(layer.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element) layer;
+					String name = element.getAttribute("name");
 					NodeList dataList = element.getElementsByTagName("data");
 					for(int j = 0; j < dataList.getLength(); j++) {
 						Node data = dataList.item(j);
@@ -42,7 +43,7 @@ public class TParser {
 							String d = e_data.getTextContent().replace("\n", "");
 							String [] gids = d.split(",");
 
-							TLayer tlay = createLayer(gids, width, height);
+							TLayer tlay = createLayer(name, gids, width, height);
 							map.addLayer(tlay);
 						}
 					}
@@ -59,8 +60,8 @@ public class TParser {
 		return null;
 	}
 
-	private static TLayer createLayer(String [] gids, int mw, int mh) {
-		TLayer layer = new TLayer(mw, mh);
+	private static TLayer createLayer(String layerName, String [] gids, int mw, int mh) {
+		TLayer layer = new TLayer(layerName, mw, mh);
 
 		for(int i = 0; i < gids.length; i++) {
 			long gid = Long.parseLong(gids[i]);

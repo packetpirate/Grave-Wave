@@ -1,6 +1,9 @@
 package com.gzsr.tmx;
 
 public class TLayer {
+	private String name;
+	public String getLayerName() { return name; }
+
 	private TTile [][] tiles;
 	public TTile [][] getTiles() { return tiles; }
 	public TTile getTile(int x, int y) {
@@ -18,7 +21,9 @@ public class TLayer {
 		}
 	}
 
-	public TLayer(int width, int height) {
+	public TLayer(String name_, int width, int height) {
+		this.name = name_;
+
 		tiles = new TTile[height][width];
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
