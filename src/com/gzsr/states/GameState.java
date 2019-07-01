@@ -30,8 +30,6 @@ import com.gzsr.gfx.ui.hud.HUD;
 import com.gzsr.objects.crafting.RecipeController;
 import com.gzsr.status.Status;
 import com.gzsr.status.StatusEffect;
-import com.gzsr.tmx.TMap;
-import com.gzsr.tmx.TParser;
 import com.gzsr.world.Level;
 
 public class GameState extends BasicGameState implements InputListener {
@@ -67,9 +65,7 @@ public class GameState extends BasicGameState implements InputListener {
 		escapeMenu = new EscapeMenu();
 
 		// TODO: Remove this initial map creation once a proper level loader is created.
-		TMap map = TParser.load("res/maps/GWB.tmx");
-		map.constructMap();
-		level = new Level(map);
+		level = new Level("res/maps/GWB.tmx");
 
 		reset(gc);
 	}
