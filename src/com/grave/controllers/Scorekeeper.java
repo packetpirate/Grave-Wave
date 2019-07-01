@@ -1,4 +1,4 @@
-package com.gzsr.controllers;
+package com.grave.controllers;
 
 public class Scorekeeper {
 	private static Scorekeeper instance = null;

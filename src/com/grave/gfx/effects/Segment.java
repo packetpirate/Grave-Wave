@@ -1,10 +1,10 @@
-package com.gzsr.gfx.effects;
+package com.grave.gfx.effects;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-import com.gzsr.Globals;
-import com.gzsr.misc.Pair;
+import com.grave.Globals;
+import com.grave.misc.Pair;
 
 public class Segment {
 	private Pair<Float> start;

@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -6,11 +6,11 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
-import com.gzsr.ConfigManager;
-import com.gzsr.Controls;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.ConfigManager;
+import com.grave.Controls;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class ControlConfigButton extends Button {
 	public static final float WIDTH = 150.0f;

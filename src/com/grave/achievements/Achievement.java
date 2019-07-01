@@ -1,11 +1,11 @@
-package com.gzsr.achievements;
+package com.grave.achievements;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.AchievementManager;
-import com.gzsr.AssetManager;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.states.GameState;
+import com.grave.AchievementManager;
+import com.grave.AssetManager;
+import com.grave.controllers.AchievementController;
+import com.grave.states.GameState;
 
 public abstract class Achievement implements IAchievement {
 	protected int id;

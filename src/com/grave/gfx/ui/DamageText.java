@@ -1,9 +1,9 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.misc.Pair;
+import com.grave.misc.Pair;
 
 public class DamageText extends VanishingText {
 	private static final String FONT_NAME = "PressStart2P-Regular_small";

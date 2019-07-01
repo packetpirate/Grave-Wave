@@ -1,17 +1,17 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.math.Calculate;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.math.Calculate;
+import com.grave.misc.MouseInfo;
+import com.grave.misc.Pair;
 
 public class TooltipText implements Entity {
 	private static final float MAX_WIDTH = 250.0f;

@@ -1,11 +1,11 @@
-package com.gzsr.entities.components;
+package com.grave.entities.components;
 
 import org.newdawn.slick.Color;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
-import com.gzsr.talents.Talents;
+import com.grave.AssetManager;
+import com.grave.entities.Player;
+import com.grave.gfx.Animation;
+import com.grave.talents.Talents;
 
 public class HeartMonitor {
 	public enum State {

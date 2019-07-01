@@ -1,16 +1,16 @@
-package com.gzsr.gfx.ui.hud;
+package com.grave.gfx.ui.hud;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.components.HeartMonitor;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.components.HeartMonitor;
+import com.grave.gfx.Animation;
+import com.grave.gfx.Camera;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class EKGBar implements Entity {
 	private static final Pair<Float> SIZE = new Pair<Float>(181.0f, 22.0f);

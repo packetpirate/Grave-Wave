@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import java.util.Map;
 
@@ -8,13 +8,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.achievements.Achievement;
-import com.gzsr.achievements.Metric;
-import com.gzsr.achievements.milestone.MilestoneAchievement;
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.achievements.Achievement;
+import com.grave.achievements.Metric;
+import com.grave.achievements.milestone.MilestoneAchievement;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class AchievementMenuDisplay implements Entity {
 	private static final String HEADER = "PressStart2P-Regular";

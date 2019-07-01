@@ -1,11 +1,11 @@
-package com.gzsr.gfx.particles;
+package com.grave.gfx.particles;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import com.gzsr.entities.Entity;
-import com.gzsr.states.GameState;
+import com.grave.entities.Entity;
+import com.grave.states.GameState;
 
 public class Projectile extends Particle {
 	private BiFunction<Entity, Long, List<Particle>> bloodGenerator;

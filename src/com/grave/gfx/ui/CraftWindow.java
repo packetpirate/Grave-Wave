@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -6,17 +6,17 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Recipe;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.items.Item;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.objects.weapons.Weapon;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.misc.MouseInfo;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Recipe;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.items.Item;
+import com.grave.objects.weapons.WType;
+import com.grave.objects.weapons.Weapon;
 
 public class CraftWindow implements Entity {
 	public static final float WIDTH = 784;

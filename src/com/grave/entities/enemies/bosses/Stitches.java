@@ -1,26 +1,26 @@
-package com.gzsr.entities.enemies.bosses;
+package com.grave.entities.enemies.bosses;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.EnemyType;
-import com.gzsr.entities.enemies.LootTable;
-import com.gzsr.entities.enemies.ResourceTable;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.items.Powerups;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.states.GameState;
-import com.gzsr.status.Status;
+import com.grave.AssetManager;
+import com.grave.achievements.Metrics;
+import com.grave.controllers.AchievementController;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.EnemyType;
+import com.grave.entities.enemies.LootTable;
+import com.grave.entities.enemies.ResourceTable;
+import com.grave.gfx.particles.Particle;
+import com.grave.math.Calculate;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.items.Powerups;
+import com.grave.objects.weapons.DamageType;
+import com.grave.states.GameState;
+import com.grave.status.Status;
 
 public class Stitches extends Boss {
 	private static final int FIRST_WAVE = 25;

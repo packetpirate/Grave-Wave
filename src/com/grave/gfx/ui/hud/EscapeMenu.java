@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui.hud;
+package com.grave.gfx.ui.hud;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -9,20 +9,20 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.ui.MenuButton;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.AchievementMenuState;
-import com.gzsr.states.GameState;
-import com.gzsr.states.MenuState;
-import com.gzsr.states.settings.AudioSettingsState;
-import com.gzsr.states.settings.ControlSettingsState;
-import com.gzsr.states.settings.GameSettingsState;
-import com.gzsr.states.settings.GammaSettingsState;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.gfx.Camera;
+import com.grave.gfx.ui.MenuButton;
+import com.grave.misc.MouseInfo;
+import com.grave.misc.Pair;
+import com.grave.states.AchievementMenuState;
+import com.grave.states.GameState;
+import com.grave.states.MenuState;
+import com.grave.states.settings.AudioSettingsState;
+import com.grave.states.settings.ControlSettingsState;
+import com.grave.states.settings.GameSettingsState;
+import com.grave.states.settings.GammaSettingsState;
 
 public class EscapeMenu {
 	private enum EscapeMenuState { MAIN, SETTINGS, DISPLAY, EXIT; }

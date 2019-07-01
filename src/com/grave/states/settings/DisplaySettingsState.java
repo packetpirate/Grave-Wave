@@ -1,4 +1,4 @@
-package com.gzsr.states.settings;
+package com.grave.states.settings;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -12,14 +12,14 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.MusicPlayer;
-import com.gzsr.gfx.ui.MenuButton;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.SettingsState;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.MusicPlayer;
+import com.grave.gfx.ui.MenuButton;
+import com.grave.misc.MouseInfo;
+import com.grave.misc.Pair;
+import com.grave.states.SettingsState;
 
 public class DisplaySettingsState extends BasicGameState implements InputListener {
 	public static final int ID = 11;

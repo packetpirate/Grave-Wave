@@ -1,4 +1,4 @@
-package com.gzsr.gfx.particles.emitters;
+package com.grave.gfx.particles.emitters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.function.BiFunction;
 
 import org.newdawn.slick.Color;
 
-import com.gzsr.Globals;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.ColorGenerator;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.misc.Pair;
+import com.grave.Globals;
+import com.grave.entities.Entity;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.ColorGenerator;
+import com.grave.gfx.particles.Particle;
+import com.grave.misc.Pair;
 
 public class BloodGenerator {
 	private static final long BLOOD_DRAW_TIME = 5_000L;

@@ -1,20 +1,20 @@
-package com.gzsr.gfx.particles.emitters;
+package com.grave.gfx.particles.emitters;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
 
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.particles.Emitter;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.StatusProjectile;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
-import com.gzsr.status.BurningEffect;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.particles.Emitter;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.StatusProjectile;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
+import com.grave.status.BurningEffect;
 
 public class FireFieldEmitter extends Emitter {
 	private static final float VELOCITY = 0.2f;

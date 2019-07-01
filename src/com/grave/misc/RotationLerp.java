@@ -1,4 +1,4 @@
-package com.gzsr.misc;
+package com.grave.misc;
 
 public class RotationLerp {
 	private static final float TWO_PI = (float)(Math.PI * 2);

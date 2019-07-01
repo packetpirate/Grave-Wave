@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,21 +8,21 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.ArmConfig;
-import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.Camera;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.math.Calculate;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.ArmConfig;
+import com.grave.objects.weapons.Explosion;
+import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class BigRedButton extends RangedWeapon {
 	private static final int PRICE = 20_000;

@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,17 +9,17 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.emitters.BloodGenerator;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.Camera;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.particles.emitters.BloodGenerator;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class PipeBomb extends Projectile {
 	public static final float SPEED = ProjectileType.PIPE_BOMB.getVelocity();

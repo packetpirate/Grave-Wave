@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.melee;
+package com.grave.objects.weapons.melee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +12,16 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.Globals;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.objects.weapons.Weapon;
-import com.gzsr.states.GameState;
-import com.gzsr.talents.Talents;
+import com.grave.Globals;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.particles.Particle;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.DamageType;
+import com.grave.objects.weapons.Weapon;
+import com.grave.states.GameState;
+import com.grave.talents.Talents;
 
 public abstract class MeleeWeapon extends Weapon {
 	protected Image img;

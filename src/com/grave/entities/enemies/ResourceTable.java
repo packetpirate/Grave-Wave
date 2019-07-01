@@ -1,13 +1,13 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gzsr.Globals;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.items.ResourceDrop;
-import com.gzsr.talents.Talents;
+import com.grave.Globals;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.items.ResourceDrop;
+import com.grave.talents.Talents;
 
 public class ResourceTable {
 	private float [] dropChance;

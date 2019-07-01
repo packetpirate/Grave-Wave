@@ -1,4 +1,4 @@
-package com.gzsr.achievements.milestone;
+package com.grave.achievements.milestone;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gzsr.achievements.Achievement;
-import com.gzsr.achievements.Metric;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
+import com.grave.achievements.Achievement;
+import com.grave.achievements.Metric;
+import com.grave.controllers.AchievementController;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class MilestoneAchievement extends Achievement {
 	private Map<Metric, Pair<Integer>> milestones;

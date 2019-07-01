@@ -1,16 +1,16 @@
-package com.gzsr.objects.weapons;
+package com.grave.objects.weapons;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Sound;
 
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.melee.MeleeWeapon;
-import com.gzsr.objects.weapons.ranged.RangedWeapon;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.melee.MeleeWeapon;
+import com.grave.objects.weapons.ranged.RangedWeapon;
 
 public abstract class Weapon implements Entity {
 	protected Sound useSound;

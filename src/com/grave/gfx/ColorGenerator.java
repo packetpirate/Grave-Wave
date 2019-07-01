@@ -1,8 +1,8 @@
-package com.gzsr.gfx;
+package com.grave.gfx;
 
 import org.newdawn.slick.Color;
 
-import com.gzsr.Globals;
+import com.grave.Globals;
 
 public class ColorGenerator {
 	private Color start, end;

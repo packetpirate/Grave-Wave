@@ -1,10 +1,10 @@
-package com.gzsr.gfx.effects;
+package com.grave.gfx.effects;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
 
 public class VisualEffect implements Entity {
 	protected long lifespan, created;

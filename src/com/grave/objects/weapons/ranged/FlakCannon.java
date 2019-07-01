@@ -1,23 +1,23 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.StatusProjectile;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.weapons.ArmConfig;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.status.BurningEffect;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Player;
+import com.grave.gfx.Camera;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.particles.StatusProjectile;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.weapons.ArmConfig;
+import com.grave.objects.weapons.WType;
+import com.grave.status.BurningEffect;
 
 public class FlakCannon extends RangedWeapon {
 	private static final int PRICE = 0;

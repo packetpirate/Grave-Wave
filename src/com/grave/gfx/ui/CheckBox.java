@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import java.util.function.Consumer;
 
@@ -7,11 +7,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.ConfigManager;
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.ConfigManager;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class CheckBox implements Entity {
 	public static final float SIZE = 40.0f;

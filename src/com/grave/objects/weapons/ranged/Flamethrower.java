@@ -1,22 +1,22 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.StatusProjectile;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.ArmConfig;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.status.BurningEffect;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Player;
+import com.grave.gfx.Animation;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.particles.StatusProjectile;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.ArmConfig;
+import com.grave.objects.weapons.WType;
+import com.grave.status.BurningEffect;
 
 public class Flamethrower extends RangedWeapon {
 	private static final int PRICE = 3_200;

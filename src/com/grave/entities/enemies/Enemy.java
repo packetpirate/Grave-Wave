@@ -1,4 +1,4 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +9,25 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.AnimationState;
-import com.gzsr.gfx.Layers;
-import com.gzsr.gfx.ui.DamageText;
-import com.gzsr.gfx.ui.StatusMessages;
-import com.gzsr.math.Calculate;
-import com.gzsr.misc.Pair;
-import com.gzsr.misc.Vector2f;
-import com.gzsr.objects.items.Powerups;
-import com.gzsr.objects.items.ResourceDrop;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.states.GameState;
-import com.gzsr.status.StatusHandler;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.controllers.AchievementController;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.gfx.Animation;
+import com.grave.gfx.AnimationState;
+import com.grave.gfx.Layers;
+import com.grave.gfx.ui.DamageText;
+import com.grave.gfx.ui.StatusMessages;
+import com.grave.math.Calculate;
+import com.grave.misc.Pair;
+import com.grave.misc.Vector2f;
+import com.grave.objects.items.Powerups;
+import com.grave.objects.items.ResourceDrop;
+import com.grave.objects.weapons.DamageType;
+import com.grave.states.GameState;
+import com.grave.status.StatusHandler;
 
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;

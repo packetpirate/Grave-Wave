@@ -1,12 +1,12 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
 
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
 
 public class LaserNode extends Projectile {
 	public static final Color BARRIER_COLOR = new Color(0xFFA0B9);

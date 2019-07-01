@@ -1,4 +1,4 @@
-package com.gzsr.achievements.state;
+package com.grave.achievements.state;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gzsr.achievements.Metric;
+import com.grave.achievements.Metric;
 
 public class AchievementState {
 	class Transition {

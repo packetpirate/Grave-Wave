@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,23 +8,23 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.ui.StatusMessages;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.ArmConfig;
-import com.gzsr.objects.weapons.Weapon;
-import com.gzsr.states.GameState;
-import com.gzsr.status.Status;
-import com.gzsr.talents.Talents;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Player;
+import com.grave.gfx.Animation;
+import com.grave.gfx.Camera;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.ui.StatusMessages;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.ArmConfig;
+import com.grave.objects.weapons.Weapon;
+import com.grave.states.GameState;
+import com.grave.status.Status;
+import com.grave.talents.Talents;
 
 public abstract class RangedWeapon extends Weapon {
 	protected Sound reloadSound;

@@ -1,4 +1,4 @@
-package com.gzsr.gfx.particles;
+package com.grave.gfx.particles;
 
 import org.newdawn.slick.Color;
 

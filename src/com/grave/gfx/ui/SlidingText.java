@@ -1,14 +1,14 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class SlidingText implements Entity {
 	private static final String FONT_NAME = "PressStart2P-Regular";

@@ -1,4 +1,4 @@
-package com.gzsr.gfx.particles;
+package com.grave.gfx.particles;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.entities.Entity;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.entities.Entity;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class Emitter implements Entity {
 	protected List<Particle> particles;

@@ -1,4 +1,4 @@
-package com.gzsr.gfx.particles;
+package com.grave.gfx.particles;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -7,16 +7,16 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.ColorGenerator;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.Animation;
+import com.grave.gfx.ColorGenerator;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Particle implements Entity {
 	protected Animation animation;

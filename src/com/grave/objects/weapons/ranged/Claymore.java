@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,17 +11,17 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.emitters.BloodGenerator;
-import com.gzsr.math.Calculate;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.particles.emitters.BloodGenerator;
+import com.grave.math.Calculate;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Claymore extends Projectile {
 	private static final Color DETECTOR = new Color(1.0f, 0.0f, 0.0f, 0.1f);

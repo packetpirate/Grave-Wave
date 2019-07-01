@@ -1,4 +1,4 @@
-package com.gzsr.states.settings;
+package com.grave.states.settings;
 
 import java.util.function.Consumer;
 
@@ -14,19 +14,19 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import com.gzsr.AssetManager;
-import com.gzsr.ConfigManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.MusicPlayer;
-import com.gzsr.gfx.Flashlight;
-import com.gzsr.gfx.ui.MenuButton;
-import com.gzsr.gfx.ui.Slider;
-import com.gzsr.math.Calculate;
-import com.gzsr.misc.MouseInfo;
-import com.gzsr.misc.Pair;
-import com.gzsr.states.GameState;
-import com.gzsr.states.MenuState;
+import com.grave.AssetManager;
+import com.grave.ConfigManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.MusicPlayer;
+import com.grave.gfx.Flashlight;
+import com.grave.gfx.ui.MenuButton;
+import com.grave.gfx.ui.Slider;
+import com.grave.math.Calculate;
+import com.grave.misc.MouseInfo;
+import com.grave.misc.Pair;
+import com.grave.states.GameState;
+import com.grave.states.MenuState;
 
 public class GammaSettingsState extends BasicGameState implements InputListener {
 	public static final int ID = 13;

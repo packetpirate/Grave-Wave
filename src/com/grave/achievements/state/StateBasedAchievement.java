@@ -1,4 +1,4 @@
-package com.gzsr.achievements.state;
+package com.grave.achievements.state;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gzsr.achievements.Achievement;
-import com.gzsr.achievements.Metric;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.states.GameState;
+import com.grave.achievements.Achievement;
+import com.grave.achievements.Metric;
+import com.grave.controllers.AchievementController;
+import com.grave.states.GameState;
 
 public class StateBasedAchievement extends Achievement {
 	private AchievementState currentState;

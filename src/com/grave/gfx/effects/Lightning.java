@@ -1,4 +1,4 @@
-package com.gzsr.gfx.effects;
+package com.grave.gfx.effects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.misc.Pair;
+import com.grave.misc.Pair;
 
 public class Lightning extends VisualEffect {
 	public static final Color ELECTRIC_BLUE = new Color(0x47C2F7);

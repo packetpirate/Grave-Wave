@@ -1,8 +1,8 @@
-package com.gzsr.entities.enemies.bosses;
+package com.grave.entities.enemies.bosses;
 
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyType;
-import com.gzsr.misc.Pair;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyType;
+import com.grave.misc.Pair;
 
 public abstract class Boss extends Enemy {
 	public Boss(EnemyType type_, Pair<Float> position_) {

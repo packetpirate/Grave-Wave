@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.Iterator;
 
@@ -7,18 +7,18 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.effects.Lightning;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.states.GameState;
-import com.gzsr.status.DamageEffect;
-import com.gzsr.status.ParalysisEffect;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.effects.Lightning;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.DamageType;
+import com.grave.states.GameState;
+import com.grave.status.DamageEffect;
+import com.grave.status.ParalysisEffect;
 
 public class ENNode extends Projectile {
 	private static final long FLY_TIME = 250L;

@@ -1,9 +1,9 @@
-package com.gzsr.achievements;
+package com.grave.achievements;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.states.GameState;
+import com.grave.controllers.AchievementController;
+import com.grave.states.GameState;
 
 public interface IAchievement {
 	public int getID();

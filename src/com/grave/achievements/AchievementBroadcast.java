@@ -1,11 +1,11 @@
-package com.gzsr.achievements;
+package com.grave.achievements;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import com.gzsr.math.Calculate;
-import com.gzsr.misc.Pair;
+import com.grave.math.Calculate;
+import com.grave.misc.Pair;
 
 public class AchievementBroadcast {
 	public static final Pair<Float> SIZE = new Pair<Float>(300.0f, 72.0f);

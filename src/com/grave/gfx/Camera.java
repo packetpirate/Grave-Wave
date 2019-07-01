@@ -1,4 +1,4 @@
-package com.gzsr.gfx;
+package com.grave.gfx;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-import com.gzsr.Globals;
-import com.gzsr.entities.Player;
-import com.gzsr.misc.Pair;
-import com.gzsr.tmx.TMap;
+import com.grave.Globals;
+import com.grave.entities.Player;
+import com.grave.misc.Pair;
+import com.grave.tmx.TMap;
 
 public class Camera {
 	private static final long VIGNETTE_DURATION = 500L;

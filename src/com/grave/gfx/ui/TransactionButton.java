@@ -1,10 +1,10 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import com.gzsr.AssetManager;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.misc.Pair;
 
 public class TransactionButton extends Button {
 	public static enum Type {

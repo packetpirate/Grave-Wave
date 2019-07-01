@@ -1,4 +1,4 @@
-package com.gzsr.gfx;
+package com.grave.gfx;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
@@ -8,12 +8,12 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
-import com.gzsr.AssetManager;
-import com.gzsr.ConfigManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.Player;
-import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
+import com.grave.AssetManager;
+import com.grave.ConfigManager;
+import com.grave.Globals;
+import com.grave.entities.Player;
+import com.grave.misc.Pair;
+import com.grave.status.Status;
 
 public class Flashlight {
 	private static Color SHADOW = new Color(0xBB000009);

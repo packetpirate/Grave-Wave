@@ -1,12 +1,12 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.entities.enemies.bosses.Aberration;
-import com.gzsr.entities.enemies.bosses.Stitches;
-import com.gzsr.entities.enemies.bosses.Zombat;
-import com.gzsr.gfx.Animation;
-import com.gzsr.misc.Pair;
+import com.grave.Globals;
+import com.grave.achievements.Metrics;
+import com.grave.entities.enemies.bosses.Aberration;
+import com.grave.entities.enemies.bosses.Stitches;
+import com.grave.entities.enemies.bosses.Zombat;
+import com.grave.gfx.Animation;
+import com.grave.misc.Pair;
 
 public enum EnemyType {
 	// Enemies

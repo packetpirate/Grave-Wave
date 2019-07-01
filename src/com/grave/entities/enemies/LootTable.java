@@ -1,11 +1,11 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.gzsr.objects.items.Powerups;
+import com.grave.objects.items.Powerups;
 
 public class LootTable {
 	private Map<Powerups.Type, Float> probabilities;

@@ -1,4 +1,4 @@
-package com.gzsr.entities;
+package com.grave.entities;
 
 import java.util.HashMap;
 import java.util.Map;

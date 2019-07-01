@@ -1,10 +1,10 @@
-package com.gzsr.gfx.particles.emitters;
+package com.grave.gfx.particles.emitters;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.gfx.particles.Emitter;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.gfx.particles.Emitter;
+import com.grave.gfx.particles.Particle;
+import com.grave.misc.Pair;
 
 public class BurningEmitter extends Emitter {
 	private static final float VELOCITY = 0.2f;

@@ -1,22 +1,22 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.Player;
-import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.items.Powerups;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.states.GameState;
-import com.gzsr.status.DeafenedEffect;
-import com.gzsr.status.FlashbangEffect;
-import com.gzsr.status.Status;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.Player;
+import com.grave.math.Calculate;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.items.Powerups;
+import com.grave.objects.weapons.DamageType;
+import com.grave.states.GameState;
+import com.grave.status.DeafenedEffect;
+import com.grave.status.FlashbangEffect;
+import com.grave.status.Status;
 
 public class Starfright extends Enemy {
 	private static final int FIRST_WAVE = 25;

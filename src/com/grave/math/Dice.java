@@ -1,7 +1,7 @@
-package com.gzsr.math;
+package com.grave.math;
 
-import com.gzsr.Globals;
-import com.gzsr.misc.Pair;
+import com.grave.Globals;
+import com.grave.misc.Pair;
 
 public class Dice {
 	private int count;

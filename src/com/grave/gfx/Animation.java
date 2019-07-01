@@ -1,10 +1,10 @@
-package com.gzsr.gfx;
+package com.grave.gfx;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import com.gzsr.AssetManager;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.misc.Pair;
 
 public class Animation {
 	private String imageName;

@@ -1,11 +1,11 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.achievements.Metrics;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.WType;
+import com.grave.achievements.Metrics;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.WType;
 
 public class Crossbowgun extends Crossbow {
 	private static final int PRICE = 0;

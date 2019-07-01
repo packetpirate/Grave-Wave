@@ -1,4 +1,4 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,22 +9,22 @@ import java.util.Queue;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.Globals;
-import com.gzsr.achievements.Metric;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.bosses.Aberration;
-import com.gzsr.entities.enemies.bosses.Stitches;
-import com.gzsr.entities.enemies.bosses.Zombat;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.items.Armor;
-import com.gzsr.states.GameState;
-import com.gzsr.states.ShopState;
-import com.gzsr.talents.Talents;
+import com.grave.Globals;
+import com.grave.achievements.Metric;
+import com.grave.achievements.Metrics;
+import com.grave.controllers.AchievementController;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.bosses.Aberration;
+import com.grave.entities.enemies.bosses.Stitches;
+import com.grave.entities.enemies.bosses.Zombat;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
+import com.grave.objects.items.Armor;
+import com.grave.states.GameState;
+import com.grave.states.ShopState;
+import com.grave.talents.Talents;
 
 public class EnemyController implements Entity {
 	private static final int SPAWN_POOL_START = 5;

@@ -1,16 +1,16 @@
-package com.gzsr.objects.crafting;
+package com.grave.objects.crafting;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.objects.weapons.melee.SpikedBat;
-import com.gzsr.objects.weapons.ranged.CompositeBow;
-import com.gzsr.objects.weapons.ranged.Crossbowgun;
-import com.gzsr.objects.weapons.ranged.ENCannon;
-import com.gzsr.objects.weapons.ranged.FlakCannon;
-import com.gzsr.objects.weapons.ranged.MolotovWeapon;
-import com.gzsr.objects.weapons.ranged.PipeBombWeapon;
+import com.grave.objects.weapons.WType;
+import com.grave.objects.weapons.melee.SpikedBat;
+import com.grave.objects.weapons.ranged.CompositeBow;
+import com.grave.objects.weapons.ranged.Crossbowgun;
+import com.grave.objects.weapons.ranged.ENCannon;
+import com.grave.objects.weapons.ranged.FlakCannon;
+import com.grave.objects.weapons.ranged.MolotovWeapon;
+import com.grave.objects.weapons.ranged.PipeBombWeapon;
 
 public class RecipeController {
 	private static List<Recipe> basicRecipes;

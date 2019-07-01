@@ -1,13 +1,13 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 
-import com.gzsr.AssetManager;
-import com.gzsr.gfx.Camera;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.gfx.Camera;
+import com.grave.misc.Pair;
 
 public class MenuButton extends Button {
 	private static final Color DEFAULT_TEXT = new Color(0xFFFFFF);

@@ -1,12 +1,12 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.achievements.Metrics;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.WType;
+import com.grave.achievements.Metrics;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.WType;
 
 public class CompositeBow extends BowAndArrow {
 	private static final int PRICE = 0;

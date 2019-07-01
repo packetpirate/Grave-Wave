@@ -1,16 +1,16 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
 
 public class VanishingText implements Entity {
 	protected String text;

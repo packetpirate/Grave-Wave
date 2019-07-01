@@ -1,15 +1,15 @@
-package com.gzsr.gfx.ui.hud;
+package com.grave.gfx.ui.hud;
 
 import java.util.List;
 
 import org.newdawn.slick.Graphics;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.achievements.AchievementBroadcast;
-import com.gzsr.controllers.AchievementController;
-import com.gzsr.gfx.Camera;
-import com.gzsr.misc.Pair;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.achievements.AchievementBroadcast;
+import com.grave.controllers.AchievementController;
+import com.grave.gfx.Camera;
+import com.grave.misc.Pair;
 
 public class AchievementDisplay {
 	public AchievementDisplay() {

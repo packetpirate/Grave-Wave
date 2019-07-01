@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui.hud;
+package com.grave.gfx.ui.hud;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -11,15 +11,15 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Controls;
-import com.gzsr.Globals;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.Camera;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.ranged.RangedWeapon;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.Controls;
+import com.grave.Globals;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.Camera;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.ranged.RangedWeapon;
+import com.grave.states.GameState;
 
 public class HUD {
 	public static final Color FADE = new Color(1.0f, 1.0f, 1.0f, 0.3f);

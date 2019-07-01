@@ -1,19 +1,19 @@
-package com.gzsr.entities.enemies;
+package com.grave.entities.enemies;
 
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.entities.Player;
-import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.crafting.Resources;
-import com.gzsr.objects.items.Powerups;
-import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.states.GameState;
-import com.gzsr.status.Status;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.entities.Player;
+import com.grave.math.Calculate;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.crafting.Resources;
+import com.grave.objects.items.Powerups;
+import com.grave.objects.weapons.Explosion;
+import com.grave.states.GameState;
+import com.grave.status.Status;
 
 public class BigMama extends Enemy {
 	private static final int FIRST_WAVE = 15;

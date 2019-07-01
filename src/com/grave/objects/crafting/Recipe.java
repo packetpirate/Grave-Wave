@@ -1,13 +1,13 @@
-package com.gzsr.objects.crafting;
+package com.grave.objects.crafting;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gzsr.entities.Player;
-import com.gzsr.objects.Inventory;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.objects.weapons.Weapon;
-import com.gzsr.objects.weapons.ranged.RangedWeapon;
+import com.grave.entities.Player;
+import com.grave.objects.Inventory;
+import com.grave.objects.weapons.WType;
+import com.grave.objects.weapons.Weapon;
+import com.grave.objects.weapons.ranged.RangedWeapon;
 
 public class Recipe {
 	private static int rNum = 0;

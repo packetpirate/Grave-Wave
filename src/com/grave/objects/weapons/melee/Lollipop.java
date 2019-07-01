@@ -1,18 +1,18 @@
-package com.gzsr.objects.weapons.melee;
+package com.grave.objects.weapons.melee;
 
 import java.util.List;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.AssetManager;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.emitters.BloodGenerator;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.WType;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.achievements.Metrics;
+import com.grave.entities.enemies.Enemy;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.emitters.BloodGenerator;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class Lollipop extends MeleeWeapon {
 	private static final int PRICE = 1_000;

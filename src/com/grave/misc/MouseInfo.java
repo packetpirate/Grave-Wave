@@ -1,4 +1,4 @@
-package com.gzsr.misc;
+package com.grave.misc;
 
 public class MouseInfo {
 	private Pair<Float> lmp;

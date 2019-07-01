@@ -1,4 +1,4 @@
-package com.gzsr.gfx.ui.hud;
+package com.grave.gfx.ui.hud;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -8,13 +8,13 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.util.FontUtils;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.Layers;
-import com.gzsr.misc.Pair;
-import com.gzsr.status.Status;
+import com.grave.AssetManager;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.gfx.Camera;
+import com.grave.gfx.Layers;
+import com.grave.misc.Pair;
+import com.grave.status.Status;
 
 public class Heart implements Entity {
 	private static final Color POISON_COLOR = new Color(0x5AAD5B);

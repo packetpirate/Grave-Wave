@@ -1,20 +1,20 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.Iterator;
 
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.Animation;
-import com.gzsr.gfx.Camera;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.objects.weapons.Explosion;
-import com.gzsr.states.GameState;
+import com.grave.AssetManager;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.Animation;
+import com.grave.gfx.Camera;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.objects.weapons.Explosion;
+import com.grave.states.GameState;
 
 public class Missile extends Projectile {
 	public static final float SPEED = ProjectileType.MISSILE.getVelocity();

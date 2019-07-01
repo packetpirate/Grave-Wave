@@ -1,4 +1,4 @@
-package com.gzsr.objects.crafting;
+package com.grave.objects.crafting;
 
 public class Resources {
 	public static final int METAL = 0;

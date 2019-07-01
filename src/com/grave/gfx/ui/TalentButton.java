@@ -1,15 +1,15 @@
-package com.gzsr.gfx.ui;
+package com.grave.gfx.ui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.UnicodeFont;
 
-import com.gzsr.AssetManager;
-import com.gzsr.entities.Player;
-import com.gzsr.misc.Pair;
-import com.gzsr.talents.Talents;
-import com.gzsr.talents.Talents.TalentType;
+import com.grave.AssetManager;
+import com.grave.entities.Player;
+import com.grave.misc.Pair;
+import com.grave.talents.Talents;
+import com.grave.talents.Talents.TalentType;
 
 public class TalentButton extends Button {
 	// Use row as index to find level requirement for a particular talent.

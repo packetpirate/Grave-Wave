@@ -1,13 +1,13 @@
-package com.gzsr.objects.weapons.melee;
+package com.grave.objects.weapons.melee;
 
 import org.newdawn.slick.Image;
 
-import com.gzsr.AssetManager;
-import com.gzsr.achievements.Metrics;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.objects.weapons.DamageType;
-import com.gzsr.objects.weapons.WType;
+import com.grave.AssetManager;
+import com.grave.achievements.Metrics;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.objects.weapons.DamageType;
+import com.grave.objects.weapons.WType;
 
 public class BastardSword extends MeleeWeapon {
 	private static final int PRICE = 400;

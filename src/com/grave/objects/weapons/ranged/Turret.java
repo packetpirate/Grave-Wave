@@ -1,4 +1,4 @@
-package com.gzsr.objects.weapons.ranged;
+package com.grave.objects.weapons.ranged;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,21 +12,21 @@ import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
-import com.gzsr.AssetManager;
-import com.gzsr.Globals;
-import com.gzsr.controllers.Scorekeeper;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.entities.enemies.EnemyController;
-import com.gzsr.gfx.particles.Particle;
-import com.gzsr.gfx.particles.Projectile;
-import com.gzsr.gfx.particles.ProjectileType;
-import com.gzsr.gfx.particles.emitters.BloodGenerator;
-import com.gzsr.math.Calculate;
-import com.gzsr.math.Dice;
-import com.gzsr.misc.Pair;
-import com.gzsr.misc.RotationLerp;
-import com.gzsr.talents.Talents;
+import com.grave.AssetManager;
+import com.grave.Globals;
+import com.grave.controllers.Scorekeeper;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.entities.enemies.EnemyController;
+import com.grave.gfx.particles.Particle;
+import com.grave.gfx.particles.Projectile;
+import com.grave.gfx.particles.ProjectileType;
+import com.grave.gfx.particles.emitters.BloodGenerator;
+import com.grave.math.Calculate;
+import com.grave.math.Dice;
+import com.grave.misc.Pair;
+import com.grave.misc.RotationLerp;
+import com.grave.talents.Talents;
 
 public class Turret extends Projectile {
 	private static final double HEALTH_MAX = 100.0;

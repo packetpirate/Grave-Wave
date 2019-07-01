@@ -1,9 +1,9 @@
-package com.gzsr.gfx.particles;
+package com.grave.gfx.particles;
 
-import com.gzsr.entities.Entity;
-import com.gzsr.entities.Player;
-import com.gzsr.entities.enemies.Enemy;
-import com.gzsr.status.StatusEffect;
+import com.grave.entities.Entity;
+import com.grave.entities.Player;
+import com.grave.entities.enemies.Enemy;
+import com.grave.status.StatusEffect;
 
 public class StatusProjectile extends Projectile {
 	private StatusEffect effect;
