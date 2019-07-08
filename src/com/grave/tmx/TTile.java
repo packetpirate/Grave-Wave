@@ -1,8 +1,6 @@
 package com.grave.tmx;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 
 public class TTile {
 	public static final long FLIP_HORIZONTAL = 0x80000000L;
@@ -27,26 +25,21 @@ public class TTile {
 		else return false;
 	}
 
-	private Shape collider;
-	public Shape getCollider() { return collider; }
-
 	private boolean walkable;
 	public boolean isWalkable() { return walkable; }
 	public void setWalkable(boolean walkable_) { walkable = walkable_; }
 
-	public TTile(long tid_, int x_, int y_, int w_, int h_) {
-		this(tid_, x_, y_, w_, h_, true);
+	public TTile(long tid_, int x_, int y_) {
+		this(tid_, x_, y_, true);
 	}
 
-	public TTile(long tid_, int x_, int y_, int w_, int h_, boolean walkable_) {
+	public TTile(long tid_, int x_, int y_, boolean walkable_) {
 		this.x = x_;
 		this.y = y_;
 
 		this.fh = false;
 		this.fv = false;
 		this.fd = false;
-
-		this.collider = new Rectangle((x_ * w_), (y_ * h_), w_, h_);
 
 		this.walkable = walkable_;
 

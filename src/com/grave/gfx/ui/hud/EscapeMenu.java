@@ -184,7 +184,6 @@ public class EscapeMenu {
 	}
 
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		UnicodeFont font = AssetManager.getManager().getFont(BUTTON_FONT);
 		float fontHeight = font.getLineHeight();
 
@@ -215,7 +214,7 @@ public class EscapeMenu {
 			float textW = small.getWidth("Are you sure?");
 			g.setFont(small);
 			g.setColor(Color.white);
-			g.drawString("Are you sure?", (camera.getOffset().x + (Globals.WIDTH / 2) - (textW / 2)), (camera.getOffset().y + (Globals.HEIGHT / 2) - (fontHeight + 5.0f)));
+			g.drawString("Are you sure?", ((Globals.WIDTH / 2) - (textW / 2)), ((Globals.HEIGHT / 2) - (fontHeight + 5.0f)));
 
 			yes.render(g, 0L);
 			no.render(g, 0L);
@@ -223,15 +222,12 @@ public class EscapeMenu {
 	}
 
 	private void drawContainer(Graphics g, float fontHeight, int numOfButtons) {
-		Camera camera = Camera.getCamera();
-		float offX = camera.getOffset().x;
-		float offY = camera.getOffset().y;
 		float totalHeight = ((fontHeight * numOfButtons) + ((numOfButtons - 1) * 10.0f) + 40.0f);
 
 		g.setColor(Color.gray);
-		g.fillRect((offX + (Globals.WIDTH / 2) - 200.0f), (offY + (Globals.HEIGHT / 2) - (totalHeight / 2)), 400.0f, totalHeight);
+		g.fillRect(((Globals.WIDTH / 2) - 200.0f), ((Globals.HEIGHT / 2) - (totalHeight / 2)), 400.0f, totalHeight);
 		g.setColor(Color.white);
-		g.drawRect((offX + (Globals.WIDTH / 2) - 200.0f), (offY + (Globals.HEIGHT / 2) - (totalHeight / 2)), 400.0f, totalHeight);
+		g.drawRect(((Globals.WIDTH / 2) - 200.0f), ((Globals.HEIGHT / 2) - (totalHeight / 2)), 400.0f, totalHeight);
 	}
 
 	private float getTextOffset(UnicodeFont f, String text) { return (Globals.WIDTH / 2) - (f.getWidth(text) / 2); }

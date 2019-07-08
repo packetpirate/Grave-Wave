@@ -15,9 +15,9 @@ import org.newdawn.slick.util.FontUtils;
 import com.grave.AchievementManager;
 import com.grave.AssetManager;
 import com.grave.Controls;
+import com.grave.Controls.Layout;
 import com.grave.Globals;
 import com.grave.MusicPlayer;
-import com.grave.Controls.Layout;
 import com.grave.controllers.AchievementController;
 import com.grave.controllers.Scorekeeper;
 import com.grave.entities.Player;
@@ -155,6 +155,8 @@ public class GameState extends BasicGameState implements InputListener {
 		level.render(g, time);
 
 		StatusMessages.getInstance().render(g, time);
+		
+		g.resetTransform();
 
 		hud.render(g, this, time);
 
@@ -164,31 +166,28 @@ public class GameState extends BasicGameState implements InputListener {
 			float p = flash.getPercentageTimeLeft(time);
 			Color color = new Color(1.0f, 1.0f, 1.0f, p);
 			g.setColor(color);
-			g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
-					   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
+			g.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
 		} else if(Camera.getCamera().displayVignette()) {
 			g.setColor(Camera.VIGNETTE_COLOR);
-			g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
-					   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
+			g.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
 		}
 
 		if(paused) {
 			g.setColor(PAUSE_OVERLAY);
-			g.fillRect(camera.getOffset().x, camera.getOffset().y, Globals.WIDTH, Globals.HEIGHT);
+			g.fillRect(0, 0, Globals.WIDTH, Globals.HEIGHT);
 			g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 			g.setColor(Color.white);
 			int w = g.getFont().getWidth("Paused");
 			int h = g.getFont().getLineHeight();
+			
 			FontUtils.drawCenter(g.getFont(), "Paused",
-								 (int)(camera.getOffset().x + (Globals.WIDTH / 2) - (w / 2)),
-								 (int)(camera.getOffset().y + (Globals.HEIGHT / 2) - (h / 2)), w);
+								 (int)((Globals.WIDTH / 2) - (w / 2)),
+								 (int)((Globals.HEIGHT / 2) - (h / 2)), w);
 		}
 
 		if(escapeMenu.isOpen()) {
 			escapeMenu.render(g, time);
 		} else if(consoleOpen) console.render(g, time);
-
-		g.resetTransform();
 	}
 
 	public void reset(GameContainer gc) throws SlickException{

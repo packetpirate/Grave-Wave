@@ -11,7 +11,6 @@ import com.grave.entities.Entity;
 import com.grave.entities.Player;
 import com.grave.entities.enemies.Enemy;
 import com.grave.entities.enemies.EnemyController;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 
@@ -35,10 +34,9 @@ public class BossHealthBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		EnemyController ec = EnemyController.getInstance();
 
-		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+		Pair<Float> dPos = new Pair<Float>(position.x, position.y);
 
 		g.setColor(Color.black);
 		g.fillRect(dPos.x, dPos.y, size.x, size.y);

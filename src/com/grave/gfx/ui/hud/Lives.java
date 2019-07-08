@@ -9,7 +9,6 @@ import org.newdawn.slick.state.BasicGameState;
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 
@@ -33,14 +32,13 @@ public class Lives implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
 		int lives = player.getAttributes().getInt("lives");
 		for(int i = 0; i < lives; i++) {
-			float x = ((position.x + camera.getOffset().x) + (i * GEM_OFFSET));
-			g.drawImage(gem, x, (position.y + camera.getOffset().y), getFilterColor(Color.white, touchingPlayer));
+			float x = (position.x + (i * GEM_OFFSET));
+			g.drawImage(gem, x, position.y, getFilterColor(Color.white, touchingPlayer));
 		}
 	}
 

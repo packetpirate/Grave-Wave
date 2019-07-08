@@ -68,7 +68,7 @@ public class TParser {
 			int x = (i % mw);
 			int y = (i / mw);
 
-			TTile tile = new TTile(gid, x, y, tw, th);
+			TTile tile = new TTile(gid, x, y);
 			boolean walkable = walkabilityByTID(tile.getTID());
 			if(!walkable) tile.setWalkable(walkable);
 

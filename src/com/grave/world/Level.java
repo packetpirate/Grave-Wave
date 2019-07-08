@@ -23,10 +23,8 @@ import com.grave.misc.Pair;
 import com.grave.objects.items.Item;
 import com.grave.objects.weapons.Explosion;
 import com.grave.states.GameState;
-import com.grave.tmx.TLayer;
 import com.grave.tmx.TMap;
 import com.grave.tmx.TParser;
-import com.grave.tmx.TTile;
 
 public class Level {
 	private TMap map;
@@ -124,17 +122,11 @@ public class Level {
 		Shape collider = new Rectangle((pos.x - (size.x / 2)), (pos.y - (size.y / 2)), size.x, size.y);
 		boolean collision = false;
 
-		List<TLayer> layers = map.getLayers();
-		for(int i = 0; i < layers.size(); i++) {
-			TLayer layer = map.getLayer(i);
-
-			if(layer != null) {
-				TTile [][] tiles = layer.getTiles();
-				for(int y = 0; y < map.getMapHeight(); y++) {
-					for(int x = 0; x < map.getMapWidth(); x++) {
-						TTile tile = tiles[y][x];
-						if(!tile.isWalkable() && (tile.getCollider().intersects(collider) || tile.getCollider().contains(collider))) collision = true;
-					}
+		for(int y = 0; y < map.getMapHeight(); y++) {
+			for(int x = 0; x < map.getMapWidth(); x++) {
+				Shape tile = map.getCollider(x, y);
+				if(!map.isWalkable(x, y) && (tile.intersects(collider) || tile.contains(collider))) {
+					collision = true;
 				}
 			}
 		}

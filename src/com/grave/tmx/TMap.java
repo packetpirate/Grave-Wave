@@ -7,6 +7,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.AssetManager;
@@ -36,6 +38,17 @@ public class TMap implements Entity {
 	}
 	public void addLayer(TLayer layer) { layers.add(layer); }
 
+	private Shape [][] colliders;
+	public Shape [][] getColliders() { return colliders; }
+	public Shape getCollider(int x, int y) {
+		try {
+			Shape collider = colliders[y][x];
+			return collider;
+		} catch(ArrayIndexOutOfBoundsException aio) {
+			return null;
+		}
+	}
+
 	// The width and height, in pixels, of each tile on the map.
 	private int tileWidth, tileHeight;
 	public int getTileWidth() { return tileWidth; }
@@ -54,6 +67,13 @@ public class TMap implements Entity {
 
 	public TMap(int tw, int th, int mw, int mh) {
 		layers = new ArrayList<TLayer>();
+
+		colliders = new Shape[mh][mw];
+		for(int y = 0; y < mh; y++) {
+			for(int x = 0; x < mw; x++) {
+				colliders[y][x] = new Rectangle((x * tw), (y * th), tw, th);
+			}
+		}
 
 		tileWidth = tw;
 		tileHeight = th;
@@ -147,10 +167,10 @@ public class TMap implements Entity {
 	 * @return True if this position is walkable on all layers. False if this position isn't walkable on any one of the map's layers.
 	 */
 	public boolean isWalkable(int x, int y) {
-		boolean walkable = false;
+		boolean walkable = true;
 		for(int i = 0; i < layers.size(); i++) {
 			TLayer layer = layers.get(i);
-			walkable = layer.getTile(x, y).isWalkable();
+			walkable = (walkable & layer.getTile(x, y).isWalkable());
 		}
 
 		return walkable;

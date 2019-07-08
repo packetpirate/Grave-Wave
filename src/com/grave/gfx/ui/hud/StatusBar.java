@@ -10,7 +10,6 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 import com.grave.status.StatusEffect;
@@ -32,7 +31,6 @@ public class StatusBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
@@ -45,8 +43,7 @@ public class StatusBar implements Entity {
 				float percentageTimeLeft = status.getPercentageTimeLeft(cTime);
 				if(touchingPlayer) percentageTimeLeft *= HUD.FADE.a;
 
-				g.drawImage(img, (position.x + camera.getOffset().x + xPlus), (position.y + camera.getOffset().y),
-							new Color(1.0f, 1.0f, 1.0f, percentageTimeLeft));
+				g.drawImage(img, (position.x + xPlus), position.y, new Color(1.0f, 1.0f, 1.0f, percentageTimeLeft));
 				xPlus += img.getWidth() + 5.0f;
 			}
 		}

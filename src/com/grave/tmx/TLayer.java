@@ -21,14 +21,14 @@ public class TLayer {
 		}
 	}
 
-	public TLayer(String name_, int width, int height) {
+	public TLayer(String name_, int mw, int mh) {
 		this.name = name_;
 
-		tiles = new TTile[height][width];
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < width; x++) {
+		tiles = new TTile[mh][mw];
+		for(int y = 0; y < mh; y++) {
+			for(int x = 0; x < mw; x++) {
 				// Set a default tile in case something goes wrong during the load process.
-				tiles[y][x] = new TTile(0, x, y, 0, 0);
+				tiles[y][x] = new TTile(0, x, y);
 			}
 		}
 	}

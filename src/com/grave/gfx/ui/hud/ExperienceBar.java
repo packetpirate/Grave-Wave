@@ -11,7 +11,6 @@ import org.newdawn.slick.util.FontUtils;
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 
@@ -34,7 +33,6 @@ public class ExperienceBar implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
@@ -44,7 +42,7 @@ public class ExperienceBar implements Entity {
 
 		Color filter = getFilterColor(Color.white, touchingPlayer);
 
-		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+		Pair<Float> dPos = new Pair<Float>(position.x, position.y);
 
 		Image subImage = bar.getSubImage(0, 0, (int)(bar.getWidth() * percentage), bar.getHeight());
 		g.drawImage(subImage, dPos.x, dPos.y, filter);

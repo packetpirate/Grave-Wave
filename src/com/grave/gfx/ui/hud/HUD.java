@@ -16,7 +16,6 @@ import com.grave.Controls;
 import com.grave.Globals;
 import com.grave.entities.Player;
 import com.grave.entities.enemies.EnemyController;
-import com.grave.gfx.Camera;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ranged.RangedWeapon;
 import com.grave.states.GameState;
@@ -71,12 +70,11 @@ public class HUD {
 	}
 
 	public void render(Graphics g, GameState gs, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		EnemyController ec = EnemyController.getInstance();
 		boolean touchingPlayer = intersects(player);
 
-		g.drawImage(hud, (camera.getOffset().x + 10.0f), (camera.getOffset().y + 10.0f), getFilterColor(Color.white, touchingPlayer));
+		g.drawImage(hud, 10.0f, 10.0f, getFilterColor(Color.white, touchingPlayer));
 
 		armor.render(g, cTime);
 		heart.render(g, cTime);
@@ -103,15 +101,15 @@ public class HUD {
 				int w2 = fs.getWidth(subtext);
 
 				g.setColor(Color.white);
-				FontUtils.drawCenter(f, text, (int)(camera.getOffset().x + Globals.WIDTH - w1 - 20), (int)(camera.getOffset().y + 20.0f), w1);
-				FontUtils.drawCenter(fs, subtext, (int)(camera.getOffset().x + Globals.WIDTH - w2 - 20), (int)(camera.getOffset().y + f.getLineHeight() + 30.0f), w2);
+				FontUtils.drawCenter(f, text, (Globals.WIDTH - w1 - 20), 20, w1);
+				FontUtils.drawCenter(fs, subtext, (Globals.WIDTH - w2 - 20), (f.getLineHeight() + 30), w2);
 			} else {
 				// Render the wave counter.
 				String text = String.format("Wave: %d", ec.getWave());
 				int w = f.getWidth(text);
 
 				g.setColor(Color.white);
-				FontUtils.drawCenter(f, text, (int)(camera.getOffset().x + Globals.WIDTH - 20 - w), (int)(camera.getOffset().y + 20.0f), w);
+				FontUtils.drawCenter(f, text, (Globals.WIDTH - 20 - w), 20, w);
 			}
 		} // End Wave Counter rendering.
 
@@ -120,8 +118,8 @@ public class HUD {
 			String money = String.format("$%s", NumberFormat.getInstance(Locale.US).format(player.getAttributes().getInt("money")));
 			float w = g.getFont().getWidth(money);
 			float h = g.getFont().getLineHeight();
-			float x = (camera.getOffset().x + (Globals.WIDTH / 2) - (w / 2));
-			float y = (camera.getOffset().y + Globals.HEIGHT - h - 20.0f);
+			float x = ((Globals.WIDTH / 2) - (w / 2));
+			float y = (Globals.HEIGHT - h - 20.0f);
 			FontUtils.drawCenter(g.getFont(), money, (int)x, (int)y, (int)w, Color.white);
 		} // End Player Money Drawing
 
@@ -138,10 +136,10 @@ public class HUD {
 			Image cash = AssetManager.getManager().getImage("GZS_Cash");
 			Image crafting = AssetManager.getManager().getImage("GZS_Crafting_Icon");
 
-			float tx = (camera.getOffset().x + Globals.WIDTH - (w1 + 20.0f));
-			float ty = (camera.getOffset().y + Globals.HEIGHT - h - 20.0f);
-			float ix = (camera.getOffset().x + Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f));
-			float iy = (camera.getOffset().y + Globals.HEIGHT - 20.0f);
+			float tx = (Globals.WIDTH - (w1 + 20.0f));
+			float ty = (Globals.HEIGHT - h - 20.0f);
+			float ix = (Globals.WIDTH - (w1 + 20.0f) - ((character.getWidth() / 2) + 10.0f));
+			float iy = (Globals.HEIGHT - 20.0f);
 
 			// Draw the character icon to indicate the hotkey for the talents screen.
 			g.drawString(Controls.Layout.TALENTS_SCREEN.getDisplay(), tx, ty);
@@ -172,15 +170,15 @@ public class HUD {
 			float height = ((fs.getLineHeight() * 3) + 20.0f);
 
 			g.setColor(new Color(0x444444AA));
-			g.fillRect((camera.getOffset().x + 10.0f), (camera.getOffset().y + 100.0f), width, height);
+			g.fillRect(10.0f, 100.0f, width, height);
 			g.setColor(Color.white);
-			g.drawRect((camera.getOffset().x + 10.0f), (camera.getOffset().y + 100.0f), width, height);
+			g.drawRect(10.0f, 100.0f, width, height);
 
 			float lh = fs.getLineHeight();
 			g.setFont(fs);
-			g.drawString(weaponName, (camera.getOffset().x + 15.0f), (camera.getOffset().y + 105.0f));
-			g.drawString(equipped, (camera.getOffset().x + 15.0f), (camera.getOffset().y + lh + 110.0f));
-			g.drawString(reloading, (camera.getOffset().x + 15.0f), (camera.getOffset().y + (lh * 2) + 115.0f));
+			g.drawString(weaponName, 15.0f, 105.0f);
+			g.drawString(equipped, 15.0f, (lh + 110.0f));
+			g.drawString(reloading, 15.0f, ((lh * 2) + 115.0f));
 		}
 
 		// If player is respawning, draw the countdown.
@@ -191,7 +189,7 @@ public class HUD {
 			String respawnText = "Respawn in " + (timeToRespawn / 1000L) + "...";
 			float w = g.getFont().getWidth(respawnText);
 			float h = g.getFont().getLineHeight();
-			FontUtils.drawCenter(g.getFont(), respawnText, (int)(camera.getOffset().x + (Globals.WIDTH / 2) - (w / 2)), (int)(camera.getOffset().y + (Globals.HEIGHT / 2) - (h / 2)), (int)w);
+			FontUtils.drawCenter(g.getFont(), respawnText, (int)((Globals.WIDTH / 2) - (w / 2)), (int)((Globals.HEIGHT / 2) - (h / 2)), (int)w);
 		}
 	}
 

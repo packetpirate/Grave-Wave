@@ -11,7 +11,6 @@ import org.newdawn.slick.util.FontUtils;
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 import com.grave.status.Status;
@@ -36,11 +35,10 @@ public class Heart implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 
-		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+		Pair<Float> dPos = new Pair<Float>(position.x, position.y);
 
 		// Draw the Heart
 		double currentHealth = player.getAttributes().getDouble("health");

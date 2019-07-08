@@ -11,7 +11,6 @@ import org.newdawn.slick.util.FontUtils;
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
-import com.grave.gfx.Camera;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ranged.RangedWeapon;
@@ -49,13 +48,12 @@ public class WeaponDisplay implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
 		Player player = Player.getPlayer();
 		RangedWeapon rw = player.getCurrentRanged();
 		boolean touchingPlayer = intersects(player);
 		boolean outOfAmmo = (rw.getClipAmmo() == 0);
 
-		Pair<Float> dPos = new Pair<Float>((position.x + camera.getOffset().x), (position.y + camera.getOffset().y));
+		Pair<Float> dPos = new Pair<Float>(position.x, position.y);
 
 		Image img = AssetManager.getManager().getImage("GZS_HUD_Weapon");
 		Color filter = (outOfAmmo ? WeaponDisplay.OUT_OF_AMMO_FILTER : Color.white);

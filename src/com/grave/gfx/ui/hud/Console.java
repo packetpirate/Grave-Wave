@@ -97,29 +97,25 @@ public class Console implements Entity {
 
 	@Override
 	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
-		float offX = camera.getOffset().x;
-		float offY = camera.getOffset().y;
-
 		// Draw the container window.
 		g.setColor(CONSOLE_BACKGROUND);
-		g.fillRect((offX + 10.0f), (offY + Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
+		g.fillRect(10.0f, (Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
 		g.setColor(CONSOLE_BORDER);
-		g.drawRect((offX + 10.0f), (offY + Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
+		g.drawRect(10.0f, (Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);
 
 		// Draw the input box.
 		g.setColor(CONSOLE_TEXTBOX);
-		g.fillRect((offX + 15.0f), (offY + Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
+		g.fillRect(15.0f, (Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
 		g.setColor(CONSOLE_TEXTBORDER);
-		g.drawRect((offX + 15.0f), (offY + Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
+		g.drawRect(15.0f, (Globals.HEIGHT - 34.0f), (Globals.WIDTH - 30.0f), 19.0f);
 
 		// Draw the current command.
 		g.setColor(CONSOLE_TEXT);
 		g.setFont(CONSOLE_FONT);
-		g.drawString(currentCommand, (offX + 20.0f), (offY + Globals.HEIGHT - 30.0f));
+		g.drawString(currentCommand, 20.0f, (Globals.HEIGHT - 30.0f));
 
 		// Draw the cursor next to the last character of the current command.
-		g.fillRect((offX + 20.0f + CONSOLE_FONT.getWidth(currentCommand)), (offY + Globals.HEIGHT - 30.0f), 2.0f, CONSOLE_FONT.getHeight());
+		g.fillRect((20.0f + CONSOLE_FONT.getWidth(currentCommand)), (Globals.HEIGHT - 30.0f), 2.0f, CONSOLE_FONT.getHeight());
 
 		// Display the previous commands.
 		if(!consoleLines.isEmpty()) {
@@ -127,9 +123,8 @@ public class Console implements Entity {
 
 			g.setColor(CONSOLE_PASTTEXT);
 			for(int i = 0; i < Math.min(consoleLines.size(), 10); i++) {
-				float x = (offX + 20.0f);
-				float y = (offY + Globals.HEIGHT - 39.0f - (19.0f * Math.min(consoleLines.size(), 10))) + (i * 19.0f);
-				g.drawString(consoleLines.get(command), x, (y + 4.0f));
+				float y = (Globals.HEIGHT - 39.0f - (19.0f * Math.min(consoleLines.size(), 10))) + (i * 19.0f);
+				g.drawString(consoleLines.get(command), 20.0f, (y + 4.0f));
 				command++;
 			}
 		}
