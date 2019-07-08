@@ -9,6 +9,7 @@ import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.entities.Player;
 import com.grave.gfx.Layers;
+import com.grave.math.Calculate;
 import com.grave.misc.Pair;
 
 public abstract class Item implements Entity {
@@ -52,6 +53,15 @@ public abstract class Item implements Entity {
 			lastBlink = cTime;
 		}
 
+		// Move the item toward the player if the player is close enough.
+		Player player = Player.getPlayer();
+		float dist = Calculate.Distance(player.getPosition(), position);
+		if(dist <= player.getCollectionDistance()) {
+			float str = player.getCollectionStrength();
+			float theta = Calculate.Hypotenuse(position, player.getPosition());
+			position.x += (float)(Math.cos(theta) * str * delta);
+			position.y += (float)(Math.sin(theta) * str * delta);
+		}
 	}
 
 	@Override

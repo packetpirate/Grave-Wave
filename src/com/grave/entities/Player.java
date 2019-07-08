@@ -48,6 +48,7 @@ import com.grave.status.Status;
 import com.grave.status.StatusHandler;
 import com.grave.talents.Talents;
 import com.grave.tmx.TMap;
+import com.grave.world.Level;
 
 public class Player implements Entity {
 	private static final float DEFAULT_SPEED = 0.15f;
@@ -55,6 +56,10 @@ public class Player implements Entity {
 	private static final long RESPAWN_TIME = 3_000L;
 	private static final long GRUNT_TIMER = 1_500L;
 	private static final int INVENTORY_SIZE = 16;
+	private static final float COLLECTION_DIST = 128.0f;
+	private static final float COLLECTION_STRENGTH = 0.25f;
+
+	public static final float INTERACT_DIST = 96.0f;
 
 	//private static final Pair<Float> HAND_OFFSET = new Pair<Float>(16.0f, -5.0f);
 	public static final Pair<Float> ABOVE_1 = new Pair<Float>(0.0f, -64.0f);
@@ -68,26 +73,30 @@ public class Player implements Entity {
 	public Pair<Float> getPosition() { return position; }
 	private Pair<Float> velocity;
 	public Pair<Float> getVelocity() { return velocity; }
-	public void move(TMap map, float xOff, float yOff) {
+	public void move(Level level, float xOff, float yOff) {
 		if(isAlive()) {
-			moving = true;
-			velocity.x = xOff;
-			velocity.y = yOff;
+			TMap map = level.getMap();
 
-			position.x += velocity.x;
-			position.y += velocity.y;
+			if(!level.obstaclePresent(new Pair<Float>((position.x + xOff), (position.y + yOff)), new Pair<Float>(24.0f, 24.0f))) {
+				moving = true;
+				velocity.x = xOff;
+				velocity.y = yOff;
 
-			// Constrain the player to the level.
-			float w = map.getMapWidthTotal();
-			float h = map.getMapHeightTotal();
+				position.x += velocity.x;
+				position.y += velocity.y;
 
-			if((position.x - 32.0f) < 0.0f) position.x = 32.0f;
-			else if((position.x + 32.0f) >= w) position.x = (w - 32.0f);
+				// Constrain the player to the level.
+				float w = map.getMapWidthTotal();
+				float h = map.getMapHeightTotal();
 
-			if((position.y - 32.0f) < 0.0f) position.y = 32.0f;
-			else if((position.y + 32.0f) >= h) position.y = (h - 32.0f);
+				if((position.x - 32.0f) < 0.0f) position.x = 32.0f;
+				else if((position.x + 32.0f) >= w) position.x = (w - 32.0f);
 
-			Camera.getCamera().focusOnPlayer(map);
+				if((position.y - 32.0f) < 0.0f) position.y = 32.0f;
+				else if((position.y + 32.0f) >= h) position.y = (h - 32.0f);
+
+				Camera.getCamera().focusOnPlayer(map);
+			}
 		}
 	}
 
@@ -122,6 +131,8 @@ public class Player implements Entity {
 
 	private Resources resources;
 	public Resources getResources() { return resources; }
+	public float getCollectionDistance() { return Player.COLLECTION_DIST; }
+	public float getCollectionStrength() { return Player.COLLECTION_STRENGTH; }
 
 	private Talents talents;
 	public Talents getTalents() { return talents; }
@@ -259,7 +270,8 @@ public class Player implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		Camera camera = Camera.getCamera();
-		TMap map = ((GameState) gs).getLevel().getMap();
+		Level level = ((GameState) gs).getLevel();
+		TMap map = level.getMap();
 
 		if(!isAlive()) {
 			if(!respawning) {
@@ -326,10 +338,10 @@ public class Player implements Entity {
 			velocity.y = 0.0f;
 
 			float adjSpeed = ((getSpeed() + (attributes.getInt("speedUp") * (DEFAULT_SPEED * 0.10f))) * (float)attributes.getDouble("spdMult") * delta);
-			if(controls.isPressed(Controls.Layout.MOVE_UP)) move(map, 0.0f, -adjSpeed);
-			if(controls.isPressed(Controls.Layout.MOVE_LEFT)) move(map, -adjSpeed, 0.0f);
-			if(controls.isPressed(Controls.Layout.MOVE_DOWN)) move(map, 0.0f, adjSpeed);
-			if(controls.isPressed(Controls.Layout.MOVE_RIGHT)) move(map, adjSpeed, 0.0f);
+			if(controls.isPressed(Controls.Layout.MOVE_UP)) move(level, 0.0f, -adjSpeed);
+			if(controls.isPressed(Controls.Layout.MOVE_LEFT)) move(level, -adjSpeed, 0.0f);
+			if(controls.isPressed(Controls.Layout.MOVE_DOWN)) move(level, 0.0f, adjSpeed);
+			if(controls.isPressed(Controls.Layout.MOVE_RIGHT)) move(level, adjSpeed, 0.0f);
 		}
 
 		if(controls.isReleased(Controls.Layout.FLASHLIGHT)) flashlight.toggle();
@@ -338,9 +350,7 @@ public class Player implements Entity {
 		}
 
 		// If the interact button has been pressed, check for game object interactions.
-		if(controls.isReleased(Controls.Layout.INTERACT)) {
-
-		}
+		if(controls.isReleased(Controls.Layout.INTERACT)) level.interact((GameState)gs, cTime);
 
 		bounds.setCenterX(position.x);
 		bounds.setCenterY(position.y + 4.0f);

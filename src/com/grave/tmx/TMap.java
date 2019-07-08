@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
+import com.grave.misc.Pair;
 import com.grave.world.GameObject;
 import com.grave.world.Level;
 
@@ -130,7 +131,9 @@ public class TMap implements Entity {
 					GameObject.Type type = GameObject.getTypeByTID(tile.getTID());
 					if(type != GameObject.Type.NONE) {
 						// Place game object at this position according to the found type.
-						// TODO: Implement this.
+						Pair<Float> pos = new Pair<Float>((float)((x * tileWidth) + (tileWidth / 2)), (float)((y * tileHeight) + (tileHeight / 2)));
+						GameObject obj = new GameObject(type, pos);
+						level.addEntity(obj.getTag(), obj);
 					}
 				}
 			}

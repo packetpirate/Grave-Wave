@@ -28,7 +28,7 @@ public class TLayer {
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
 				// Set a default tile in case something goes wrong during the load process.
-				tiles[y][x] = new TTile(0, x, y);
+				tiles[y][x] = new TTile(0, x, y, 0, 0);
 			}
 		}
 	}

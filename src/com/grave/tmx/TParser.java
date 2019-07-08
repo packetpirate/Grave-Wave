@@ -43,7 +43,7 @@ public class TParser {
 							String d = e_data.getTextContent().replace("\n", "");
 							String [] gids = d.split(",");
 
-							TLayer tlay = createLayer(name, gids, width, height);
+							TLayer tlay = createLayer(name, gids, width, height, tileWidth, tileHeight);
 							map.addLayer(tlay);
 						}
 					}
@@ -60,7 +60,7 @@ public class TParser {
 		return null;
 	}
 
-	private static TLayer createLayer(String layerName, String [] gids, int mw, int mh) {
+	private static TLayer createLayer(String layerName, String [] gids, int mw, int mh, int tw, int th) {
 		TLayer layer = new TLayer(layerName, mw, mh);
 
 		for(int i = 0; i < gids.length; i++) {
@@ -68,10 +68,40 @@ public class TParser {
 			int x = (i % mw);
 			int y = (i / mw);
 
-			TTile tile = new TTile(gid, x, y);
+			TTile tile = new TTile(gid, x, y, tw, th);
+			boolean walkable = walkabilityByTID(tile.getTID());
+			if(!walkable) tile.setWalkable(walkable);
+
 			layer.setTile(x, y, tile);
 		}
 
 		return layer;
+	}
+
+	private static boolean walkabilityByTID(int tid) {
+		switch(tid) {
+			case 33:
+			case 34:
+			case 35:
+			case 36:
+			case 37:
+			case 38:
+			case 41:
+			case 42:
+			case 43:
+			case 44:
+			case 49:
+			case 50:
+			case 51:
+			case 52:
+			case 57:
+			case 58:
+			case 59:
+			case 60:
+			case 61:
+				return false;
+			default:
+				return true;
+		}
 	}
 }
