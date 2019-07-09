@@ -81,7 +81,7 @@ public class Gasbag extends Enemy {
 										 new Pair<Float>(position.x, position.y), pe,
 										 0.0, false, Gasbag.POISON_KNOCKBACK,
 										 Gasbag.EXPLODE_RADIUS, cTime);
-		gs.getLevel().addEntity("poisonExplosion", poison);
+		gs.getLevel().addEntity(poison.getTag(), poison);
 
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;

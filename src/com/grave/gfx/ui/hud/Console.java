@@ -259,7 +259,7 @@ public class Console implements Entity {
 							Explosion exp = new Explosion(Explosion.Type.NORMAL, "GZS_Explosion",
 														  new Pair<Float>(x, y), damage, false,
 														  10.0f, radius, pauseTime);
-							gs.getLevel().addEntity("explosion", exp);
+							gs.getLevel().addEntity(exp.getTag(), exp);
 						} catch(NumberFormatException nfe) {
 							consoleLines.add("  ERROR: Invalid parameters specified for /explode command.");
 						}

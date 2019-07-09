@@ -56,7 +56,7 @@ public class Missile extends Projectile {
 	private void explode(GameState gs, long cTime) {
 		exp.setCreatedTime(cTime);
 		exp.setPosition(position);
-		gs.getLevel().addEntity("explosion", exp);
+		gs.getLevel().addEntity(exp.getTag(), exp);
 
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		exploded = true;

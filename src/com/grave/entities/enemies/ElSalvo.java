@@ -119,7 +119,7 @@ public class ElSalvo extends Enemy {
 									  new Pair<Float>(position.x, position.y),
 									  ElSalvo.EXPLODE_DAMAGE, false, 0.0f,
 									  ElSalvo.EXPLODE_RADIUS, cTime);
-		gs.getLevel().addEntity("explosion", exp);
+		gs.getLevel().addEntity(exp.getTag(), exp);
 
 		explode.play(1.0f, AssetManager.getManager().getSoundVolume());
 		health = 0.0;

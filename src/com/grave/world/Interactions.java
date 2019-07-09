@@ -1,5 +1,6 @@
 package com.grave.world;
 
+import com.grave.AssetManager;
 import com.grave.Globals;
 import com.grave.misc.Pair;
 import com.grave.objects.crafting.Resources;
@@ -45,7 +46,8 @@ public enum Interactions {
 				  					  new Pair<Float>(pos), dmg,
 				  					  false, 10.0f, 128.0f, cTime);
 
-		gs.getLevel().addEntity("explosion", exp);
+		gs.getLevel().addEntity(exp.getTag(), exp);
+		AssetManager.getManager().getSound("explosion2").play(1.0f, AssetManager.getManager().getSoundVolume());
 	});
 
 	private Interaction action;

@@ -15,7 +15,9 @@ import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.misc.Pair;
 import com.grave.world.GameObject;
+import com.grave.world.Interactions;
 import com.grave.world.Level;
+import com.grave.world.objects.DamageableObject;
 
 public class TMap implements Entity {
 	private List<TLayer> layers;
@@ -111,20 +113,23 @@ public class TMap implements Entity {
 				for(int y = 0; y < mapHeight; y++) {
 					for(int x = 0; x < mapWidth; x++) {
 						TTile tile = layer.getTile(x, y);
-						Image img = tile.getImage(tileset, tileWidth, tileHeight);
-						if(img != null) {
-							boolean fh = tile.isFlipped(TTile.FLIP_HORIZONTAL);
-							boolean fv = tile.isFlipped(TTile.FLIP_VERTICAL);
-							boolean fd = tile.isFlipped(TTile.FLIP_DIAGONAL);
 
-							int angle = 0;
-							if(fh && fd) angle = 90;
-							else if(fh && fv) angle = 180;
-							else if(fv && fd) angle = 270;
+						if(TTile.isStaticTile(tile.getTID())) {
+							Image img = TTile.getImage(tileset, tile.getTID(), tileWidth, tileHeight);
+							if(img != null) {
+								boolean fh = tile.isFlipped(TTile.FLIP_HORIZONTAL);
+								boolean fv = tile.isFlipped(TTile.FLIP_VERTICAL);
+								boolean fd = tile.isFlipped(TTile.FLIP_DIAGONAL);
 
-							if(angle != 0) context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), angle);
-							context.drawImage(img, (x * tileWidth), (y * tileHeight));
-							if(angle != 0) context.resetTransform();
+								int angle = 0;
+								if(fh && fd) angle = 90;
+								else if(fh && fv) angle = 180;
+								else if(fv && fd) angle = 270;
+
+								if(angle != 0) context.rotate(((x * tileWidth) + (tileWidth / 2)), ((y * tileHeight) + (tileHeight / 2)), angle);
+								context.drawImage(img, (x * tileWidth), (y * tileHeight));
+								if(angle != 0) context.resetTransform();
+							}
 						}
 					}
 				}
@@ -150,10 +155,19 @@ public class TMap implements Entity {
 					TTile tile = tiles[y][x];
 					GameObject.Type type = GameObject.getTypeByTID(tile.getTID());
 					if(type != GameObject.Type.NONE) {
-						// Place game object at this position according to the found type.
 						Pair<Float> pos = new Pair<Float>((float)((x * tileWidth) + (tileWidth / 2)), (float)((y * tileHeight) + (tileHeight / 2)));
-						GameObject obj = new GameObject(type, pos);
-						level.addEntity(obj.getTag(), obj);
+						GameObject obj = null;
+
+						if(type.equals(GameObject.Type.EXPLOSIVE_BARREL)) {
+							// Place an explosive barrel damageable object.
+							obj = new DamageableObject(type, Interactions.EXPLOSION, pos, 24.0f,
+													   "grave_wave_tiles", tile.getTID(), new Pair<Integer>(x, y), new Pair<Integer>(64, 64));
+						} else {
+							// Place game object at this position according to the found type.
+							obj = new GameObject(type, pos);
+						}
+
+						if(obj != null) level.addEntity(obj.getTag(), obj);
 					}
 				}
 			}

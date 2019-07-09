@@ -61,7 +61,7 @@ public class TTile {
 	 * @param h The height of the tile.
 	 * @return A sub-image containing the tile matching the TID.
 	 */
-	public Image getImage(Image tileset, int w, int h) {
+	public static Image getImage(Image tileset, int tid, int w, int h) {
 		if(tid == 0) return null;
 
 		int nh = tileset.getWidth() / w; // Number of tiles in this tileset horizontally.
@@ -72,5 +72,13 @@ public class TTile {
 
 		Image sub = tileset.getSubImage((ox * w), (oy * h), w, h);
 		return sub;
+	}
+
+	public static boolean isStaticTile(int tid) {
+		// TODO: Update with more dynamic game object TIDs.
+		switch(tid) {
+			case 39: return false;
+			default: return true;
+		}
 	}
 }

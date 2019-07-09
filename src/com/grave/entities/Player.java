@@ -49,6 +49,7 @@ import com.grave.status.StatusHandler;
 import com.grave.talents.Talents;
 import com.grave.tmx.TMap;
 import com.grave.world.Level;
+import com.grave.world.objects.DamageableObject;
 
 public class Player implements Entity {
 	private static final float DEFAULT_SPEED = 0.15f;
@@ -725,7 +726,7 @@ public class Player implements Entity {
 			Iterator<Projectile> it = rw.getProjectiles().iterator();
 			while(it.hasNext()) {
 				Projectile p = it.next();
-				if(p.isAlive(cTime) && p.checkCollision(enemy) && !enemy.dead()) {
+				if(p.isAlive(cTime) && !enemy.dead() && p.checkCollision(enemy)) {
 					if(p instanceof LaserNode) {
 						LaserNode node = (LaserNode) p;
 						node.damage(enemy.getDamage());
@@ -765,6 +766,27 @@ public class Player implements Entity {
 					float roll = Globals.rand.nextFloat();
 					if(roll <= 0.1f) monitor.addBPM(-40);
 				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean checkWeapons(GameState gs, DamageableObject obj, long cTime) {
+		for(RangedWeapon rw : getRangedWeapons()) {
+			Iterator<Projectile> it = rw.getProjectiles().iterator();
+			while(it.hasNext()) {
+				Projectile p = it.next();
+				if(p.isAlive(cTime) && p.checkCollision(obj.getCollider())) {
+					if(p instanceof LaserNode) continue;
+					else return p.collide(gs, obj, cTime);
+				}
+			}
+		}
+
+		for(MeleeWeapon mw : getMeleeWeapons()) {
+			if(mw.isAttacking() && mw.hit(gs, obj, cTime)) {
+				return true;
 			}
 		}
 

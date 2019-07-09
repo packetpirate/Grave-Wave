@@ -68,7 +68,7 @@ public class BigRedButton extends RangedWeapon {
 		if(!explosions.isEmpty() && (elapsed >= BigRedButton.EXP_DELAY)) {
 			Explosion exp = explosions.remove();
 			exp.setPosition(getExplosionLocation((GameState)gs, Player.getPlayer(), Player.getPlayer().getPosition()));
-			((GameState)gs).getLevel().addEntity("explosion", exp);
+			((GameState)gs).getLevel().addEntity(exp.getTag(), exp);
 			AssetManager.getManager().getSound(BigRedButton.EXP_SOUND).play(1.0f, AssetManager.getManager().getSoundVolume());
 			lastExplosion = cTime;
 

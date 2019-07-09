@@ -95,7 +95,7 @@ public class BigMama extends Enemy {
 												new Pair<Float>(position.x, position.y),
 												BigMama.EXP_DAMAGE, false, BigMama.EXP_KNOCKBACK,
 												BigMama.EXP_DIST, cTime);
-				((GameState)gs).getLevel().addEntity("bloodExplosion", blood);
+				((GameState)gs).getLevel().addEntity(blood.getTag(), blood);
 
 				exploded = true;
 				explosion.play(1.0f, AssetManager.getManager().getSoundVolume());

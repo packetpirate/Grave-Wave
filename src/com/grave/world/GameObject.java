@@ -6,6 +6,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class GameObject implements Entity {
 	public enum Type {
@@ -13,7 +14,8 @@ public class GameObject implements Entity {
 		NONE(Interactions.NONE),
 		TRASH_CAN(Interactions.ONE_RANDOM_RESOURCE),
 		FIRE_HYDRANT(Interactions.NONE),
-		DEAD_BODY(Interactions.RANDOM_RESOURCES);
+		DEAD_BODY(Interactions.RANDOM_RESOURCES),
+		EXPLOSIVE_BARREL(Interactions.NONE);
 
 		private Interactions interaction;
 		public Interactions getInteraction() { return interaction; }
@@ -23,15 +25,18 @@ public class GameObject implements Entity {
 		}
 	}
 
-	private Type type;
+	protected Type type;
 	public Interactions getInteraction() { return type.getInteraction(); }
 
-	private Pair<Float> position;
+	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 
-	private boolean used;
+	protected boolean used;
 	public boolean isUsed() { return used; }
-	public void use() { used = true; }
+	public void use(GameState gs, Pair<Float> objPos, long cTime) {
+		used = true;
+		getInteraction().execute(gs, objPos, cTime);
+	}
 	public void reset() { used = false; }
 
 	public GameObject(Type type_, Pair<Float> position_) {
@@ -56,6 +61,7 @@ public class GameObject implements Entity {
 		switch(tid) {
 			case 37: return Type.FIRE_HYDRANT;
 			case 38: return Type.TRASH_CAN;
+			case 39: return Type.EXPLOSIVE_BARREL;
 			case 46: return Type.DEAD_BODY;
 			default: return Type.NONE;
 		}

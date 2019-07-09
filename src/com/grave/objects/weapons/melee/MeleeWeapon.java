@@ -22,6 +22,7 @@ import com.grave.objects.weapons.DamageType;
 import com.grave.objects.weapons.Weapon;
 import com.grave.states.GameState;
 import com.grave.talents.Talents;
+import com.grave.world.objects.DamageableObject;
 
 public abstract class MeleeWeapon extends Weapon {
 	protected Image img;
@@ -152,6 +153,11 @@ public abstract class MeleeWeapon extends Weapon {
 		}
 
 		return isHit;
+	}
+
+	public boolean hit(GameState gs, DamageableObject obj, long cTime) {
+		Shape hitBox = getHitBox(cTime);
+		return (obj.getCollider().intersects(hitBox) || obj.getCollider().contains(hitBox));
 	}
 
 	public void onHit(GameState gs, Enemy enemy, long cTime) {

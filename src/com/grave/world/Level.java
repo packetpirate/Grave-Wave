@@ -25,6 +25,7 @@ import com.grave.objects.weapons.Explosion;
 import com.grave.states.GameState;
 import com.grave.tmx.TMap;
 import com.grave.tmx.TParser;
+import com.grave.world.objects.DamageableObject;
 
 public class Level {
 	private TMap map;
@@ -70,6 +71,9 @@ public class Level {
 					if(item.isActive(cTime)) {
 						player.checkItem(item, cTime);
 					} else eit.remove();
+				} else if(ent instanceof DamageableObject) {
+					DamageableObject obj = (DamageableObject) ent;
+					if(obj.isBroken()) eit.remove();
 				} else if(ent instanceof VisualEffect) {
 					VisualEffect visual = (VisualEffect) ent;
 					if(!visual.isActive(cTime)) eit.remove();
@@ -109,8 +113,7 @@ public class Level {
 					float dist = Calculate.Distance(player.getPosition(), obj.getPosition());
 
 					if(dist <= Player.INTERACT_DIST) {
-						obj.use();
-						obj.getInteraction().execute(gs, obj.getPosition(), cTime);
+						obj.use(gs, obj.getPosition(), cTime);
 						break; // Only allow interaction with one object per button press.
 					}
 				}

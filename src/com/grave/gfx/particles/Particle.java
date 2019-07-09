@@ -240,6 +240,10 @@ public class Particle implements Entity {
 		return (player.getCollider().intersects(bounds) || player.getCollider().contains(bounds));
 	}
 
+	public boolean checkCollision(Shape collider) {
+		return (collider.intersects(bounds) || collider.contains(bounds));
+	}
+
 	@Override
 	public String getName() { return "Particle"; }
 

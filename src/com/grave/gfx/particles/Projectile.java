@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 
 import com.grave.entities.Entity;
 import com.grave.states.GameState;
+import com.grave.world.objects.DamageableObject;
 
 public class Projectile extends Particle {
 	private BiFunction<Entity, Long, List<Particle>> bloodGenerator;
@@ -56,6 +57,22 @@ public class Projectile extends Particle {
 			List<Particle> particles = bloodGenerator.apply(e, cTime);
 			particles.stream().forEach(p -> gs.getLevel().addEntity("blood", p));
 		}
+
+		return true;
+	}
+
+	public boolean collide(GameState gs, DamageableObject obj, long cTime) {
+		if(penetrated != null) {
+			for(Entity ent : penetrated) {
+				if(ent.equals(obj)) return false;
+			}
+
+			if(penetrations == 0) collision = true;
+			else {
+				penetrated.add(obj);
+				penetrations--;
+			}
+		} else collision = true;
 
 		return true;
 	}
