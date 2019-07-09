@@ -142,10 +142,12 @@ public class HeartMonitor {
 			state.getAnimation().restart(cTime);
 		}
 
-		long sinceLastBeat = (cTime - lastBeat);
-		if(sinceLastBeat >= state.getDelay()) {
-			AssetManager.getManager().getSound("heartbeat").play();
-			lastBeat = cTime;
+		if(Player.getPlayer().isAlive()) {
+			long sinceLastBeat = (cTime - lastBeat);
+			if(sinceLastBeat >= state.getDelay()) {
+				AssetManager.getManager().getSound("heartbeat").play();
+				lastBeat = cTime;
+			}
 		}
 	}
 
