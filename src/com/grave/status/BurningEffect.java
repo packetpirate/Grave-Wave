@@ -83,7 +83,7 @@ public class BurningEffect extends StatusEffect {
 	
 	@Override
 	public void render(Graphics g, long cTime) {
-		if(emitter.isEmitting()) emitter.render(g, cTime);
+		if(emitter.isEmitting()) emitter.render(null, g, cTime);
 	}
 	
 	public static Pair<Integer> getDamageRange() {

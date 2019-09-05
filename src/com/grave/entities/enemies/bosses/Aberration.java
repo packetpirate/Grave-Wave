@@ -219,7 +219,7 @@ public class Aberration extends Boss {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Render the Aberration's tentacles.
 		if(!dead()) {
 			for(int i = 0; i < 3; i++) {
@@ -243,7 +243,7 @@ public class Aberration extends Boss {
 		}
 
 		// Even if Aberration is dead, render its particles until they all die.
-		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(g, cTime));
+		if(!bile.isEmpty()) bile.stream().filter(p -> p.isAlive(cTime)).forEach(p -> p.render(gs, g, cTime));
 		// Only render the Aberration until it dies.
 		if(!dead()) animation.getCurrentAnimation().render(g, position, theta, shouldDrawFlash(cTime));
 		statusHandler.render(g, cTime);

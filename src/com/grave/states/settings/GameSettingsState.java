@@ -81,10 +81,10 @@ public class GameSettingsState extends BasicGameState implements InputListener {
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_large"));
 		FontUtils.drawCenter(g.getFont(), "Game Settings", 0, 40, Globals.WIDTH);
 		
-		fullscreenCheckbox.render(g, 0L);
+		fullscreenCheckbox.render(null, g, 0L);
 		
-		applyButton.render(g, 0L);
-		backButton.render(g, 0L);
+		applyButton.render(null, g, 0L);
+		backButton.render(null, g, 0L);
 	}
 	
 	@Override

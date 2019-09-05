@@ -9,6 +9,7 @@ import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class SlidingText implements Entity {
 	private static final String FONT_NAME = "PressStart2P-Regular";
@@ -80,7 +81,7 @@ public class SlidingText implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		UnicodeFont font = AssetManager.getManager().getFont(FONT_NAME);
 		Color color = new Color(1.0f, 1.0f, 1.0f, cO);
 

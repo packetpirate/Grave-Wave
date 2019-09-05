@@ -94,7 +94,7 @@ public class Zombat extends Boss {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Render the blood stream being siphoned from the player.
 		if(siphoningBlood) {
 			Player player = Player.getPlayer();
@@ -108,7 +108,7 @@ public class Zombat extends Boss {
 			g.setLineWidth(1.0f);
 		}
 
-		super.render(g, cTime);
+		super.render(gs, g, cTime);
 	}
 
 	@Override

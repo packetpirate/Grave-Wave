@@ -11,6 +11,7 @@ import com.grave.entities.Player;
 import com.grave.gfx.Layers;
 import com.grave.math.Calculate;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public abstract class Item implements Entity {
 	private static final long BLINK_START = 3000L;
@@ -65,7 +66,7 @@ public abstract class Item implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Image icon = getIcon();
 		if(isActive(cTime) && (icon != null)) {
 			boolean draw = !blinking || (blinking && ((cTime - lastBlink) >= BLINK_DURATION));

@@ -17,6 +17,7 @@ import com.grave.math.Calculate;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ArmConfig;
 import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class LaserBarrier extends RangedWeapon {
 	private static final int PRICE = 2_000;
@@ -45,9 +46,9 @@ public class LaserBarrier extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(lastNode != null) {
-			lastNode.render(g, cTime);
+			lastNode.render(gs, g, cTime);
 
 			// Render the range of the last node.
 			g.setColor(LaserBarrier.BARRIER_RANGE_INDICATOR);
@@ -70,7 +71,7 @@ public class LaserBarrier extends RangedWeapon {
 		Iterator<Projectile> it = projectiles.iterator();
 		while(it.hasNext()) {
 			Projectile node = it.next();
-			node.render(g, cTime);
+			node.render(gs, g, cTime);
 		}
 	}
 

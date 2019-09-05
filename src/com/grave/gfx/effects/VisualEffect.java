@@ -5,6 +5,7 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
+import com.grave.states.GameState;
 
 public class VisualEffect implements Entity {
 	protected long lifespan, created;
@@ -20,7 +21,7 @@ public class VisualEffect implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Override me!
 	}
 

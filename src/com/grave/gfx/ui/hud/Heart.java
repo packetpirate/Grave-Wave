@@ -13,6 +13,7 @@ import com.grave.entities.Entity;
 import com.grave.entities.Player;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 import com.grave.status.Status;
 
 public class Heart implements Entity {
@@ -34,7 +35,7 @@ public class Heart implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 

@@ -92,7 +92,7 @@ public class DamageableObject extends GameObject {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Image tilesetImg = AssetManager.getManager().getImage(tileset);
 		Image img = TTile.getImage(tilesetImg, tid, tw, th);
 		if(img != null) img.draw((position.x - (tw / 2)), (position.y - (th / 2)));

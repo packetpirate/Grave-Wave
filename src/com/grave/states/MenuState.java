@@ -98,11 +98,11 @@ public class MenuState extends BasicGameState implements InputListener {
 
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 
-		gameStart.render(g, 0L);
-		achievements.render(g, 0L);
-		settings.render(g, 0L);
-		credits.render(g, 0L);
-		exit.render(g, 0L);
+		gameStart.render(null, g, 0L);
+		achievements.render(null, g, 0L);
+		settings.render(null, g, 0L);
+		credits.render(null, g, 0L);
+		exit.render(null, g, 0L);
 
 		g.setColor(Color.white);
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));

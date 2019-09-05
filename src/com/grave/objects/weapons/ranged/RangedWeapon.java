@@ -109,10 +109,10 @@ public abstract class RangedWeapon extends Weapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		projectiles.stream()
 				   .filter(p -> p.isActive(cTime))
-				   .forEach(p -> p.render(g, cTime));
+				   .forEach(p -> p.render(gs, g, cTime));
 
 		if(muzzleFlash != null) {
 			Player player = Player.getPlayer();

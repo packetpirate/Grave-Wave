@@ -19,6 +19,7 @@ import com.grave.math.Dice;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ArmConfig;
 import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class ClaymoreWeapon extends RangedWeapon {
 	private static final int PRICE = 500;
@@ -76,8 +77,8 @@ public class ClaymoreWeapon extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+	public void render(GameState gs, Graphics g, long cTime) {
+		super.render(gs, g, cTime);
 
 		if(equipped && deploying) {
 			// Render the charge bar.

@@ -160,7 +160,7 @@ public class Stitches extends Boss {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(hook != null) {
 			// Draw the hook's tether.
 			g.setColor(Color.black);
@@ -168,10 +168,10 @@ public class Stitches extends Boss {
 			g.drawLine(position.x, position.y, hook.getPosition().x, hook.getPosition().y);
 			g.setLineWidth(1.0f);
 
-			hook.render(g, cTime);
+			hook.render(gs, g, cTime);
 		}
 
-		super.render(g, cTime);
+		super.render(gs, g, cTime);
 	}
 
 	private float findPlayerIntercept(Pair<Float> playerPos, Pair<Float> playerVel, int delta) {

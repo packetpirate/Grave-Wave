@@ -88,10 +88,10 @@ public class PipeBomb extends Projectile {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(exploded) {
-			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(g, cTime));
-		} else super.render(g, cTime);
+			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(gs, g, cTime));
+		} else super.render(gs, g, cTime);
 	}
 
 	private void explode(GameState gs, long cTime) {

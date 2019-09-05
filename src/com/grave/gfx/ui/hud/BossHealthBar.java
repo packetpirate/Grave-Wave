@@ -13,6 +13,7 @@ import com.grave.entities.enemies.Enemy;
 import com.grave.entities.enemies.EnemyController;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class BossHealthBar implements Entity {
 	private Pair<Float> position;
@@ -33,7 +34,7 @@ public class BossHealthBar implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		EnemyController ec = EnemyController.getInstance();
 
 		Pair<Float> dPos = new Pair<Float>(position.x, position.y);

@@ -106,8 +106,8 @@ public class PipeBombWeapon extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+	public void render(GameState gs, Graphics g, long cTime) {
+		super.render(gs, g, cTime);
 
 		if(equipped && charging) {
 			// Render the charge bar.

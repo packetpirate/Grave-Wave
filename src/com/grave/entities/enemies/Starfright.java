@@ -102,7 +102,7 @@ public class Starfright extends Enemy {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(!dead()) animation.getCurrentAnimation().render(g, position, pTheta, (flashing || shouldDrawFlash(cTime)));
 		statusHandler.render(g, cTime);

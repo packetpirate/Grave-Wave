@@ -29,7 +29,7 @@ public class Claymore extends Projectile {
 	private static final float SHRAPNEL_SPREAD = (float)(Math.PI / 3.6); // 50 degree spread total
 	private static final float EXP_RANGE = 200.0f;
 	private static final String EXP_SOUND = "explosion2";
-	
+
 	private Sound explosion;
 	private Shape collider;
 	private List<Projectile> shrapnel;
@@ -38,22 +38,22 @@ public class Claymore extends Projectile {
 	private boolean shrapnelCreated;
 	private double damage;
 	private boolean critical;
-	
+
 	public Claymore(Particle p_, double damage_, boolean critical_) {
 		super(p_, 0.0, false);
-		
+
 		this.explosion = AssetManager.getManager().getSound(Claymore.EXP_SOUND);
-		
+
 		float mTheta = theta - (float)(Math.PI / 2);
 		float magX1 = (float)(Math.cos(mTheta - (SHRAPNEL_SPREAD / 2)) * EXP_RANGE);
 		float magY1 = (float)(Math.sin(mTheta - (SHRAPNEL_SPREAD / 2)) * EXP_RANGE);
 		float magX2 = (float)(Math.cos(mTheta + (SHRAPNEL_SPREAD / 2)) * EXP_RANGE);
 		float magY2 = (float)(Math.sin(mTheta + (SHRAPNEL_SPREAD / 2)) * EXP_RANGE);
-		this.collider = new Polygon(new float[] { position.x, position.y, 
-												  (position.x + magX1), (position.y + magY1), 
-												  (position.x + magX2), (position.y + magY2) 
+		this.collider = new Polygon(new float[] { position.x, position.y,
+												  (position.x + magX1), (position.y + magY1),
+												  (position.x + magX2), (position.y + magY2)
 												});
-		
+
 		this.shrapnel = new ArrayList<Projectile>();
 		this.exploded = false;
 		this.shrapnelCreated = false;
@@ -65,7 +65,7 @@ public class Claymore extends Projectile {
 	public void update(BasicGameState gs, long cTime, int delta) {
 		if(!exploded) {
 			EnemyController ec = EnemyController.getInstance();
-			
+
 			Iterator<Enemy> it = ec.getAliveEnemies().iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
@@ -76,7 +76,7 @@ public class Claymore extends Projectile {
 				}
 			}
 		}
-		
+
 		if(exploded && !shrapnelCreated) {
 			// Create the Claymore projectiles.
 			for(int i = 0; i < Claymore.SHRAPNEL_COUNT; i++) {
@@ -87,17 +87,17 @@ public class Claymore extends Projectile {
 				long lifespan = ProjectileType.SHRAPNEL.getLifespan();
 				float devTheta = (theta + (Globals.rand.nextFloat() * (Claymore.SHRAPNEL_SPREAD / 2) * (Globals.rand.nextBoolean()?1:-1)));
 				Particle particle = new Particle(color, position, velocity, devTheta,
-												 0.0f, new Pair<Float>(width, height), 
+												 0.0f, new Pair<Float>(width, height),
 												 lifespan, cTime);
-				
+
 				Projectile projectile = new Projectile(particle, BloodGenerator.BURST, damage, critical);
-				
-				shrapnel.add(projectile);	
+
+				shrapnel.add(projectile);
 			}
-			
+
 			shrapnelCreated = true;
 		}
-		
+
 		// Update the shrapnel particles.
 		if(!shrapnel.isEmpty()) {
 			Iterator<Projectile> it = shrapnel.iterator();
@@ -110,31 +110,31 @@ public class Claymore extends Projectile {
 			}
 		}
 	}
-	
+
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(!exploded) {
-			super.render(g, cTime);
-			
+			super.render(gs, g, cTime);
+
 			// Draw the collider.
 			g.setColor(Claymore.DETECTOR);
 			g.draw(collider);
 			g.fill(collider);
 		} else {
 			// Draw the shrapnel particles.
-			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(g, cTime));
+			if(!shrapnel.isEmpty()) shrapnel.stream().forEach(sh -> sh.render(gs, g, cTime));
 		}
 	}
-	
+
 	public static int getShrapnelCount() {
 		return Claymore.SHRAPNEL_COUNT;
 	}
-	
+
 	@Override
 	public boolean isAlive(long cTime) {
 		return (!exploded || !shrapnel.isEmpty());
 	}
-	
+
 	private boolean checkRange(Enemy e) {
 		float dist = Calculate.Distance(position, e.getPosition());
 		return (collider.intersects(e.getCollider()) && (dist <= Claymore.EXP_RANGE));

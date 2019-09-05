@@ -102,7 +102,7 @@ public class ENNode extends Projectile {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(started && (next != null)) {
 			g.setColor(Lightning.ELECTRIC_BLUE);
 			g.setLineWidth(3.0f);
@@ -112,7 +112,7 @@ public class ENNode extends Projectile {
 			g.drawLine(position.x, position.y, next.getPosition().x, next.getPosition().y);
 		}
 
-		super.render(g, cTime);
+		super.render(gs, g, cTime);
 	}
 
 	public void pair(ENNode next_) { this.next = next_; }

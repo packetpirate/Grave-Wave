@@ -94,12 +94,12 @@ public class Level {
 		}
 	}
 
-	public void render(Graphics g, long cTime) {
-		map.render(g, cTime);
+	public void render(GameState gs, Graphics g, long cTime) {
+		map.render(gs, g, cTime);
 
 		List<Entity> sorted = new ArrayList<Entity>();
 		entities.values().stream().forEach(ents -> sorted.addAll(ents));
-		sorted.stream().sorted(Entity.COMPARE).forEach(ent -> ent.render(g, cTime));
+		sorted.stream().sorted(Entity.COMPARE).forEach(ent -> ent.render(gs, g, cTime));
 	}
 
 	public void interact(GameState gs, long cTime) {

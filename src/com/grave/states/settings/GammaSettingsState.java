@@ -115,14 +115,14 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 		g.setColor(Color.black);
 		g.fillRect(0.0f, 300.0f, Globals.WIDTH, (Globals.HEIGHT - 300.0f));
 
-		opacitySlider.render(g, 0L);
+		opacitySlider.render(null, g, 0L);
 
 		// Draw the text explaining what the slider is for.
 		g.setFont(assets.getFont("PressStart2P-Regular"));
 		Calculate.TextWrap(g, EXPLANATION, g.getFont(), ((Globals.WIDTH / 2) - 250.0f), (Globals.HEIGHT - 250.0f), 500.0f, true);
 
-		applyButton.render(g, 0L);
-		if(!Globals.firstTimeGamma) backButton.render(g, 0L);
+		applyButton.render(null, g, 0L);
+		if(!Globals.firstTimeGamma) backButton.render(null, g, 0L);
 	}
 
 	@Override

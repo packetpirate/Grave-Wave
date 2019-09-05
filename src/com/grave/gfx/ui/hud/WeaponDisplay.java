@@ -14,6 +14,7 @@ import com.grave.entities.Player;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ranged.RangedWeapon;
+import com.grave.states.GameState;
 import com.grave.status.Status;
 
 public class WeaponDisplay implements Entity {
@@ -47,7 +48,7 @@ public class WeaponDisplay implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Player player = Player.getPlayer();
 		RangedWeapon rw = player.getCurrentRanged();
 		boolean touchingPlayer = intersects(player);

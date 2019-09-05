@@ -18,6 +18,7 @@ import com.grave.misc.Pair;
 import com.grave.objects.weapons.ArmConfig;
 import com.grave.objects.weapons.DamageType;
 import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class AWP extends RangedWeapon {
 	private static final int PRICE = 5_000;
@@ -49,8 +50,8 @@ public class AWP extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+	public void render(GameState gs, Graphics g, long cTime) {
+		super.render(gs, g, cTime);
 
 		Player player = Player.getPlayer();
 		float theta = (player.getRotation() - (float)(Math.PI / 2));

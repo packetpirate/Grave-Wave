@@ -430,10 +430,10 @@ public class Player implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Render all the player's active weapons.
-		getRangedWeapons().stream().forEach(w -> w.render(g, cTime));
-		getMeleeWeapons().stream().forEach(w -> w.render(g, cTime));
+		getRangedWeapons().stream().forEach(w -> w.render(gs, g, cTime));
+		getMeleeWeapons().stream().forEach(w -> w.render(gs, g, cTime));
 
 		if(isAlive()) {
 			AssetManager assets = AssetManager.getManager();

@@ -183,30 +183,30 @@ public class EscapeMenu {
 		}
 	}
 
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		UnicodeFont font = AssetManager.getManager().getFont(BUTTON_FONT);
 		float fontHeight = font.getLineHeight();
 
 		if(state == EscapeMenuState.MAIN) {
 			drawContainer(g, fontHeight, 4);
 
-			resume.render(g, 0L);
-			settings.render(g, 0L);
-			achievements.render(g, 0L);
-			exit.render(g, 0L);
+			resume.render(gs, g, 0L);
+			settings.render(gs, g, 0L);
+			achievements.render(gs, g, 0L);
+			exit.render(gs, g, 0L);
 		} else if(state == EscapeMenuState.SETTINGS) {
 			drawContainer(g, fontHeight, 5);
 
-			game.render(g, 0L);
-			audio.render(g, 0L);
-			display.render(g, 0L);
-			controls.render(g, 0L);
-			settingsBack.render(g, 0L);
+			game.render(gs, g, 0L);
+			audio.render(gs, g, 0L);
+			display.render(gs, g, 0L);
+			controls.render(gs, g, 0L);
+			settingsBack.render(gs, g, 0L);
 		} else if(state == EscapeMenuState.DISPLAY) {
 			drawContainer(g, fontHeight, 2);
 
-			gamma.render(g, 0L);
-			displayBack.render(g, 0L);
+			gamma.render(gs, g, 0L);
+			displayBack.render(gs, g, 0L);
 		} else if(state == EscapeMenuState.EXIT) {
 			drawContainer(g, fontHeight, 2);
 
@@ -216,8 +216,8 @@ public class EscapeMenu {
 			g.setColor(Color.white);
 			g.drawString("Are you sure?", ((Globals.WIDTH / 2) - (textW / 2)), ((Globals.HEIGHT / 2) - (fontHeight + 5.0f)));
 
-			yes.render(g, 0L);
-			no.render(g, 0L);
+			yes.render(gs, g, 0L);
+			no.render(gs, g, 0L);
 		}
 	}
 

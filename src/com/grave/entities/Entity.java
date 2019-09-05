@@ -5,13 +5,15 @@ import java.util.Comparator;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
+import com.grave.states.GameState;
+
 public interface Entity {
 	public abstract String getName();
 	public abstract String getTag();
 	public abstract String getDescription();
 	public abstract int getLayer();
 	public abstract void update(BasicGameState gs, long cTime, int delta);
-	public abstract void render(Graphics g, long cTime);
+	public abstract void render(GameState gs, Graphics g, long cTime);
 
 	/**
 	 * Compares entities according to their rendering layer.

@@ -18,6 +18,7 @@ import com.grave.entities.enemies.TinyZumby;
 import com.grave.gfx.Animation;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 import com.grave.status.StatusEffect;
 
 public class Explosion implements Entity {
@@ -107,7 +108,7 @@ public class Explosion implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(started && (anim != null) && anim.isActive(cTime)) {
 			anim.render(g, position, new Pair<Float>((radius * 2), (radius * 2)));
 		}

@@ -373,7 +373,7 @@ public class ShopState extends BasicGameState implements InputListener {
 
 					// Draw the equip button. If it's already equipped, disable it.
 					if(selectedInInventory) {
-						equipButton.render(g, 0L);
+						equipButton.render(null, g, 0L);
 						if(mw.isEquipped()) {
 							float x = equipButton.getPosition().x - (equipButton.getSize().x / 2);
 							float y = equipButton.getPosition().y - (equipButton.getSize().y / 2);
@@ -412,7 +412,7 @@ public class ShopState extends BasicGameState implements InputListener {
 				}
 
 				if(drawSellButton) {
-					sellButton.render(g, 0L);
+					sellButton.render(null, g, 0L);
 
 					g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));
 					FontUtils.drawCenter(g.getFont(), cost, (int)(CONTAINER_WIDTH + 10.0f),
@@ -433,7 +433,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							FontUtils.drawCenter(g.getFont(), "One Clip", (int)(ammoButton.getPosition().x.floatValue() - (ammoButton.getSize().x / 2)),
 												 (int)(ammoButton.getPosition().y - ammoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
 												 (int)ammoButton.getSize().x.floatValue(), Color.white);
-							ammoButton.render(g, 0L);
+							ammoButton.render(null, g, 0L);
 							if(w.clipsMaxedOut() || (Player.getPlayer().getAttributes().getInt("money") < w.getAmmoPrice())) {
 								// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
 								float x = ammoButton.getPosition().x - (ammoButton.getSize().x / 2);
@@ -457,7 +457,7 @@ public class ShopState extends BasicGameState implements InputListener {
 							FontUtils.drawCenter(g.getFont(), "Max Ammo", (int)(maxAmmoButton.getPosition().x.floatValue() - (maxAmmoButton.getSize().x / 2)),
 												 (int)(maxAmmoButton.getPosition().y - maxAmmoButton.getSize().y - (g.getFont().getLineHeight() - 10.0f)),
 												 (int)maxAmmoButton.getSize().x.floatValue(), Color.white);
-							maxAmmoButton.render(g, 0L);
+							maxAmmoButton.render(null, g, 0L);
 
 							if(w.clipsMaxedOut() || (maxAmmoAffordable == 0)) {
 								// If the player has max ammo for this weapon or they can't afford more, show a "disabled" overlay on the button.
@@ -475,7 +475,7 @@ public class ShopState extends BasicGameState implements InputListener {
 					}
 				}
 			} else {
-				buyButton.render(g, 0L);
+				buyButton.render(null, g, 0L);
 
 				String cost = "Error";
 				if(selection instanceof Weapon) {

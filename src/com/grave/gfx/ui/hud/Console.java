@@ -96,7 +96,7 @@ public class Console implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Draw the container window.
 		g.setColor(CONSOLE_BACKGROUND);
 		g.fillRect(10.0f, (Globals.HEIGHT - 232.0f), (Globals.WIDTH - 20.0f), 222.0f);

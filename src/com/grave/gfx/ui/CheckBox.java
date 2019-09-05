@@ -12,6 +12,7 @@ import com.grave.ConfigManager;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class CheckBox implements Entity {
 	public static final float SIZE = 40.0f;
@@ -49,7 +50,7 @@ public class CheckBox implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular");
 
 		g.setFont(f);

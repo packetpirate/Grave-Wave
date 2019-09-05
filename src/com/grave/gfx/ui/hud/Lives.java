@@ -11,6 +11,7 @@ import com.grave.entities.Entity;
 import com.grave.entities.Player;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Lives implements Entity {
 	private static final float GEM_OFFSET = 26.0f;
@@ -31,7 +32,7 @@ public class Lives implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Player player = Player.getPlayer();
 		boolean touchingPlayer = intersects(player);
 

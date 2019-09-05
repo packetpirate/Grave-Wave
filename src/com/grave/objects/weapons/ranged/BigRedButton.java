@@ -78,11 +78,11 @@ public class BigRedButton extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(!explosions.isEmpty()) {
 			explosions.stream()
 					  .filter(exp -> exp.isActive(cTime))
-					  .forEach(exp -> exp.render(g, cTime));
+					  .forEach(exp -> exp.render(gs, g, cTime));
 		}
 	}
 

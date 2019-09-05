@@ -288,13 +288,13 @@ public class EnemyController implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(!isRestarting()) {
 			// Render all living enemies.
 			Iterator<Enemy> it = alive.iterator();
 			while(it.hasNext()) {
 				Enemy e = it.next();
-				e.render(g, cTime);
+				e.render(gs, g, cTime);
 			}
 		}
 	}

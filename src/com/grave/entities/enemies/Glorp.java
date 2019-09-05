@@ -141,7 +141,7 @@ public class Glorp extends Enemy {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// All enemies should render their animation.
 		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, theta, shouldDrawFlash(cTime));
 		statusHandler.render(g, cTime);

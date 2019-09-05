@@ -64,8 +64,8 @@ public class DisplaySettingsState extends BasicGameState implements InputListene
 		
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
-		gammaSettings.render(g, 0L);
-		backButton.render(g, 0L);
+		gammaSettings.render(null, g, 0L);
+		backButton.render(null, g, 0L);
 		
 		g.setColor(Color.white);
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));

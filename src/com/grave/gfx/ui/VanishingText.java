@@ -11,6 +11,7 @@ import com.grave.entities.Player;
 import com.grave.entities.enemies.Enemy;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class VanishingText implements Entity {
 	protected String text;
@@ -111,7 +112,7 @@ public class VanishingText implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(isActive()) {
 			g.setFont(AssetManager.getManager().getFont(font));
 			g.setColor(color);

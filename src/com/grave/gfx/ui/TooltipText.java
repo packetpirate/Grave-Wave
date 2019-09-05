@@ -12,6 +12,7 @@ import com.grave.gfx.Layers;
 import com.grave.math.Calculate;
 import com.grave.misc.MouseInfo;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class TooltipText implements Entity {
 	private static final float MAX_WIDTH = 250.0f;
@@ -44,7 +45,7 @@ public class TooltipText implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// If the mouse cursor is hovering over the text, display the tooltip.
 		MouseInfo mouse = Controls.getInstance().getMouse();
 		if(isMouseInside()) {

@@ -100,7 +100,7 @@ public class AchievementMenuState extends BasicGameState {
 		g.fillRect(50.0f, 150.0f, (Globals.WIDTH - 100.0f), DEFAULT_HEIGHT);
 		
 		// Draw achievements here in scrollable fashion.
-		achievements.stream().forEach(achievement -> achievement.render(g, 0L));
+		achievements.stream().forEach(achievement -> achievement.render(null, g, 0L));
 		
 		// Draw rectangles over the header and footer sections to hide scrolled items in the achievement display.
 		g.setColor(AchievementMenuState.BACKGROUND);
@@ -117,7 +117,7 @@ public class AchievementMenuState extends BasicGameState {
 		g.setFont(assets.getFont("PressStart2P-Regular"));
 		g.drawString("Track your achievement progress here.", 30.0f, 100.0f);
 		
-		exit.render(g, 0L);
+		exit.render(null, g, 0L);
 	}
 
 	@Override

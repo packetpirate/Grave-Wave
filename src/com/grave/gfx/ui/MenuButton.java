@@ -8,6 +8,7 @@ import org.newdawn.slick.UnicodeFont;
 import com.grave.AssetManager;
 import com.grave.gfx.Camera;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class MenuButton extends Button {
 	private static final Color DEFAULT_TEXT = new Color(0xFFFFFF);
@@ -34,7 +35,7 @@ public class MenuButton extends Button {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Image img = AssetManager.getManager().getImage(image);
 
 		float x = position.x;

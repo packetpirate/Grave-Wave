@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class StatusMessages implements Entity {
 	private static StatusMessages instance;
@@ -56,9 +57,9 @@ public class StatusMessages implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		messages.stream().forEach(message -> {
-			if(message.isActive()) message.render(g, cTime);
+			if(message.isActive()) message.render(gs, g, cTime);
 		});
 	}
 

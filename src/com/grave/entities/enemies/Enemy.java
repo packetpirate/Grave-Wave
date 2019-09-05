@@ -28,6 +28,7 @@ import com.grave.objects.items.ResourceDrop;
 import com.grave.objects.weapons.DamageType;
 import com.grave.states.GameState;
 import com.grave.status.StatusHandler;
+import com.grave.tmx.TMap;
 
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;
@@ -185,7 +186,7 @@ public abstract class Enemy implements Entity {
 		if(!allies.isEmpty()) {
 			Vector2f alignment = computeAlignment(allies);
 			Vector2f cohesion = computeCohesion(allies);
-			Vector2f separation = computeSeparation(allies);
+			Vector2f separation = computeSeparation(gs, allies);
 
 			velocity.x += (alignment.x + cohesion.x + (separation.x * 5));
 			velocity.y += (alignment.y + cohesion.y + (separation.y * 5));
@@ -237,7 +238,7 @@ public abstract class Enemy implements Entity {
 		return v;
 	}
 
-	private Vector2f computeSeparation(List<Enemy> allies) {
+	private Vector2f computeSeparation(GameState gs, List<Enemy> allies) {
 		Vector2f v = new Vector2f();
 		int neighbors = 0;
 
@@ -246,6 +247,32 @@ public abstract class Enemy implements Entity {
 				v.x += e.getPosition().x - position.x;
 				v.y += e.getPosition().y - position.y;
 				neighbors++;
+			}
+		}
+
+		// Calculate separation from non-walkable tiles.
+		TMap map = gs.getLevel().getMap();
+		int mw = map.getMapWidth();
+		int mh = map.getMapHeight();
+		int tw = map.getTileWidth();
+		int th = map.getTileHeight();
+		int etx = ((int)((position.x / (mw * tw)) * mw) - 1);
+		int ety = ((int)((position.y / (mh * th)) * mh) - 1);
+
+		// Check the surrounding tiles for walkability and calculate separation. This is to avoid checking the entire map.
+		for(int x = (etx - 1); x <= (etx + 1); x++) {
+			for(int y = (ety - 1); y <= (ety + 1); y++) {
+				// If this coordinate is within the bounds of the map.
+				if((x > 0) && (x < mw) && (y > 0) && (y < mh)) {
+					// ...and if the tile is not walkable.
+					if(!map.isWalkable(x, y)) {
+						// Use the center of the tile's bounds as the separation point.
+						v.x += (((x * tw) + (tw / 2)) - position.x);
+						v.y += (((y * th) + (th / 2)) - position.y);
+
+						neighbors++;
+					}
+				}
 			}
 		}
 
@@ -260,7 +287,7 @@ public abstract class Enemy implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// All enemies should render their animation.
 		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, pTheta, shouldDrawFlash(cTime));
@@ -269,6 +296,15 @@ public abstract class Enemy implements Entity {
 		if(Globals.SHOW_COLLIDERS) {
 			g.setColor(Color.red);
 			g.draw(bounds);
+
+			TMap map = gs.getLevel().getMap();
+			int mw = map.getMapWidth();
+			int mh = map.getMapHeight();
+			int tw = map.getTileWidth();
+			int th = map.getTileHeight();
+			int etx = ((int)((position.x / (mw * tw)) * mw) - 1);
+			int ety = ((int)((position.y / (mh * th)) * mh) - 1);
+			g.drawRect((etx * tw), (ety * th), (tw * 3), (th * 3));
 		}
 	}
 

@@ -107,13 +107,13 @@ public class GameOverState extends BasicGameState implements InputListener {
 						0.0f, 0.0f, deathScreen.getWidth(), deathScreen.getHeight());
 		}
 		
-		menuButton.render(g, 0L);
+		menuButton.render(null, g, 0L);
 		
-		if(killCount.started()) killCount.render(g, time);
-		if(accuracy.started()) accuracy.render(g, time);
-		if(moneyCollected.started()) moneyCollected.render(g, time);
-		if(wavesCleared.started()) wavesCleared.render(g, time);
-		if(scoreCount.started()) scoreCount.render(g, time);
+		if(killCount.started()) killCount.render(null, g, time);
+		if(accuracy.started()) accuracy.render(null, g, time);
+		if(moneyCollected.started()) moneyCollected.render(null, g, time);
+		if(wavesCleared.started()) wavesCleared.render(null, g, time);
+		if(scoreCount.started()) scoreCount.render(null, g, time);
 	}
 	
 	@Override

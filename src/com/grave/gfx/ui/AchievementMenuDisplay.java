@@ -15,6 +15,7 @@ import com.grave.achievements.milestone.MilestoneAchievement;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class AchievementMenuDisplay implements Entity {
 	private static final String HEADER = "PressStart2P-Regular";
@@ -54,7 +55,7 @@ public class AchievementMenuDisplay implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		AssetManager assets = AssetManager.getManager();
 
 		// Background of achievement display.

@@ -193,7 +193,7 @@ public class Particle implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(shouldDraw(cTime)) {
 			float a = (float)Math.toDegrees(rotation);
 

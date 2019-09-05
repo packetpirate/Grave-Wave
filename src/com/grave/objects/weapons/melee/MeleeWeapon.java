@@ -70,7 +70,7 @@ public abstract class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(attacking && (img != null)) {
 			if(Globals.SHOW_COLLIDERS) {
 				g.setColor(Color.red);

@@ -17,6 +17,7 @@ import com.grave.objects.crafting.Resources;
 import com.grave.objects.items.Item;
 import com.grave.objects.weapons.WType;
 import com.grave.objects.weapons.Weapon;
+import com.grave.states.GameState;
 
 public class CraftWindow implements Entity {
 	public static final float WIDTH = 784;
@@ -59,7 +60,7 @@ public class CraftWindow implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		g.setColor(Color.lightGray);
 		g.fillRect(position.x, position.y, WIDTH, HEIGHT);
 		g.setColor(Color.white);
@@ -67,19 +68,19 @@ public class CraftWindow implements Entity {
 
 		drawResources(g, cTime);
 		drawWeaponCosts(g, cTime);
-		drawIcon(g, cTime);
+		drawIcon(gs, g, cTime);
 
 		boolean haveIngredients = recipe.hasIngredients();
 		g.setColor(haveIngredients ? ACTIVE_COLOR : Color.gray);
 		UnicodeFont large = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		float craftWidth = craft.getWidth();
 		g.fillRect((position.x + WIDTH - craftWidth - 20.0f), ((position.y + HEIGHT) - (large.getLineHeight() + 20.0f)), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
-		craft.render(g, cTime);
+		craft.render(gs, g, cTime);
 		g.setColor(Color.white);
 		g.drawRect((position.x + WIDTH - craftWidth - 20.0f), ((position.y + HEIGHT) - (large.getLineHeight() + 20.0f)), (craftWidth + 10.0f), (large.getLineHeight() + 10.0f));
 	}
 
-	private void drawIcon(Graphics g, long cTime) {
+	private void drawIcon(GameState gs, Graphics g, long cTime) {
 		g.setColor(Color.black);
 		g.fillRect((position.x + 10.0f), (position.y + 10.0f), ICON_SIZE, ICON_SIZE);
 		g.setColor(Color.white);
@@ -105,7 +106,7 @@ public class CraftWindow implements Entity {
 		g.setFont(regular);
 		g.drawString(result.getName(), (position.x + ICON_SIZE + 30.0f), (position.y + ((ICON_SIZE / 2) - (regular.getLineHeight() / 2)) + 10.0f));
 
-		tooltip.render(g, cTime);
+		tooltip.render(gs, g, cTime);
 	}
 
 	private void drawResources(Graphics g, long cTime) {

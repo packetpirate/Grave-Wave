@@ -152,10 +152,10 @@ public class GameState extends BasicGameState implements InputListener {
 		Camera camera = Camera.getCamera();
 		camera.translate(g);
 
-		level.render(g, time);
+		level.render(this, g, time);
 
-		StatusMessages.getInstance().render(g, time);
-		
+		StatusMessages.getInstance().render(this, g, time);
+
 		g.resetTransform();
 
 		hud.render(g, this, time);
@@ -179,15 +179,15 @@ public class GameState extends BasicGameState implements InputListener {
 			g.setColor(Color.white);
 			int w = g.getFont().getWidth("Paused");
 			int h = g.getFont().getLineHeight();
-			
+
 			FontUtils.drawCenter(g.getFont(), "Paused",
-								 (int)((Globals.WIDTH / 2) - (w / 2)),
-								 (int)((Globals.HEIGHT / 2) - (h / 2)), w);
+								 (Globals.WIDTH / 2) - (w / 2),
+								 (Globals.HEIGHT / 2) - (h / 2), w);
 		}
 
 		if(escapeMenu.isOpen()) {
-			escapeMenu.render(g, time);
-		} else if(consoleOpen) console.render(g, time);
+			escapeMenu.render(this, g, time);
+		} else if(consoleOpen) console.render(this, g, time);
 	}
 
 	public void reset(GameContainer gc) throws SlickException{

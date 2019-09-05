@@ -12,6 +12,7 @@ import com.grave.Controls;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Slider implements Entity {
 	private static final float HEIGHT = 20.0f;
@@ -58,7 +59,7 @@ public class Slider implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// Draw the label just above the slider.
 		g.setColor(Color.white);
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular"));

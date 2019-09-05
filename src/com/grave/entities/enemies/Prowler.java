@@ -119,7 +119,7 @@ public class Prowler extends Enemy {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		// All enemies should render their animation.
 		float adjTheta = (jumping ? jumpTheta : theta);
 		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, adjTheta, shouldDrawFlash(cTime));

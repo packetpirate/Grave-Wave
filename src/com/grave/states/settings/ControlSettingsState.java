@@ -104,11 +104,11 @@ public class ControlSettingsState extends BasicGameState implements InputListene
 		FontUtils.drawCenter(g.getFont(), "Controls", 0, 40, Globals.WIDTH);
 		
 		for(ControlConfigButton config : configs) {
-			config.render(g, 0L);
+			config.render(null, g, 0L);
 		}
 		
-		applyButton.render(g, 0L);
-		backButton.render(g, 0L);
+		applyButton.render(null, g, 0L);
+		backButton.render(null, g, 0L);
 	}
 	
 	@Override

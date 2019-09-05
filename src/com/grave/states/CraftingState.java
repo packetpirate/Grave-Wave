@@ -75,7 +75,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 		drawCraftWindow(g);
 		drawResources(g);
 
-		back.render(g, 0L);
+		back.render(null, g, 0L);
 
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_large");
 		FontUtils.drawCenter(f, "Crafting", 0, 40, Globals.WIDTH);
@@ -98,7 +98,7 @@ public class CraftingState extends BasicGameState implements InputListener {
 
 	private void drawCrafts(Graphics g) {
 		g.translate(0.0f, sOff);
-		crafts.stream().forEach(craft -> craft.render(g, 0L));
+		crafts.stream().forEach(craft -> craft.render(null, g, 0L));
 		g.resetTransform();
 	}
 

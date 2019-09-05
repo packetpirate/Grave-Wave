@@ -14,6 +14,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 import com.grave.world.GameObject;
 import com.grave.world.Interactions;
 import com.grave.world.Level;
@@ -94,7 +95,7 @@ public class TMap implements Entity {
 		// Update any tiles that might need updating? Might not even be needed...
 	}
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		if(map != null) g.drawImage(map, 0.0f, 0.0f);
 	}
 

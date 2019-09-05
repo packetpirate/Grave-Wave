@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Lightning extends VisualEffect {
 	public static final Color ELECTRIC_BLUE = new Color(0x47C2F7);
@@ -62,7 +63,7 @@ public class Lightning extends VisualEffect {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		segments.stream().forEach(segment -> segment.render(g));
 	}
 

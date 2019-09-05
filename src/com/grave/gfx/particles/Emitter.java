@@ -11,6 +11,7 @@ import org.newdawn.slick.state.BasicGameState;
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 
 public class Emitter implements Entity {
 	protected List<Particle> particles;
@@ -60,11 +61,11 @@ public class Emitter implements Entity {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		Iterator<Particle> it = particles.iterator();
 		while(it.hasNext()) {
 			Particle p = it.next();
-			if(p.isAlive(cTime)) p.render(g, cTime);
+			if(p.isAlive(cTime)) p.render(gs, g, cTime);
 		}
 	}
 

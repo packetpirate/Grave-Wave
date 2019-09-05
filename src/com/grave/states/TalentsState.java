@@ -170,17 +170,17 @@ public class TalentsState extends BasicGameState implements InputListener {
 		// Draw the talent trees themselves.
 		for(int r = 0; r < 7; r++) {
 			for(int c = 0; c < 3; c++) {
-				if(munitions[r][c] != null) munitions[r][c].render(g, 0L);
-				if(fortification[r][c] != null) fortification[r][c].render(g, 0L);
-				if(tactics[r][c] != null) tactics[r][c].render(g, 0L);
+				if(munitions[r][c] != null) munitions[r][c].render(null, g, 0L);
+				if(fortification[r][c] != null) fortification[r][c].render(null, g, 0L);
+				if(tactics[r][c] != null) tactics[r][c].render(null, g, 0L);
 			}
 		}
 		
 		for(int r = 0; r < 7; r++) {
 			for(int c = 0; c < 3; c++) {
-				if(munitionsTooltips[r][c] != null) munitionsTooltips[r][c].render(g, 0L);
-				if(fortificationTooltips[r][c] != null) fortificationTooltips[r][c].render(g, 0L);
-				if(tacticsTooltips[r][c] != null) tacticsTooltips[r][c].render(g, 0L);
+				if(munitionsTooltips[r][c] != null) munitionsTooltips[r][c].render(null, g, 0L);
+				if(fortificationTooltips[r][c] != null) fortificationTooltips[r][c].render(null, g, 0L);
+				if(tacticsTooltips[r][c] != null) tacticsTooltips[r][c].render(null, g, 0L);
 			}
 		}
 		
@@ -193,8 +193,8 @@ public class TalentsState extends BasicGameState implements InputListener {
 		FontUtils.drawCenter(small, "Left Click: Spend Skill Point", 0, (int)(Globals.HEIGHT - (small.getLineHeight() * 2.0f) - 45.0f), Globals.WIDTH);
 		FontUtils.drawCenter(small, "Right Click: Remove Skill Point", 0, (int)(Globals.HEIGHT - small.getLineHeight() - 35.0f), Globals.WIDTH);
 		
-		back.render(g, 0L);
-		if(changesMade > 0) accept.render(g, 0L);
+		back.render(null, g, 0L);
+		if(changesMade > 0) accept.render(null, g, 0L);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.newdawn.slick.UnicodeFont;
 import com.grave.AssetManager;
 import com.grave.entities.Player;
 import com.grave.misc.Pair;
+import com.grave.states.GameState;
 import com.grave.talents.Talents;
 import com.grave.talents.Talents.TalentType;
 
@@ -16,54 +17,54 @@ public class TalentButton extends Button {
 	private static final int [] TIER_LEVEL_REQUIREMENTS = new int[] {1, 5, 10, 15, 20, 25, 30};
 	private static final String LOCK_ICON = "GZS_Talent_Locked";
 	private static final Color GRAY_OUT = new Color(180, 180, 180);
-	
+
 	public static final float SIZE = 32.0f;
-	
+
 	private TalentType talent;
 	public TalentType getTalent() { return talent; }
-	
+
 	private int pointsToAdd;
 	public int getPointsToAdd() { return pointsToAdd; }
-	
+
 	public TalentButton(TalentType talent_, Pair<Float> position_) {
 		this.talent = talent_;
 		this.position = position_;
-		
+
 		this.pointsToAdd = 0;
 	}
-	
+
 	public void confirm() {
 		int total = (talent.ranks() + pointsToAdd);
 		talent.ranks(total);
 		Talents.applyRanks(talent);
-		
+
 		pointsToAdd = 0;
 	}
-	
+
 	public void revert() {
 		Player player = Player.getPlayer();
 		int sk = player.getAttributes().getInt("skillPoints");
 		player.getAttributes().set("skillPoints", (sk + pointsToAdd));
-		
+
 		pointsToAdd = 0;
 	}
-	
+
 	@Override
-	public void render(Graphics g, long cTime) {
+	public void render(GameState gs, Graphics g, long cTime) {
 		boolean correctLevel = meetsLevelRequirement();
-		
+
 		Image img = talent.getIcon();
 		Image lock = AssetManager.getManager().getImage(LOCK_ICON);
 		if(img != null) {
 			float w = img.getWidth();
 			float h = img.getHeight();
-			
+
 			g.setColor(Color.black);
 			g.fillRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
-			
+
 			if(correctLevel) img.draw((position.x - (w / 2)), (position.y - (h / 2)));
 			else lock.draw((position.x - (w / 2)), (position.y - (h / 2)), GRAY_OUT);
-			
+
 			g.setColor(Color.white);
 			g.drawRect((position.x - (w / 2)), (position.y - (h / 2)), w, h);
 		} else {
@@ -72,7 +73,7 @@ public class TalentButton extends Button {
 			g.setColor(Color.white);
 			g.drawRect((position.x - (SIZE / 2)), (position.y - (SIZE / 2)), SIZE, SIZE);
 		}
-		
+
 		UnicodeFont f = AssetManager.getManager().getFont("PressStart2P-Regular_small");
 		String progress = String.format("%d / %d", (talent.ranks() + pointsToAdd), talent.maxRanks());
 		float tw = f.getWidth(progress);
@@ -80,18 +81,18 @@ public class TalentButton extends Button {
 		g.setColor(Color.white);
 		g.drawString(progress, (position.x - (tw / 2)), (position.y + (SIZE / 2) + 10.0f));
 	}
-	
+
 	private boolean meetsLevelRequirement() {
 		Player player = Player.getPlayer();
 		int level = player.getAttributes().getInt("level");
 		return (level >= TIER_LEVEL_REQUIREMENTS[talent.row()]);
 	}
-	
+
 	@Override
 	public void click() {
 		click(true);
 	}
-	
+
 	@Override
 	public void click(boolean left) {
 		if(left) {
@@ -99,7 +100,7 @@ public class TalentButton extends Button {
 				if((talent.ranks() + pointsToAdd) < talent.maxRanks()) {
 					Player player = Player.getPlayer();
 					int sk = player.getAttributes().getInt("skillPoints");
-					
+
 					if(sk > 0) {
 						pointsToAdd++;
 						player.getAttributes().set("skillPoints", (sk - 1));
@@ -119,11 +120,11 @@ public class TalentButton extends Button {
 	@Override
 	public boolean inBounds(float x, float y) {
 		Image img = AssetManager.getManager().getImage(image);
-		
+
 		float w = (img != null) ? img.getWidth() : SIZE;
 		float h = (img != null) ? img.getHeight() : SIZE;
-		
-		return ((x > (position.x - (w / 2))) && (x < (position.x + (w / 2))) && 
+
+		return ((x > (position.x - (w / 2))) && (x < (position.x + (w / 2))) &&
 				(y > (position.y - (h / 2))) && (y < (position.y + (h / 2))));
 	}
 }

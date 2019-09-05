@@ -93,11 +93,11 @@ public class SettingsState extends BasicGameState implements InputListener {
 		
 		if(background != null) g.drawImage(background, 0.0f, 0.0f, Globals.WIDTH, Globals.HEIGHT, 0.0f, 0.0f, background.getWidth(), background.getHeight());
 		
-		gameSettings.render(g, 0L);
-		audioSettings.render(g, 0L);
-		displaySettings.render(g, 0L);
-		controlSettings.render(g, 0L);
-		backButton.render(g, 0L);
+		gameSettings.render(null, g, 0L);
+		audioSettings.render(null, g, 0L);
+		displaySettings.render(null, g, 0L);
+		controlSettings.render(null, g, 0L);
+		backButton.render(null, g, 0L);
 		
 		g.setColor(Color.white);
 		g.setFont(AssetManager.getManager().getFont("PressStart2P-Regular_small"));

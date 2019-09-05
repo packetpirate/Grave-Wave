@@ -18,6 +18,7 @@ import com.grave.math.Dice;
 import com.grave.misc.Pair;
 import com.grave.objects.weapons.ArmConfig;
 import com.grave.objects.weapons.WType;
+import com.grave.states.GameState;
 
 public class AK47 extends RangedWeapon {
 	private static final int PRICE = 2_500;
@@ -56,8 +57,8 @@ public class AK47 extends RangedWeapon {
 	}
 
 	@Override
-	public void render(Graphics g, long cTime) {
-		super.render(g, cTime);
+	public void render(GameState gs, Graphics g, long cTime) {
+		super.render(gs, g, cTime);
 
 		// Render muzzle flash.
 		Pair<Float> mp = new Pair<Float>((Player.getPlayer().getPosition().x + 5.0f), (Player.getPlayer().getPosition().y - 28.0f));

@@ -76,16 +76,16 @@ public class HUD {
 
 		g.drawImage(hud, 10.0f, 10.0f, getFilterColor(Color.white, touchingPlayer));
 
-		armor.render(g, cTime);
-		heart.render(g, cTime);
-		lives.render(g, cTime);
-		ekg.render(g, cTime);
-		experience.render(g, cTime);
-		statusBar.render(g, cTime);
+		armor.render(gs, g, cTime);
+		heart.render(gs, g, cTime);
+		lives.render(gs, g, cTime);
+		ekg.render(gs, g, cTime);
+		experience.render(gs, g, cTime);
+		statusBar.render(gs, g, cTime);
 
-		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(g, cTime);
+		if(ec.isBossWave() && !ec.isRestarting()) bossHealth.render(gs, g, cTime);
 
-		weaponDisplay.render(g, cTime);
+		weaponDisplay.render(gs, g, cTime);
 		achievementDisplay.render(g, cTime);
 
 		UnicodeFont fs = AssetManager.getManager().getFont("PressStart2P-Regular_small");
