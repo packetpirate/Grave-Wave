@@ -1,7 +1,5 @@
 package com.grave.entities.enemies;
 
-import com.grave.entities.Player;
-import com.grave.math.Calculate;
 import com.grave.math.Dice;
 import com.grave.misc.Pair;
 import com.grave.objects.crafting.Resources;
@@ -42,8 +40,8 @@ public class Zumby extends Enemy {
 
 	@Override
 	public void move(GameState gs, int delta) {
-		if(!statusHandler.hasStatus(Status.PARALYSIS)) {
-			theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+		if(!statusHandler.hasStatus(Status.PARALYSIS) && hasTarget()) {
+			//theta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
 			velocity.x = (float)Math.cos(theta) * Zumby.SPEED * delta;
 			velocity.y = (float)Math.sin(theta) * Zumby.SPEED * delta;
 

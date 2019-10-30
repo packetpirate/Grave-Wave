@@ -15,7 +15,7 @@ public class Globals {
 	public static final int STEP_TIME = 1000 / TARGET_FPS;
 	public static final int MAX_STEPS = 4;
 
-	public static final boolean SHOW_COLLIDERS = false; // Disabled in player releases.
+	public static final boolean SHOW_COLLIDERS = true; // Disabled in player releases.
 	public static final boolean ENABLE_CONSOLE = true; // TODO: Disable for player releases.
 
 	public static int WIDTH = 1024;

@@ -1,17 +1,22 @@
 package com.grave.world.pathing;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import com.grave.misc.OrderPair;
+import com.grave.misc.Pair;
 import com.grave.tmx.TMap;
 
 public class Path {
-	private List<OrderPair<Integer>> path;
-	public List<OrderPair<Integer>> getPath() { return path; }
+	private Deque<OrderPair<Integer>> path;
+	public Deque<OrderPair<Integer>> getPath() { return path; }
 	public boolean pathPossible() { return !path.isEmpty(); }
+	public OrderPair<Integer> getNextNode() { return path.pop(); }
+	public void clear() { path.clear(); }
 
 	/**
 	 * Creates a path between the source tile and the target tile.
@@ -19,12 +24,12 @@ public class Path {
 	 * @param src A position in the given map from where to start the path.
 	 * @param target The destination in the given map to end the path.
 	 */
-	public Path(TMap map, OrderPair<Integer> src, OrderPair<Integer> target) {
-		path = new ArrayList<OrderPair<Integer>>();
+	public Path(TMap map, Pair<Integer> src, Pair<Integer> target) {
+		path = new ArrayDeque<OrderPair<Integer>>();
 		calculate(map, src, target);
 	}
 
-	public void calculate(TMap map, OrderPair<Integer> src, OrderPair<Integer> target) {
+	public void calculate(TMap map, Pair<Integer> src, Pair<Integer> target) {
 		PriorityQueue<OrderPair<Integer>> frontier = new PriorityQueue<OrderPair<Integer>>();
 		OrderPair<Integer> start = new OrderPair<Integer>(src, 0);
 		OrderPair<Integer> goal = new OrderPair<Integer>(target, 0);
@@ -54,12 +59,13 @@ public class Path {
 			}
 		}
 
+		path.clear();
 		if(came_from.containsKey(goal)) { // If false, no path is possible and path will be empty.
 			// Backtrack from the goal node to construct the path.
-			path.clear();
 			OrderPair<Integer> current = goal;
 			while(!current.equals(start)) {
-				path.add(current);
+				//path.add(current);
+				path.push(current);
 				current = came_from.get(current);
 			}
 		}

@@ -21,6 +21,7 @@ import com.grave.gfx.Layers;
 import com.grave.gfx.ui.DamageText;
 import com.grave.gfx.ui.StatusMessages;
 import com.grave.math.Calculate;
+import com.grave.misc.OrderPair;
 import com.grave.misc.Pair;
 import com.grave.misc.Vector2f;
 import com.grave.objects.items.Powerups;
@@ -29,6 +30,7 @@ import com.grave.objects.weapons.DamageType;
 import com.grave.states.GameState;
 import com.grave.status.StatusHandler;
 import com.grave.tmx.TMap;
+import com.grave.world.pathing.Path;
 
 public abstract class Enemy implements Entity {
 	private static long FLASH_DURATION = 100L;
@@ -52,6 +54,9 @@ public abstract class Enemy implements Entity {
 	protected boolean attacking;
 	protected long lastAttack;
 	public abstract long getAttackDelay();
+
+	protected Path path;
+	protected OrderPair<Integer> currentNode;
 
 	protected double health;
 	public double getHealth() { return health; }
@@ -108,6 +113,9 @@ public abstract class Enemy implements Entity {
 		this.speed = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 
+		this.path = null;
+		this.currentNode = null;
+
 		this.health = 0.0;
 		this.cash = type.getCashValue();
 		this.experience = type.getExperience();
@@ -135,6 +143,8 @@ public abstract class Enemy implements Entity {
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
 		Player player = Player.getPlayer();
+		GameState game = (GameState) gs;
+		TMap map = game.getLevel().getMap();
 
 		// All enemies should update.
 		if(isAlive(cTime)) {
@@ -145,7 +155,14 @@ public abstract class Enemy implements Entity {
 			animation.getCurrentAnimation().update(cTime);
 
 			if(player.isAlive()) {
+				calculatePath(map);
+
 				if(touchingPlayer()) {
+					if(currentNode != null) {
+						path.clear();
+						currentNode = null;
+					}
+
 					if(!attacking) {
 						long elapsed = (cTime - lastAttack);
 						if(elapsed >= getAttackDelay()) {
@@ -179,6 +196,44 @@ public abstract class Enemy implements Entity {
 	}
 
 	public abstract void move(GameState gs, int delta);
+
+	protected void calculatePath(TMap map) {
+		// TODO: redesign this so path is only calculated when enemy is attacked, player is spotted, or noise is heard
+		Player player = Player.getPlayer();
+		if(path == null) {
+			Pair<Integer> gridCoords = map.worldToGridCoords(position);
+			Pair<Integer> playerGridCoords = map.worldToGridCoords(player.getPosition());
+			path = new Path(map, gridCoords, playerGridCoords);
+			currentNode = path.getNextNode();
+
+			Pair<Float> target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+			theta = Calculate.Hypotenuse(position, target);
+		} else {
+			if(currentNode != null) {
+				Pair<Float> target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+				int ret = Calculate.FastDistanceCompare(position, target, (bounds.getWidth() / 2));
+				if(ret <= 0) {
+					if(path.pathPossible()) { // if there are still nodes left in the path
+						currentNode = path.getNextNode();
+						if(currentNode != null) {
+							target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+							theta = Calculate.Hypotenuse(position, target);
+						}
+					} else {
+						// TODO: is player visible? if so, charge!
+						// if not, recalculate path
+					}
+				}
+
+				if(currentNode != null) theta = Calculate.Hypotenuse(position, target);
+			}
+		}
+	}
+
+	protected boolean hasTarget() {
+		return ((path != null) && (currentNode != null));
+	}
+
 	protected void avoidObstacles(GameState gs, int delta) {
 		EnemyController ec = EnemyController.getInstance();
 		List<Enemy> allies = ec.getAliveEnemies();
@@ -305,12 +360,19 @@ public abstract class Enemy implements Entity {
 			int etx = ((int)((position.x / (mw * tw)) * mw) - 1);
 			int ety = ((int)((position.y / (mh * th)) * mh) - 1);
 			g.drawRect((etx * tw), (ety * th), (tw * 3), (th * 3));
+
+			// draw line to next path node
+			if(currentNode != null) {
+				Pair<Float> target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+				g.drawLine(position.x, position.y, target.x, target.y);
+			}
 		}
 	}
 
 	public Shape getCollider() { return bounds; }
 	public boolean touchingPlayer() {
-		return bounds.intersects(Player.getPlayer().getCollider());
+		Shape pCollider = Player.getPlayer().getCollider();
+		return (pCollider.intersects(bounds) || bounds.contains(pCollider));
 	}
 	public abstract float getCohesionDistance();
 	public abstract float getSeparationDistance();
