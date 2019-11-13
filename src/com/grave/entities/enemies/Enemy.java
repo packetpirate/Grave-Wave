@@ -21,7 +21,6 @@ import com.grave.gfx.Layers;
 import com.grave.gfx.ui.DamageText;
 import com.grave.gfx.ui.StatusMessages;
 import com.grave.math.Calculate;
-import com.grave.misc.OrderPair;
 import com.grave.misc.Pair;
 import com.grave.misc.Vector2f;
 import com.grave.objects.items.Powerups;
@@ -56,7 +55,7 @@ public abstract class Enemy implements Entity {
 	public abstract long getAttackDelay();
 
 	protected Path path;
-	protected OrderPair<Integer> currentNode;
+	protected Pair<Integer> currentNode;
 
 	protected double health;
 	public double getHealth() { return health; }
@@ -199,6 +198,7 @@ public abstract class Enemy implements Entity {
 
 	protected void calculatePath(TMap map) {
 		// TODO: redesign this so path is only calculated when enemy is attacked, player is spotted, or noise is heard
+		/*
 		Player player = Player.getPlayer();
 		if(path == null) {
 			Pair<Integer> gridCoords = map.worldToGridCoords(position);
@@ -226,6 +226,16 @@ public abstract class Enemy implements Entity {
 				}
 
 				if(currentNode != null) theta = Calculate.Hypotenuse(position, target);
+			}
+		}*/
+		Player player = Player.getPlayer();
+		if(path != null) {
+			// Prioritize paths over flow field.
+		} else {
+			if(currentNode != null) {
+
+			} else {
+				// i dunno... wander about? search for player?
 			}
 		}
 	}

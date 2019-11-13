@@ -50,6 +50,7 @@ import com.grave.talents.Talents;
 import com.grave.tmx.TMap;
 import com.grave.world.Level;
 import com.grave.world.objects.DamageableObject;
+import com.grave.world.pathing.FlowField;
 
 public class Player implements Entity {
 	private static final float DEFAULT_SPEED = 0.15f;
@@ -83,6 +84,8 @@ public class Player implements Entity {
 				velocity.x = xOff;
 				velocity.y = yOff;
 
+				Pair<Integer> oldGridCoords = map.worldToGridCoords(position);
+
 				position.x += velocity.x;
 				position.y += velocity.y;
 
@@ -96,10 +99,20 @@ public class Player implements Entity {
 				if((position.y - 32.0f) < 0.0f) position.y = 32.0f;
 				else if((position.y + 32.0f) >= h) position.y = (h - 32.0f);
 
+				Pair<Integer> newGridCoords = map.worldToGridCoords(position);
+
+				if(!oldGridCoords.equals(newGridCoords)) {
+					if(flowField == null) flowField = new FlowField(map, newGridCoords);
+					else flowField.recalculate(newGridCoords);
+				}
+
 				Camera.getCamera().focusOnPlayer(map);
 			}
 		}
 	}
+
+	private FlowField flowField;
+	public FlowField getFlowField() { return flowField; }
 
 	private Animation body;
 	private Animation feet;
@@ -273,6 +286,8 @@ public class Player implements Entity {
 		Camera camera = Camera.getCamera();
 		Level level = ((GameState) gs).getLevel();
 		TMap map = level.getMap();
+
+		if(flowField == null) flowField = new FlowField(map, map.worldToGridCoords(position));
 
 		if(!isAlive()) {
 			if(!respawning) {

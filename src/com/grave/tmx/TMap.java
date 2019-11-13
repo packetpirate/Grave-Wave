@@ -181,6 +181,10 @@ public class TMap implements Entity {
 		}
 	}
 
+	public boolean inBounds(int x, int y) {
+		return ((x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight));
+	}
+
 	/**
 	 * Determines if an (x, y) position is walkable on all layers.
 	 * @param x The x-coordinate of the tile to check.
@@ -188,6 +192,8 @@ public class TMap implements Entity {
 	 * @return True if this position is walkable on all layers. False if this position isn't walkable on any one of the map's layers.
 	 */
 	public boolean isWalkable(int x, int y) {
+		if(!inBounds(x, y)) return false;
+
 		boolean walkable = true;
 		for(int i = 0; i < layers.size(); i++) {
 			TLayer layer = layers.get(i);
