@@ -30,6 +30,15 @@ public class FlowField {
 		visited.add(target);
 		unexplored.add(target);
 
+		// set the cost of non-traversable tiles to Integer.MAX_VALUE
+		for(int y = 0; y < map.getMapHeight(); y++) {
+			for(int x = 0; x < map.getMapWidth(); x++) {
+				if(!map.isWalkable(x, y)) {
+					costs[y][x] = Integer.MAX_VALUE;
+				}
+			}
+		}
+
 		while(!unexplored.isEmpty()) {
 			List<Pair<Integer>> toExplore = new ArrayList<Pair<Integer>>();
 
@@ -50,13 +59,8 @@ public class FlowField {
 
 		for(Pair<Integer> neighbor : neighbors) {
 			if(!visited.contains(neighbor)) {
-				int dx = (neighbor.x - x);
-				int dy = (neighbor.y - y);
-				int g = ((Math.abs(dx + dy) == 1) ? 10 : 14);
-				int h = ((Math.abs(neighbor.x - target.x) + Math.abs(neighbor.y - target.y)) * 10);
-
-				costs[neighbor.y][neighbor.x] = (g + h);
-
+				int cost = (costs[y][x] + 1);
+				costs[neighbor.y][neighbor.x] = cost;
 				explored.add(neighbor);
 			}
 		}
@@ -81,8 +85,40 @@ public class FlowField {
 		return neighbors;
 	}
 
+	public Pair<Integer> cheapestNeighbor(int x, int y) {
+		List<Pair<Integer>> neighbors = getNeighbors(x, y);
+		Pair<Integer> cheapest = null;
+		int lowestCost = Integer.MAX_VALUE;
+
+		for(int i = 0; i < neighbors.size(); i++) {
+			Pair<Integer> neighbor = neighbors.get(i);
+			int cost = costs[neighbor.y][neighbor.x];
+
+			if(cost < lowestCost) {
+				lowestCost = cost;
+				cheapest = neighbor;
+			}
+		}
+
+		return cheapest;
+	}
+
 	private boolean inBounds(int x, int y) {
 		if(map == null) return false;
 		else return ((x >= 0) && (x < map.getMapWidth()) && (y >= 0) && (y < map.getMapHeight()));
+	}
+
+	public void print() {
+		if(map != null) {
+			for(int y = 0; y < map.getMapHeight(); y++) {
+				String row = "";
+				for(int x = 0; x < map.getMapWidth(); x++) {
+					row += costs[y][x];
+					if(x < (map.getMapWidth() - 1)) row += ", ";
+				}
+
+				System.out.println(row);
+			}
+		}
 	}
 }
