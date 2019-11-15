@@ -66,8 +66,8 @@ public class TMap implements Entity {
 	public int getMapHeightTotal() { return (tileHeight * mapHeight); }
 
 	public Pair<Integer> worldToGridCoords(Pair<Float> worldCoords) {
-		int etx = ((int)((worldCoords.x / (mapWidth * tileWidth)) * mapWidth) - 1);
-		int ety = ((int)((worldCoords.y / (mapHeight * tileHeight)) * mapHeight) - 1);
+		int etx = ((int)((worldCoords.x / (mapWidth * tileWidth)) * mapWidth));
+		int ety = ((int)((worldCoords.y / (mapHeight * tileHeight)) * mapHeight));
 		return new Pair<Integer>(etx, ety);
 	}
 

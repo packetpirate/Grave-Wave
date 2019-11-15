@@ -2,6 +2,7 @@ package com.grave.world.pathing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.grave.misc.Pair;
 import com.grave.tmx.TMap;
@@ -51,11 +52,16 @@ public class FlowField {
 			unexplored.clear();
 			unexplored.addAll(toExplore);
 		}
+
+		print();
 	}
 
 	private List<Pair<Integer>> explore(int x, int y, List<Pair<Integer>> visited) {
 		List<Pair<Integer>> explored = new ArrayList<Pair<Integer>>();
 		List<Pair<Integer>> neighbors = getNeighbors(x, y);
+
+		// Remove diagonal neighbors.
+		neighbors = neighbors.stream().filter((neighbor) -> (Math.abs((neighbor.x - x) + (neighbor.y - y)) == 1)).collect(Collectors.toList());
 
 		for(Pair<Integer> neighbor : neighbors) {
 			if(!visited.contains(neighbor)) {
