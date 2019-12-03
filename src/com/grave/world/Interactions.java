@@ -2,6 +2,7 @@ package com.grave.world;
 
 import com.grave.AssetManager;
 import com.grave.Globals;
+import com.grave.entities.Player;
 import com.grave.misc.Pair;
 import com.grave.objects.crafting.Resources;
 import com.grave.objects.items.ResourceDrop;
@@ -48,6 +49,11 @@ public enum Interactions {
 
 		gs.getLevel().addEntity(exp.getTag(), exp);
 		AssetManager.getManager().getSound("explosion2").play(1.0f, AssetManager.getManager().getSoundVolume());
+	}),
+
+	SKILL_POINT((gs, pos, cTime) -> {
+		Player player = Player.getPlayer();
+		player.addSkillPoint(gs, cTime, 1);
 	});
 
 	private Interaction action;

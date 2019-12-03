@@ -17,6 +17,7 @@ import com.grave.gfx.ColorGenerator;
 import com.grave.gfx.Layers;
 import com.grave.misc.Pair;
 import com.grave.states.GameState;
+import com.grave.tmx.TMap;
 
 public class Particle implements Entity {
 	protected Animation animation;
@@ -183,7 +184,17 @@ public class Particle implements Entity {
 
 	@Override
 	public void update(BasicGameState gs, long cTime, int delta) {
+		GameState game = (GameState) gs;
+		TMap map = game.getLevel().getMap();
+
 		if(isAlive(cTime)) {
+			// Check for collision with environment.
+			Pair<Integer> gridCoords = map.worldToGridCoords(position);
+			if(!map.isWalkable(gridCoords.x, gridCoords.y)) {
+				collision = true;
+				return;
+			}
+
 			if(animation != null) animation.update(cTime);
 			position.x += velocity * delta * (float)Math.cos(theta - (Math.PI / 2));
 			position.y += velocity * delta * (float)Math.sin(theta - (Math.PI / 2));

@@ -15,7 +15,8 @@ public class GameObject implements Entity {
 		TRASH_CAN(Interactions.ONE_RANDOM_RESOURCE),
 		FIRE_HYDRANT(Interactions.NONE),
 		DEAD_BODY(Interactions.RANDOM_RESOURCES),
-		EXPLOSIVE_BARREL(Interactions.NONE);
+		EXPLOSIVE_BARREL(Interactions.NONE),
+		VENDING_MACHINE(Interactions.SKILL_POINT);
 
 		private Interactions interaction;
 		public Interactions getInteraction() { return interaction; }
@@ -62,6 +63,7 @@ public class GameObject implements Entity {
 			case 37: return Type.FIRE_HYDRANT;
 			case 38: return Type.TRASH_CAN;
 			case 39: return Type.EXPLOSIVE_BARREL;
+			case 40: return Type.VENDING_MACHINE;
 			case 46: return Type.DEAD_BODY;
 			default: return Type.NONE;
 		}

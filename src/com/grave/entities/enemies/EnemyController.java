@@ -268,7 +268,7 @@ public class EnemyController implements Entity {
 				if(enemy.dead()) enemy.onDeath(gs, cTime);
 				if(!enemy.isAlive(cTime)) {
 					// If the enemy died, give the player experience and cash, and remove the enemy.
-					player.addExperience(gs, enemy.getExpValue(), cTime);
+					//player.addExperience(gs, enemy.getExpValue(), cTime);
 
 					int money = enemy.getCashValue();
 					if(Talents.Tactics.WINDFALL.active()) money += (money * (Talents.Tactics.WINDFALL.ranks() * 0.1));

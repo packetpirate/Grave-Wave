@@ -672,6 +672,15 @@ public class Player implements Entity {
 		Scorekeeper.getInstance().addMoney(amnt);
 	}
 
+	public void addSkillPoint(GameState gs, long cTime, int amnt) {
+		if(amnt > 0) {
+			attributes.addTo("skillPoints", amnt);
+			String status = String.format("Got %d skill %s!", amnt, ((amnt > 1) ? "points" : "point"));
+			StatusMessages.getInstance().addMessage(status, this, Player.ABOVE_1, cTime, 2_000L);
+			AssetManager.getManager().getSound("level-up").play(1.0f, AssetManager.getManager().getSoundVolume());
+		}
+	}
+
 	public void addExperience(GameState gs, int amnt, long cTime) {
 		addExperience(gs, amnt, cTime, true);
 	}

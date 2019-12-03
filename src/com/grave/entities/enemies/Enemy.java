@@ -54,6 +54,8 @@ public abstract class Enemy implements Entity {
 	protected long lastAttack;
 	public abstract long getAttackDelay();
 
+	protected boolean sawPlayerLastStep;
+	protected Pair<Integer> lastKnownPlayerPosition;
 	protected Path path;
 	protected Pair<Integer> currentNode;
 
@@ -112,6 +114,8 @@ public abstract class Enemy implements Entity {
 		this.speed = 0.0f;
 		this.velocity = new Vector2f(0.0f, 0.0f);
 
+		this.sawPlayerLastStep = false;
+		this.lastKnownPlayerPosition = null;
 		this.path = null;
 		this.currentNode = null;
 
@@ -151,14 +155,16 @@ public abstract class Enemy implements Entity {
 			statusHandler.update((GameState)gs, cTime, delta);
 
 			updateFlash(cTime);
-			animation.getCurrentAnimation().update(cTime);
+
+			Animation state = animation.getCurrentAnimation();
+			if(state != null) state.update(cTime);
 
 			if(player.isAlive()) {
 				calculatePath(map);
 
 				if(touchingPlayer()) {
 					if(currentNode != null) {
-						path.clear();
+						if(path != null) path.clear();
 						currentNode = null;
 					}
 
@@ -197,6 +203,58 @@ public abstract class Enemy implements Entity {
 	public abstract void move(GameState gs, int delta);
 
 	protected void calculatePath(TMap map) {
+		Player player = Player.getPlayer();
+		boolean playerSighted = playerInSights(map);
+		Pair<Integer> gridCoords = map.worldToGridCoords(position);
+
+		if(playerSighted) {
+			// Follow flow field.
+			Pair<Integer> pPos = map.worldToGridCoords(player.getPosition());
+			if(pPos != lastKnownPlayerPosition) currentNode = player.getFlowField().cheapestNeighbor(gridCoords.x, gridCoords.y);
+			lastKnownPlayerPosition = pPos;
+			if(currentNode == null) currentNode = player.getFlowField().cheapestNeighbor(gridCoords.x, gridCoords.y);
+			if(!sawPlayerLastStep) {
+				// TODO: Make zombie noises?
+				System.out.println("Found you!");
+			}
+		} else {
+			if(sawPlayerLastStep) {
+				System.out.println("Where'd you go?");
+				// Just lost sight of player. Calculate A* path to last known player position.
+				path = new Path(map, gridCoords, lastKnownPlayerPosition);
+				if((path != null) && path.pathPossible()) currentNode = path.getNextNode();
+			} else {
+				if(path != null) {
+					if(!path.pathPossible()) {
+						System.out.println("I give up...");
+						path = null;
+						currentNode = null;
+					}
+				}
+			}
+		}
+
+		if(currentNode != null) {
+			// Travel towards node.
+			Pair<Float> target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+			int ret = Calculate.FastDistanceCompare(position, target, (bounds.getWidth() / 2));
+			if(ret <= 0) {
+				if(path != null) currentNode = path.getNextNode();
+				else if(playerSighted) currentNode = player.getFlowField().cheapestNeighbor(gridCoords.x, gridCoords.y);
+
+				if(currentNode != null) {
+					target = new Pair<Float>((float)((currentNode.x * map.getTileWidth()) + (map.getTileWidth() / 2)), (float)((currentNode.y * map.getTileHeight()) + (map.getTileHeight() / 2)));
+					theta = Calculate.Hypotenuse(position, target);
+				}
+			}
+
+			if(currentNode != null) theta = Calculate.Hypotenuse(position, target);
+		}
+
+		sawPlayerLastStep = playerSighted;
+
+
+
 		// TODO: redesign this so path is only calculated when enemy is attacked, player is spotted, or noise is heard
 		/*
 		Player player = Player.getPlayer();
@@ -228,20 +286,30 @@ public abstract class Enemy implements Entity {
 				if(currentNode != null) theta = Calculate.Hypotenuse(position, target);
 			}
 		}*/
-		Player player = Player.getPlayer();
-		if(path != null) {
-			// Prioritize paths over flow field.
-		} else {
-			if(currentNode != null) {
-
-			} else {
-				// i dunno... wander about? search for player?
-			}
-		}
 	}
 
 	protected boolean hasTarget() {
-		return ((path != null) && (currentNode != null));
+		return (currentNode != null);
+	}
+
+	protected boolean playerInSights(TMap map) {
+		Player player = Player.getPlayer();
+		boolean inSight = true;
+
+		// TODO: Implement line of sight test.
+		float pTheta = Calculate.Hypotenuse(position, player.getPosition());
+		Pair<Float> ray = new Pair<Float>(position);
+		while(Calculate.FastDistanceCompare(ray, player.getPosition(), Globals.RAY_STEP_LENGTH) == 1) {
+			ray.x += ((float)Math.cos(pTheta) * Globals.RAY_STEP_LENGTH);
+			ray.y += ((float)Math.sin(pTheta) * Globals.RAY_STEP_LENGTH);
+			Pair<Integer> gridPos = map.worldToGridCoords(ray);
+			if(!map.isWalkable(gridPos.x, gridPos.y)) {
+				inSight = false;
+				break;
+			}
+		}
+
+		return inSight;
 	}
 
 	protected void avoidObstacles(GameState gs, int delta) {
@@ -354,8 +422,8 @@ public abstract class Enemy implements Entity {
 	@Override
 	public void render(GameState gs, Graphics g, long cTime) {
 		// All enemies should render their animation.
-		float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
-		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, pTheta, shouldDrawFlash(cTime));
+		//float pTheta = Calculate.Hypotenuse(position, Player.getPlayer().getPosition());
+		if(isAlive(cTime)) animation.getCurrentAnimation().render(g, position, theta, shouldDrawFlash(cTime));
 		statusHandler.render(g, cTime);
 
 		if(Globals.SHOW_COLLIDERS) {

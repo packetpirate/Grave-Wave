@@ -52,8 +52,6 @@ public class FlowField {
 			unexplored.clear();
 			unexplored.addAll(toExplore);
 		}
-
-		print();
 	}
 
 	private List<Pair<Integer>> explore(int x, int y, List<Pair<Integer>> visited) {
