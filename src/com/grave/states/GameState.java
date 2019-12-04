@@ -199,14 +199,14 @@ public class GameState extends BasicGameState implements InputListener {
 
 		Player player = Player.getPlayer();
 
-		EnemyController.reset();
-		EnemyController ec = EnemyController.getInstance();
+		//EnemyController.reset();
+		//EnemyController ec = EnemyController.getInstance();
 
 		player.reset();
 
 		level.reset();
 		level.addEntity("player", player);
-		level.addEntity("enemyController", ec);
+		//level.addEntity("enemyController", ec);
 
 		StatusMessages.getInstance().clear();
 

@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -37,11 +38,13 @@ public class MenuState extends BasicGameState implements InputListener {
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		assets = AssetManager.getManager();
 
-		gameStart = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 260.0f)), "Start Game");
-		achievements = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 200.0f)), "Achievements");
-		settings = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 140.0f)), "Settings");
-		credits = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Credits");
-		exit = new MenuButton(new Pair<Float>((Globals.WIDTH - 170.0f), (Globals.HEIGHT - 80.0f)), "Exit");
+		UnicodeFont large = assets.getFont("PressStart2P-Regular_large");
+
+		gameStart = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Start Game") - 20.0f), (Globals.HEIGHT - 400.0f)), "Start Game");
+		achievements = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Achievements") - 20.0f), (Globals.HEIGHT - 340.0f)), "Achievements");
+		settings = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Settings") - 20.0f), (Globals.HEIGHT - 280.0f)), "Settings");
+		credits = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Credits") - 20.0f), (Globals.HEIGHT - 220.0f)), "Credits");
+		exit = new MenuButton(new Pair<Float>((Globals.WIDTH - large.getWidth("Exit") - 20.0f), (Globals.HEIGHT - 80.0f)), "Exit");
 	}
 
 	@Override
@@ -91,7 +94,8 @@ public class MenuState extends BasicGameState implements InputListener {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-		Image background = assets.getImage("GZS_Background02");
+		//Image background = assets.getImage("GZS_Background02");
+		Image background = assets.getImage("GW_Background_01");
 
 		g.resetTransform();
 		g.clear();

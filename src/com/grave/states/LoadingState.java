@@ -137,8 +137,9 @@ public class LoadingState extends BasicGameState {
 	private void loadImages() throws SlickException {
 		String [] assetList = new String [] {
 			// Primary Images
-			"images/GZS_Background6.png",
-			"images/GZS_Background02.png",
+			//"images/GZS_Background6.png",
+			//"images/GZS_Background02.png",
+			"images/new/GW_Background_01.png",
 			"images/new/GZSR_Gamma_Background.png",
 			"images/new/GWB.png",
 			"images/new/grave_wave_tiles.png",

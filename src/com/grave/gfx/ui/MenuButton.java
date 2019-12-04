@@ -36,6 +36,7 @@ public class MenuButton extends Button {
 
 	@Override
 	public void render(GameState gs, Graphics g, long cTime) {
+		UnicodeFont fnt = AssetManager.getManager().getFont(FONT_NAME);
 		Image img = AssetManager.getManager().getImage(image);
 
 		float x = position.x;
@@ -45,15 +46,20 @@ public class MenuButton extends Button {
 			y += Camera.getCamera().getOffset().y;
 		}
 
+		boolean hover = mouseOver();
 		if(img == null) {
 			// Draw the text representing the button.
-			UnicodeFont fnt = AssetManager.getManager().getFont(FONT_NAME);
-			Color color = mouseOver() ? DEFAULT_HOVER : DEFAULT_TEXT;
+			Color color = hover ? DEFAULT_HOVER : DEFAULT_TEXT;
 
 			g.setColor(color);
 			g.setFont(fnt);
 			g.drawString(text, x, y);
 		} else g.drawImage(img, x, y);
+
+		if(hover) {
+			g.setColor(Color.white);
+			g.drawRect((position.x - 10.0f), (position.y - 10.0f), (fnt.getWidth(text) + 20.0f), (fnt.getHeight(text) + 20.0f));
+		}
 	}
 
 	@Override
