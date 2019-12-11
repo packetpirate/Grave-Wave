@@ -17,7 +17,7 @@ import com.grave.Globals;
 import com.grave.MusicPlayer;
 import com.grave.controllers.AchievementController;
 import com.grave.gfx.Animation;
-import com.grave.gfx.Flashlight;
+import com.grave.gfx.lighting.AlphaMap;
 import com.grave.states.settings.AudioSettingsState;
 import com.grave.states.settings.ControlSettingsState;
 import com.grave.states.settings.DisplaySettingsState;
@@ -49,7 +49,7 @@ public class LoadingState extends BasicGameState {
 			ConfigManager.getInstance().init();
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("fullscreen")) Globals.app.setFullscreen(ConfigManager.getInstance().getAttributes().getBoolean("fullscreen"));
 			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("firstTimeGamma")) Globals.firstTimeGamma = ConfigManager.getInstance().getAttributes().getBoolean("firstTimeGamma");
-			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) Flashlight.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
+			if(ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) AlphaMap.setShadowOpacity(ConfigManager.getInstance().getAttributes().getFloat("shadowLevel"));
 
 			AchievementController.getInstance().init();
 			AchievementManager.init();

@@ -181,7 +181,7 @@ public class Starfright extends Enemy {
 	public float getSpeed() {
 		Player player = Player.getPlayer();
 
-		boolean blinded = (player.getFlashlight().isEnabled() && player.getFlashlight().inView(getCollider()));
+		boolean blinded = (player.getFlashlight().isActive() && player.getFlashlight().inView(getCollider()));
 		if(blinded) return (speed * 0.25f);
 
 		return speed;

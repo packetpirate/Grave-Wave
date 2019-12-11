@@ -20,6 +20,7 @@ import com.grave.Controls;
 import com.grave.Globals;
 import com.grave.MusicPlayer;
 import com.grave.gfx.Flashlight;
+import com.grave.gfx.lighting.AlphaMap;
 import com.grave.gfx.ui.MenuButton;
 import com.grave.gfx.ui.Slider;
 import com.grave.math.Calculate;
@@ -44,14 +45,14 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
-		flashlight = new Flashlight();
-		flashlight.setOrigin(playerPos.x, playerPos.y);
+		flashlight = new Flashlight(new Pair<Float>(playerPos.x, playerPos.y));
+		//flashlight.setOrigin(playerPos.x, playerPos.y);
 		flashlight.setTheta((float)(Math.PI / 2));
 
 		opacitySlider = new Slider("shadowLevel", "Gamma Level", new Pair<Float>(((Globals.WIDTH / 2) - 256.0f), (Globals.HEIGHT - 400.0f)), 512.0f, opacityOperation);
 		opacitySlider.setSliderBounds(new Pair<Float>(0.60f, 0.90f));
-		opacitySlider.setDefaultVal(Flashlight.getShadowOpacity());
-		opacitySlider.setSliderVal(Flashlight.getShadowOpacity());
+		opacitySlider.setDefaultVal(AlphaMap.getShadowOpacity());
+		opacitySlider.setSliderVal(AlphaMap.getShadowOpacity());
 
 		applyButton = new MenuButton(new Pair<Float>(50.0f, (Globals.HEIGHT - 80.0f)), "Apply");
 		backButton = new MenuButton(new Pair<Float>((Globals.WIDTH - 200.0f), (Globals.HEIGHT - 80.0f)), "Back");
@@ -61,7 +62,7 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 	public void enter(GameContainer gc, StateBasedGame game) throws SlickException {
 		Controls.getInstance().resetAll();
 
-		opacitySlider.setSliderVal(Flashlight.getShadowOpacity());
+		opacitySlider.setSliderVal(AlphaMap.getShadowOpacity());
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 		if(background != null) g.drawImage(background, 0.0f, 0.0f);
 
 		// Draw the flashlight.
-		flashlight.render(g, 0L);
+		//flashlight.render(g, 0L);
 
 		// Draw the UI for adjusting shadow opacity.
 		g.setColor(Color.black);
@@ -154,7 +155,7 @@ public class GammaSettingsState extends BasicGameState implements InputListener 
 	private Consumer<Float> opacityOperation = new Consumer<Float>() {
 		@Override
 		public void accept(Float val_) {
-			Flashlight.setShadowOpacity(val_);
+			AlphaMap.setShadowOpacity(val_);
 		}
 	};
 

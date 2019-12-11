@@ -16,6 +16,7 @@ import com.grave.entities.Entity;
 import com.grave.entities.Player;
 import com.grave.entities.enemies.EnemyController;
 import com.grave.gfx.effects.VisualEffect;
+import com.grave.gfx.lighting.AlphaMap;
 import com.grave.gfx.particles.Emitter;
 import com.grave.gfx.particles.Particle;
 import com.grave.math.Calculate;
@@ -92,6 +93,8 @@ public class Level {
 				}
 			}
 		}
+
+		AlphaMap.getInstance().update(gs, cTime, delta);
 	}
 
 	public void render(GameState gs, Graphics g, long cTime) {
@@ -100,6 +103,8 @@ public class Level {
 		List<Entity> sorted = new ArrayList<Entity>();
 		entities.values().stream().forEach(ents -> sorted.addAll(ents));
 		sorted.stream().sorted(Entity.COMPARE).forEach(ent -> ent.render(gs, g, cTime));
+
+		AlphaMap.getInstance().render(gs, g, cTime);
 	}
 
 	public void interact(GameState gs, long cTime) {

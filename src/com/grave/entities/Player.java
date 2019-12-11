@@ -24,6 +24,7 @@ import com.grave.gfx.Animation;
 import com.grave.gfx.Camera;
 import com.grave.gfx.Flashlight;
 import com.grave.gfx.Layers;
+import com.grave.gfx.lighting.AlphaMap;
 import com.grave.gfx.particles.Projectile;
 import com.grave.gfx.particles.StatusProjectile;
 import com.grave.gfx.ui.StatusMessages;
@@ -432,7 +433,7 @@ public class Player implements Entity {
 			float x = (position.x - camera.getOffset().x);
 			float y = (position.y - camera.getOffset().y);
 			theta = Calculate.Hypotenuse(new Pair<Float>(x, y), mouse.getPosition()) + (float)(Math.PI / 2);
-			flashlight.update(this, cTime);
+			//flashlight.update(this, cTime);
 		}
 
 		if(moving) {
@@ -487,7 +488,7 @@ public class Player implements Entity {
 		}
 
 		statusHandler.render(g, cTime);
-		flashlight.render(g, cTime);
+		//flashlight.render(g, cTime);
 	}
 
 	/**
@@ -577,7 +578,13 @@ public class Player implements Entity {
 		// Misc Properties
 		attributes.set("lastClick", 0L);
 
-		flashlight = new Flashlight();
+		AlphaMap alphaMap = AlphaMap.getInstance();
+		alphaMap.removeByTag("flashlight");
+
+		flashlight = new Flashlight(new Pair<Float>(0.0f, 0.0f));
+		flashlight.activate();
+
+		alphaMap.addLight(flashlight);
 	}
 
 	/**

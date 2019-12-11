@@ -1,30 +1,21 @@
 package com.grave.gfx;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.AssetManager;
-import com.grave.ConfigManager;
 import com.grave.Globals;
 import com.grave.entities.Player;
+import com.grave.gfx.lighting.LightSource;
 import com.grave.misc.Pair;
-import com.grave.status.Status;
+import com.grave.states.GameState;
 
-public class Flashlight {
-	private static Color SHADOW = new Color(0xBB000009);
-	private static final Color NIGHT_VISION = new Color(0x66004409);
-
-	public static float getShadowOpacity() {
-		if(!ConfigManager.getInstance().getAttributes().getMap().containsKey("shadowLevel")) return Flashlight.SHADOW.a;
-		else return ConfigManager.getInstance().getAttributes().getFloat("shadowLevel");
-	}
-	public static void setShadowOpacity(float val_) { Flashlight.SHADOW.a = val_; }
-
+public class Flashlight extends LightSource {
 	private Pair<Float> origin;
 	public Pair<Float> getOrigin() { return origin; }
 	public void setOrigin(float x_, float y_) {
@@ -42,23 +33,21 @@ public class Flashlight {
 	private Rectangle oCollider; // Original collider.
 	private Shape tCollider; // Transformed collider.
 
-	private boolean enabled;
-	public boolean isEnabled() { return enabled; }
-	public void toggle() { enabled = !enabled; }
-
-	public Flashlight() {
-		this.origin = new Pair<Float>(0.0f, 0.0f);
+	public Flashlight(Pair<Float> origin_) {
+		super(origin_);
+		this.origin = origin_;
 		this.theta = 0.0f;
 
 		this.lightMap = AssetManager.getManager().getImage("GZS_LightAlphaMap3");
 		this.flashlight = AssetManager.getManager().getImage("GZS_Flashlight");
 		this.oCollider = new Rectangle(18.0f, -192.0f, flashlight.getWidth(), (flashlight.getHeight() * 2));
 		this.tCollider = new Rectangle(18.0f, -192.0f, flashlight.getWidth(), (flashlight.getHeight() * 2));
-
-		this.enabled = true;
 	}
 
-	public void update(Player player, long cTime) {
+	@Override
+	public void update(BasicGameState gs, long cTime, int delta) {
+		Player player = Player.getPlayer();
+
 		origin.x = player.getPosition().x;
 		origin.y = player.getPosition().y;
 		theta = player.getRotation();
@@ -68,21 +57,9 @@ public class Flashlight {
 		tCollider = oCollider.transform(Transform.createRotateTransform((theta - (float)(Math.PI / 2)), origin.x, origin.y));
 	}
 
-	public void render(Graphics g, long cTime) {
-		Camera camera = Camera.getCamera();
-		Player player = Player.getPlayer();
-
-		g.clearAlphaMap();
-
-		g.setDrawMode(Graphics.MODE_NORMAL);
-		g.setColor((player.getStatusHandler().hasStatus(Status.NIGHT_VISION)) ? NIGHT_VISION : SHADOW);
-		g.fillRect((camera.getOffset().x - Camera.MAX_OFFSET), (camera.getOffset().y - Camera.MAX_OFFSET),
-				   (Globals.WIDTH + (Camera.MAX_OFFSET * 2)), (Globals.HEIGHT + (Camera.MAX_OFFSET * 2)));
-
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-		if(isEnabled() && player.isAlive()) {
+	@Override
+	public void render(GameState gs, Graphics g, long cTime) {
+		if(isActive() && Player.getPlayer().isAlive()) {
 			if(lightMap != null) g.drawImage(lightMap, (origin.x - (lightMap.getWidth() / 2)), (origin.y - (lightMap.getHeight() / 2)));
 			if(flashlight != null) {
 				float a = (float)Math.toDegrees(theta - (Math.PI / 2));
@@ -96,10 +73,16 @@ public class Flashlight {
 				}
 			}
 		}
-
-		GL11.glDisable(GL11.GL_BLEND);
-		g.setDrawMode(Graphics.MODE_NORMAL);
 	}
 
 	public boolean inView(Shape other) { return (tCollider.intersects(other) || tCollider.contains(other)); }
+
+	@Override
+	public String getName() { return "Flashlight"; }
+
+	@Override
+	public String getDescription() { return "Flashlight"; }
+
+	@Override
+	public String getTag() { return "flashlight"; }
 }
