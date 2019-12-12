@@ -5,6 +5,8 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.entities.Entity;
 import com.grave.gfx.Layers;
+import com.grave.gfx.lighting.AlphaMap;
+import com.grave.gfx.lighting.LightSource;
 import com.grave.misc.Pair;
 import com.grave.states.GameState;
 
@@ -32,17 +34,43 @@ public class GameObject implements Entity {
 	protected Pair<Float> position;
 	public Pair<Float> getPosition() { return position; }
 
+	protected LightSource light;
+	public LightSource getLight() { return light; }
+	protected boolean lightDefaultOn;
+	public boolean isLightOn() { return lightDefaultOn; }
+	public void addLight(LightSource light_, boolean defaultOn_) {
+		light = light_;
+		light.move(new Pair<Float>(position));
+		if(defaultOn_) light.activate();
+		lightDefaultOn = defaultOn_;
+
+		AlphaMap map = AlphaMap.getInstance();
+		map.addLight(light);
+	}
+
 	protected boolean used;
 	public boolean isUsed() { return used; }
 	public void use(GameState gs, Pair<Float> objPos, long cTime) {
 		used = true;
 		getInteraction().execute(gs, objPos, cTime);
 	}
-	public void reset() { used = false; }
+	public void reset() {
+		if((light != null) && lightDefaultOn) {
+			light.move(new Pair<Float>(position));
+			light.activate();
+
+			AlphaMap map = AlphaMap.getInstance();
+			map.addLight(light);
+		}
+
+		used = false;
+	}
 
 	public GameObject(Type type_, Pair<Float> position_) {
 		this.type = type_;
 		this.position = position_;
+		this.light = null;
+		this.lightDefaultOn = false;
 
 		this.used = false;
 	}

@@ -13,6 +13,8 @@ import org.newdawn.slick.state.BasicGameState;
 
 import com.grave.AssetManager;
 import com.grave.entities.Entity;
+import com.grave.gfx.lighting.LightSource;
+import com.grave.gfx.lighting.RadialLight;
 import com.grave.misc.Pair;
 import com.grave.states.GameState;
 import com.grave.world.GameObject;
@@ -172,6 +174,11 @@ public class TMap implements Entity {
 						} else {
 							// Place game object at this position according to the found type.
 							obj = new GameObject(type, pos);
+						}
+
+						if(type.equals(GameObject.Type.VENDING_MACHINE)) {
+							LightSource light = new RadialLight(Pair.ZERO, 64.0f);
+							obj.addLight(light, true);
 						}
 
 						if(obj != null) level.addEntity(obj.getTag(), obj);

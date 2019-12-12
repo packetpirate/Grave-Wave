@@ -24,12 +24,10 @@ import com.grave.entities.Player;
 import com.grave.entities.enemies.EnemyController;
 import com.grave.gfx.Camera;
 import com.grave.gfx.lighting.AlphaMap;
-import com.grave.gfx.lighting.RadialLight;
 import com.grave.gfx.ui.StatusMessages;
 import com.grave.gfx.ui.hud.Console;
 import com.grave.gfx.ui.hud.EscapeMenu;
 import com.grave.gfx.ui.hud.HUD;
-import com.grave.misc.Pair;
 import com.grave.objects.crafting.RecipeController;
 import com.grave.status.Status;
 import com.grave.status.StatusEffect;
@@ -209,9 +207,9 @@ public class GameState extends BasicGameState implements InputListener {
 		alphaMap.clear();
 		player.reset();
 
-		RadialLight light = new RadialLight(new Pair<Float>(128.0f, 128.0f), 128.0f);
-		light.activate();
-		alphaMap.addLight(light);
+		//RadialLight light = new RadialLight(new Pair<Float>(128.0f, 128.0f), 128.0f);
+		//light.activate();
+		//alphaMap.addLight(light);
 
 		level.reset();
 		level.addEntity("player", player);
